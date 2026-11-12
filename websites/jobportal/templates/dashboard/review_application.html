@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+
+{% block title %}Review Application - Employer Dashboard{% endblock %}
+
+{% block content %}
+<main class="pt-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="mb-6">
+            <a href="{% url 'dashboard:pending_reviews' %}" class="text-sm text-gray-500 hover:text-gray-700">&larr; Back to Pending Reviews</a>
+            <h1 class="text-2xl font-bold text-gray-900 mt-1">Review Application</h1>
+        </div>
+
+        <!-- Applicant Info -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Applicant Details</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Name</p>
+                    <p class="text-sm text-gray-900 mt-1">
+                        {{ application.job_seeker.user.get_full_name|default:application.job_seeker.user.username }}
+                    </p>
+                </div>
+                <div>
+                    <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Email</p>
+                    <p class="text-sm text-gray-900 mt-1">{{ application.job_seeker.user.email }}</p>
+                </div>
+                <div>
+                    <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Position Applied</p>
+                    <p class="text-sm text-gray-900 mt-1">{{ application.job.title }}</p>
+                </div>
+                <div>
+                    <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Applied On</p>
+                    <p class="text-sm text-gray-900 mt-1">{{ application.applied_date|date:"M d, Y" }}</p>
+                </div>
+                {% if application.job_seeker.skills %}
+                <div class="sm:col-span-2">
+                    <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Skills</p>
+                    <p class="text-sm text-gray-900 mt-1">{{ application.job_seeker.skills }}</p>
+                </div>
+                {% endif %}
+                {% if application.job_seeker.experience %}
+                <div class="sm:col-span-2">
+                    <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Experience</p>
+                    <p class="text-sm text-gray-900 mt-1 whitespace-pre-line">{{ application.job_seeker.experience }}</p>
+                </div>
+                {% endif %}
+                {% if application.job_seeker.education %}
+                <div class="sm:col-span-2">
+                    <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Education</p>
+                    <p class="text-sm text-gray-900 mt-1 whitespace-pre-line">{{ application.job_seeker.education }}</p>
+                </div>
+                {% endif %}
+            </div>
+            {% if application.job_seeker.resume %}
+            <div class="mt-4 pt-4 border-t border-gray-100">
+                <a href="{{ application.job_seeker.resume.url }}" target="_blank"
+                   class="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                    <i class="fas fa-file-pdf text-red-500"></i> Download Resume
+                </a>
+            </div>
+            {% else %}
+            <div class="mt-4 pt-4 border-t border-gray-100">
+                <p class="text-sm text-gray-400 italic">No resume uploaded by applicant.</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Cover Letter -->
+        {% if application.cover_letter %}
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-3">Cover Letter</h2>
+            <p class="text-sm text-gray-700 whitespace-pre-line">{{ application.cover_letter }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Decision & Email -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Decision &amp; Response Email</h2>
+
+            <!-- Tab buttons -->
+            <div class="flex gap-2 mb-4" id="emailTabs">
+                <button type="button" onclick="selectDecision('accepted')"
+                        id="tab-accepted"
+                        class="px-4 py-2 rounded-md text-sm font-medium border transition-colors border-gray-300 text-gray-600 hover:border-green-500 hover:text-green-700">
+                    Accept
+                </button>
+                <button type="button" onclick="selectDecision('rejected')"
+                        id="tab-rejected"
+                        class="px-4 py-2 rounded-md text-sm font-medium border transition-colors border-gray-300 text-gray-600 hover:border-red-500 hover:text-red-700">
+                    Reject
+                </button>
+            </div>
+
+            <form method="POST" action="{% url 'dashboard:review_application' application.id %}" id="decisionForm">
+                {% csrf_token %}
+                <input type="hidden" name="status" id="statusInput" value="">
+
+                <div class="mb-4">
+                    <label for="emailBody" class="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
+                        Email to Applicant
+                    </label>
+                    <textarea id="emailBody" name="email_body" rows="12"
+                              class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all font-mono"
+                              placeholder="Select Accept or Reject above to pre-fill the email..."></textarea>
+                </div>
+
+                <div class="flex gap-3">
+                    <button type="submit" id="submitBtn"
+                            class="px-6 py-2 rounded-md text-sm font-medium text-white bg-gray-400 cursor-not-allowed transition-colors"
+                            disabled>
+                        Send Decision
+                    </button>
+                    <a href="{% url 'dashboard:pending_reviews' %}"
+                       class="px-6 py-2 rounded-md text-sm font-medium text-gray-600 border border-gray-300 hover:bg-gray-50 transition-colors">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+{{ acceptance_email|json_script:"acceptance-email" }}
+{{ rejection_email|json_script:"rejection-email" }}
+<script>
+    const acceptanceEmailText = JSON.parse(document.getElementById('acceptance-email').textContent);
+    const rejectionEmailText = JSON.parse(document.getElementById('rejection-email').textContent);
+
+    function selectDecision(decision) {
+        const emailBody = document.getElementById('emailBody');
+        const statusInput = document.getElementById('statusInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const tabAccepted = document.getElementById('tab-accepted');
+        const tabRejected = document.getElementById('tab-rejected');
+
+        statusInput.value = decision;
+        submitBtn.disabled = false;
+
+        if (decision === 'accepted') {
+            emailBody.value = acceptanceEmailText;
+            submitBtn.className = 'px-6 py-2 rounded-md text-sm font-medium text-white bg-green-600 hover:bg-green-700 transition-colors';
+            submitBtn.textContent = 'Accept & Send Email';
+            tabAccepted.className = 'px-4 py-2 rounded-md text-sm font-medium border transition-colors bg-green-50 border-green-500 text-green-700';
+            tabRejected.className = 'px-4 py-2 rounded-md text-sm font-medium border transition-colors border-gray-300 text-gray-600 hover:border-red-500 hover:text-red-700';
+        } else {
+            emailBody.value = rejectionEmailText;
+            submitBtn.className = 'px-6 py-2 rounded-md text-sm font-medium text-white bg-red-600 hover:bg-red-700 transition-colors';
+            submitBtn.textContent = 'Reject & Send Email';
+            tabRejected.className = 'px-4 py-2 rounded-md text-sm font-medium border transition-colors bg-red-50 border-red-500 text-red-700';
+            tabAccepted.className = 'px-4 py-2 rounded-md text-sm font-medium border transition-colors border-gray-300 text-gray-600 hover:border-green-500 hover:text-green-700';
+        }
+    }
+</script>
+{% endblock %}

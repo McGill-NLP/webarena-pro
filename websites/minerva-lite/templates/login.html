@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="auth-card">
+  <div>
+    <p class="eyebrow">Bolder-Kohn University</p>
+    <h1>Sign in as student or advisor</h1>
+    <p class="auth-copy">Use a seeded student ID or advisor ID to open the matching Minerva-lite workspace.</p>
+  </div>
+  <form method="POST" action="/login" class="auth-form">
+    <input type="hidden" name="next" value="{{ next_url or '' }}" />
+    <label>Student ID
+      <input data-test="login-student-id" type="text" name="login_id" placeholder="e.g. 260123456" required />
+    </label>
+    <label>Password
+      <input data-test="login-password" type="password" name="password" placeholder="Password" required />
+    </label>
+    <button class="btn btn-primary" data-test="login-submit" type="submit">Sign In</button>
+  </form>
+</section>
+{% endblock %}

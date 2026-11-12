@@ -1,0 +1,58 @@
+PRAGMA foreign_keys = ON;
+
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username TEXT UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS videos (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  title TEXT NOT NULL,
+  channel TEXT NOT NULL,
+  views INTEGER NOT NULL DEFAULT 0,
+  description TEXT,
+  duration_seconds INTEGER NOT NULL DEFAULT 0,
+  duration_text TEXT NOT NULL,
+  category TEXT NOT NULL,
+  youtube_id TEXT NOT NULL,
+  upload_date TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS likes (
+  user_id INTEGER NOT NULL,
+  video_id INTEGER NOT NULL,
+  value INTEGER NOT NULL CHECK (value IN (-1, 1)),
+  PRIMARY KEY (user_id, video_id),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (video_id) REFERENCES videos(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS watch_later (
+  user_id INTEGER NOT NULL,
+  video_id INTEGER NOT NULL,
+  added_at TEXT NOT NULL,
+  PRIMARY KEY (user_id, video_id),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (video_id) REFERENCES videos(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS history (
+  user_id INTEGER NOT NULL,
+  video_id INTEGER NOT NULL,
+  watched_at TEXT NOT NULL,
+  PRIMARY KEY (user_id, video_id),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (video_id) REFERENCES videos(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS comments (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  video_id INTEGER NOT NULL,
+  content TEXT NOT NULL,
+  created_at TEXT NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (video_id) REFERENCES videos(id) ON DELETE CASCADE
+);

@@ -1,0 +1,3 @@
+include scripts/generate_autologin_async.py
+include scripts/generate_ui_evidence_async.py
+recursive-include docs *.md

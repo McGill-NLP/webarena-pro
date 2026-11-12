@@ -1,0 +1,189 @@
+{
+  "schema_version": 1,
+  "assets": [
+    {
+      "path": "maya.patel/safari/AfricansafariAug2014-025.jpg",
+      "creator": "PanWoyteczek",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "source_url": "https://commons.wikimedia.org/wiki/File:SA05339-Greater_blue-eared_starling_-_B%C5%82yszczak_stalowy.jpg",
+      "sha256": "f9ae0f6448cf99e17dbf64f199ff3e953b0992b07cfe5280278aa6467e943400"
+    },
+    {
+      "path": "maya.patel/safari/Elephantsafari.jpg",
+      "creator": "Stephen Jacobs (Why Steve)",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "source_url": "https://commons.wikimedia.org/wiki/File:African_elephant_standing.jpg",
+      "sha256": "ca5671dece6b272629cbec0ff69ca17c8f43aa2078e8ba4beb7eca057b08f7f0"
+    },
+    {
+      "path": "maya.patel/safari/SafariMusicLoop.mp3",
+      "creator": "frankum",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "source_url": "https://freesound.org/people/frankum/sounds/255585/",
+      "sha256": "6cc0a1edf830f558b49b5c4837d77fac906eefd560a8af8eab859cec43212e6c"
+    },
+    {
+      "path": "maya.patel/safari/Safariloop.wav.mp3",
+      "creator": "frankum",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "source_url": "https://freesound.org/people/frankum/sounds/255585/",
+      "sha256": "6cc0a1edf830f558b49b5c4837d77fac906eefd560a8af8eab859cec43212e6c"
+    },
+    {
+      "path": "maya.patel/safari/safariloop0S22m2.mp3",
+      "creator": "frankum",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "source_url": "https://freesound.org/people/frankum/sounds/328368/",
+      "sha256": "c198fa20c2e61ec820b5e75b239c1453fc758f0e557e6027ef1792d1562a718a"
+    },
+    {
+      "path": "maya.patel/work/Employee_Handbook_Draft.md",
+      "creator": "WebArena-Pro contributors",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source_url": "",
+      "sha256": "839776997e0425e4d70686f9db44a49fc4958dfdc036f52615e37ea42f5d5f19"
+    },
+    {
+      "path": "maya.patel/work/Project_Alpha_Notes.txt",
+      "creator": "WebArena-Pro contributors",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source_url": "",
+      "sha256": "e06dba543b14067abf681849cf1843a306349d76fdb7da5e63ac93d2f1f84f86"
+    },
+    {
+      "path": "maya.patel/work/Q3_Budget.csv",
+      "creator": "WebArena-Pro contributors",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source_url": "",
+      "sha256": "af4830bbf0c8b6efe0e9fbb05f0148be67ed9f4ff67e80f9999aa9be0c755442"
+    },
+    {
+      "path": "maya.patel/work/Server_Logs_Sample.txt",
+      "creator": "WebArena-Pro contributors",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source_url": "",
+      "sha256": "8ebdf095056b8ca3790c89efbeb6278596c06d8e8a3d0fa7f2ab809337c4adda"
+    },
+    {
+      "path": "maya.patel/work/Social_Media_Copy.txt",
+      "creator": "WebArena-Pro contributors",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source_url": "",
+      "sha256": "f857772af3b903dfbb21caf60395086d465bc08f7e24f097ecce629b133ccc44"
+    },
+    {
+      "path": "daniel.brooks/production/Ambientelectronicmusic001.mp3",
+      "creator": "frankum",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "source_url": "https://freesound.org/people/frankum/sounds/328368/",
+      "sha256": "c198fa20c2e61ec820b5e75b239c1453fc758f0e557e6027ef1792d1562a718a"
+    },
+    {
+      "path": "daniel.brooks/production/Newtime-electronicmusictrack.mp3",
+      "creator": "frankum",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "source_url": "https://freesound.org/people/frankum/sounds/405603/",
+      "sha256": "f125e7eb5e37eda4fcb2595692464749943f675e6a9ac563fdc93ead1258213c"
+    },
+    {
+      "path": "daniel.brooks/production/electronicmusicloop001.mp3",
+      "creator": "frankum",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "source_url": "https://freesound.org/people/frankum/sounds/255585/",
+      "sha256": "6cc0a1edf830f558b49b5c4837d77fac906eefd560a8af8eab859cec43212e6c"
+    },
+    {
+      "path": "daniel.brooks/work/Design_System_V2.md",
+      "creator": "WebArena-Pro contributors",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source_url": "",
+      "sha256": "4c23ae01d6e8cc1381a4ecb5517101326c69abdcf14409535710d5792dcb6f2f"
+    },
+    {
+      "path": "daniel.brooks/work/Employee_Handbook_Draft.md",
+      "creator": "WebArena-Pro contributors",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source_url": "",
+      "sha256": "839776997e0425e4d70686f9db44a49fc4958dfdc036f52615e37ea42f5d5f19"
+    },
+    {
+      "path": "daniel.brooks/work/Freelance_Invoice_Template.txt",
+      "creator": "WebArena-Pro contributors",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source_url": "",
+      "sha256": "3f2fbcd07a7643321f173d3597b1aacbfad3bd2c4cea0cd63adc4b72fea7e56a"
+    },
+    {
+      "path": "daniel.brooks/work/Marketing_Campaign_Q4.csv",
+      "creator": "WebArena-Pro contributors",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source_url": "",
+      "sha256": "420093fd43238b56c931474e443fe0ba966e395676f7d6d0a7ce0bc3cf91b1e5"
+    },
+    {
+      "path": "daniel.brooks/work/Music_Collab_Ideas.txt",
+      "creator": "WebArena-Pro contributors",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source_url": "",
+      "sha256": "549a6a73c67f1f15bf7909f60bacaa3bd7bd37a161f9a4339722a5fb5adab1a6"
+    },
+    {
+      "path": "daniel.brooks/work/Project_Alpha_Notes.txt",
+      "creator": "WebArena-Pro contributors",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source_url": "",
+      "sha256": "e06dba543b14067abf681849cf1843a306349d76fdb7da5e63ac93d2f1f84f86"
+    },
+    {
+      "path": "daniel.brooks/work/Q3_Budget.csv",
+      "creator": "WebArena-Pro contributors",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source_url": "",
+      "sha256": "af4830bbf0c8b6efe0e9fbb05f0148be67ed9f4ff67e80f9999aa9be0c755442"
+    },
+    {
+      "path": "daniel.brooks/work/Server_Logs_Sample.txt",
+      "creator": "WebArena-Pro contributors",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source_url": "",
+      "sha256": "8ebdf095056b8ca3790c89efbeb6278596c06d8e8a3d0fa7f2ab809337c4adda"
+    },
+    {
+      "path": "daniel.brooks/work/Social_Media_Copy.txt",
+      "creator": "WebArena-Pro contributors",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source_url": "",
+      "sha256": "f857772af3b903dfbb21caf60395086d465bc08f7e24f097ecce629b133ccc44"
+    },
+    {
+      "path": "daniel.brooks/work/Weekly_Status_Report.md",
+      "creator": "WebArena-Pro contributors",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "source_url": "",
+      "sha256": "93902a520a1d132eef1217fffa65d7d8e00de7b2c50bb48fc70fb5be2b4010fa"
+    }
+  ]
+}

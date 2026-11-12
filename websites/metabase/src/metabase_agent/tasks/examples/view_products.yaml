@@ -1,0 +1,20 @@
+id: view_products
+name: View all products
+instruction: >
+  View the Products table to see all available products.
+  1. Click "New" button, then click "Question"
+  2. Select "sample-db" database, then select "Products" table
+  3. Click "Visualize" to see all products
+start_url: http://localhost:3000
+max_steps: 10
+timeout_seconds: 300
+success_criteria:
+  - url_contains: question
+  - query_result_has_rows
+tags:
+  - beginner
+  - question
+  - view
+notes: >
+  Absolute minimum task - just navigate and view a table.
+  Good for testing basic question creation flow.

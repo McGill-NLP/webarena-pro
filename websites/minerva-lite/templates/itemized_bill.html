@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-heading">
+  <h1 class="page-title">View Itemized Bill</h1>
+  {% include "_term_selector.html" %}
+</section>
+
+<section class="bill-sheet" data-test="itemized-bill">
+  <header class="bill-header">
+    <div>
+      <p class="bill-kicker">Student Fee Account Statement</p>
+      <h2>Bolder-Kohn University</h2>
+      <p>Student Accounts</p>
+    </div>
+    <div class="bill-summary-box">
+      <div><span>Term</span><strong>{{ summary.term }}</strong></div>
+      <div><span>Payment due by</span><strong>{{ summary.full_payment_due_by }}</strong></div>
+      <div><span>Balance</span><strong data-test="bill-balance">{{ summary.balance|money }}</strong></div>
+    </div>
+  </header>
+
+  <dl class="bill-identity">
+    <div><dt>Name</dt><dd>{{ student.display_name }}</dd></div>
+    <div><dt>Student ID</dt><dd>{{ student.student_id }}</dd></div>
+    <div><dt>Faculty</dt><dd>{{ student.faculty|faculty_name }}</dd></div>
+    <div><dt>Program</dt><dd>{{ student.degree }} - {{ student.major }}</dd></div>
+    <div><dt>Residency</dt><dd>{{ residency_label }}</dd></div>
+  </dl>
+
+  <table class="bill-table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Description</th>
+        <th>Term</th>
+        <th>Charges</th>
+        <th>Payments/Credits</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for line in lines %}
+      <tr data-test="bill-line">
+        <td>{{ "2026-08-01" if summary.term == "Fall 2026" else "2027-01-05" }}</td>
+        <td>{{ line.description }}</td>
+        <td>{{ summary.term }}</td>
+        <td>{{ line.amount|money }}</td>
+        <td></td>
+      </tr>
+      {% endfor %}
+      {% for payment in payments %}
+      <tr data-test="bill-payment-line">
+        <td>Posted</td>
+        <td>{{ payment.description }} - {{ payment.method }}</td>
+        <td>{{ payment.term }}</td>
+        <td></td>
+        <td>{{ payment.amount|money }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <th colspan="3">Current term charges</th>
+        <td>{{ summary.charges|money }}</td>
+        <td></td>
+      </tr>
+      <tr>
+        <th colspan="3">Payments and account credits</th>
+        <td></td>
+        <td>{{ summary.paid|money }}</td>
+      </tr>
+      <tr>
+        <th colspan="3">Outstanding balance</th>
+        <td colspan="2" data-test="bill-amount-due">{{ summary.balance|money }}</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <details class="rate-catalog">
+    <summary>Faculty and major billing math</summary>
+    <p class="muted">Annual 2025-2026 totals are stored in <code>billing_math.py</code>; this table is generated from that catalog for future demo users.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Faculty</th>
+          <th>Major</th>
+          <th>Degree</th>
+          {% for key, label in residency_labels.items() %}
+          <th>{{ label }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in amount_catalog %}
+        <tr>
+          <td>{{ row.faculty }}</td>
+          <td>{{ row.major }}</td>
+          <td>{{ row.degree }}</td>
+          {% for key in residency_labels %}
+          <td>{{ row[key]|money }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </details>
+</section>
+{% endblock %}

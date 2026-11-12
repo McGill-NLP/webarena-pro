@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-heading">
+  <h1 class="page-title">Registration Menu</h1>
+  {% include "_term_selector.html" %}
+</section>
+
+<section class="step-grid">
+  <article class="step-card">
+    <header>
+      <div class="step-number">Step 1</div>
+      <h2>Search Class Schedule</h2>
+    </header>
+    <p>
+      Choose the schedule term and search by subject, course number, or title. Note the CRNs for lectures,
+      laboratories, conferences, and waitlist-eligible sections before adding them.
+    </p>
+    <a class="step-link" href="/search" data-test="menu-step-search">Launch Search Class</a>
+  </article>
+
+  <article class="step-card">
+    <header>
+      <div class="step-number">Step 2</div>
+      <h2>Add or Drop Course Sections</h2>
+    </header>
+    <p>
+      Enter the CRN for each section you want to add, or drop from the list of registered sections. Select the
+      satisfactory/unsatisfactory grade mode when eligible.
+    </p>
+    <a class="step-link" href="/add-drop" data-test="menu-step-adddrop">Open Add/Drop by CRN</a>
+  </article>
+
+  <article class="step-card">
+    <header>
+      <div class="step-number">Step 3</div>
+      <h2>View Student Schedule by Course Section</h2>
+    </header>
+    <p>
+      Display locations, meeting dates, instructors, and any notes attached to your registered sections as well as
+      waitlisted courses in one consolidated view.
+    </p>
+    <a class="step-link" href="/schedule" data-test="menu-step-schedule">View Student Schedule</a>
+  </article>
+
+  <article class="step-card">
+    <header>
+      <div class="step-number">Step 4</div>
+      <h2>View Personal Weekly Class Schedule</h2>
+    </header>
+    <p>
+      Review your classes in a weekly calendar grid. Print the schedule or save as PDF to confirm room locations on the
+      first day of class.
+    </p>
+    <a class="step-link" href="/schedule-week" data-test="menu-step-weekly">Weekly Schedule View</a>
+  </article>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+id: count_rows_in_orders
+name: Count rows in Orders table
+instruction: >
+  "How many rows are in the Orders table from the sample database (sample-db)?"
+start_url: http://localhost:3000/browse/databases
+max_steps: 10
+timeout_seconds: 300
+expected_answer: "200"
+success_criteria:
+  - response_contains: "200"
+tags:
+  - beginner
+  - browse
+  - count
+notes: >
+  Simple task - navigate to the Orders table in sample-db and find the row count.
+  The answer is 200.

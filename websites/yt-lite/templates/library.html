@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="page-title">
+  {% if tab == 'history' %}History
+  {% elif tab == 'watch-later' %}Watch later
+  {% else %}Liked videos{% endif %}
+</h1>
+
+{% if videos %}
+<div class="video-grid">
+  {% for v in videos %}
+  <a href="{{ url_for('watch', video_id=v['id']) }}" class="video-card">
+    <div class="thumb">
+      <div class="duration">{{ v["duration_text"] }}</div>
+    </div>
+    <div class="video-info">
+      <div class="video-title">{{ v["title"] }}</div>
+      <div class="video-meta">{{ v["channel"] }} • {{ v["views"] }} views</div>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% else %}
+<p>No videos.</p>
+{% endif %}
+
+{% endblock %}

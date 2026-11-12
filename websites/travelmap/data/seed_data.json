@@ -1,0 +1,597 @@
+{
+  "availability_window": {
+    "start": "2026-04-01",
+    "end": "2026-09-01"
+  },
+  "users": [
+    {
+      "id": 1,
+      "name": "Avery Chen",
+      "email": "avery@example.com",
+      "password": "demo123",
+      "is_host": false,
+      "hometown": "Toronto",
+      "bio": "Product designer who plans short city escapes around good coffee and neighborhood walks.",
+      "avatar_url": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80"
+    },
+    {
+      "id": 2,
+      "name": "Maya Patel",
+      "email": "maya@example.com",
+      "password": "demo123",
+      "is_host": true,
+      "hometown": "Toronto",
+      "bio": "Host and architect running bright, thoughtful stays across Toronto neighborhoods.",
+      "avatar_url": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=300&q=80"
+    },
+    {
+      "id": 3,
+      "name": "Jordan Rivera",
+      "email": "jordan@example.com",
+      "password": "demo123",
+      "is_host": true,
+      "hometown": "Los Angeles",
+      "bio": "Creative host splitting time between desert escapes and design-forward city apartments.",
+      "avatar_url": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80"
+    },
+    {
+      "id": 4,
+      "name": "Priya Nair",
+      "email": "priya@example.com",
+      "password": "demo123",
+      "is_host": true,
+      "hometown": "Vancouver",
+      "bio": "Hospitality operator focused on quiet, polished stays near walking and biking routes.",
+      "avatar_url": "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=300&q=80"
+    },
+    {
+      "id": 5,
+      "name": "Leo Martinez",
+      "email": "leo@example.com",
+      "password": "demo123",
+      "is_host": false,
+      "hometown": "Montreal",
+      "bio": "Remote worker traveling for long weekends, vinyl shops, and good brunch.",
+      "avatar_url": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=300&q=80"
+    }
+  ],
+  "listings": [
+    {
+      "id": 1,
+      "slug": "annex-glass-loft",
+      "host_id": 2,
+      "title": "Annex Glass Loft",
+      "city": "Toronto",
+      "country": "Canada",
+      "neighborhood": "Annex",
+      "price_per_night": 245,
+      "cleaning_fee": 48,
+      "service_fee": 32,
+      "bedrooms": 2,
+      "beds": 2,
+      "baths": 1.5,
+      "max_guests": 4,
+      "rating": 4.93,
+      "review_count": 122,
+      "description": "A bright two-bedroom loft with a wall of plants, skylights, a chef-ready kitchen, and a fast walk to the subway and Bloor Street.",
+      "amenities": ["Wifi", "Dedicated workspace", "Self check-in", "Chef kitchen", "Washer", "Patio"],
+      "house_rules": ["No parties", "Quiet hours after 10 PM", "Shoes off indoors"],
+      "blocked_ranges": [
+        {"start": "2026-04-03", "end": "2026-04-05"},
+        {"start": "2026-06-12", "end": "2026-06-15"}
+      ],
+      "images": [
+        {
+          "url": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80",
+          "alt_text": "Sunlit loft living room",
+          "display_order": 0
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=80",
+          "alt_text": "Modern kitchen with wood cabinets",
+          "display_order": 1
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "slug": "leslieville-garden-suite",
+      "host_id": 2,
+      "title": "Leslieville Garden Suite",
+      "city": "Toronto",
+      "country": "Canada",
+      "neighborhood": "Leslieville",
+      "price_per_night": 188,
+      "cleaning_fee": 35,
+      "service_fee": 24,
+      "bedrooms": 1,
+      "beds": 1,
+      "baths": 1.0,
+      "max_guests": 2,
+      "rating": 4.86,
+      "review_count": 84,
+      "description": "A quiet one-bedroom tucked behind a brick lane house with a private deck, espresso setup, and easy streetcar access.",
+      "amenities": ["Wifi", "Garden deck", "Air conditioning", "Coffee bar", "Keypad entry"],
+      "house_rules": ["No smoking", "No pets", "Please water the herbs if you stay more than three nights"],
+      "blocked_ranges": [
+        {"start": "2026-04-18", "end": "2026-04-20"}
+      ],
+      "images": [
+        {
+          "url": "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80",
+          "alt_text": "Cozy suite living room",
+          "display_order": 0
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80",
+          "alt_text": "Open suite interior",
+          "display_order": 1
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "slug": "joshua-tree-artist-dome",
+      "host_id": 3,
+      "title": "Joshua Tree Artist Dome",
+      "city": "Joshua Tree",
+      "country": "United States",
+      "neighborhood": "Panorama Heights",
+      "price_per_night": 310,
+      "cleaning_fee": 60,
+      "service_fee": 41,
+      "bedrooms": 1,
+      "beds": 1,
+      "baths": 1.0,
+      "max_guests": 2,
+      "rating": 4.98,
+      "review_count": 204,
+      "description": "A cinematic geodesic dome with a record player, desert deck, outdoor shower, and dark-sky stargazing setup.",
+      "amenities": ["Wifi", "Hot tub", "Record player", "Fire pit", "Outdoor shower", "Mountain views"],
+      "house_rules": ["No open flames outside the fire pit", "Observe quiet hours after 9 PM", "Respect desert wildlife"],
+      "blocked_ranges": [
+        {"start": "2026-05-01", "end": "2026-05-04"}
+      ],
+      "images": [
+        {
+          "url": "https://images.unsplash.com/photo-1505692952047-1a78307da8f2?auto=format&fit=crop&w=1200&q=80",
+          "alt_text": "Desert dome exterior",
+          "display_order": 0
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1448630360428-65456885c650?auto=format&fit=crop&w=1200&q=80",
+          "alt_text": "Minimal desert interior",
+          "display_order": 1
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "slug": "vancouver-seawall-studio",
+      "host_id": 4,
+      "title": "Vancouver Seawall Studio",
+      "city": "Vancouver",
+      "country": "Canada",
+      "neighborhood": "Kitsilano",
+      "price_per_night": 215,
+      "cleaning_fee": 39,
+      "service_fee": 28,
+      "bedrooms": 1,
+      "beds": 1,
+      "baths": 1.0,
+      "max_guests": 2,
+      "rating": 4.89,
+      "review_count": 97,
+      "description": "A calm studio two blocks from the seawall with oak floors, a rainfall shower, and dedicated bike storage.",
+      "amenities": ["Wifi", "Bike storage", "Rainfall shower", "Dedicated workspace", "Laundry"],
+      "house_rules": ["No smoking", "No parties", "Please rinse sand from gear before coming inside"],
+      "blocked_ranges": [],
+      "images": [
+        {
+          "url": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80",
+          "alt_text": "Bright studio apartment",
+          "display_order": 0
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1464890100898-a385f744067f?auto=format&fit=crop&w=1200&q=80",
+          "alt_text": "Studio bedroom corner",
+          "display_order": 1
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "slug": "montreal-plateau-book-nook",
+      "host_id": 3,
+      "title": "Montreal Plateau Book Nook",
+      "city": "Montreal",
+      "country": "Canada",
+      "neighborhood": "Plateau",
+      "price_per_night": 172,
+      "cleaning_fee": 30,
+      "service_fee": 20,
+      "bedrooms": 1,
+      "beds": 1,
+      "baths": 1.0,
+      "max_guests": 2,
+      "rating": 4.84,
+      "review_count": 65,
+      "description": "A warm apartment lined with bookshelves, a long breakfast table, and quick walks to cafes, parks, and bagel runs.",
+      "amenities": ["Wifi", "Bathtub", "Balcony", "Kitchen", "Washer"],
+      "house_rules": ["No smoking", "Please recycle glass", "Pets allowed on approval"],
+      "blocked_ranges": [
+        {"start": "2026-07-03", "end": "2026-07-06"}
+      ],
+      "images": [
+        {
+          "url": "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=1200&q=80",
+          "alt_text": "Book-filled apartment",
+          "display_order": 0
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80",
+          "alt_text": "Warm reading nook",
+          "display_order": 1
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "slug": "county-barn-retreat",
+      "host_id": 4,
+      "title": "County Barn Retreat",
+      "city": "Prince Edward County",
+      "country": "Canada",
+      "neighborhood": "Hillier",
+      "price_per_night": 295,
+      "cleaning_fee": 55,
+      "service_fee": 36,
+      "bedrooms": 3,
+      "beds": 4,
+      "baths": 2.0,
+      "max_guests": 6,
+      "rating": 4.95,
+      "review_count": 58,
+      "description": "A restored barn with vaulted beams, vineyard views, a cedar sauna, and room for a long weekend group trip.",
+      "amenities": ["Wifi", "Sauna", "BBQ", "Indoor fireplace", "Parking", "Kitchen"],
+      "house_rules": ["No events", "Maximum six overnight guests", "Please close the barn doors at night"],
+      "blocked_ranges": [
+        {"start": "2026-06-19", "end": "2026-06-22"}
+      ],
+      "images": [
+        {
+          "url": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
+          "alt_text": "Converted barn stay",
+          "display_order": 0
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&w=1200&q=80",
+          "alt_text": "Barn living area",
+          "display_order": 1
+        }
+      ]
+    }
+  ],
+  "reviews": [
+    {
+      "id": 1,
+      "listing_id": 1,
+      "user_id": 5,
+      "rating": 5.0,
+      "comment": "The light in the mornings is unreal, and Maya left a neighborhood guide with actually useful food picks.",
+      "created_at": "2026-02-11T10:30:00"
+    },
+    {
+      "id": 2,
+      "listing_id": 1,
+      "user_id": 1,
+      "rating": 4.8,
+      "comment": "Super smooth check-in and a great desk setup for remote work.",
+      "created_at": "2026-01-19T09:15:00"
+    },
+    {
+      "id": 3,
+      "listing_id": 2,
+      "user_id": 5,
+      "rating": 4.9,
+      "comment": "Quiet, easy, and the deck gets beautiful evening sun.",
+      "created_at": "2026-02-24T18:20:00"
+    },
+    {
+      "id": 4,
+      "listing_id": 3,
+      "user_id": 1,
+      "rating": 5.0,
+      "comment": "One of the most memorable places I have stayed. The stars alone were worth it.",
+      "created_at": "2026-01-06T20:05:00"
+    },
+    {
+      "id": 5,
+      "listing_id": 4,
+      "user_id": 1,
+      "rating": 4.7,
+      "comment": "Perfect location for biking, quiet at night, and very easy to settle into.",
+      "created_at": "2026-01-28T15:45:00"
+    },
+    {
+      "id": 6,
+      "listing_id": 5,
+      "user_id": 2,
+      "rating": 4.8,
+      "comment": "Loved the bookshelves and morning coffee on the balcony.",
+      "created_at": "2026-02-03T08:40:00"
+    },
+    {
+      "id": 7,
+      "listing_id": 6,
+      "user_id": 5,
+      "rating": 5.0,
+      "comment": "Great for a group weekend. The sauna and giant dining table were the highlights.",
+      "created_at": "2026-01-14T13:10:00"
+    }
+  ],
+  "bookings": [
+    {
+      "id": 1,
+      "confirmation_code": "BKG-2001",
+      "listing_id": 4,
+      "guest_id": 1,
+      "check_in": "2026-04-25",
+      "check_out": "2026-04-29",
+      "guests": 2,
+      "total_price": 927,
+      "status": "confirmed",
+      "created_at": "2026-03-02T11:45:00"
+    },
+    {
+      "id": 2,
+      "confirmation_code": "BKG-2002",
+      "listing_id": 1,
+      "guest_id": 5,
+      "check_in": "2026-05-20",
+      "check_out": "2026-05-23",
+      "guests": 2,
+      "total_price": 815,
+      "status": "confirmed",
+      "created_at": "2026-03-05T09:20:00"
+    },
+    {
+      "id": 3,
+      "confirmation_code": "BKG-2003",
+      "listing_id": 6,
+      "guest_id": 5,
+      "check_in": "2026-04-11",
+      "check_out": "2026-04-14",
+      "guests": 4,
+      "total_price": 976,
+      "status": "confirmed",
+      "created_at": "2026-02-18T16:05:00"
+    }
+  ],
+  "wishlists": [
+    {
+      "id": 1,
+      "user_id": 1,
+      "listing_id": 6,
+      "notes": "Potential group weekend"
+    },
+    {
+      "id": 2,
+      "user_id": 5,
+      "listing_id": 3,
+      "notes": "Desert inspiration trip"
+    }
+  ],
+  "message_threads": [
+    {
+      "id": 1,
+      "listing_id": 2,
+      "guest_id": 1,
+      "host_id": 2,
+      "subject": "Parking and arrival",
+      "last_message_at": "2026-03-03T09:00:00",
+      "messages": [
+        {
+          "sender_id": 1,
+          "body": "Hi Maya, is street parking usually available after 6 PM on Fridays?",
+          "created_at": "2026-03-03T08:20:00"
+        },
+        {
+          "sender_id": 2,
+          "body": "Yes, usually quite easy on my block. I can also point you to a paid lot if needed.",
+          "created_at": "2026-03-03T09:00:00"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "listing_id": 4,
+      "guest_id": 1,
+      "host_id": 4,
+      "subject": "Bike storage details",
+      "last_message_at": "2026-03-06T14:30:00",
+      "messages": [
+        {
+          "sender_id": 1,
+          "body": "Hi Priya, would there be room for two bikes during our April stay?",
+          "created_at": "2026-03-06T14:00:00"
+        },
+        {
+          "sender_id": 4,
+          "body": "Absolutely. The storage room is private and right off the main entrance.",
+          "created_at": "2026-03-06T14:30:00"
+        }
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "id": 1,
+      "slug": "book-annex-loft",
+      "title": "Book a three-night Annex stay",
+      "category": "booking",
+      "difficulty": "easy",
+      "start_path": "/",
+      "persona_user_id": 1,
+      "intent": "Log in as Avery Chen and book Annex Glass Loft for 2 guests from April 14, 2026 to April 17, 2026.",
+      "success_criteria": "A confirmed booking exists for listing 1 with Avery as the guest and the exact requested dates.",
+      "validator_key": "booking_exists",
+      "validation_target": {
+        "listing_id": 1,
+        "guest_id": 1,
+        "check_in": "2026-04-14",
+        "check_out": "2026-04-17"
+      }
+    },
+    {
+      "id": 2,
+      "slug": "save-joshua-tree-dome",
+      "title": "Save the Joshua Tree dome for later",
+      "category": "wishlist",
+      "difficulty": "easy",
+      "start_path": "/listings/joshua-tree-artist-dome",
+      "persona_user_id": 1,
+      "intent": "Log in as Avery Chen and save Joshua Tree Artist Dome to the wishlist.",
+      "success_criteria": "A wishlist item exists for Avery and listing 3.",
+      "validator_key": "wishlist_contains",
+      "validation_target": {
+        "user_id": 1,
+        "listing_id": 3
+      }
+    },
+    {
+      "id": 3,
+      "slug": "message-maya-early-checkin",
+      "title": "Ask about early check-in in Leslieville",
+      "category": "messaging",
+      "difficulty": "medium",
+      "start_path": "/listings/leslieville-garden-suite",
+      "persona_user_id": 1,
+      "intent": "Log in as Avery Chen and send Maya a message from the Leslieville Garden Suite listing that mentions early check-in.",
+      "success_criteria": "A message exists in Avery's thread for listing 2 containing the phrase early check-in.",
+      "validator_key": "message_contains",
+      "validation_target": {
+        "guest_id": 1,
+        "listing_id": 2,
+        "body_contains": "early check-in"
+      }
+    },
+    {
+      "id": 4,
+      "slug": "host-block-annex-weekend",
+      "title": "Block a May weekend for host use",
+      "category": "hosting",
+      "difficulty": "medium",
+      "start_path": "/host",
+      "persona_user_id": 2,
+      "intent": "Log in as Maya Patel and block Annex Glass Loft from May 8, 2026 to May 10, 2026.",
+      "success_criteria": "Availability entries for listing 1 are unavailable on May 8 and May 9, 2026.",
+      "validator_key": "blocked_range",
+      "validation_target": {
+        "listing_id": 1,
+        "start": "2026-05-08",
+        "end": "2026-05-10"
+      }
+    },
+    {
+      "id": 5,
+      "slug": "cancel-vancouver-trip",
+      "title": "Cancel the Vancouver studio trip",
+      "category": "trip-management",
+      "difficulty": "easy",
+      "start_path": "/trips",
+      "persona_user_id": 1,
+      "intent": "Log in as Avery Chen and cancel the upcoming Vancouver Seawall Studio booking with confirmation code BKG-2001.",
+      "success_criteria": "Booking BKG-2001 is marked canceled.",
+      "validator_key": "booking_canceled",
+      "validation_target": {
+        "guest_id": 1,
+        "confirmation_code": "BKG-2001"
+      }
+    },
+    {
+      "id": 6,
+      "slug": "book-county-barn-weekend",
+      "title": "Book a Prince Edward County long weekend",
+      "category": "booking",
+      "difficulty": "medium",
+      "start_path": "/listings/county-barn-retreat",
+      "persona_user_id": 5,
+      "intent": "Log in as Leo Martinez and book County Barn Retreat for 4 guests from May 1, 2026 to May 4, 2026.",
+      "success_criteria": "A confirmed booking exists for listing 6 with Leo as the guest and the exact requested dates.",
+      "validator_key": "booking_exists",
+      "validation_target": {
+        "listing_id": 6,
+        "guest_id": 5,
+        "check_in": "2026-05-01",
+        "check_out": "2026-05-04"
+      }
+    },
+    {
+      "id": 7,
+      "slug": "save-annex-loft-for-later",
+      "title": "Save the Annex loft for a future Toronto stay",
+      "category": "wishlist",
+      "difficulty": "easy",
+      "start_path": "/listings/annex-glass-loft",
+      "persona_user_id": 5,
+      "intent": "Log in as Leo Martinez and save Annex Glass Loft to the wishlist for a future Toronto trip.",
+      "success_criteria": "A wishlist item exists for Leo and listing 1.",
+      "validator_key": "wishlist_contains",
+      "validation_target": {
+        "user_id": 5,
+        "listing_id": 1
+      }
+    },
+    {
+      "id": 8,
+      "slug": "message-priya-about-bike-storage",
+      "title": "Ask about bike storage before a Vancouver stay",
+      "category": "messaging",
+      "difficulty": "medium",
+      "start_path": "/listings/vancouver-seawall-studio",
+      "persona_user_id": 1,
+      "intent": "Log in as Avery Chen and send Priya a message from the Vancouver Seawall Studio listing that mentions bike storage.",
+      "success_criteria": "A message exists in Avery's thread for listing 4 containing the phrase bike storage.",
+      "validator_key": "message_contains",
+      "validation_target": {
+        "guest_id": 1,
+        "listing_id": 4,
+        "body_contains": "bike storage"
+      }
+    },
+    {
+      "id": 9,
+      "slug": "host-block-leslieville-cleaning-window",
+      "title": "Block the Leslieville suite for a cleaning window",
+      "category": "hosting",
+      "difficulty": "medium",
+      "start_path": "/host",
+      "persona_user_id": 2,
+      "intent": "Log in as Maya Patel and block Leslieville Garden Suite from May 18, 2026 to May 21, 2026.",
+      "success_criteria": "Availability entries for listing 2 are unavailable on May 18, May 19, and May 20, 2026.",
+      "validator_key": "blocked_range",
+      "validation_target": {
+        "listing_id": 2,
+        "start": "2026-05-18",
+        "end": "2026-05-21"
+      }
+    },
+    {
+      "id": 10,
+      "slug": "cancel-county-barn-booking",
+      "title": "Cancel Leo's County Barn Retreat booking",
+      "category": "trip-management",
+      "difficulty": "easy",
+      "start_path": "/trips",
+      "persona_user_id": 5,
+      "intent": "Log in as Leo Martinez and cancel the County Barn Retreat booking with confirmation code BKG-2003.",
+      "success_criteria": "Booking BKG-2003 is marked canceled.",
+      "validator_key": "booking_canceled",
+      "validation_target": {
+        "guest_id": 5,
+        "confirmation_code": "BKG-2003"
+      }
+    }
+  ]
+}

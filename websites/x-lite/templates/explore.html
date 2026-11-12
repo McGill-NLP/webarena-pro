@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="sticky-top border-b border-gray">
+    <div class="p-4">
+        <form action="/explore" method="GET" class="relative">
+            <input type="hidden" name="tab" value="{{ active_tab }}">
+            <input type="text" name="query" placeholder="Search X-lite" value="{{ q or '' }}"
+                   class="w-full bg-gray-100 border-none rounded-full py-2 px-10 focus:ring-1 focus:ring-blue-400 outline-none"
+                   data-testid="search-input">
+            <svg class="w-5 h-5 absolute left-3 top-2.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+            <button type="submit" class="hidden" data-testid="search-submit"></button>
+        </form>
+    </div>
+    <div class="flex overflow-x-auto">
+        {% for tab in explore_tabs %}
+        <a href="/explore?tab={{ tab.id }}"
+           class="flex-none min-w-[88px] px-3 text-center py-4 text-sm sm:text-base font-bold hover:bg-gray-50 transition {% if active_tab == tab.id %}border-b-4 border-blue-500 text-black{% else %}text-gray-500{% endif %}"
+           data-testid="explore-tab-{{ tab.id|replace('_', '-') }}">{{ tab.label }}</a>
+        {% endfor %}
+    </div>
+</div>
+
+<div data-testid="explore-results">
+    {% if q %}
+        {% if users %}
+        <div class="p-4 border-b border-gray">
+            <h2 class="text-xl font-black mb-4">People</h2>
+            <div class="divide-y divide-gray">
+                {% for s_user in users %}
+                <div class="py-3 flex items-center justify-between" data-testid="user-result-{{ s_user.username }}">
+                    <a href="/user/{{ s_user.username }}" class="flex items-center space-x-3 flex-grow">
+                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center font-bold text-blue-600">
+                            {{ s_user.display_name[0] }}
+                        </div>
+                        <div>
+                            <div class="font-bold text-sm">{{ s_user.display_name }}</div>
+                            <div class="text-gray-500 text-sm">@{{ s_user.username }}</div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="p-4 border-b border-gray">
+            <h2 class="text-xl font-black mb-4">Posts</h2>
+            <div class="divide-y divide-gray">
+                {% for tweet in tweets %}
+                    {% include "_tweet.html" %}
+                {% endfor %}
+                {% if not tweets %}
+                <div class="py-8 text-center text-gray-500">No posts found for "{{ q }}"</div>
+                {% endif %}
+            </div>
+        </div>
+    {% else %}
+        <div class="p-4 border-b border-gray">
+            <h2 class="text-xl font-black">{{ page_title }}</h2>
+            <div class="text-gray-500 text-sm mt-1">{{ page_subtitle }}</div>
+        </div>
+
+        <div class="p-4 border-b border-gray"
+             {% if active_tab != 'for_you' %}data-testid="{{ active_tab }}-list"{% endif %}>
+            <div class="space-y-1">
+                {% for topic in topics %}
+                <a href="{{ topic.href or ('/explore?tab=' ~ active_tab ~ '&topic=' ~ (topic.query|urlencode)) }}" class="block py-3 hover:bg-gray-50 transition" data-testid="explore-clickable-item-{{ active_tab }}-{{ loop.index }}">
+                    <div class="text-sm text-gray-500">{{ topic.category }}</div>
+                    <div class="font-black text-lg">{{ topic.name }}</div>
+                    <div class="text-sm text-gray-500">{{ topic.count }}</div>
+                </a>
+                {% endfor %}
+                {% if not topics %}
+                <div class="py-6 text-center text-gray-500">No sampled topics found for this category yet.</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="divide-y divide-gray">
+            {% for tweet in tab_tweets %}
+                {% include "_tweet.html" %}
+            {% endfor %}
+            {% if not tab_tweets %}
+            <div class="py-8 text-center text-gray-500">No sampled posts found for this category yet.</div>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

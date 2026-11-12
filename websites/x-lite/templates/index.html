@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="sticky-top p-4 border-b border-gray">
+    <h1 class="text-xl font-black">Home</h1>
+</div>
+
+<div class="flex border-b border-gray">
+    <a href="/?tab=for_you{% if q %}&q={{ q|urlencode }}{% endif %}"
+       class="flex-1 text-center py-4 font-bold hover:bg-gray-50 transition {% if active_tab == 'for_you' %}border-b-4 border-blue-500 text-black{% else %}text-gray-500{% endif %}"
+       data-testid="timeline-tab-for-you">
+        For you
+    </a>
+    <a href="/?tab=following{% if q %}&q={{ q|urlencode }}{% endif %}"
+       class="flex-1 text-center py-4 font-bold hover:bg-gray-50 transition {% if active_tab == 'following' %}border-b-4 border-blue-500 text-black{% else %}text-gray-500{% endif %}"
+       data-testid="timeline-tab-following">
+        Following
+    </a>
+</div>
+
+{% if user %}
+<div class="p-4 border-b border-gray flex space-x-4">
+    <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center font-bold text-gray-600 flex-shrink-0">
+        {{ user.display_name[0] }}
+    </div>
+    <div class="flex-grow">
+        <form action="/tweet" method="POST">
+            <textarea name="content" placeholder="What's happening?"
+                      class="w-full text-xl outline-none resize-none py-2" rows="2"
+                      data-testid="post-input" data-test="post-tweet-textarea"></textarea>
+            <div class="flex justify-end border-t border-gray pt-2 mt-2">
+                <button type="submit" class="btn-primary px-4 py-2" data-testid="post-submit" data-test="post-tweet-button">Post</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+<div id="timeline-feed"
+     class="divide-y divide-gray"
+     data-next-offset="{{ next_offset }}"
+     data-page-size="{{ page_size }}"
+     data-has-more="{{ '1' if has_more else '0' }}"
+     data-tab="{{ active_tab }}"
+     data-query="{{ q or '' }}">
+    {% include "_tweet_list.html" %}
+</div>
+
+<div id="timeline-loader" class="hidden py-5 text-center text-gray-500 text-sm" data-testid="timeline-loader">
+    Loading more posts...
+</div>
+<div id="timeline-sentinel" class="h-1" aria-hidden="true"></div>
+<div id="timeline-end" class="py-5 text-center text-gray-500 text-sm {% if has_more %}hidden{% endif %}" data-testid="timeline-end">
+    No more posts.
+</div>
+
+<script>
+(() => {
+    const feed = document.getElementById("timeline-feed");
+    const loader = document.getElementById("timeline-loader");
+    const sentinel = document.getElementById("timeline-sentinel");
+    const end = document.getElementById("timeline-end");
+    if (!feed || !loader || !sentinel || !end) return;
+
+    let loading = false;
+    let hasMore = feed.dataset.hasMore === "1";
+    let nextOffset = Number.parseInt(feed.dataset.nextOffset || "0", 10);
+
+    async function loadMore() {
+        if (loading || !hasMore) return;
+        loading = true;
+        loader.classList.remove("hidden");
+
+        const params = new URLSearchParams({
+            offset: String(nextOffset),
+            tab: feed.dataset.tab || "for_you",
+        });
+        if (feed.dataset.query) {
+            params.set("q", feed.dataset.query);
+        }
+
+        try {
+            const response = await fetch(`/api/timeline?${params.toString()}`, {
+                headers: { "X-Requested-With": "fetch" },
+            });
+            if (!response.ok) throw new Error(`timeline ${response.status}`);
+            const payload = await response.json();
+            if (payload.html) {
+                feed.insertAdjacentHTML("beforeend", payload.html);
+            }
+            nextOffset = payload.next_offset;
+            hasMore = Boolean(payload.has_more);
+            feed.dataset.nextOffset = String(nextOffset);
+            feed.dataset.hasMore = hasMore ? "1" : "0";
+            if (!hasMore) {
+                end.classList.remove("hidden");
+            }
+        } catch (error) {
+            hasMore = false;
+            end.textContent = "Could not load more posts.";
+            end.classList.remove("hidden");
+        } finally {
+            loading = false;
+            loader.classList.add("hidden");
+        }
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+            loadMore();
+        }
+    }, { rootMargin: "900px 0px" });
+
+    observer.observe(sentinel);
+})();
+</script>
+{% endblock %}

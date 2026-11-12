@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "webarena-pro-bgym"
+version = "0.1.0"
+description = "WebArena-Pro BrowserGym integration"
+readme = "README.md"
+requires-python = ">=3.12"
+license = {file = "LICENSE"}
+dependencies = [
+    "webarena-pro-media[transcription,local]>=0.1.0",
+    "agentlab>=0.4.2",
+    "docker>=7.1.0",
+    "fastapi>=0.133.0",
+    "google-generativeai>=0.8.6",
+    "gradio<6.0",
+    "httpx>=0.28.1",
+    "webdav4>=0.10.0",
+    "icalendar>=6.0.0",
+    "vobject>=0.9.9",
+    "webarena-pro-core",
+    "openai>=1.109.1",
+]
+
+[project.optional-dependencies]
+verifier = [
+    "webarena-pro-core[verifier]",
+]
+
+[project.scripts]
+webarena-pro-agentlab-xray = "webarena_pro_bgym.xray:main"
+
+[tool.uv.sources]
+webarena-pro-core = { path = "../webarena-pro-core", editable = true }
+webarena-pro-media = { path = "../webarena-pro-media", editable = true }
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+    "pytest-timeout>=2.4.0",
+]

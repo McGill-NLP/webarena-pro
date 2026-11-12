@@ -1,0 +1,6 @@
+static/videos/
+static/thumbnails/
+static/videos_backup_original/
+database.db
+__pycache__/
+.verify_deps/

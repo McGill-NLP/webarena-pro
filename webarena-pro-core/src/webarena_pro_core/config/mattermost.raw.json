@@ -1,0 +1,2619 @@
+[
+  {
+    "intent": "I’m planning to write a short report about addiction using a YouTube video as reference material, and I want to share it with Jane. Find a video that discusses weed addiction and how to overcome it. Then, in the Research Lab workspace in Notion, create a new page titled “Addiction”, include what the video describes as the opposite of addiction, and summarize in one sentence what the professor suggests doing to overcome addiction. Share the published link with Jane.",
+    "login_username": "admin",
+    "login_usernames": {
+      "mattermost": "admin",
+      "notion": "demo@webarena.local",
+      "yt-lite": "seed_user"
+    },
+    "require_login": true,
+    "sites": [
+      "mattermost",
+      "notion",
+      "yt-lite"
+    ],
+    "task_id": "098",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Found the weed-addiction video (fv1285) on yt-lite.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "yt-lite",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(fv1285)\",\\s*\"watched_at\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent searched yt-lite for 'weed' and opened the video about weed addiction and how to overcome addiction."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Created a page titled 'Addiction' in the Research Lab workspace whose content says the opposite of addiction is connection and summarizes the advice (you can't do this alone; ask for help).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\"Addiction\\.?\"[^}]*\"workspace\":\"Research Lab\"[^}]*\"deleted\":false"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"page\":\"Addiction\\.?\",\"workspace\":\"Research Lab\"[^}]*\"text\":\"[^\"]*(?i:connection)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"page\":\"Addiction\\.?\",\"workspace\":\"Research Lab\"[^}]*\"text\":\"[^\"]*(?i:ask for help|need help|can.?t do (this|it) alone|reach out)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A Notion page titled 'Addiction' in the Research Lab workspace states that the opposite of addiction is connection and includes a one-sentence summary like 'you can't do this alone, you need help and should ask for help'."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Published the page and shared the link with jane.smith via Mattermost DM.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\"Addiction\\.?\"[^}]*\"workspace\":\"Research Lab\"[^}]*\"deleted\":false,\"published\":true"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The 'Addiction' page was published (share link created)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "jane.smith received the published link in a direct message.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "channel_posts",
+                  "site": "mattermost",
+                  "params": {
+                    "user": "admin"
+                  },
+                  "resolve": [
+                    {
+                      "api": "user_by_name",
+                      "params": {
+                        "user": "admin",
+                        "username": "admin"
+                      },
+                      "extract": "id",
+                      "bind": "u1"
+                    },
+                    {
+                      "api": "user_by_name",
+                      "params": {
+                        "user": "admin",
+                        "username": "jane.smith"
+                      },
+                      "extract": "id",
+                      "bind": "u2"
+                    },
+                    {
+                      "api": "dm_channel",
+                      "params": {
+                        "user": "admin"
+                      },
+                      "extract": "id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*\\\\?/share\\\\?/)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "admin sent jane.smith a Mattermost direct message containing the published link of the 'Addiction' page."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "According to the weekly deployment schedule for March 10-14, what service is scheduled for Tuesday and who owns it?",
+    "login_username": "admin",
+    "login_usernames": {
+      "mattermost": "admin"
+    },
+    "require_login": true,
+    "sites": [
+      "mattermost"
+    ],
+    "task_id": "099",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Answer includes Payment Gateway v3.2.1 and owner Charlie.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "exact_match": "Payment Gateway v3.2.1; Charlie"
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer identifies Payment Gateway (version v3.2.1) as Tuesday's service and Charlie as its owner. Both facts must be affirmed, not merely quoted, denied, or offered as incorrect alternatives. Equivalent formatting, including Markdown and parentheses around the version, is acceptable."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find the latest date mentioned as the deadline for Project Alpha authentication to be working end-to-end.",
+    "login_username": "admin",
+    "login_usernames": {
+      "mattermost": "admin"
+    },
+    "require_login": true,
+    "sites": [
+      "mattermost"
+    ],
+    "task_id": "100",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Answer states March 25 and the March 28 demo context.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "March 25",
+                    "March 28"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Answer states March 25 and the March 28 demo context."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "In the weekly marketing analytics report, what was the demo page conversion rate from views to demo requests?",
+    "login_username": "admin",
+    "login_usernames": {
+      "mattermost": "admin"
+    },
+    "require_login": true,
+    "sites": [
+      "mattermost"
+    ],
+    "task_id": "101",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Answer includes the conversion rate 9.75%.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "9.75%"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Answer includes 312, 3,200, and 9.75%."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "In the PR #287 code review thread, what retry behavior did Charlie describe?",
+    "login_username": "admin",
+    "login_usernames": {
+      "mattermost": "admin"
+    },
+    "require_login": true,
+    "sites": [
+      "mattermost"
+    ],
+    "task_id": "102",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Answer includes 3 retries and 1s/2s/4s/8s.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "3 retries",
+                    "1s",
+                    "2s",
+                    "4s",
+                    "8s"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Answer includes 3 retries and 1s/2s/4s/8s."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create the HR team and share the invite link with Alice, Bob, John, and Ivy from the TechCorp General Team.",
+    "login_username": "admin",
+    "login_usernames": {
+      "mattermost": "admin"
+    },
+    "require_login": true,
+    "sites": [
+      "mattermost"
+    ],
+    "task_id": "103",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The HR team was created.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "api": "team_by_name",
+                  "params": {
+                    "user": "admin",
+                    "team_name": "hr"
+                  },
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": [
+                        200
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The HR team was created."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The HR team invite link was shared with Alice, Bob, John, and Ivy.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_contains": "invite"
+                      },
+                      {
+                        "action_contains": "Invite"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The HR team invite link was shared with Alice, Bob, John, and Ivy."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a “Project Alpha & Beta” channel in the Engineering team and invite all members from the existing Project Alpha and Project Beta channels.",
+    "login_username": "admin",
+    "login_usernames": {
+      "mattermost": "admin"
+    },
+    "require_login": true,
+    "sites": [
+      "mattermost"
+    ],
+    "task_id": "104",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The 'Project Alpha & Beta' channel was created in Engineering.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "action_contains": "Project Alpha & Beta"
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The 'Project Alpha & Beta' channel was created in Engineering."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "All Project Alpha and Project Beta members were invited.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_contains": "invite"
+                      },
+                      {
+                        "action_contains": "Add"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "All Project Alpha and Project Beta members were invited."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Mark all unread messages as read across all teams, channels, and direct messages, and add an eyes reaction to the last message in each.",
+    "login_username": "admin",
+    "login_usernames": {
+      "mattermost": "admin"
+    },
+    "require_login": true,
+    "sites": [
+      "mattermost"
+    ],
+    "task_id": "105",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "All unread messages were marked as read.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "all": [
+                      {
+                        "action_regex": "(?i)mark"
+                      },
+                      {
+                        "action_regex": "(?i)as read"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "All unread messages were marked as read."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Eyes reaction added to last message of each previously-unread conversation.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "action_regex": "(?i)eyes"
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Eyes reaction added to last message of each previously-unread conversation."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "In the Engineering team, post that the projects are completed in the Project Alpha and Project Beta channels and leave both channels. Then, create a Project Charlie channel and invite Kevin, Bob, Jane, Lisa, and Mike.",
+    "login_username": "admin",
+    "login_usernames": {
+      "mattermost": "admin"
+    },
+    "require_login": true,
+    "sites": [
+      "mattermost"
+    ],
+    "task_id": "106",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Posted that the project is completed in the Project Alpha channel.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "api": "channel_posts",
+                  "params": {
+                    "user": "admin"
+                  },
+                  "resolve": [
+                    {
+                      "api": "channel_by_name",
+                      "params": {
+                        "user": "admin",
+                        "team_name": "engineering",
+                        "channel_name": "project-alpha"
+                      },
+                      "extract": "id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_contains",
+                      "value": "completed"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A message stating the project is completed was posted in the Project Alpha channel."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "Left the Project Alpha channel after posting.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "action_regex": "(?i)leave"
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent left the Project Alpha channel after posting."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Posted that the project is completed in the Project Beta channel.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "api": "channel_posts",
+                  "params": {
+                    "user": "admin"
+                  },
+                  "resolve": [
+                    {
+                      "api": "channel_by_name",
+                      "params": {
+                        "user": "admin",
+                        "team_name": "engineering",
+                        "channel_name": "project-beta"
+                      },
+                      "extract": "id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_contains",
+                      "value": "completed"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A message stating the project is completed was posted in the Project Beta channel."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [
+            "r3"
+          ],
+          "eval_config": {
+            "rubric": "Left the Project Beta channel after posting.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "action_regex": "(?i)leave"
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent left the Project Beta channel after posting."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Created a Project Charlie channel and invited Kevin, Bob, Jane, Lisa, Mike.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "api": "channel_by_name",
+                  "params": {
+                    "user": "admin",
+                    "team_name": "engineering",
+                    "channel_name": "project-charlie"
+                  },
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": [
+                        200
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Created a Project Charlie channel and invited Kevin, Bob, Jane, Lisa, Mike."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a “Project Charlie” channel to the Engineering team and group “Project Alpha,” “Project Beta,” and “Project Charlie” under a “project” category. Then, group “devops,” “code reviews,” “bugs and issues,” and “deployments” under a “developments” category.",
+    "login_username": "admin",
+    "login_usernames": {
+      "mattermost": "admin"
+    },
+    "require_login": true,
+    "sites": [
+      "mattermost"
+    ],
+    "task_id": "107",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Created the 'Project Charlie' channel in Engineering.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "api": "channel_by_name",
+                  "params": {
+                    "user": "admin",
+                    "team_name": "engineering",
+                    "channel_name": "project-charlie"
+                  },
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": [
+                        200
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Created the 'Project Charlie' channel in Engineering."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Created a 'project' category with Alpha, Beta, Charlie.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "action_contains": "project"
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Created a 'project' category with Alpha, Beta, Charlie."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Created a 'developments' category with devops, code-reviews, bugs-and-issues, deployments.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "action_contains": "develop"
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Created a 'developments' category with devops, code-reviews, bugs-and-issues, deployments."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Remove Emma and Grace from the Marketing team, promote the remaining members to team admins, and send each of them a direct message informing them of their new role.",
+    "login_username": "admin",
+    "login_usernames": {
+      "mattermost": "admin"
+    },
+    "require_login": true,
+    "sites": [
+      "mattermost"
+    ],
+    "task_id": "108",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Removed Emma and Grace from the Marketing team.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "all": [
+                      {
+                        "action_contains": "Emma"
+                      },
+                      {
+                        "action_contains": "Grace"
+                      },
+                      {
+                        "action_contains": "remove"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Removed Emma and Grace from the Marketing team."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Promoted Frank, Ivy, and Kevin to team admins.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_contains": "admin"
+                      },
+                      {
+                        "action_contains": "promote"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Promoted Frank, Ivy, and Kevin to team admins."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "DM'd Frank, Ivy, Kevin about their admin role.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "all": [
+                      {
+                        "action_contains": "Frank"
+                      },
+                      {
+                        "action_contains": "Ivy"
+                      },
+                      {
+                        "action_contains": "Kevin"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "DM'd Frank, Ivy, Kevin about their admin role."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Call Emma and Bob. If no one joins within 30 seconds, end the call and send them a direct message asking them to call back when they’re available.",
+    "login_username": "admin",
+    "login_usernames": {
+      "mattermost": "admin"
+    },
+    "require_login": true,
+    "sites": [
+      "mattermost"
+    ],
+    "task_id": "109",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Initiated separate one-to-one calls with Emma and Bob.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "mattermost_calls",
+                "trust": "both",
+                "config": {
+                  "caller": "admin",
+                  "recipients": [
+                    "emma.davis",
+                    "bob.wilson"
+                  ],
+                  "criterion": "started"
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Initiated separate one-to-one calls with Emma and Bob."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "For each person, waited at least 30 seconds with nobody else joining and then ended that one-to-one call.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "mattermost_calls",
+                "trust": "both",
+                "config": {
+                  "caller": "admin",
+                  "recipients": [
+                    "emma.davis",
+                    "bob.wilson"
+                  ],
+                  "criterion": "unanswered_ended",
+                  "minimum_seconds": 30
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "For each person, waited at least 30 seconds with nobody else joining and then ended that one-to-one call."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Sent Emma and Bob each a direct message asking them to call back when available.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "mattermost_calls",
+                "trust": "terminal",
+                "config": {
+                  "caller": "admin",
+                  "recipients": [
+                    "emma.davis",
+                    "bob.wilson"
+                  ],
+                  "criterion": "callback"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find the message where Kevin outlined the key metrics for the new internal dashboard. Pin the message, copy its link, and share it with Diana, Natalie, and Alice.",
+    "login_username": "admin",
+    "login_usernames": {
+      "mattermost": "admin"
+    },
+    "previous_task_intent": "Find the message in the Engineering team channel where Kevin outlined the key metrics for the new internal dashboard. Pin the message, copy its link, and share it in a direct message with Diana, Natalie, and Alice.",
+    "require_login": true,
+    "sites": [
+      "mattermost"
+    ],
+    "task_id": "110",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Found Kevin's key metrics message.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_contains": "Kevin"
+                      },
+                      {
+                        "action_contains": "metric"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Found Kevin's key metrics message."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Pinned the key metrics message.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "action_contains": "pin"
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Pinned the key metrics message."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Created a DM with Diana, Natalie, and Alice.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "all": [
+                      {
+                        "action_contains": "Diana"
+                      },
+                      {
+                        "action_contains": "Natalie"
+                      },
+                      {
+                        "action_contains": "Alice"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Created a DM with Diana, Natalie, and Alice."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Shared the link to Kevin's message in the DM.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "action_contains": "http"
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Shared the link to Kevin's message in the DM."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find the Tuesday item in the Engineering , Deployments weekly deployment schedule for March 10-14. Then, find how many Home Internet payments appear in the first four months of 2026 and their total. Finally, find how many one-way economy flights from Denver (DEN) to Las Vegas (LAS) on 2026-06-15 are non-stop only. Post about these informations then.",
+    "login_username": "admin",
+    "login_usernames": {
+      "firefly": "test@example.com",
+      "mattermost": "admin",
+      "x-lite": "techvalueinvestor"
+    },
+    "previous_task_intent": "In Mattermost, find the Tuesday item in the Engineering , Deployments weekly deployment schedule for March 10-14. Then in Firefly, find how many Home Internet payments appear from 2026-01-01 through 2026-04-30 and their total. Finally, in flight-search, find how many one-way economy flights from Denver (DEN) to Las Vegas (LAS) on 2026-06-15 are nonstop only. Post these informations in X then.",
+    "require_login": true,
+    "sites": [
+      "mattermost",
+      "firefly",
+      "flight-search",
+      "x-lite"
+    ],
+    "task_id": "111",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Posted on X-lite: Tuesday deployment Payment Gateway v3.2.1 owned by Charlie; Home Internet Jan-Apr 2026 4 payments totaling C$344.96; 13 nonstop DEN-LAS economy flights on 2026-06-15.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state_table",
+                  "site": "x-lite",
+                  "params": {
+                    "table": "tweets"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"content\":\"[^\"]*(?:(?i:payment gateway v3\\.2\\.1))[^\"]*\"[^}]*\"user_id\":\"u41\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new X-lite post by techvalueinvestor states the Tuesday deployment is Payment Gateway v3.2.1 owned by Charlie, that there are 4 Home Internet payments Jan-Apr 2026 totaling C$344.96, and that there are 13 nonstop DEN-LAS economy flights on 2026-06-15."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The post includes Charlie, C$344.96 (4 payments) and 13 nonstop flights.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state_table",
+                  "site": "x-lite",
+                  "params": {
+                    "table": "tweets"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"content\":\"[^\"]*(?:(?i:charlie)[^\"]*344\\.96[^\"]*13|344\\.96[^\"]*(?i:charlie)[^\"]*13|13[^\"]*(?i:charlie)[^\"]*344\\.96)[^\"]*\"[^}]*\"user_id\":\"u41\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The X-lite post contains all three facts: Charlie as the owner, 4 Home Internet payments totaling C$344.96, and 13 nonstop DEN-LAS flights."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "I previously watched a breakfast recipe video and recreated the recipes from it. For the channel that mentioned Korean fried chicken, please suggest a cuisine I’ve tried before and include a link to its recipe.",
+    "login_username": "john.doe",
+    "login_usernames": {
+      "mattermost": "john.doe",
+      "yt-lite": "seed_user"
+    },
+    "require_login": true,
+    "sites": [
+      "mattermost",
+      "yt-lite"
+    ],
+    "task_id": "112",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Posted the three breakfast dishes (Blueberry Smoothie Bowl, Homemade Cereal, Chocolate PB Overnight Oats) in the Water Cooler channel.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "both",
+                "config": {
+                  "api": "channel_posts",
+                  "site": "mattermost",
+                  "params": {
+                    "user": "john.doe"
+                  },
+                  "resolve": [
+                    {
+                      "api": "user_by_name",
+                      "params": {
+                        "user": "john.doe",
+                        "username": "john.doe"
+                      },
+                      "extract": "id",
+                      "bind": "author_id"
+                    },
+                    {
+                      "api": "channel_by_name",
+                      "params": {
+                        "user": "john.doe",
+                        "team_name": "general",
+                        "channel_name": "watercooler"
+                      },
+                      "checks": [
+                        {
+                          "type": "json_path",
+                          "path": "delete_at",
+                          "operator": "equals",
+                          "value": 0
+                        }
+                      ],
+                      "extract": "id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "pagination": {
+                    "path": "posts",
+                    "count_path": "order",
+                    "page_size": 200,
+                    "max_pages": 100
+                  },
+                  "checks": [
+                    {
+                      "type": "json_collection_contains",
+                      "path": "posts",
+                      "match": {
+                        "user_id": {
+                          "resolved": "author_id"
+                        },
+                        "channel_id": {
+                          "resolved": "channel_id"
+                        },
+                        "delete_at": 0,
+                        "type": ""
+                      },
+                      "created_since_task_start": "create_at",
+                      "text": {
+                        "field": "message",
+                        "contains_all": [
+                          "Blueberry Smoothie Bowl",
+                          "Homemade Cereal",
+                          "Chocolate PB Overnight Oats"
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The message links the video '3 EASY VEGAN BREAKFAST IDEAS ( w/ rawincollege! )' (fv238 / fv337).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "both",
+                "config": {
+                  "api": "channel_posts",
+                  "site": "mattermost",
+                  "params": {
+                    "user": "john.doe"
+                  },
+                  "resolve": [
+                    {
+                      "api": "user_by_name",
+                      "params": {
+                        "user": "john.doe",
+                        "username": "john.doe"
+                      },
+                      "extract": "id",
+                      "bind": "author_id"
+                    },
+                    {
+                      "api": "channel_by_name",
+                      "params": {
+                        "user": "john.doe",
+                        "team_name": "general",
+                        "channel_name": "watercooler"
+                      },
+                      "checks": [
+                        {
+                          "type": "json_path",
+                          "path": "delete_at",
+                          "operator": "equals",
+                          "value": 0
+                        }
+                      ],
+                      "extract": "id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "pagination": {
+                    "path": "posts",
+                    "count_path": "order",
+                    "page_size": 200,
+                    "max_pages": 100
+                  },
+                  "checks": [
+                    {
+                      "type": "json_collection_contains",
+                      "path": "posts",
+                      "match": {
+                        "user_id": {
+                          "resolved": "author_id"
+                        },
+                        "channel_id": {
+                          "resolved": "channel_id"
+                        },
+                        "delete_at": 0,
+                        "type": ""
+                      },
+                      "created_since_task_start": "create_at",
+                      "text": {
+                        "field": "message",
+                        "link_targets_any": [
+                          "__YT-LITE__/watch/fv238",
+                          "__YT-LITE__/watch/fv337"
+                        ],
+                        "ignore_query_fragment": true
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find the demo page conversion rate from the weekly marketing analytics report. Then, find the highest-value open deal in the Proposal stage. Next, check April 2026 Restaurants spending against a C$250.00 target. Finally, find how many one-way economy flights from San Francisco (SFO) to Seattle (SEA) on 2026-06-15 are non-stop only. Post the combined summary in the analytics discussion.",
+    "login_username": "admin",
+    "login_usernames": {
+      "firefly": "test@example.com",
+      "mattermost": "admin",
+      "pipedrive": "admin@local.host"
+    },
+    "require_login": true,
+    "sites": [
+      "mattermost",
+      "pipedrive",
+      "firefly",
+      "flight-search"
+    ],
+    "task_id": "113",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The post includes the 9.75% demo-page conversion rate.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "channel_posts",
+                  "site": "mattermost",
+                  "params": {
+                    "user": "admin"
+                  },
+                  "resolve": [
+                    {
+                      "api": "channel_by_name",
+                      "params": {
+                        "user": "admin",
+                        "team_name": "marketing",
+                        "channel_name": "analytics"
+                      },
+                      "extract": "id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*9\\.75\\s?%[^\"]*(?i:apex)|[^\"]*(?i:apex)[^\"]*9\\.75\\s?%)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The summary posted in the analytics discussion includes the 9.75% demo page conversion rate (312 demo requests from 3,200 views)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The post identifies 'Apex Financial Group - Annual Support Contract' at $94,100.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "channel_posts",
+                  "site": "mattermost",
+                  "params": {
+                    "user": "admin"
+                  },
+                  "resolve": [
+                    {
+                      "api": "channel_by_name",
+                      "params": {
+                        "user": "admin",
+                        "team_name": "marketing",
+                        "channel_name": "analytics"
+                      },
+                      "extract": "id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*(?i:apex financial group - annual support contract)[^\"]*94,?100)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The post names 'Apex Financial Group - Annual Support Contract' as the highest-value open Proposal deal at $94,100."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The post states C$262.65 is over the C$250 target by C$12.65.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "channel_posts",
+                  "site": "mattermost",
+                  "params": {
+                    "user": "admin"
+                  },
+                  "resolve": [
+                    {
+                      "api": "channel_by_name",
+                      "params": {
+                        "user": "admin",
+                        "team_name": "marketing",
+                        "channel_name": "analytics"
+                      },
+                      "extract": "id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*262\\.65[^\"]*12\\.65)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The post states that April 2026 Restaurants spending of C$262.65 is over the C$250.00 target by C$12.65."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The post states there are 4 non-stop SFO-SEA flights.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "channel_posts",
+                  "site": "mattermost",
+                  "params": {
+                    "user": "admin"
+                  },
+                  "resolve": [
+                    {
+                      "api": "channel_by_name",
+                      "params": {
+                        "user": "admin",
+                        "team_name": "marketing",
+                        "channel_name": "analytics"
+                      },
+                      "extract": "id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*\\b4\\b[^\"]*(?i:non-?stop|direct)[^\"]*|[^\"]*(?i:non-?stop|direct)[^\"]*\\b4\\b)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The post states that there are 4 non-stop one-way economy SFO-SEA flights on 2026-06-15."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The summary was posted in the analytics discussion (marketing/analytics).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "channel_posts",
+                  "site": "mattermost",
+                  "params": {
+                    "user": "admin"
+                  },
+                  "resolve": [
+                    {
+                      "api": "channel_by_name",
+                      "params": {
+                        "user": "admin",
+                        "team_name": "marketing",
+                        "channel_name": "analytics"
+                      },
+                      "extract": "id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*9\\.75[^\"]*(?i:apex)[^\"]*262\\.65|[^\"]*(?i:apex)[^\"]*9\\.75[^\"]*262\\.65|[^\"]*262\\.65[^\"]*9\\.75[^\"]*(?i:apex))"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The combined summary was posted as a new message in the Analytics channel (the analytics discussion)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find the Volunteer Day at City Food Bank spots and signup count. Then, find how many Vacation-tagged expenses there are from 2025-06-01 through 2025-08-31 and their total. Next, find the fastest one-way economy flight from Los Angeles (LAX) to Tokyo Narita (NRT) on 2026-06-15. Finally, find the status and expected close date of Radiant Solar - Custom Development Agreement. Reply in the Upcoming Events thread with a combined summary.",
+    "login_username": "admin",
+    "login_usernames": {
+      "firefly": "test@example.com",
+      "mattermost": "admin",
+      "pipedrive": "admin@local.host"
+    },
+    "require_login": true,
+    "sites": [
+      "mattermost",
+      "firefly",
+      "flight-search",
+      "pipedrive"
+    ],
+    "task_id": "114",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Replied in the Upcoming Events thread (general/events) with the combined summary: 20 spots / 12 signed up, 10 Vacation expenses totaling C$4,901.35, the United Airlines fastest LAX-NRT flight, and Radiant Solar open with Feb 21, 2025 expected close.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "channel_posts",
+                  "site": "mattermost",
+                  "params": {
+                    "user": "admin"
+                  },
+                  "resolve": [
+                    {
+                      "api": "channel_by_name",
+                      "params": {
+                        "user": "admin",
+                        "team_name": "general",
+                        "channel_name": "events"
+                      },
+                      "extract": "id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*20 spots)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*12 signed)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*10 )"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*4,?901\\.35)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*(?i:united))"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*(?i:open))"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*(?i:feb(ruary)? 21,? 2025|2025-02-21))"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A reply by admin in the 'Upcoming Events' thread (Events channel) includes: City Food Bank has 20 spots and 12 signed up; 10 Vacation-tagged expenses from 2025-06-01 to 2025-08-31 totaling C$4,901.35; the fastest LAX-NRT economy flight is United Airlines (nonstop, 11h 35m); and Radiant Solar - Custom Development Agreement is open with expected close date Feb 21, 2025."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Share the safari folder with Agent2 so they can access it. Then, send the “Customer Interview Digest - Q2 2026” content to Henry via email and leave him a direct message.",
+    "login_username": "admin",
+    "login_usernames": {
+      "mattermost": "admin",
+      "nextcloud": "maya.patel",
+      "notion": "demo@webarena.local",
+      "thunderbird": "alice@techcorp.local"
+    },
+    "previous_task_intent": "Share the safari folder with Diana, Emma, and Jane so they can access it. Then, send the “Customer Interview Digest - Q2 2026” content to Henry via email and leave him a direct message.",
+    "require_login": true,
+    "sites": [
+      "mattermost",
+      "nextcloud",
+      "thunderbird",
+      "notion"
+    ],
+    "task_id": "115",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Shared the 'safari' folder in Nextcloud (authored recipient 'Agent 2' does not exist in the seed; any share of /safari counts).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "shares_list",
+                  "site": "nextcloud",
+                  "params": {
+                    "user": "maya.patel"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"path\":\\s*\"\\\\?/safari\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "maya.patel shared the 'safari' folder in Nextcloud with another user (the task names 'Agent 2', who does not exist in this Nextcloud; sharing it with any user or group is accepted)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Located the 'Customer Interview Digest — Q2 2026' page in Notion.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_regex": "(?i)customer interview"
+                      },
+                      {
+                        "url_regex": "(?i)interview|digest"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent opened the 'Customer Interview Digest — Q2 2026' page in Notion (WebArena HQ > Customer Research Hub)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Found Henry's email (henry.taylor@techcorp.com) in Mattermost and emailed him the digest content.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "thunderbird",
+                  "params": {
+                    "user": "alice@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"to\":\"[^\"]*henry\\.taylor@techcorp\\.com[^\"]*\"[^}]*\"body\":\"[^\"]*[^\"]*(?i:interview|digest)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "An email containing the 'Customer Interview Digest — Q2 2026' content was sent to henry.taylor@techcorp.com."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Sent Henry a direct message in Mattermost.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "channel_posts",
+                  "site": "mattermost",
+                  "params": {
+                    "user": "admin"
+                  },
+                  "resolve": [
+                    {
+                      "api": "user_by_name",
+                      "params": {
+                        "user": "admin",
+                        "username": "admin"
+                      },
+                      "extract": "id",
+                      "bind": "u1"
+                    },
+                    {
+                      "api": "user_by_name",
+                      "params": {
+                        "user": "admin",
+                        "username": "henry.taylor"
+                      },
+                      "extract": "id",
+                      "bind": "u2"
+                    },
+                    {
+                      "api": "dm_channel",
+                      "params": {
+                        "user": "admin"
+                      },
+                      "extract": "id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*(?i:e-?mail|digest|interview|sent))"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "admin sent henry.taylor a Mattermost direct message (about the emailed digest)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find Natalie Kim's onboarding buddy. Then, find all deals linked to Rebecca Roberts. Next, compare Groceries spending in January 2026 and March 2026. Finally, find the cheapest non-stop one-way economy flight from Toronto (YYZ) to Vancouver (YVR) on 2026-06-15. Post the combined summary in the new-hire announcement area",
+    "login_username": "admin",
+    "login_usernames": {
+      "firefly": "test@example.com",
+      "mattermost": "admin",
+      "pipedrive": "admin@local.host"
+    },
+    "require_login": true,
+    "sites": [
+      "mattermost",
+      "pipedrive",
+      "firefly",
+      "flight-search"
+    ],
+    "task_id": "116",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Posted in the new-hire announcement area (general/announcements): Natalie Kim's buddy is Frank Miller; Rebecca Roberts' deals Phoenix Logistics Hub - Marketing Automation Setup and Cascade Logistics - Marketing Automation Setup; January Groceries C$433.56 vs March C$351.27, C$82.29 higher; cheapest non-stop YYZ-YVR is Flair Airlines 9:49 AM - 12:02 PM.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "channel_posts",
+                  "site": "mattermost",
+                  "params": {
+                    "user": "admin"
+                  },
+                  "resolve": [
+                    {
+                      "api": "channel_by_name",
+                      "params": {
+                        "user": "admin",
+                        "team_name": "general",
+                        "channel_name": "announcements"
+                      },
+                      "extract": "id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*(?i:frank miller))"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*(?i:phoenix logistics hub))"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*(?i:cascade logistics))"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*433\\.56)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*351\\.27)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*82\\.29)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*(?i:flair))"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new admin message in the new-hire announcement area (Announcements channel) includes: Natalie Kim's onboarding buddy is Frank Miller; Rebecca Roberts is linked to 'Phoenix Logistics Hub - Marketing Automation Setup' and 'Cascade Logistics - Marketing Automation Setup'; January 2026 Groceries (C$433.56) exceeded March 2026 (C$351.27) by C$82.29; the cheapest non-stop YYZ-YVR economy flight is Flair Airlines 9:49 AM to 12:02 PM."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find the retry behavior Charlie described in the PR #287 code review thread. Then, find the pending activity shown for Lynx Cybersecurity - Data Analytics Solution. Next, find the fastest one-way economy flight from London Heathrow (LHR) to New York (JFK) on 2026-06-15. Finally, find the latest Netflix monthly subscription payment from 2026-01-01 through 2026-04-30. Reply in the PR #287 thread with a combined summary.",
+    "login_username": "admin",
+    "login_usernames": {
+      "firefly": "test@example.com",
+      "mattermost": "admin",
+      "pipedrive": "admin@local.host"
+    },
+    "require_login": true,
+    "sites": [
+      "mattermost",
+      "pipedrive",
+      "flight-search",
+      "firefly"
+    ],
+    "task_id": "117",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Replied in the PR #287 thread (engineering/code-reviews): max 3 retries with 1s, 2s, 4s backoff then fail (8s ceiling); Lynx Cybersecurity pending call 'Contract review meeting' due May 23, 2026; fastest LHR-JFK is Virgin Atlantic nonstop 8h 5m; latest Netflix payment 2026-04-22 for C$16.99.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "channel_posts",
+                  "site": "mattermost",
+                  "params": {
+                    "user": "admin"
+                  },
+                  "resolve": [
+                    {
+                      "api": "channel_by_name",
+                      "params": {
+                        "user": "admin",
+                        "team_name": "engineering",
+                        "channel_name": "code-reviews"
+                      },
+                      "extract": "id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*3 retries)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*(?i:contract review meeting))"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*(?i:may 23|2026-05-23))"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*(?i:virgin))"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*16\\.99)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*(?i:2026-04-22|april 22))"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A reply by admin in the 'PR #287' thread (Code Reviews channel) includes: Charlie's retry behavior (max 3 retries with 1s, 2s, 4s backoff then fail, 8s ceiling); the Lynx Cybersecurity - Data Analytics Solution pending activity is a call named 'Contract review meeting' due May 23, 2026; the fastest LHR-JFK economy flight is Virgin Atlantic, nonstop, 8h 5m; and the latest Netflix payment is on 2026-04-22 for C$16.99."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find the two action items in Bob's infrastructure status report for the week of March 10. Then, count the open deals currently shown in the Lead stage. Next, find how many Groceries expenses there are from 2026-01-01 through 2026-03-31 and their total. Finally, find how many one-way economy flights from Denver (DEN) to Las Vegas (LAS) on 2026-06-15 include United Airlines. Post the combined summary in the infrastructure status discussion.",
+    "login_username": "admin",
+    "login_usernames": {
+      "firefly": "test@example.com",
+      "mattermost": "admin",
+      "pipedrive": "admin@local.host"
+    },
+    "require_login": true,
+    "sites": [
+      "mattermost",
+      "pipedrive",
+      "firefly",
+      "flight-search"
+    ],
+    "task_id": "118",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Posted in the infrastructure status discussion (engineering/devops): the two action items (raise payment-service memory limit 512MB -> 768MB; investigate Wednesday p99 latency spike), 15 open Lead deals, 12 Groceries expenses totaling C$1,246.95, and 9 DEN-LAS flights including United.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "channel_posts",
+                  "site": "mattermost",
+                  "params": {
+                    "user": "admin"
+                  },
+                  "resolve": [
+                    {
+                      "api": "channel_by_name",
+                      "params": {
+                        "user": "admin",
+                        "team_name": "engineering",
+                        "channel_name": "devops"
+                      },
+                      "extract": "id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*768\\s?MB)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*(?i:p99))"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*15[^\"]*(?i:lead)|[^\"]*(?i:lead)[^\"]*15)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*12[^\"]*(?i:groceries)|[^\"]*(?i:groceries)[^\"]*12)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*1,?246\\.95)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*\\b9\\b[^\"]*(?i:united)|[^\"]*(?i:united)[^\"]*\\b9\\b)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new admin message in the infrastructure status discussion (DevOps channel) includes both action items from Bob's March 10 report (increase the payment-service memory limit from 512MB to 768MB; investigate the Wednesday p99 latency spike), 15 open deals in the Lead stage, 12 Groceries expenses from Jan-Mar 2026 totaling C$1,246.95, and 9 DEN-LAS flights on 2026-06-15 that include United Airlines."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Pin Kevin’s message in the Engineering team channel outlining the key metrics for the new internal dashboard, and share its link in a direct message with Diana, Natalie, and Alice.",
+    "login_username": "admin",
+    "login_usernames": {
+      "mattermost": "admin"
+    },
+    "previous_task_intent": "Find the message in the Engineering team channel where Kevin outlined the key metrics for the new internal dashboard. Pin the message, copy its link, and share it in a direct message with Diana, Natalie, and Alice.",
+    "require_login": true,
+    "sites": [
+      "mattermost"
+    ],
+    "task_id": "119",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Kevin's key metrics message is pinned in the Engineering channel.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "action_contains": "pin"
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Kevin's key metrics message is pinned in the Engineering channel."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A DM conversation includes Diana, Natalie, and Alice.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "all": [
+                      {
+                        "action_contains": "Diana"
+                      },
+                      {
+                        "action_contains": "Natalie"
+                      },
+                      {
+                        "action_contains": "Alice"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A DM conversation includes Diana, Natalie, and Alice."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The DM contains a link to Kevin's key metrics message.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "action_contains": "http"
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The DM contains a link to Kevin's key metrics message."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "All the meetings in the content events on Mattermost were moved to June 2026. So, take each event and move it to the same day of the same week of the month in June. Additionally, if a meeting would take place in early July (because it was supposed to take place in late March) with this scheme, that is allowed. Using this strategy, create a calendar event on Nextcloud for each event.",
+    "login_username": "admin",
+    "login_usernames": {
+      "mattermost": "admin",
+      "nextcloud": "maya.patel"
+    },
+    "previous_task_intent": "All the meetings in the content events on mattermost were moved to June 2026. So, take each event and move it to the same day of the and same week of the month in June additionally, if a meeting would take place in early july (because it was supposed to take place in late march) with this scheme that is allowed. Using this strategy create a calender event on next cloud for each event.)",
+    "require_login": true,
+    "sites": [
+      "mattermost",
+      "nextcloud"
+    ],
+    "task_id": "409",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Calendar Event created: Engineering All-Hands: June 13, 2026 | 10:00 AM, virtual |",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The task account maya.patel creates and saves a Nextcloud Calendar event for Engineering All-Hands on June 13, 2026, at 10:00 AM, with location virtual. Verify all required fields on that same new event; equivalent unambiguous date/time formatting and 12/24-hour notation are acceptable. Use the explicit June 2026 date approved for this event, not the historical March source date or the evaluator wall clock. Drafts, unsaved forms, an event for another meeting, wrong dates/times/locations, unrelated pre-existing events or final-answer claims are insufficient. This event is graded independently of the other five."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Calender Event created: Team Trivia Night | March 15 | June 21, 2026 | 6:00 PM, Slack #trivia-night |",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The task account maya.patel creates and saves a Nextcloud Calendar event for Team Trivia Night on June 21, 2026, at 6:00 PM, with location Slack #trivia-night. Verify all required fields on that same new event; equivalent unambiguous date/time formatting and 12/24-hour notation are acceptable. Use the explicit June 2026 date approved for this event, not the historical March source date or the evaluator wall clock. Drafts, unsaved forms, an event for another meeting, wrong dates/times/locations, unrelated pre-existing events or final-answer claims are insufficient. This event is graded independently of the other five."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Calender Event Created: Team Lunch at Bella Italia | March 20 | June 19, 2026 | 12:30 PM, Bella Italia |",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The task account maya.patel creates and saves a Nextcloud Calendar event for Team Lunch at Bella Italia on June 19, 2026, at 12:30 PM, with location Bella Italia. Verify all required fields on that same new event; equivalent unambiguous date/time formatting and 12/24-hour notation are acceptable. Use the explicit June 2026 date approved for this event, not the historical March source date or the evaluator wall clock. Drafts, unsaved forms, an event for another meeting, wrong dates/times/locations, unrelated pre-existing events or final-answer claims are insufficient. This event is graded independently of the other five."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Calnder Event Created: Volunteer Day at City Food Bank | March 22 | June 28, 2026 | 9:00 AM–1:00 PM, City Food Bank |",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The task account maya.patel creates and saves a Nextcloud Calendar event for Volunteer Day at City Food Bank on June 28, 2026, at 9:00 AM–1:00 PM, with location City Food Bank. Verify all required fields on that same new event; equivalent unambiguous date/time formatting and 12/24-hour notation are acceptable. Use the explicit June 2026 date approved for this event, not the historical March source date or the evaluator wall clock. Drafts, unsaved forms, an event for another meeting, wrong dates/times/locations, unrelated pre-existing events or final-answer claims are insufficient. This event is graded independently of the other five."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Calendar Event Created:Project Alpha Customer Demo | March 28 | June 27, 2026 | 2:00 PM, Conference Room A |",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The task account maya.patel creates and saves a Nextcloud Calendar event for Project Alpha Customer Demo on June 27, 2026, at 2:00 PM, with location Conference Room A. Verify all required fields on that same new event; equivalent unambiguous date/time formatting and 12/24-hour notation are acceptable. Use the explicit June 2026 date approved for this event, not the historical March source date or the evaluator wall clock. Drafts, unsaved forms, an event for another meeting, wrong dates/times/locations, unrelated pre-existing events or final-answer claims are insufficient. This event is graded independently of the other five."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r6",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Calendar Event Created:  Q1 Company Town Hall | March 31 | June 30, 2026 | 3:00 PM, virtual |",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The task account maya.patel creates and saves a Nextcloud Calendar event for Q1 Company Town Hall on June 30, 2026, at 3:00 PM, with location virtual. Verify all required fields on that same new event; equivalent unambiguous date/time formatting and 12/24-hour notation are acceptable. Use the explicit June 2026 date approved for this event, not the historical March source date or the evaluator wall clock. Drafts, unsaved forms, an event for another meeting, wrong dates/times/locations, unrelated pre-existing events or final-answer claims are insufficient. This event is graded independently of the other five."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

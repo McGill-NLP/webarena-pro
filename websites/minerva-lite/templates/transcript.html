@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-heading">
+  <h1 class="page-title">View Unofficial Transcript</h1>
+  {% include "_term_selector.html" %}
+</section>
+
+<section class="transcript-sheet" data-test="unofficial-transcript">
+  <div class="transcript-notes">
+    <p><span class="transcript-icon" aria-hidden="true"></span> + A diamond appears beside a course number to indicate a multi-term course.</p>
+    <p>* An asterisk appears next to the credit value of courses not counted in the total credits earned.</p>
+    <p>
+      Remarks column:<br>
+      I - Course is included in credits and included in the GPA.<br>
+      E - Course is excluded from credits and excluded from the GPA.<br>
+      A - Course is excluded from credits and included in the GPA.
+    </p>
+    <p>Please click <a href="#">help</a> for more transcript information or <a href="#">registration holds</a> <strong>for more information on holds.</strong></p>
+  </div>
+
+  <div class="transcript-student-grid">
+    <div>
+      <div><span>Student Name with Preferred First Name:</span> Chen, Maya</div>
+      <div><span>Student ID:</span> 260123456</div>
+      <div><span>Permanent Code:</span> CHEN04060400</div>
+      <div><span>Advisor(s):</span> Lavoie, Claire S</div>
+    </div>
+    <div>
+      <div><span>Expected Graduation Term and Degree</span></div>
+      <div>Winter 2028&nbsp;&nbsp;&nbsp;&nbsp;{{ curriculum.degree }}</div>
+    </div>
+  </div>
+
+  <table class="transcript-header-table">
+    <thead>
+      <tr>
+        <th>Subject</th>
+        <th>Number</th>
+        <th>Title</th>
+        <th>Cr. / C.E.U.</th>
+        <th>Grade</th>
+        <th>Remarks</th>
+        <th>Earned</th>
+        <th>Class Avg.</th>
+      </tr>
+    </thead>
+  </table>
+
+  <div class="transcript-previous">
+    <strong>PREVIOUS EDUCATION</strong><br>
+    US High School
+  </div>
+  <p class="transcript-required">Credits Required for BSc {{ curriculum.program_group }} - &nbsp;120 credits</p>
+
+  <section class="transcript-block">
+    {% for line in program_lines %}
+    <div>{{ line }}</div>
+    {% endfor %}
+    <p>Must complete COMP 202, COMP 250, COMP 251, COMP 273 and required complementary credits</p>
+    <p><u>Credits/Exemptions</u></p>
+    <p>From: Advanced Placement Exams - 24 credits</p>
+    <div class="transcript-exemptions">
+      <div>COMP&nbsp;&nbsp;&nbsp;&nbsp;202</div>
+      <div>MATH&nbsp;&nbsp;&nbsp;&nbsp;140</div>
+      <div>MATH&nbsp;&nbsp;&nbsp;&nbsp;141</div>
+      <div>PHYS&nbsp;&nbsp;&nbsp;&nbsp;131</div>
+      <div>PHYS&nbsp;&nbsp;&nbsp;&nbsp;142</div>
+      <div>ECON&nbsp;&nbsp;&nbsp;&nbsp;1XX</div>
+    </div>
+  </section>
+
+  {% for term in transcript_terms %}
+  <section class="transcript-term" data-test="transcript-term">
+    <h2>{{ term.term }}</h2>
+    {% for line in program_lines %}
+    <div>{{ line }}</div>
+    {% endfor %}
+    <div>{{ term.year }}</div>
+
+    <table class="transcript-course-table">
+      <tbody>
+        {% for subject, number, section, title, credits, grade, earned, avg in term.courses %}
+        <tr data-test="transcript-course-row">
+          <td>{{ subject }} {{ number }}</td>
+          <td>{{ section }}</td>
+          <td>{{ title }}</td>
+          <td>{{ credits }}</td>
+          <td>{{ grade }}</td>
+          <td></td>
+          <td>{{ earned }}</td>
+          <td>{{ avg }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="transcript-summary">
+      <div>
+        <div>TERM GPA: <span>{{ term.term_gpa }}</span></div>
+        <div>CUM GPA: <span>{{ term.cum_gpa }}</span></div>
+      </div>
+      <div>
+        <div>Advanced Standing</div>
+        <div>&amp; Transfer Credits: <span>24.00</span></div>
+        <div>TOTAL CREDITS: <span>{{ term.total_credits }}</span></div>
+      </div>
+      <div>
+        <div class="summary-labels"><span>Att Cr</span><span>Earned Cr</span><span>GPA Cr</span><span>Points</span></div>
+        <div><strong>TERM TOTALS:</strong> <span>{{ term.term_total }}</span><span>{{ term.term_total }}</span><span>{{ term.term_total }}</span><span>{{ term.points }}</span></div>
+        <div><strong>CUM TOTALS:</strong> <span>{{ term.cum_total }}</span><span>{{ term.cum_total }}</span><span>{{ term.cum_total }}</span><span>{{ term.points }}</span></div>
+      </div>
+    </div>
+    <p>Standing: Satisfactory</p>
+  </section>
+  {% endfor %}
+</section>
+{% endblock %}

@@ -1,0 +1,23 @@
+services:
+  nextcloud:
+    build: .
+    ports:
+      - "${WP_NEXTCLOUD_HOST_PORT:-8080}:80"
+    volumes:
+      - nextcloud_data:/var/www/html
+    environment:
+      - NEXTCLOUD_ADMIN_USER=admin
+      - NEXTCLOUD_ADMIN_PASSWORD=admin
+      - WP_NEXTCLOUD_HOST_PORT=${WP_NEXTCLOUD_HOST_PORT:-8080}
+      - WP_NEXTCLOUD_HOST
+      - WP_NEXTCLOUD_SCHEME
+      - WP_NEXTCLOUD_URL
+      - WP_PUBLIC_HOST
+      - WP_PUBLIC_SCHEME
+      # Optional existing external Office service; the default is bundled CODE.
+      - WP_COLLABORA_URL
+      - WP_COLLABORA_INTERNAL_URL
+      - WP_NEXTCLOUD_CALLBACK_URL
+
+volumes:
+  nextcloud_data:

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <section class="section-header">
+    <div>
+      <p class="eyebrow">Saved Stays</p>
+      <h1>Your wishlist</h1>
+    </div>
+  </section>
+
+  <section class="listing-grid">
+    {% for card in wishlist_cards %}
+      {% set item = card.item %}
+      <article class="listing-card">
+        <div class="card-image-shell">
+          <a class="image-frame" href="{{ request.app.url_path_for('listing_detail', slug=item.listing.slug) }}">
+            <img src="{{ item.listing.primary_image }}" alt="{{ item.listing.title }}" />
+          </a>
+          <span class="card-badge">{{ card.card_meta.label }}</span>
+        </div>
+        <div class="listing-card-body">
+          <h3><a href="{{ request.app.url_path_for('listing_detail', slug=item.listing.slug) }}">{{ item.listing.title }}</a></h3>
+          <p class="listing-card-subline">{{ card.card_meta.date_range }}</p>
+          <div class="card-price-row">
+            <span><strong>{{ card.card_meta.total_price_display }}</strong></span>
+            <span>★ {{ card.card_meta.rating_display }}</span>
+          </div>
+        </div>
+      </article>
+    {% endfor %}
+  </section>
+
+  {% if not wishlist_cards %}
+    <section class="empty-state">
+      <h3>Your wishlist is empty.</h3>
+      <p>Save any home you like from a listing page and it will show up here.</p>
+    </section>
+  {% endif %}
+{% endblock %}

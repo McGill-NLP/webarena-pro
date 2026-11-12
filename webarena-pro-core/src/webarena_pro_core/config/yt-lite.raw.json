@@ -1,0 +1,3408 @@
+[
+  {
+    "intent": "Create a Notion page titled “Impressionist Artist.” in the Research Lab workspace that documents a YouTube video relevant to Post-Impressionism. The page should include the video title and a bullet-point list of three artists explicitly mentioned in the video.",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "notion": "demo@webarena.local",
+      "yt-lite": "seed_user"
+    },
+    "previous_task_intent": "Find a YouTube video relevant to Post-Impressionism. From the video, identify and remember three artists who are explicitly mentioned. Then, in the Research Lab workspace in Notion, create a new page titled “Impressionist Artist.”. The page must include the YouTube video title and a bullet-point list of the three artists mentioned in the video.",
+    "require_login": true,
+    "sites": [
+      "yt-lite",
+      "notion"
+    ],
+    "task_id": "265",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Used the Post-Impressionism video (fv1368) as the source.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "yt-lite",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(fv1368)\",\\s*\"watched_at\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent found and watched the yt-lite video 'Post-Impressionist art for beginners | Demo tutorial on Post-Impressionism'."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A page titled 'Impressionist Artist.' exists in the Research Lab workspace.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\"Impressionist Artist\\.?\"[^}]*\"workspace\":\"Research Lab\"[^}]*\"deleted\":false"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A Notion page titled 'Impressionist Artist.' exists in the Research Lab workspace."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The page body contains the exact video title.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"page\":\"Impressionist Artist\\.?\",\"workspace\":\"Research Lab\"[^}]*\"text\":\"[^\"]*Post-Impressionist art for beginners \\| Demo tutorial on Post-Impressionism"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The 'Impressionist Artist.' page body contains the exact title of the source video: 'Post-Impressionist art for beginners | Demo tutorial on Post-Impressionism'."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The page has a bullet list of exactly three artists mentioned in the video (Vincent Van Gogh, Paul Cezanne, Georges Seurat).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"page\":\"Impressionist Artist\\.?\",\"workspace\":\"Research Lab\",\"type\":\"bulleted_list_item\",\"text\":\"[^\"]*(?i:van gogh)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"page\":\"Impressionist Artist\\.?\",\"workspace\":\"Research Lab\",\"type\":\"bulleted_list_item\",\"text\":\"[^\"]*(?i:c(é|e)zanne)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"page\":\"Impressionist Artist\\.?\",\"workspace\":\"Research Lab\",\"type\":\"bulleted_list_item\",\"text\":\"[^\"]*(?i:seurat)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The 'Impressionist Artist.' page contains a bullet-point list with exactly three artist names explicitly mentioned in the video (Vincent Van Gogh, Paul Cezanne, Georges Seurat)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Emma and Frank are huge fans of Henry. Earlier, you watched a YouTube video of Henry playing “Dance Monkey” on the radio. Find that video again, then send its link to Emma and Frank, mentioning which instrument was played.",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "mattermost": "admin",
+      "yt-lite": "seed_user"
+    },
+    "require_login": true,
+    "sites": [
+      "yt-lite",
+      "mattermost"
+    ],
+    "task_id": "266",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Found the video of Henry playing 'Dance Monkey' on the radio (fv008).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "yt-lite",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(fv008)\",\\s*\"watched_at\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent found (and opened) the yt-lite video of Henry playing 'Dance Monkey' live on the radio show."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Sent the video link to Emma and Frank in a Team Slack group message with the answer: violin.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "channel_posts",
+                  "site": "mattermost",
+                  "params": {
+                    "user": "admin"
+                  },
+                  "resolve": [
+                    {
+                      "url": "__MATTERMOST__/api/v4/users/me/channels",
+                      "method": "GET",
+                      "auth_user": "admin",
+                      "auth_mode": "bearer_login",
+                      "login_url": "__MATTERMOST__/api/v4/users/login",
+                      "token_header": "Token",
+                      "extract": "/display_name=admin, emma.davis, frank.miller/id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:fv008)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:(?i:violin))"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A Mattermost group message including admin, Emma Davis and Frank Miller contains the link to Henry's 'Dance Monkey' video and states that Henry played the violin."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "In the conclusion of the video “Supervised Machine Learning Classification Algorithms Application in Friction Stir Welding Process,” what is the accuracy of the support vector machine algorithm? Answer with a number between 0 and 1.",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "268",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Correctly find the video titled “Supervised Machine Learning Classification Algorithms Application in Friction Stir Welding Process.”",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(fv832)\",\\s*\"watched_at\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Correctly find the video titled “Supervised Machine Learning Classification Algorithms Application in Friction Stir Welding Process.”"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The response gives the support vector machine algorithm’s accuracy as a number between 0 and 1, and exact accuracy of 0.89.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "0.89"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The response gives the support vector machine algorithm’s accuracy as a number between 0 and 1, and exact accuracy of 0.89."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Search for “machine learning” and add videos that are 4 minutes or less to Watch Later.",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "269",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Searched for videos using “machine learning.”",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "url_regex": "(?i)q=machine(\\+|%20| )learning"
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Searched for videos using “machine learning.”"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Applied the “4 minutes or less” filter.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "url_regex": "duration=short"
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Applied the “4 minutes or less” filter."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Watch Later includes “Supervised Machine Learning Classification Algorithms Application in Friction Stir Welding Process.”",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"watch_later\":\\[[^\\]]*\\{\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"fv832\"\\}"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Watch Later includes “Supervised Machine Learning Classification Algorithms Application in Friction Stir Welding Process.”"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Watch Later includes “What is Layer Normalization?”",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"watch_later\":\\[[^\\]]*\\{\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"fv783\"\\}"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Watch Later includes “What is Layer Normalization?”"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Watch Later includes “Aging-US | Machine Learning Used to Estimate Physiological Age.”",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"watch_later\":\\[[^\\]]*\\{\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"fv538\"\\}"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Watch Later includes “Aging-US | Machine Learning Used to Estimate Physiological Age.”"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find a video relating to the paycheques of ceos, do text and figure appear on screen? if there are, what are the colours used to display the big number figures, what was the percentage growth of top ceo pay since 1978?",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "271",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Find and watch The wild growth of CEO Pay: Five numbers to watch,",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(fv1327)\",\\s*\"watched_at\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Find and watch The wild growth of CEO Pay: Five numbers to watch,"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Conclude that text does appear on screen, big number figures are displayed in red, and the percentage growth of top ceo pay since 1978 is 1,460%",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Conclude that text does appear on screen, big number figures are displayed in red, and the percentage growth of top ceo pay since 1978 is 1,460%"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Look at Life is Strange: Remastered Thoughts and Opinions by RyeBread, when was the game scheduled for release? Can you summarize what the creator talks about and his opinion? On which platforms is it available?",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "272",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Watch the whole video Life is Strange: Remastered Thoughts and Opinions by RyeBread and listen to what the creator says and summarizes",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(fv1153)\",\\s*\"watched_at\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Watch the whole video Life is Strange: Remastered Thoughts and Opinions by RyeBread and listen to what the creator says and summarizes"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Conclude that the release date of the game is or was FALL 2021, summarizes the opinion and thoughts of the creator, and it will be available on both PC, through steam, and console, specifically mentioning ps4 and xbox one, and",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Conclude that the release date of the game is or was FALL 2021, summarizes the opinion and thoughts of the creator, and it will be available on both PC, through steam, and console, specifically mentioning ps4 and xbox one, and"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "In the video Londa Demonstrates How To Fold Fabric to cut Long Strips of Bias, can you find anything related to the creator, can you find their website ?",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "274",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Watch the video Londa Demonstrates How To Fold Fabric to cut Long Strips of Bias",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(fv1397)\",\\s*\"watched_at\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Watch the video Londa Demonstrates How To Fold Fabric to cut Long Strips of Bias"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Conclude there is a website: \"londas-sewing.com\"",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "londas-sewing.com"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Conclude there is a website: \"londas-sewing.com\""
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "In the video Playing Meme Music With The Recorder | ThatMidgetAsian, what song does the creator play with the recorder",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "277",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Watch and listen to the video Playing Meme Music With The Recorder | ThatMidgetAsian",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(fv818)\",\\s*\"watched_at\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Watch and listen to the video Playing Meme Music With The Recorder | ThatMidgetAsian"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Describe a song based on recorder audio, any song.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Describe a song based on recorder audio, any song."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "In the video, Zener Diodes: The Unsung Heroes of Electronics, did the creator use any stock images and videos? if so, where do they originate from",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "278",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "watch Zener Diodes: The Unsung Heroes of Electronics and find watermarks",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(fv1408)\",\\s*\"watched_at\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "watch Zener Diodes: The Unsung Heroes of Electronics and find watermarks"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Conclude that Storyblocks is the source of these background video or is given credit to",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "storyblocks"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Conclude that Storyblocks is the source of these background video or is given credit to"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "In the video, Zener Diodes: The Unsung Heroes of Electronics, was there any act of soldering shown?",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "279",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "watch Zener Diodes: The Unsung Heroes of Electronics and find soldering iron",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(fv1408)\",\\s*\"watched_at\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "watch Zener Diodes: The Unsung Heroes of Electronics and find soldering iron"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Conclude that Zener Diodes: The Unsung Heroes of Electronics does show soldering iron videos and the action of soldering",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Conclude that Zener Diodes: The Unsung Heroes of Electronics does show soldering iron videos and the action of soldering"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "In the video, REMEMBER CANDY CIGARETTES does the creator using and source videos from TikTok?",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "previous_task_intent": "In the video, REMEMBER CANDY CIGARETTES does the creator use and source videos from TikTok?",
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "280",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Watch the video REMEMBER CANDY CIGARETTES and analyze the frames",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(fv1385)\",\\s*\"watched_at\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Watch the video REMEMBER CANDY CIGARETTES and analyze the frames"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Conclude yes, there are tiktok clips that appear throughout the video",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Conclude yes, there are tiktok clips that appear throughout the video"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "In the video New Townsmen Update Feature ★ Trade Guild, does the creator show their face any point after 30 seconds into the video?",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "281",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "watch the video New Townsmen Update Feature ★ Trade Guild",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(fv1307)\",\\s*\"watched_at\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "watch the video New Townsmen Update Feature ★ Trade Guild"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Conclude that the creator does not show his face at anypoint after the 30 second mark",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Conclude that the creator does not show his face at anypoint after the 30 second mark"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "In the video \"How to 4 Layer Ramp Rush on Console\", what are the important things to note to successfully 4 layer ramp rush?",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "282",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Opened, watched, and listened to the video How to 4 Layer Ramp Rush on Console",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(fv1395)\",\\s*\"watched_at\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Opened, watched, and listened to the video How to 4 Layer Ramp Rush on Console"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Describe one of the main parts of the process: Rythm, jump, or look down",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include_any": [
+                    "rhythm",
+                    "rythm",
+                    "jump",
+                    "look down"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Describe one of the main parts of the process: Rythm, jump, or look down"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Report what is said during the last 30 seconds of the first video on the website.",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "previous_task_intent": "open the first video and tell me what is said during the last 30 seconds.",
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "284",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The response is based on the first video in yt-lite.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(fv1419)\",\\s*\"watched_at\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The response is based on the first video in yt-lite."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The response reports speech from the final 30 seconds of the video.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The response reports speech from the final 30 seconds of the video."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The response accurately captures the spoken content about despair, its solution, patience, and reason.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "despair",
+                    "patience",
+                    "reason"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The response accurately captures the spoken content about despair, its solution, patience, and reason."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "In the video \"Tips for winter biking\", does the creator demonstrate himself riding a bike anywhere at all during the video?",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "285",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Opened and watched the video \"Tips for winter biking\"",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(fv170)\",\\s*\"watched_at\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Opened and watched the video \"Tips for winter biking\""
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The answer should say yes, many times, the creator rides a bike and demonstrates",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The answer should say yes, many times, the creator rides a bike and demonstrates"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "In the video \"Tips for winter biking\", does the creator demonstrate inside a virtual setting or an indoor setting.",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "286",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Opened and watched the video \"Tips for winter biking\"",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(fv170)\",\\s*\"watched_at\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Opened and watched the video \"Tips for winter biking\""
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Answer should contain that the creator is neither in a virtual setting or an indoor setting, he is outside, riding in a real winter environment",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Answer should contain that the creator is neither in a virtual setting or an indoor setting, he is outside, riding in a real winter environment"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "In the video \"Australian BASE jumper gets his parachute STUCK - leaving him dangling on the side of a cliff,\" does the person get saved?",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "previous_task_intent": "In the video \"Australian BASE jumper gets his parachute STUCK - leaving him dangling on the side of a cliff,\" does the person get saved in the video?",
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "287",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Watch the video \"Australian BASE jumper gets his parachute STUCK - leaving him dangling on the side of a cliff\"",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(fv1406)\",\\s*\"watched_at\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Watch the video \"Australian BASE jumper gets his parachute STUCK - leaving him dangling on the side of a cliff\""
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Conclude that the person did get saved",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Conclude that the person did get saved"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find a video related to breakfast recipes, identify the three main fruit ingredients shown in the video, and draw three circles using the colors of those fruits.",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "penpot": "admin@penpot.local",
+      "yt-lite": "seed_user"
+    },
+    "require_login": true,
+    "sites": [
+      "yt-lite",
+      "penpot"
+    ],
+    "task_id": "288",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Found and watched the vegan breakfast video (fv238/fv337) and identified strawberry, blueberry and banana.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "yt-lite",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(fv238|fv337)\",\\s*\"watched_at\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent watched the '3 EASY VEGAN BREAKFAST IDEAS' video and identified the three main fruits: strawberry, blueberry and banana."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A new Penpot file contains three circles colored red, blue/purple and yellow.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "rpc",
+                  "site": "penpot",
+                  "params": {
+                    "command": "get-file",
+                    "body": "{\"id\": \"{file_id}\"}"
+                  },
+                  "resolve": [
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-profile",
+                        "body": "{}"
+                      },
+                      "extract": "defaultTeamId",
+                      "bind": "team_id"
+                    },
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-team-recent-files",
+                        "body": "{\"team-id\": \"{team_id}\"}"
+                      },
+                      "extract": "0.id",
+                      "bind": "file_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"type\":\"circle\"",
+                      "operator": "gte",
+                      "value": 3
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new Penpot file contains three circle shapes filled red, blue or purple, and yellow (matching strawberry, blueberry and banana)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find a video of someone face-painting a Mario character, then draw the exact shape that is painted on the person’s face.",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "penpot": "admin@penpot.local",
+      "yt-lite": "seed_user"
+    },
+    "require_login": true,
+    "sites": [
+      "yt-lite",
+      "penpot"
+    ],
+    "task_id": "289",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Found the video 'Face painting Princess Peach from video game Mario - Princess Crown - Tiara - super quick design' (fv491).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "yt-lite",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(fv491)\",\\s*\"watched_at\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent found and watched the yt-lite video 'Face painting Princess Peach from video game Mario - Princess Crown - Tiara - super quick design'."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The Penpot illustration includes a crown with three points and three circles inside.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "rpc",
+                  "site": "penpot",
+                  "params": {
+                    "command": "get-file",
+                    "body": "{\"id\": \"{file_id}\"}"
+                  },
+                  "resolve": [
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-profile",
+                        "body": "{}"
+                      },
+                      "extract": "defaultTeamId",
+                      "bind": "team_id"
+                    },
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-team-recent-files",
+                        "body": "{\"team-id\": \"{team_id}\"}"
+                      },
+                      "extract": "0.id",
+                      "bind": "file_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"type\":\"circle\"",
+                      "operator": "gte",
+                      "value": 3
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"type\":\"(path|bool|polygon|rect)\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new Penpot file contains a drawing of a crown with three points and three circles inside it."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "What was the last card at the video of playing card game?",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "290",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "9 of hearts.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "9 of hearts"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "9 of hearts."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Draw the last card that appeared in the video playing card game.",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "penpot": "admin@penpot.local",
+      "yt-lite": "seed_user"
+    },
+    "require_login": true,
+    "sites": [
+      "yt-lite",
+      "penpot"
+    ],
+    "task_id": "291",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Found and watched 'How to play Snip Snap Snorem' (fv1202) to the end.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "yt-lite",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(fv1202)\",\\s*\"watched_at\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent found and watched the yt-lite video 'How to play Snip Snap Snorem' until the end."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Drew 9 red hearts on a new Penpot page (the last card, the nine of hearts).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "rpc",
+                  "site": "penpot",
+                  "params": {
+                    "command": "get-file",
+                    "body": "{\"id\": \"{file_id}\"}"
+                  },
+                  "resolve": [
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-profile",
+                        "body": "{}"
+                      },
+                      "extract": "defaultTeamId",
+                      "bind": "team_id"
+                    },
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-team-recent-files",
+                        "body": "{\"team-id\": \"{team_id}\"}"
+                      },
+                      "extract": "0.id",
+                      "bind": "file_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"type\":\"path\"",
+                      "operator": "gte",
+                      "value": 9
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"fillColor\":\"#(f{2}|e[0-9a-f]|d[0-9a-f])[0-3][0-9a-f][0-3][0-9a-f]\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "rpc",
+                  "site": "penpot",
+                  "params": {
+                    "command": "get-file",
+                    "body": "{\"id\": \"{file_id}\"}"
+                  },
+                  "resolve": [
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-profile",
+                        "body": "{}"
+                      },
+                      "extract": "defaultTeamId",
+                      "bind": "team_id"
+                    },
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-team-recent-files",
+                        "body": "{\"team-id\": \"{team_id}\"}"
+                      },
+                      "extract": "0.id",
+                      "bind": "file_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"type\":\"bool\"",
+                      "operator": "gte",
+                      "value": 9
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"fillColor\":\"#(f{2}|e[0-9a-f]|d[0-9a-f])[0-3][0-9a-f][0-3][0-9a-f]\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new Penpot file contains nine red heart shapes (the nine of hearts was the last card in the video)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "In the video New Townsmen Update Feature ★ Trade Guild, does the creator show their face while commenting any point 30 seconds into the video?",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "292",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "watch the video New Townsmen Update Feature ★ Trade Guild",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(fv1307)\",\\s*\"watched_at\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "watch the video New Townsmen Update Feature ★ Trade Guild"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Conclude that the creator does not show his face at anypoint after the 30 second mark",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Conclude that the creator does not show his face at anypoint after the 30 second mark"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find a YouTube video that teaches how to write a poem and has a yellow clock in its thumbnail. After watching the video, create a report in the Personal Travel workspace in Notion with the title “How to Write a Poem.” Set the page emoji to match the title of the last poem mentioned in the video, and include the presenter’s Instagram account in the page content.",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "notion": "demo@webarena.local",
+      "yt-lite": "seed_user"
+    },
+    "require_login": true,
+    "sites": [
+      "yt-lite",
+      "notion"
+    ],
+    "task_id": "293",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Found the video 'HOW TO TEACH KIDS TO WRITE A POEM | WORKING ON CREATIVE WRITING | TIPS & TOOLS FOR CREATIVE WRITING!' (fv1317, yellow clock thumbnail).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "yt-lite",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(fv1317)\",\\s*\"watched_at\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent searched yt-lite for 'write a poem', selected the video with the yellow clock thumbnail ('HOW TO TEACH KIDS TO WRITE A POEM | WORKING ON CREATIVE WRITING | TIPS & TOOLS FOR CREATIVE WRITING!') and watched it."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A page titled 'How to Write a Poem' was created in the Personal Travel workspace.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\"How to Write a Poem\\.?\"[^}]*\"workspace\":\"Personal Travel\"[^}]*\"deleted\":false"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A Notion page titled 'How to Write a Poem' exists in the Personal Travel workspace."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The page icon is the ladybird emoji (🐞), matching the last poem in the video.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\"How to Write a Poem\\.?\",\"icon\":\"🐞\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The 'How to Write a Poem' page has the ladybird/ladybug emoji (🐞) as its icon."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The page includes the presenter's Instagram account @whatthelydiamonksdrew.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"page\":\"How to Write a Poem\\.?\"[^}]*\"text\":\"[^\"]*@?whatthelydiamonksdrew"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The 'How to Write a Poem' page content includes the presenter's Instagram account @whatthelydiamonksdrew."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find a video that discusses weed addiction and how to overcome addiction, specifically the one with “Starts with Me” in the thumbnail. Then, in the Research Lab workspace in Notion, create a new page titled “Addiction.” On the page, add “weed addiction” as a Heading 1. Under that heading, include what the video describes as the opposite of addiction, and summarize in one sentence what the professor suggests doing to overcome addiction.",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "notion": "demo@webarena.local",
+      "yt-lite": "seed_user"
+    },
+    "previous_task_intent": "I’m planning to write a short report about addiction and want to use YouTube as a reference. Find a YouTube video that discusses weed addiction and how to overcome addiction, specifically the one with “Starts with Me” in the thumbnail. Then, in the Research Lab workspace in Notion, create a new page titled “Addiction.” On the page, add “weed addiction” as a Heading 1. Under that heading, include what the video describes as the opposite of addiction, and summarize in one sentence what the professor suggests doing to overcome addiction.\n\nThe agent should first search YouTube using the query “write a poem,” select the video with the yellow clock in its thumbnail, and watch it.",
+    "require_login": true,
+    "sites": [
+      "yt-lite",
+      "notion"
+    ],
+    "task_id": "299",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Found the 'Starts With Me' weed addiction video (fv1285).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "yt-lite",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(fv1285)\",\\s*\"watched_at\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent searched yt-lite for 'weed' and opened the video with 'Starts with Me' in the thumbnail ('Why It's So Difficult To ACCEPT You're ADDICTED To WEED | Starts With Me')."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A page titled 'Addiction' exists in the Research Lab workspace with 'weed addiction' as a Heading 1.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\"Addiction\\.?\"[^}]*\"workspace\":\"Research Lab\"[^}]*\"deleted\":false"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"page\":\"Addiction\\.?\",\"workspace\":\"Research Lab\",\"type\":\"heading_1\",\"text\":\"[^\"]*(?i:weed addiction)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A Notion page titled 'Addiction' exists in the Research Lab workspace and contains 'weed addiction' as a Heading 1 block."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The page says the opposite of addiction is connection.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"page\":\"Addiction\\.?\",\"workspace\":\"Research Lab\"[^}]*\"text\":\"[^\"]*(?i:connection)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The 'Addiction' page states that the opposite of addiction is connection."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The page summarizes the professor's advice in one sentence (you can't do this alone; you need help and should ask for help).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"page\":\"Addiction\\.?\",\"workspace\":\"Research Lab\"[^}]*\"text\":\"[^\"]*(?i:ask for help|need help|can.?t do (this|it) alone|reach out)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The 'Addiction' page includes a one-sentence summary of what the professor suggests to overcome addiction, along the lines of 'you can't do this alone — you need help and should ask for help'."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Make a document which contains a step by step guide on how to make buffalo chicken dip with an ingredients list at  the beginning then the instructions after",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "mydrive": "agent1@test.com",
+      "yt-lite": "seed_user"
+    },
+    "require_login": true,
+    "sites": [
+      "yt-lite",
+      "mydrive"
+    ],
+    "task_id": "302",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A document was created in MyDrive",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A document was created in MyDrive"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "\"Buffalo Chicken Ranch Dip\" video was watched",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "yt-lite",
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"fv1384\",\\s*\"watched_at\""
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "\"Buffalo Chicken Ranch Dip\" video was watched"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "document shopping list must contain: 2 chicken breasts, block of softened  cream cheese, 1 cup ranch dressing,  1/2 cup franks red hot wing sauce, 3/4 of a cup shredded cheddar cheese",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "document shopping list must contain: 2 chicken breasts, block of softened  cream cheese, 1 cup ranch dressing,  1/2 cup franks red hot wing sauce, 3/4 of a cup shredded cheddar cheese. The ingredients list must appear before the instructions in the created MyDrive document."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "document instruction list should include: halve 2 chicken breasts, salt and pepper, 3 minutes a side to brown chicken add water and let cook for 5 minutes, shred chicken, add rest of ingreediants, put everything into a casserole dish and bake on 375F for 40 minutes",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "document instruction list should include: halve 2 chicken breasts, salt and pepper, 3 minutes a side to brown chicken add water and let cook for 5 minutes, shred chicken, add rest of ingreediants, put everything into a casserole dish and bake on 375F for 40 minutes"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Make a list of all the videos with step-by-step recipes on yt-lite in a document.",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "mydrive": "agent1@test.com",
+      "yt-lite": "seed_user"
+    },
+    "previous_task_intent": "please make a list of all the videos with step by step recipes on yt-lite",
+    "require_login": true,
+    "sites": [
+      "yt-lite",
+      "mydrive"
+    ],
+    "task_id": "311",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A document was created on mydrive",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A document was created on mydrive"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The document should have: Buffalo Chicken Ranch Dip, Brunchwich (1965) on Sandwiches of History⁣, CARBS WHERE??? 20 MIN LOW CARB MOCK CRAB SALAD! YES, ITS KETO FRIENDLY!, The Best Pasta Recipe | One Pot Creamy Penne Pasta: Gluten-Free, Low Fat, Vegan, Recette Nems et sauce Nem CHẢ GIÒ | Vietnamese Spring rolls | 365 recipe cooking, The Best Burger Seasoning | 30 Second Recipe, 3 Types of Eggs, 1 Perfect Scramble | The Office Chef E1, Flu Bomb - Kick Flu In The Butt With This Easy Natural Recipe, UNIQUE ICED COFFEE & HOT COFFEE RECIPES YOU NEED TO TRY MAKE AT HOME | TikTok | Keto & DF Options, Vendakka Moru Curry, Ladysfinger Yoghurt Curry, Okra curd curry",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The document should have: Buffalo Chicken Ranch Dip, Brunchwich (1965) on Sandwiches of History⁣, CARBS WHERE??? 20 MIN LOW CARB MOCK CRAB SALAD! YES, ITS KETO FRIENDLY!, The Best Pasta Recipe | One Pot Creamy Penne Pasta: Gluten-Free, Low Fat, Vegan, Recette Nems et sauce Nem CHẢ GIÒ | Vietnamese Spring rolls | 365 recipe cooking, The Best Burger Seasoning | 30 Second Recipe, 3 Types of Eggs, 1 Perfect Scramble | The Office Chef E1, Flu Bomb - Kick Flu In The Butt With This Easy Natural Recipe, UNIQUE ICED COFFEE & HOT COFFEE RECIPES YOU NEED TO TRY MAKE AT HOME | TikTok | Keto & DF Options, Vendakka Moru Curry, Ladysfinger Yoghurt Curry, Okra curd curry"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "According to Broogli in the backrooms please order these events/items in terms of levels: a glowing handheld gaming device, a wet parking garage area, a glowing blue door, a steam punk room, The Musician.",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "previous_task_intent": "According to Broogli in the backrooms please order these events/items in terms of levels: a glowing handheld gaming device, a wet parking garage area, a glowing blue door, a steam punk room, The Musician",
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "312",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent answer with the following order: a wet parking garage area, a steam punk room, a glowing handheld gaming device, The Musician, a glowing blue door.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "trust": "pass_only",
+                "config": {
+                  "exact_match": "a wet parking garage area, a steam punk room, a glowing handheld gaming device, The Musician, a glowing blue door"
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent answer with the following order: a wet parking garage area, a steam punk room, a glowing handheld gaming device, The Musician, a glowing blue door."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Of all the travel videos, add those that would help book a cheap trip to watch later.",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "previous_task_intent": "of all the travel videos add those that would be helpful for booking a cheap trip to watch later",
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "313",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "the videos added to watch later should be the following videos: United Polaris Business Class (Saver awards for up to 5) to Tahiti/Bora Bora, Tips and Tricks to get deals on Hotels. Cheap / lowest prices. Use Hotels.com - Passport Kings, CHEAPEST SECRET PLACE to GET a RENTAL CAR in FRANCE",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "yt-lite",
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"watch_later\":\\s*\\[[^\\]]*\\{\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(?:fv785)\"\\}"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"watch_later\":\\s*\\[[^\\]]*\\{\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(?:fv1071)\"\\}"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"watch_later\":\\s*\\[[^\\]]*\\{\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(?:fv1290)\"\\}"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "the videos added to watch later should be the following videos: United Polaris Business Class (Saver awards for up to 5) to Tahiti/Bora Bora, Tips and Tricks to get deals on Hotels. Cheap / lowest prices. Use Hotels.com - Passport Kings, CHEAPEST SECRET PLACE to GET a RENTAL CAR in FRANCE"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Go through the travel videos and mark them as watch later if they aren't about travel at all.",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "previous_task_intent": "go through the travel videos and mark them as watch later if they aren't about travel at all",
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "314",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "DROPPING THE DODGE!!! added to watch later",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "yt-lite",
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"watch_later\":\\s*\\[[^\\]]*\\{\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(?:fv1155)\"\\}"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "DROPPING THE DODGE!!! added to watch later"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Tips for winter biking added to watch later",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "yt-lite",
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"watch_later\":\\s*\\[[^\\]]*\\{\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(?:fv170)\"\\}"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Tips for winter biking added to watch later"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The UNKNOWN Sublevels of Backrooms Level 2 added to watch later",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "yt-lite",
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"watch_later\":\\s*\\[[^\\]]*\\{\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(?:fv275|fv374)\"\\}"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The UNKNOWN Sublevels of Backrooms Level 2 added to watch later"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "In SURPRISING OUR MOM WITH A NEW BIRD| Meet Lucy! Our Yellow-Headed Amazon Parrot. What is the name of the red and grey bird?",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "previous_task_intent": "In: SURPRISING OUR MOM WITH A NEW BIRD| Meet Lucy! Our Yellow-Headed Amazon Parrot what is the name of the red and grey bird",
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "315",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent should answer with the name Vinnie",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "trust": "pass_only",
+                "config": {
+                  "exact_match": "Vinnie"
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent should answer with the name Vinnie"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Comment on every baseball-related video to check out my channel: @baseballRUS.",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "previous_task_intent": "Search for sports and comment on every baseball related  video to check out my channel: @baseballRUS",
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "316",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Comment recommending  @baseballRUS  left on: baseball Trainer - Camwood #shorts #baseball #training #batting #hitting, Yankees Hot Stove final thoughts to Aaron Judge being named AL MVP, Yankees Hot Stove final thoughts to Aaron Judge being named AL MVP,",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "yt-lite",
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\\{[^{}]*\"text\":\\s*\"Check out my channel: @baseballRUS[.!]?\",\\s*\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(?:fv1353)\"\\}"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\\{[^{}]*\"text\":\\s*\"Check out my channel: @baseballRUS[.!]?\",\\s*\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(?:fv1160)\"\\}"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The logged-in user left a comment recommending @baseballRUS on each of these two distinct videos: baseball Trainer - Camwood #shorts #baseball #training #batting #hitting; Yankees Hot Stove final thoughts to Aaron Judge being named AL MVP. The duplicate title in the source rubric does not require posting the same comment twice."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "In YOUNG MIKE - DROP FREESTYLE (OFFICIAL MUSIC VIDEO), how many times is the rapper shown holding a Sprite?",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "previous_task_intent": "In: YOUNG MIKE - DROP FREESTYLE (OFFICIAL MUSIC VIDEO) how many times is the rapper shown holding a sprite",
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "317",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent should answer with the answer 9",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "trust": "pass_only",
+                "config": {
+                  "exact_match": "9"
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent should answer with the answer 9"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Search for sports and add all basketball-related videos to watch later.",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "previous_task_intent": "search for sports and add all basketball related videos to watch later",
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "318",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Mac McClung leads Georgetown past St. John's with 25-point high | FOX COLLEGE HOOPS HIGHLIGHTS added to watch later",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "yt-lite",
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"watch_later\":\\s*\\[[^\\]]*\\{\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(?:fv1235)\"\\}"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Mac McClung leads Georgetown past St. John's with 25-point high | FOX COLLEGE HOOPS HIGHLIGHTS added to watch later"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "WPI FRC Competition Rebound Rumble Round 50 added to watch later",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "yt-lite",
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"watch_later\":\\s*\\[[^\\]]*\\{\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(?:fv1146)\"\\}"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "WPI FRC Competition Rebound Rumble Round 50 added to watch later"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "SEA Games: Cambodian Basketball Player Overjoys by the Tremendous Support added to watch later",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "yt-lite",
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"watch_later\":\\s*\\[[^\\]]*\\{\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(?:fv927)\"\\}"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "SEA Games: Cambodian Basketball Player Overjoys by the Tremendous Support added to watch later"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "How James Harden's Strip Club Addiction Affects His Game added to watch later",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "yt-lite",
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"watch_later\":\\s*\\[[^\\]]*\\{\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(?:fv694)\"\\}"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "How James Harden's Strip Club Addiction Affects His Game added to watch later"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The Warriors Traded Jordan Poole For Who?? added to watch later",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "yt-lite",
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"watch_later\":\\s*\\[[^\\]]*\\{\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(?:fv258|fv357)\"\\}"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The Warriors Traded Jordan Poole For Who?? added to watch later"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r6",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The Time Richard Jefferson & Kenyon Martin Had A Fight! added to watch later",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "yt-lite",
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"watch_later\":\\s*\\[[^\\]]*\\{\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(?:fv219)\"\\}"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The Time Richard Jefferson & Kenyon Martin Had A Fight! added to watch later"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r7",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The Boston Celtics Are WORRISOME… added to watch later",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "yt-lite",
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"watch_later\":\\s*\\[[^\\]]*\\{\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(?:fv077)\"\\}"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The Boston Celtics Are WORRISOME… added to watch later"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r8",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "10 Golden State Warriors Players You Forgot Played For Them added to watch later",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "yt-lite",
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"watch_later\":\\s*\\[[^\\]]*\\{\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(?:fv050)\"\\}"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "10 Golden State Warriors Players You Forgot Played For Them added to watch later"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r9",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "NBA 2K17 Dribble God Mixtape #14 | Top Dribbler On NBA 2K17 | Dribble Mixtape added to watch later",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "yt-lite",
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"watch_later\":\\s*\\[[^\\]]*\\{\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(?:fv663)\"\\}"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "NBA 2K17 Dribble God Mixtape #14 | Top Dribbler On NBA 2K17 | Dribble Mixtape added to watch later"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Add the first short-video about machine learning to Watch Later.",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "previous_task_intent": "Search for “machine learning,” apply the short-video filter, and add the first result to Watch Later.",
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "319",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Video \"What is Layer Normalization\" is in Watch Later",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "yt-lite",
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"watch_later\":\\s*\\[[^\\]]*\\{\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"fv783\"\\}"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Video \"What is Layer Normalization\" is in Watch Later"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Add every backrooms video in which broogli shows his face on camera to watch later",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "321",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Watched every broogli backrooms video",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Watched every broogli backrooms video"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "\"What happens if you 💀 in the Backrooms?\" is added to watch later",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "yt-lite",
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"watch_later\":\\s*\\[[^\\]]*\\{\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"fv678\"\\}"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "\"What happens if you 💀 in the Backrooms?\" is added to watch later"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "Other broogli or backrooms video are not added to watch later",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "yt-lite",
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"watch_later\":\\s*\\[\\s*\\{\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"fv678\"\\}\\s*\\]"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Other broogli or backrooms video are not added to watch later"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "In Picking My Beard, Part 2: Brushing Wet Hair (ASMR, Brushing, Soft-spoken, Male, Scratching), does the video ever speed up? If yes, when?",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "previous_task_intent": "In Picking My Beard, Part 2: Brushing Wet Hair (ASMR, Brushing, Soft-spoken, Male, Scratching) does the video ever speed up? If yes, when?",
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "404",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent should answer that the sped-up portion of the video is around ~17-21 seconds in",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer to the user identifies a sped-up portion around 17–21 seconds into the YT-Lite video Picking My Beard, Part 2: Brushing Wet Hair (ASMR, Brushing, Soft-spoken, Male, Scratching). Accept equivalent timestamp notation such as 0:17–0:21 and natural wording indicating this approximate interval. The response must affirm that the video speeds up and locate that segment. A negated claim, 17–21 minutes, an unrelated video or mentioning numbers without identifying the speed-up interval is insufficient."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "In Mac McClung leads Georgetown past St. John's with 25-point high | FOX COLLEGE HOOPS HIGHLIGHTS, at what point in the game does Saint John's take its first time out?",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "yt-lite": "seed_user"
+    },
+    "require_login": true,
+    "sites": [
+      "yt-lite"
+    ],
+    "task_id": "408",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent should return an answer to user either saying 5:25 left in the first half or saying 14:35 into the first half (either answer would be correct)",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer identifies Saint John's first timeout in Mac McClung leads Georgetown past St. John's with 25-point high | FOX COLLEGE HOOPS HIGHLIGHTS as either 5:25 remaining in the first half or 14:35 elapsed in the first half. Both clock conventions are explicitly approved and equally valid. The answer must locate the timeout in the first half; a video playback timestamp alone, a second-half timeout, a different clock value, an answer negating these times or a list of contradictory possible times is insufficient."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Watch this video HOW TO COLOR - Tutorial | Adobe Illustrator and recreate the design the creator created.",
+    "login_username": "seed_user",
+    "login_usernames": {
+      "penpot": "admin@penpot.local",
+      "yt-lite": "seed_user"
+    },
+    "previous_task_intent": "Watch this video HOW TO COLOR - Tutorial | Adobe Illustrator and recreate a",
+    "require_login": true,
+    "sites": [
+      "yt-lite",
+      "penpot"
+    ],
+    "task_id": "419",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent should create a basketball shape in penpot",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Verify the actual saved Penpot design created for this task in the account admin@penpot.local, using visual evidence and the creation/editing trajectory. A screenshot of the source video, layer names without matching rendered artwork, an unsaved draft, unrelated existing artwork or a final-answer claim is insufficient. The created artwork must visibly depict a basketball with the curved seam/section structure of the design in HOW TO COLOR - Tutorial | Adobe Illustrator. The separate color and overlay criteria are evaluated by the other nodes; do not require all of them for this shape node. No specific canvas size or exact pixel coordinates are required."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "3 sections of the basketball should be grey",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Verify the actual saved Penpot design created for this task in the account admin@penpot.local, using visual evidence and the creation/editing trajectory. A screenshot of the source video, layer names without matching rendered artwork, an unsaved draft, unrelated existing artwork or a final-answer claim is insufficient. On that same created basketball, exactly three distinct sections must be grey. Judge visible fills, allowing normal display and antialiasing variation without requiring an unstated RGB value. Count basketball sections, not background areas, seam lines or unrelated shapes."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "4 sections of the basketball should be dark pink",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Verify the actual saved Penpot design created for this task in the account admin@penpot.local, using visual evidence and the creation/editing trajectory. A screenshot of the source video, layer names without matching rendered artwork, an unsaved draft, unrelated existing artwork or a final-answer claim is insufficient. On that same created basketball, exactly four distinct sections must be dark pink. Judge visible fills, allowing normal display and antialiasing variation without requiring an unstated RGB value. Count basketball sections, not background areas, seam lines or unrelated shapes."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "1 section of the basketball should be light pink",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Verify the actual saved Penpot design created for this task in the account admin@penpot.local, using visual evidence and the creation/editing trajectory. A screenshot of the source video, layer names without matching rendered artwork, an unsaved draft, unrelated existing artwork or a final-answer claim is insufficient. On that same created basketball, exactly one section must be light pink. Judge its visible fill, allowing normal display and antialiasing variation without requiring an unstated RGB value. Count basketball sections, not background areas, seam lines or unrelated shapes."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "there should be a sea through magenta crescent over the right Side of the basketball",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Verify the actual saved Penpot design created for this task in the account admin@penpot.local, using visual evidence and the creation/editing trajectory. A screenshot of the source video, layer names without matching rendered artwork, an unsaved draft, unrelated existing artwork or a final-answer claim is insufficient. A see-through magenta crescent must overlay the right side of that same basketball, following its right curve and allowing underlying artwork to remain visible. The approved rubric spells see-through as sea through. Accept visually transparent or semitransparent magenta without requiring a specific opacity or RGB value. An opaque crescent, left-side crescent, detached shape or magenta layer name alone is insufficient."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

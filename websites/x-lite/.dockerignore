@@ -1,0 +1,5 @@
+__pycache__/
+*.py[codz]
+database.db
+data/seed.generated.json
+data/seed.generated.json.tmp

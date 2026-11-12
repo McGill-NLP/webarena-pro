@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <section class="split-layout">
+    <div class="panel">
+      <p class="eyebrow">Welcome back</p>
+      <h1>Sign in to continue to {{ site_content.name }}.</h1>
+      <p>Sign in with your email and password.</p>
+      {% if error %}
+        <div class="error-banner">{{ error }}</div>
+      {% endif %}
+      <form class="stacked-form" method="post" action="/login">
+        <input type="hidden" name="next" value="{{ next_path }}" />
+        <label>
+          Email
+          <input type="email" name="email" placeholder="name@example.com" required />
+        </label>
+        <label>
+          Password
+          <input type="password" name="password" placeholder="Enter your password" required />
+        </label>
+        <button class="primary-button wide-button" type="submit">Sign In</button>
+      </form>
+    </div>
+  </section>
+{% endblock %}

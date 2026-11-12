@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ title or 'Minerva-lite - Registration' }}</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+<body class="minerva-skin">
+  <header class="minerva-header">
+    <div class="hero-strip">
+      <div class="container hero-inner">
+        <div class="hero-brand" data-test="logo">
+          <div class="hero-logo" aria-hidden="true">BKU</div>
+          <div class="hero-wordmark">
+            <div class="hero-wordmark-main">Minerva-lite</div>
+            <div class="hero-wordmark-sub">Bolder-Kohn University &middot; Registration &amp; Student Records</div>
+          </div>
+        </div>
+        <div class="hero-figure" aria-hidden="true"></div>
+      </div>
+    </div>
+    {% set current_path = request.path %}
+    {% set standalone_shell = current_path.startswith('/general') or current_path.startswith('/login') or current_path.startswith('/advisor') %}
+    {% set pending_tab = request.args.get('next', '') if request.endpoint == 'select_term' else '' %}
+    <div class="tab-row">
+      <div class="container tab-nav">
+        <a class="general-home-link {% if current_path.startswith('/general') %}is-active{% endif %}" href="/general" data-test="menu-general">General Menu</a>
+        {% if not standalone_shell %}
+        <nav class="tab-links">
+          <a href="/" data-test="menu-home" class="{% if current_path == '/' %}is-active{% endif %}">Registration Menu</a>
+          <a href="/student-records" data-test="menu-student-records" class="{% if current_path.startswith('/student-records') or pending_tab.startswith('student_records') %}is-active{% endif %}">Student Records Menu</a>
+          <a href="/student-accounts" data-test="menu-student-accounts" class="{% if current_path.startswith('/student-accounts') or pending_tab.startswith('student_accounts') %}is-active{% endif %}">Student Accounts Menu</a>
+        </nav>
+        {% elif current_account %}
+        <nav class="tab-links standalone-actions">
+          {% if current_account.role == 'advisor' %}
+          <a href="/advisor" data-test="menu-advisor" class="{% if current_path.startswith('/advisor') %}is-active{% endif %}">Advisor View</a>
+          {% else %}
+          <a href="/" data-test="menu-student-home">Student Menu</a>
+          {% endif %}
+        </nav>
+        {% endif %}
+        {% if current_account %}
+        <form method="POST" action="/logout" class="signout-form">
+          <span>{{ current_account.name }}</span>
+          <button class="btn" type="submit" data-test="sign-out">Sign Out</button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+  <main class="{% if standalone_shell %}standalone-main container{% else %}page container{% endif %}">
+    {% if msg %}
+    <p class="notice" data-test="notice">{{ msg }}</p>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="term-footer">
+    <div class="container term-footer-inner">
+      <a href="mailto:studentservices@bolder-kohn.example">studentservices@bolder-kohn.example</a>
+    </div>
+  </footer>
+  <!-- status link removed from UI; endpoint remains for health checks -->
+</body>
+</html>

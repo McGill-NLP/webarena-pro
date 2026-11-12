@@ -1,0 +1,298 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PageType {
+  document
+  database
+}
+
+enum BlockType {
+  paragraph
+  heading_1
+  heading_2
+  heading_3
+  bulleted_list_item
+  numbered_list_item
+  todo
+  toggle
+  image
+  quote
+  divider
+  code
+  callout
+}
+
+enum DatabasePropertyType {
+  title
+  text
+  select
+  multi_select
+  checkbox
+  date
+}
+
+enum WorkspaceRole {
+  owner
+  editor
+  viewer
+}
+
+enum PagePermissionRole {
+  editor
+  commenter
+  viewer
+}
+
+enum PageAccessLevel {
+  workspace
+  private
+}
+
+enum PageFontStyle {
+  default
+  serif
+  mono
+}
+
+model User {
+  id           String   @id
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+
+  memberships     WorkspaceMembership[]
+  createdPages    Page[]                @relation("PageCreator")
+  pagePermissions PagePermission[]
+  comments        Comment[]
+  commentMentions CommentMention[]
+  attachments     Attachment[]
+  shareLinks      ShareLink[]
+}
+
+model Workspace {
+  id        String   @id
+  slug      String   @unique
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  memberships WorkspaceMembership[]
+  pages       Page[]
+}
+
+model WorkspaceMembership {
+  id           String        @id
+  workspaceId  String
+  userId       String
+  role         WorkspaceRole
+  lastActiveAt DateTime?
+  createdAt    DateTime      @default(now())
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tabs      WorkspaceTab[]
+
+  @@unique([workspaceId, userId])
+  @@index([userId])
+}
+
+model WorkspaceTab {
+  id           String   @id
+  membershipId String
+  pageId       String
+  position     Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  membership WorkspaceMembership @relation(fields: [membershipId], references: [id], onDelete: Cascade)
+  page       Page                @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  @@unique([membershipId, pageId])
+  @@index([membershipId, position])
+}
+
+model Page {
+  id           String          @id
+  workspaceId  String
+  createdById  String
+  title        String
+  type         PageType
+  accessLevel  PageAccessLevel @default(workspace)
+  parentPageId String?
+  icon         String?
+  deletedAt    DateTime?
+  isSmallText  Boolean         @default(false)
+  isFullWidth  Boolean         @default(false)
+  isLocked     Boolean         @default(false)
+  fontStyle    PageFontStyle   @default(default)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  workspace  Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdBy  User      @relation("PageCreator", fields: [createdById], references: [id], onDelete: Restrict)
+  parentPage Page?     @relation("PageChildren", fields: [parentPageId], references: [id], onDelete: SetNull)
+  children   Page[]    @relation("PageChildren")
+
+  blocks      Block[]
+  database    Database?
+  permissions PagePermission[]
+  comments    Comment[]
+  attachments Attachment[]
+  shareLinks  ShareLink[]
+  tabs        WorkspaceTab[]
+
+  @@index([workspaceId, title])
+  @@index([workspaceId, parentPageId])
+}
+
+model PagePermission {
+  id        String             @id
+  pageId    String
+  userId    String
+  role      PagePermissionRole
+  createdAt DateTime           @default(now())
+
+  page Page @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([pageId, userId])
+  @@index([userId, role])
+}
+
+model ShareLink {
+  id          String   @id
+  token       String   @unique
+  pageId      String
+  createdById String
+  isActive    Boolean  @default(true)
+  expiresAt   DateTime?
+  createdAt   DateTime @default(now())
+
+  page      Page @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  createdBy User @relation(fields: [createdById], references: [id], onDelete: Cascade)
+}
+
+model Block {
+  id            String   @id
+  pageId        String
+  type          BlockType
+  contentText   String?
+  checked       Boolean?
+  imageUrl      String?
+  propsJson     Json?
+  richTextJson  Json?
+  position      Int
+  parentBlockId String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  page        Page   @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  parentBlock Block? @relation("BlockChildren", fields: [parentBlockId], references: [id], onDelete: SetNull)
+  children    Block[] @relation("BlockChildren")
+
+  @@index([pageId, position])
+}
+
+model Comment {
+  id              String   @id
+  pageId          String
+  authorId        String
+  parentCommentId String?
+  content         String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  page          Page      @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  author        User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  parentComment Comment?  @relation("CommentReplies", fields: [parentCommentId], references: [id], onDelete: SetNull)
+  replies       Comment[] @relation("CommentReplies")
+  mentions      CommentMention[]
+
+  @@index([pageId, createdAt])
+}
+
+model CommentMention {
+  id        String   @id
+  commentId String
+  userId    String
+  createdAt DateTime @default(now())
+
+  comment Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([commentId, userId])
+  @@index([userId])
+}
+
+model Attachment {
+  id           String   @id
+  pageId       String
+  uploadedById String
+  fileName     String
+  fileUrl      String
+  mimeType     String
+  sizeBytes    Int
+  createdAt    DateTime @default(now())
+
+  page       Page @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  uploadedBy User @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
+
+  @@index([pageId, createdAt])
+}
+
+model Database {
+  id        String   @id
+  pageId    String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  page       Page               @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  properties DatabaseProperty[]
+  rows       DatabaseRow[]
+}
+
+model DatabaseProperty {
+  id         String               @id
+  databaseId String
+  name       String
+  type       DatabasePropertyType
+  position   Int
+  configJson Json
+
+  database Database @relation(fields: [databaseId], references: [id], onDelete: Cascade)
+  cells    DatabaseCellValue[]
+
+  @@index([databaseId, position])
+}
+
+model DatabaseRow {
+  id         String   @id
+  databaseId String
+  title      String
+  position   Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  database Database            @relation(fields: [databaseId], references: [id], onDelete: Cascade)
+  cells    DatabaseCellValue[]
+
+  @@index([databaseId, position])
+}
+
+model DatabaseCellValue {
+  id         String @id
+  rowId      String
+  propertyId String
+  valueJson  Json
+
+  row      DatabaseRow      @relation(fields: [rowId], references: [id], onDelete: Cascade)
+  property DatabaseProperty @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@unique([rowId, propertyId])
+}

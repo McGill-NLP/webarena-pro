@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="catalog-hero">
+  <div>
+    <p class="eyebrow">Public catalogue</p>
+    <h1>Bolder-Kohn University majors and requirements</h1>
+    <p>Browse locally seeded undergraduate programs, requirement sections, and required courses. Program text is stored in Minerva-lite so tasks do not depend on external links.</p>
+    <div class="catalog-actions">
+      {% if current_account and current_account.role == 'advisor' %}
+      <a class="btn" href="/advisor" data-test="general-back-advisor">Back to Advisor View</a>
+      {% elif current_account %}
+      <a class="btn" href="/" data-test="general-back-student">Back to Student Menu</a>
+      {% else %}
+      <a class="btn" href="/login" data-test="general-sign-in">Sign in as student or advisor</a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="general-search-panel">
+    <form method="GET" action="/general" class="general-search">
+      <label class="sr-only" for="general-q">Search majors</label>
+      <input id="general-q" name="q" value="{{ search_query }}" placeholder="Search majors, honours, faculties, or groups" />
+      <button class="btn btn-primary" type="submit">Search</button>
+    </form>
+    {% if show_search_results %}
+    <section class="catalog-results" aria-label="Search results">
+      <div class="search-result-list">
+        {% for program in search_results %}
+        <a class="search-result-item {% if selected_program and selected_program['program_id'] == program['program_id'] %}is-active{% endif %}" href="/general?q={{ search_query|urlencode }}&program={{ program['program_id'] }}">
+          <strong>{{ program['title'] }}</strong>
+          <span>{{ program['faculty']|faculty_name }} | {{ program['major_group'] }}</span>
+        </a>
+        {% else %}
+        <p class="muted">No majors matched your search.</p>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+  </div>
+</section>
+
+<section class="catalog-layout">
+  <aside class="general-sidebar">
+    <div class="sidebar-title">
+      <span>Browse</span>
+      <strong>Faculty Index</strong>
+    </div>
+    {% for faculty, groups in grouped_programs.items() %}
+    <div class="faculty-block">
+      <h3>{{ faculty|faculty_name }}</h3>
+      {% for group, programs in groups.items() %}
+      <details class="group-block" {% if selected_program and selected_program['faculty'] == faculty and selected_program['major_group'] == group %}open{% endif %}>
+        <summary>{{ group }}</summary>
+        <div class="group-links">
+          {% for program in programs %}
+          <a href="/general?program={{ program['program_id'] }}" class="{% if selected_program and selected_program['program_id'] == program['program_id'] %}is-active{% endif %}">
+            {{ program['title'] }}
+          </a>
+          {% endfor %}
+        </div>
+      </details>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </aside>
+
+  <section class="general-detail">
+    {% if selected_program %}
+    <div class="program-heading">
+      <div>
+        <h2>{{ selected_program['title'] }}</h2>
+        <p>{{ selected_program['faculty']|faculty_name }} / {{ selected_program['major_group'] }} / Verified {{ selected_program['verified_on'] }}</p>
+      </div>
+    </div>
+
+    {% if selected_program['summary'] %}
+    <div class="program-summary">{{ selected_program['summary'] }}</div>
+    {% endif %}
+
+    {% if selected_program.get('requirement_sections') %}
+    <h3 class="section-label">Requirement Details</h3>
+    {% for section in selected_program['requirement_sections'] %}
+    <section class="requirement-section">
+      <h4>{{ section['heading'] }}</h4>
+      {% if not section.get('display_groups') %}
+      {% for note in section['notes'] %}
+      <p>{{ note }}</p>
+      {% endfor %}
+      {% endif %}
+      {% if section.get('display_groups') %}
+      {% for group in section['display_groups'] %}
+      <div class="requirement-course-group">
+        {% if group['note'] %}
+        <p class="requirement-note">{{ group['note'] }}</p>
+        {% endif %}
+        {% if group['courses'] %}
+        <div class="requirement-course-list">
+          {% for req in group['courses'] %}
+          <p><strong>{{ req['code'] }}</strong> ({{ req['title'].rstrip('.') }})</p>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+      {% elif section['courses'] %}
+      <div class="requirement-course-list">
+        {% for req in section['courses'] %}
+        <p><strong>{{ req['code'] }}</strong> ({{ req['title'].rstrip('.') }})</p>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </section>
+    {% endfor %}
+    {% elif selected_program['requirements'] %}
+    <h3>Required and complementary courses</h3>
+    <div class="requirement-course-list">
+      {% for req in selected_program['requirements'] %}
+      <p><strong>{{ req['code'] }}</strong> ({{ req['title'].rstrip('.') }})</p>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="muted">This programme is in the imported index. A full local requirement block has not been seeded yet, but the programme remains searchable and browsable in the complete local list.</p>
+    {% endif %}
+    {% else %}
+    <h2>Select a major</h2>
+    <p class="muted">Use the faculty sidebar or the search bar to open a program page.</p>
+    {% endif %}
+  </section>
+</section>
+{% endblock %}

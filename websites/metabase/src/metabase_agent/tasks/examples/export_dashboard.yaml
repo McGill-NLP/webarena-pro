@@ -1,0 +1,21 @@
+id: export_dashboard
+name: Export dashboard to PDF
+instruction: >
+  Navigate to the Sales Overview dashboard and export it as a PDF file.
+start_url: http://localhost:3000
+max_steps: 20
+timeout_seconds: 300
+requires:
+  - type: dashboard
+    name: Sales Overview
+    setup_task_id: create_dashboard
+success_criteria:
+  - file_downloaded
+  - file_extension: pdf
+tags:
+  - beginner
+  - dashboard
+  - export
+notes: >
+  Requires the Sales Overview dashboard to exist in Metabase.
+  The PDF should be saved to the downloads directory.

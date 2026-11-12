@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <section class="section-header">
+    <div>
+      <p class="eyebrow">Messaging</p>
+      <h1>Inbox</h1>
+    </div>
+  </section>
+
+  <section class="inbox-layout">
+    <aside class="panel thread-list">
+      {% for thread in threads %}
+        <a class="thread-link {% if selected_thread and selected_thread.id == thread.id %}active{% endif %}" href="/inbox?thread_id={{ thread.id }}">
+          <strong>{{ thread.subject }}</strong>
+          <span>{{ thread.listing.title }}</span>
+          <small>
+            {% if current_user.id == thread.host_id %}
+              Guest: {{ thread.guest.name }}
+            {% else %}
+              Host: {{ thread.host.name }}
+            {% endif %}
+          </small>
+        </a>
+      {% endfor %}
+      {% if not threads %}
+        <p class="helper-copy">No conversations yet. Start one from any listing page.</p>
+      {% endif %}
+    </aside>
+
+    <section class="panel conversation-panel">
+      {% if selected_thread %}
+        <div class="conversation-header">
+          <div>
+            <h2>{{ selected_thread.subject }}</h2>
+            <p>{{ selected_thread.listing.title }}</p>
+          </div>
+          <a class="inline-link" href="/listings/{{ selected_thread.listing.slug }}">Open listing</a>
+        </div>
+        <div class="message-list">
+          {% for message in selected_thread.messages %}
+            <article class="message-bubble {% if message.sender_id == current_user.id %}mine{% endif %}">
+              <strong>{{ message.sender.name }}</strong>
+              <p>{{ message.body }}</p>
+              <small>{{ message.created_at.strftime("%Y-%m-%d %H:%M") }}</small>
+            </article>
+          {% endfor %}
+        </div>
+        <form class="stacked-form" method="post" action="/threads/{{ selected_thread.id }}/reply">
+          <label>
+            Reply
+            <textarea name="body" rows="4" placeholder="Send a follow-up..." required></textarea>
+          </label>
+          <button class="primary-button" type="submit">Send Reply</button>
+        </form>
+      {% else %}
+        <div class="empty-state tall">
+          <h3>No thread selected.</h3>
+          <p>Pick a conversation from the left or create one from a listing page.</p>
+        </div>
+      {% endif %}
+    </section>
+  </section>
+{% endblock %}

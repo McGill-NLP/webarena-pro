@@ -1,0 +1,325 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <section class="listing-header">
+    <p class="eyebrow">{{ listing_content.property_type }}</p>
+    <h1>{{ listing.title }}</h1>
+    <div class="listing-meta-row">
+      <span>{{ "%.2f"|format(listing.rating) }} · {{ listing.review_count }} reviews</span>
+      <span>{{ listing.city }}, {{ listing.country }}</span>
+      <span>Hosted by {{ listing.host.name }}</span>
+    </div>
+    <p class="listing-tagline">{{ listing_content.tagline }}</p>
+  </section>
+
+  <section class="listing-gallery-shell">
+    <div class="listing-gallery">
+      {% for image in gallery_images[:5] %}
+        <img class="{% if loop.first %}hero-image{% endif %}" src="{{ image.url }}" alt="{{ image.alt_text }}" />
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="listing-page-layout">
+    <div class="listing-main">
+      <article class="panel">
+        <div class="host-overview">
+          <img class="host-avatar" src="{{ listing.host.avatar_url }}" alt="{{ listing.host.name }}" />
+          <div>
+            <h2>Hosted by {{ listing.host.name }}</h2>
+            <p>{{ listing.host.bio }}</p>
+            <div class="chip-row">
+              {% for language in listing_content.host_languages %}
+                <span class="chip">{{ language }}</span>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <h2>About this place</h2>
+        {% for paragraph in listing_content.overview %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
+      </article>
+
+      <article class="panel">
+        <h2>What guests love</h2>
+        <div class="feature-grid">
+          {% for item in listing_content.highlights %}
+            <div class="feature-card">
+              <strong>{{ item }}</strong>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="chip-row spacious">
+          {% for item in listing_content.guest_favorites %}
+            <span class="chip">{{ item }}</span>
+          {% endfor %}
+        </div>
+      </article>
+
+      <article class="panel">
+        <h2>The essentials</h2>
+        <p>{{ listing.bedrooms }} bedrooms · {{ listing.beds }} beds · {{ "%.1f"|format(listing.baths) }} baths · up to {{ listing.max_guests }} guests</p>
+        <div class="amenity-grid">
+          {% for item in listing.amenities %}
+            <div class="amenity-item">{{ item }}</div>
+          {% endfor %}
+        </div>
+      </article>
+
+      <article class="panel">
+        <h2>Sleeping arrangements</h2>
+        <div class="sleep-grid">
+          {% for space in listing_content.sleeping_arrangements %}
+            <div class="sleep-card">
+              <strong>{{ space.name }}</strong>
+              <p>{{ space.details }}</p>
+            </div>
+          {% endfor %}
+        </div>
+      </article>
+
+      <article class="panel">
+        <h2>Where you'll be</h2>
+        <p>{{ listing_content.location_blurb }}</p>
+        <div class="location-grid">
+          <div>
+            <div class="chip-row spacious">
+              {% for item in listing_content.location_highlights %}
+                <span class="chip">{{ item }}</span>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="nearby-list">
+            {% for spot in listing_content.nearby_spots %}
+              <article class="nearby-card">
+                <strong>{{ spot.name }}</strong>
+                <p>{{ spot.detail }}</p>
+              </article>
+            {% endfor %}
+          </div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <h2>Things to know</h2>
+        <div class="details-columns">
+          <div>
+            <h3>House rules</h3>
+            <ul class="simple-list">
+              {% for rule in listing.house_rules %}
+                <li>{{ rule }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div>
+            <h3>Before you arrive</h3>
+            <ul class="simple-list">
+              {% for item in listing_content.logistics %}
+                <li>{{ item }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div>
+            <h3>Policies</h3>
+            <p><strong>Check-in:</strong> {{ listing_content.check_in_window }}</p>
+            <p><strong>Cancellation:</strong> {{ listing_content.cancellation_policy }}</p>
+            {% if next_unavailable %}
+              <p><strong>Upcoming busy dates:</strong></p>
+              <div class="chip-row wrap-row">
+                {% for item in next_unavailable %}
+                  <span class="chip muted">{{ item.date.isoformat() }}</span>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <h2>Reviews</h2>
+        <div class="review-grid">
+          {% for review in listing.reviews %}
+            <article class="review-card">
+              <div class="review-card-topline">
+                <strong>{{ review.user.name }}</strong>
+                <span>{{ "%.1f"|format(review.rating) }}</span>
+              </div>
+              <p>{{ review.comment }}</p>
+              <small>{{ review.created_at.date().isoformat() }}</small>
+            </article>
+          {% endfor %}
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">More stays</p>
+            <h2>You might also like</h2>
+          </div>
+        </div>
+        <div class="listing-grid compact-grid">
+          {% for card in nearby_cards %}
+            {% set other = card.listing %}
+            <article class="listing-card">
+              <div class="card-image-shell">
+                <a class="image-frame" href="{{ request.app.url_path_for('listing_detail', slug=other.slug) }}">
+                  <img src="{{ other.primary_image }}" alt="{{ other.title }}" />
+                </a>
+                <span class="card-badge">{{ card.card_meta.label }}</span>
+              </div>
+              <div class="listing-card-body">
+                <h3><a href="{{ request.app.url_path_for('listing_detail', slug=other.slug) }}">{{ other.title }}</a></h3>
+                <p class="listing-card-subline">{{ card.card_meta.date_range }}</p>
+                <div class="card-price-row">
+                  <span><strong>{{ card.card_meta.total_price_display }}</strong></span>
+                  <span>★ {{ card.card_meta.rating_display }}</span>
+                </div>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+      </article>
+    </div>
+
+    <aside class="listing-sidebar">
+      <article class="panel booking-card">
+        <div class="booking-card-topline">
+          <p class="price-line"><strong>${{ "%.0f"|format(listing.price_per_night) }}</strong> <span>night</span></p>
+          <span class="booking-rating">★ {{ "%.2f"|format(listing.rating) }} · {{ listing.review_count }} reviews</span>
+        </div>
+        <form
+          class="stacked-form availability-picker"
+          method="post"
+          action="/listings/{{ listing.id }}/book"
+          data-date-picker
+          data-cleaning-fee="{{ listing.cleaning_fee }}"
+          data-service-fee="{{ listing.service_fee }}"
+        >
+          <script id="listing-availability-data" type="application/json" data-date-picker-payload>{{ availability_calendar|tojson }}</script>
+
+          <div class="booking-control-shell">
+            <div class="booking-date-fields">
+              <button
+                class="booking-date-trigger"
+                type="button"
+                data-calendar-toggle
+                data-calendar-focus="check_in"
+                aria-expanded="false"
+                aria-controls="availability-calendar-{{ listing.id }}"
+              >
+                <small>Check-in</small>
+                <span data-check-in-label>Add date</span>
+              </button>
+              <button
+                class="booking-date-trigger"
+                type="button"
+                data-calendar-toggle
+                data-calendar-focus="check_out"
+                aria-expanded="false"
+                aria-controls="availability-calendar-{{ listing.id }}"
+              >
+                <small>Check-out</small>
+                <span data-check-out-label>Add date</span>
+              </button>
+            </div>
+            <label class="guest-control">
+              <span>Guests</span>
+              <input type="number" name="guests" value="2" min="1" max="{{ listing.max_guests }}" required />
+            </label>
+          </div>
+
+          <div
+            class="calendar-popover"
+            id="availability-calendar-{{ listing.id }}"
+            data-calendar-popover
+            hidden
+          >
+            <div class="calendar-popover-header">
+              <div>
+                <p class="eyebrow">Choose your stay</p>
+                <h3>Pick check-in and check-out</h3>
+                <p class="calendar-helper">Unavailable nights are crossed out.</p>
+              </div>
+              <div class="calendar-header-actions">
+                <div class="calendar-navigation" aria-label="Calendar navigation">
+                  <button class="calendar-nav-button" type="button" data-calendar-prev aria-label="Previous month">←</button>
+                  <button class="calendar-nav-button" type="button" data-calendar-next aria-label="Next month">→</button>
+                </div>
+                <button class="calendar-close-button" type="button" data-calendar-close aria-label="Close calendar">×</button>
+              </div>
+            </div>
+
+            <div class="availability-calendar" data-calendar-grid aria-live="polite"></div>
+
+            <div class="calendar-popover-footer">
+              <div class="calendar-legend" aria-label="Calendar legend">
+                <span><i class="legend-swatch is-open"></i>Available</span>
+                <span><i class="legend-swatch is-unavailable"></i>Unavailable</span>
+                <span><i class="legend-swatch is-selected"></i>Selected</span>
+              </div>
+              <button class="calendar-clear-button" type="button" data-date-picker-clear hidden>Clear dates</button>
+            </div>
+          </div>
+
+          <div class="selected-stay-summary">
+            <strong data-stay-summary>Choose check-in and check-out on the calendar.</strong>
+            <span data-price-summary>Unavailable nights are crossed out.</span>
+          </div>
+
+          <details class="manual-date-entry">
+            <summary>Enter exact dates manually</summary>
+            <div class="manual-date-grid">
+              <label>
+                Check-in
+                <input type="date" name="check_in" min="{{ first_available_date }}" data-date-input="check_in" required />
+              </label>
+              <label>
+                Check-out
+                <input type="date" name="check_out" min="{{ first_available_date }}" data-date-input="check_out" required />
+              </label>
+            </div>
+          </details>
+
+          <button class="primary-button wide-button reserve-button" type="submit">Reserve</button>
+          <p class="booking-reassurance">You won’t be charged yet</p>
+          <div class="booking-fees">
+            <span>Cleaning fee</span>
+            <strong>${{ "%.0f"|format(listing.cleaning_fee) }}</strong>
+            <span>Service fee</span>
+            <strong>${{ "%.0f"|format(listing.service_fee) }}</strong>
+          </div>
+        </form>
+
+        <form method="post" action="/listings/{{ listing.id }}/wishlist">
+          <button class="secondary-button wide-button" type="submit">
+            {{ "Remove from Saved" if has_wishlisted else "Save to list" }}
+          </button>
+        </form>
+
+        {% if not current_user %}
+          <p class="helper-copy">Sign in to reserve, save this stay, or contact the host.</p>
+        {% endif %}
+      </article>
+
+      <article class="panel">
+        <h2>Contact host</h2>
+        <form class="stacked-form" method="post" action="/listings/{{ listing.id }}/message">
+          <label>
+            Subject
+            <input type="text" name="subject" value="Question about {{ listing.title }}" />
+          </label>
+          <label>
+            Message
+            <textarea name="body" rows="6" placeholder="Hi, I had a quick question about the stay..." required></textarea>
+          </label>
+          <button class="ghost-button wide-button" type="submit">Send message</button>
+        </form>
+      </article>
+    </aside>
+  </section>
+{% endblock %}

@@ -1,0 +1,465 @@
+[
+  {
+    "intent": "Send an email to the contact on the Meridian Law Group lead to arrange a meeting next monday, then register the activity.",
+    "login_username": "admin@local.host",
+    "login_usernames": {
+      "pipedrive": "admin@local.host",
+      "thunderbird": "alice@techcorp.local"
+    },
+    "require_login": true,
+    "sites": [
+      "pipedrive",
+      "thunderbird"
+    ],
+    "task_id": "228",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Found the Meridian Law Group contact's email (donald.walker@meridianlaw.com).",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_regex": "(?i)meridian|walker"
+                      },
+                      {
+                        "url_regex": "(?i)meridian|deals|contacts"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent opened the Meridian Law Group lead/deal in Pipedrive and read the contact's email address (Donald Walker, donald.walker@meridianlaw.com)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Sent the contact an email from Thunderbird proposing a meeting next Monday.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "thunderbird",
+                  "params": {
+                    "user": "alice@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"to\":\"[^\"]*donald\\.walker@meridianlaw\\.com[^\"]*\"[^}]*"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "An email was sent from Thunderbird to donald.walker@meridianlaw.com (the Meridian Law Group contact) asking to arrange a meeting next Monday."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "An 'Email' activity was added to the Meridian Law Group deal in Pipedrive.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "pipedrive",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"type\":\"email\"[^}]*\"deal_title\":\"Meridian Law Group - CRM Implementation\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new activity of type Email is registered on the Meridian Law Group deal in Pipedrive."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find the expected close date and status of the deal named Radiant Solar - Custom Development Agreement.",
+    "login_username": "admin@local.host",
+    "login_usernames": {
+      "pipedrive": "admin@local.host"
+    },
+    "previous_task_intent": "Find the expected close date and status of the deal named Radiant Solar - Custom Development Agreement. Write answer in form \"The deal Radiant Solar - Custom Development Agreement is open and has expected close date Jan 01, 2045\"",
+    "require_login": true,
+    "sites": [
+      "pipedrive"
+    ],
+    "task_id": "229",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The answer gives the expected close date Feb 21, 2025.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include_any": [
+                    "Feb 21, 2025",
+                    "2025-02-21",
+                    "February 21, 2025",
+                    "Feb 21 2025"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer states the expected close date: February 21, 2025."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The answer says the deal is open.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include_any": [
+                    "open",
+                    "Open"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer says the deal's status is open."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "For the organization Nimbus Cloud Services, find its two open deals, determine which one has the lower value, and add a task activity to that lower-value deal due on 2026-05-20 with subject exactly: Benchmark task: follow up on lower-value Nimbus deal.",
+    "login_username": "admin@local.host",
+    "login_usernames": {
+      "pipedrive": "admin@local.host"
+    },
+    "require_login": true,
+    "sites": [
+      "pipedrive"
+    ],
+    "task_id": "230",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A task activity with the exact subject exists on the lower-value Nimbus deal (Marketing Automation Setup, $60,600), due 2026-05-20.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"type\":\"task\",\"subject\":\"Benchmark task: follow up on lower-value Nimbus deal\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"subject\":\"Benchmark task: follow up on lower-value Nimbus deal\",\"due_date\":\"2026-05-20"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"subject\":\"Benchmark task: follow up on lower-value Nimbus deal\"[^}]*\"deal_title\":\"Nimbus Cloud Services - Marketing Automation Setup\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A Task activity with subject exactly 'Benchmark task: follow up on lower-value Nimbus deal', due 2026-05-20, exists on the lower-value Nimbus Cloud Services deal (Marketing Automation Setup, $60,600)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "There are two deals named TechCorp Inc. - Enterprise License Agreement. open the WON one and mark its activity named Initial discovery call as done. Then, find the open one and confirm its stage and value.",
+    "login_username": "admin@local.host",
+    "login_usernames": {
+      "pipedrive": "admin@local.host"
+    },
+    "previous_task_intent": "There are two deals named TechCorp Inc. - Enterprise License Agreement. Find the open one and confirm its stage and value. Then open the WON one and mark its activity named Initial discovery call as done.\"",
+    "require_login": true,
+    "sites": [
+      "pipedrive"
+    ],
+    "task_id": "231",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The 'Initial discovery call' activity on the WON TechCorp deal is marked done.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"subject\":\"Initial discovery call\"[^}]*\"done\":true,\"deal_title\":\"TechCorp Inc. - Enterprise License Agreement\",\"deal_status\":\"won\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The 'Initial discovery call' activity on the WON 'TechCorp Inc. - Enterprise License Agreement' deal is marked done."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The answer identifies the open deal as Lead stage, $82,300.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "Lead",
+                    "82,300"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer identifies the open TechCorp Inc. - Enterprise License Agreement deal as being in the Lead stage with value $82,300."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The open TechCorp deal is unchanged (still Lead, $82,300).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\"TechCorp Inc. - Enterprise License Agreement\",\"value\":82300,\"status\":\"open\",\"expected_close_date\":\"[^\"]*\",\"stage\":\"Lead\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The open TechCorp Inc. - Enterprise License Agreement deal is still in the Lead stage with value $82,300 (it was not modified)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Shoot leon green an email asking him about his weekend",
+    "login_username": "admin@local.host",
+    "login_usernames": {
+      "mattermost": "admin",
+      "nextcloud": "maya.patel",
+      "pipedrive": "admin@local.host",
+      "thunderbird": "alice@techcorp.local"
+    },
+    "require_login": true,
+    "sites": [
+      "pipedrive",
+      "thunderbird",
+      "mattermost",
+      "nextcloud"
+    ],
+    "task_id": "232",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "An email was sent to leon@example.com.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "thunderbird",
+                  "params": {
+                    "user": "alice@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"to\":\"[^\"]*leon@example\\.com[^\"]*\"[^}]*"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "An email addressed to leon@example.com was sent from Thunderbird."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The email asks Leon Green about his weekend.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "thunderbird",
+                  "params": {
+                    "user": "alice@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"to\":\"[^\"]*leon@example\\.com[^\"]*\"[^}]*\"body\":\"[^\"]*[^\"]*(?i:weekend)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The email to Leon Green asks him about his weekend."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

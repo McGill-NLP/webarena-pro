@@ -1,0 +1,2074 @@
+[
+  {
+    "intent": "Create a new page \"New Commers\" under Team Notes, and a table listing the accepted candidates and their respective jobs and contact.",
+    "login_username": "demo@webarena.local",
+    "login_usernames": {
+      "jobportal": "employer_acme",
+      "notion": "demo@webarena.local"
+    },
+    "require_login": true,
+    "sites": [
+      "notion",
+      "jobportal"
+    ],
+    "task_id": "177",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Created a new page titled 'New Commers'.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\"New Commers\"[^}]*\"deleted\":false"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A Notion page titled 'New Commers' was created."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "'New Commers' is located under the 'Team Notes' page.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\"New Commers\"[^}]*\"parent\":\"Team Notes\"[^}]*\"deleted\":false"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The 'New Commers' page is a child of the 'Team Notes' page (WebArena HQ workspace)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A table (database) is present on the 'New Commers' page.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"page\":\"New Commers\",\"db_count\":[1-9]"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"parent\":\"New Commers\",\"property_count\":[1-9]"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The 'New Commers' page contains a table/database."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The table lists Noah Patel, Kate Müller, Henry Okonkwo and Grace Kim with their emails and job titles.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)noah patel"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "noah@example\\.com"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)kate m(ü|u)ller"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "kate@example\\.com"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)henry okonkwo"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "henry@example\\.com"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)grace kim"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "grace@example\\.com"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)business operations analyst"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)product design intern"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)data analyst"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)frontend engineer"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The table on 'New Commers' lists the accepted candidates with name, email and job: Noah Patel (noah@example.com, Business Operations Analyst), Kate Müller (kate@example.com, Product Design Intern), Henry Okonkwo (henry@example.com, Data Analyst) and Grace Kim (grace@example.com, Frontend Engineer)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Publish the \"my summer vacation\" page and answer with the public link of the page.",
+    "login_username": "demo@webarena.local",
+    "login_usernames": {
+      "notion": "demo@webarena.local"
+    },
+    "previous_task_intent": "First switch the current workspace to Personal Travel. Then, publish a page named \"my summer vacation\". Answer with the link of the page.",
+    "require_login": true,
+    "sites": [
+      "notion"
+    ],
+    "task_id": "178",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The 'my summer vacation' page (Personal Travel workspace) is published.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\\s*\"my summer vacation\"[^}]*\"published\":\\s*true"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The 'my summer vacation' page in the Personal Travel workspace shows a published state (an active share link exists)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The answer contains the public link.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include_any": [
+                    "/share/",
+                    "share"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent sent a message containing the public URL of the 'my summer vacation' page (a share link)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Update the my summer vacation page with a one-line summary based on the Travel Budget database that includes the destination with the highest total planned spending, how much of that budget is still unpaid, and how much remains to be spent on activities.",
+    "login_username": "demo@webarena.local",
+    "login_usernames": {
+      "notion": "demo@webarena.local"
+    },
+    "previous_task_intent": "Update the my summer vacation page with a one-line summary based on the Travel Budget database that identifies the destination with the highest total planned spending, how much of that budget is still unpaid, and how much remains to be spent on activities.",
+    "require_login": true,
+    "sites": [
+      "notion"
+    ],
+    "task_id": "179",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The page text names Singapore (highest planned spending destination).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"page\":\\s*\"my summer vacation\"[^}]*singapore"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The 'my summer vacation' page now includes a summary naming Singapore as the destination with the highest total planned spending."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The page text includes the unpaid amount ($3,495) and remaining activities amount ($785).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"page\":\\s*\"my summer vacation\"[^}]*3,?495"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"page\":\\s*\"my summer vacation\"[^}]*785"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The summary states that $3,495 of the Singapore budget is still unpaid and $785 is left to spend on activities."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "summarize how many pages are published in WebarenaHQ workspace, and give a list of published page titles.",
+    "login_username": "demo@webarena.local",
+    "login_usernames": {
+      "notion": "demo@webarena.local"
+    },
+    "require_login": true,
+    "sites": [
+      "notion"
+    ],
+    "task_id": "180",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The answer lists API Spec v2 and Launch Readiness Handbook.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "API Spec v2",
+                    "Launch Readiness Handbook"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer lists the two published pages: 'API Spec v2' and 'Launch Readiness Handbook'."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The answer states the count is 2.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer states that exactly 2 pages are published in the WebarenaHQ workspace."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a Notion page named owwww and email Bob that it was created.",
+    "login_username": "demo@webarena.local",
+    "login_usernames": {
+      "notion": "demo@webarena.local",
+      "thunderbird": "alice@techcorp.local"
+    },
+    "require_login": true,
+    "sites": [
+      "notion",
+      "thunderbird"
+    ],
+    "task_id": "181",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A Notion page named 'owwww' exists.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\"owwww\"[^}]*\"deleted\":false"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A Notion page titled exactly 'owwww' exists."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Bob Martin (bob@techcorp.local) received an email saying the page was created.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "thunderbird",
+                  "params": {
+                    "user": "bob@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"INBOX\":\\[(?:(?!\"[A-Za-z]+\":\\[)[\\s\\S])*?\"body\":\"[^\"]*[^\"]*(?i:owwww)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "bob@techcorp.local received an email from alice saying that the Notion page 'owwww' was created."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Update the my summer vacation page so its icon directly reflects the destination with the highest total planned spending in the Travel Budget database. After choosing the correct destination, add a short note to the page that explicitly names it.",
+    "login_username": "demo@webarena.local",
+    "login_usernames": {
+      "notion": "demo@webarena.local"
+    },
+    "require_login": true,
+    "sites": [
+      "notion"
+    ],
+    "task_id": "182",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The page icon is the Singapore flag (🇸🇬).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\\s*\"my summer vacation\"[^}]*\"icon\":\\s*\"🇸🇬\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The 'my summer vacation' page icon is now the Singapore flag 🇸🇬."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The page text names Singapore.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"page\":\\s*\"my summer vacation\"[^}]*singapore"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A short note naming Singapore was added to the page."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Workspace “Research Lab” reflects my main professional work. Please apply to the job that best fits my background, summarizing the relevant experiences mentioned in Notion.",
+    "login_username": "demo@webarena.local",
+    "login_usernames": {
+      "jobportal": "employer_acme",
+      "notion": "demo@webarena.local"
+    },
+    "require_login": true,
+    "sites": [
+      "notion",
+      "jobportal"
+    ],
+    "task_id": "183",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Inferred an NLP/ML engineer background from the Research Lab notes and applied to Helix AI's Machine Learning Engineer job with a cover letter.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "jobportal",
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"job_title\": \"Machine Learning Engineer\"",
+                      "operator": "gte",
+                      "value": 3
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent read the Research Lab workspace in Notion, inferred an NLP/machine-learning engineering background, and submitted an application to the Machine Learning Engineer job at Helix AI on the job portal with a cover letter summarizing the relevant Notion experience."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find the most recent lab meeting page and share it through a published link. Share it with the person I most recently interacted with on each communication platform.",
+    "login_username": "demo@webarena.local",
+    "login_usernames": {
+      "mattermost": "admin",
+      "notion": "demo@webarena.local",
+      "thunderbird": "alice@techcorp.local"
+    },
+    "previous_task_intent": "Find the most recent lab meeting page in Notion and share it through published link. Share it with the person I most recently interacted with on each communication platform.",
+    "require_login": true,
+    "sites": [
+      "notion",
+      "thunderbird",
+      "mattermost"
+    ],
+    "task_id": "184",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Published the most recent lab meeting page ('Lab Meeting – 2026-05-01') with a share link.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\"Lab Meeting – 2026-05-01\"[^}]*\"workspace\":\"Research Lab\"[^}]*\"deleted\":false,\"published\":true"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The Notion page 'Lab Meeting – 2026-05-01' (the most recent lab meeting) has an active published share link."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Sent David (david@techcorp.local) an email with the published link.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "thunderbird",
+                  "params": {
+                    "user": "david@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"INBOX\":\\[(?:(?!\"[A-Za-z]+\":\\[)[\\s\\S])*?\"body\":\"[^\"]*[^\"]*\\\\?/share\\\\?/"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "david@techcorp.local received an email containing the published (share) link of the 'Lab Meeting – 2026-05-01' page."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Sent emma.davis a Mattermost DM with the published link.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "channel_posts",
+                  "site": "mattermost",
+                  "params": {
+                    "user": "admin"
+                  },
+                  "resolve": [
+                    {
+                      "api": "user_by_name",
+                      "params": {
+                        "user": "admin",
+                        "username": "admin"
+                      },
+                      "extract": "id",
+                      "bind": "u1"
+                    },
+                    {
+                      "api": "user_by_name",
+                      "params": {
+                        "user": "admin",
+                        "username": "emma.davis"
+                      },
+                      "extract": "id",
+                      "bind": "u2"
+                    },
+                    {
+                      "api": "dm_channel",
+                      "params": {
+                        "user": "admin"
+                      },
+                      "extract": "id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:/share/)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "admin sent emma.davis a Mattermost direct message containing the published share link of the lab meeting page."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find the most recent lab meeting page and share the page with published link. Share it with the person I most recently interacted with on each communication platform. Then publish a short post summarizing the page content instead of individually sending a message.",
+    "login_username": "demo@webarena.local",
+    "login_usernames": {
+      "mattermost": "admin",
+      "notion": "demo@webarena.local",
+      "thunderbird": "alice@techcorp.local",
+      "x-lite": "techvalueinvestor"
+    },
+    "previous_task_intent": "Find the most recent lab meeting page in Notion (in research lab workspace) and share the page with published link. Share it with the person I most recently interacted with on each communication platform. For platforms that support posting, publish a short post summarizing the Notion content, instead of individually sending a message.",
+    "require_login": true,
+    "sites": [
+      "notion",
+      "mattermost",
+      "thunderbird",
+      "x-lite"
+    ],
+    "task_id": "185",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A publication (share) link exists for 'Lab Meeting – 2026-05-01'.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\"Lab Meeting – 2026-05-01\"[^}]*\"workspace\":\"Research Lab\"[^}]*\"deleted\":false,\"published\":true"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The Notion page 'Lab Meeting – 2026-05-01' has an active published share link."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "David (david@techcorp.local) received an email with the link.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "thunderbird",
+                  "params": {
+                    "user": "david@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"INBOX\":\\[(?:(?!\"[A-Za-z]+\":\\[)[\\s\\S])*?\"body\":\"[^\"]*[^\"]*\\\\?/share\\\\?/"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "david@techcorp.local received an email containing the published link of the lab meeting page."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "emma.davis received a Mattermost DM with the link.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "channel_posts",
+                  "site": "mattermost",
+                  "params": {
+                    "user": "admin"
+                  },
+                  "resolve": [
+                    {
+                      "api": "user_by_name",
+                      "params": {
+                        "user": "admin",
+                        "username": "admin"
+                      },
+                      "extract": "id",
+                      "bind": "u1"
+                    },
+                    {
+                      "api": "user_by_name",
+                      "params": {
+                        "user": "admin",
+                        "username": "emma.davis"
+                      },
+                      "extract": "id",
+                      "bind": "u2"
+                    },
+                    {
+                      "api": "dm_channel",
+                      "params": {
+                        "user": "admin"
+                      },
+                      "extract": "id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:/share/)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "admin sent emma.davis a Mattermost direct message containing the published link of the lab meeting page."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "An X-lite post summarizes the page content (not just the link).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state_table",
+                  "site": "x-lite",
+                  "params": {
+                    "table": "tweets"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"content\":\"[^\"]*(?:(?i:lab meeting|meeting|agenda|discussed))[^\"]*\"[^}]*\"user_id\":\"u41\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new X-lite post by techvalueinvestor summarizes the content of the 'Lab Meeting – 2026-05-01' page (a summary, not merely the shared link)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "The travel budget in Notion is outdated. Update the flight budget using the second-cheapest flight options for trips departing on July 17, 2026 and returning on July 22, 2026.",
+    "login_username": "demo@webarena.local",
+    "login_usernames": {
+      "notion": "demo@webarena.local"
+    },
+    "require_login": true,
+    "sites": [
+      "notion",
+      "flight-search"
+    ],
+    "task_id": "186",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Searched the second-cheapest round-trip flights for Jul 17 - Jul 22, 2026 (ICN->SIN, ICN->TPE, GMP->CJU).",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_regex": "(?i)SIN|TPE|CJU|changi|taoyuan|jeju"
+                      },
+                      {
+                        "url_regex": "(?i)SIN|TPE|CJU"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent searched flight-search for round trips departing July 17, 2026 and returning July 22, 2026 for Incheon→Changi, Incheon→Taoyuan and Gimpo→Jeju and read off the second-cheapest option of each."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Updated the Travel Budget flight rows: Incheon→Changi 748, Incheon→Taoyuan 309, Gimpo→Jeju 278.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\"Round-trip flight Incheon→Changi\",\"cells\":\\{[^}]*\"Amount\":\"\\$?748(\\.0+)?\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\"Round-trip flight Incheon→Taoyuan\",\"cells\":\\{[^}]*\"Amount\":\"\\$?309(\\.0+)?\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\"Round-trip flight Gimpo→Jeju\",\"cells\":\\{[^}]*\"Amount\":\"\\$?278(\\.0+)?\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the Travel Budget database the flight rows were updated to the second-cheapest prices: 'Round-trip flight Incheon→Changi' = 748, 'Round-trip flight Incheon→Taoyuan' = 309, 'Round-trip flight Gimpo→Jeju' = 278."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Update the travel budget for my domestic flight trip based on the most recent result: the cheapest one for July 17th 2026 to July 22nd 2026), then create a separate view for that domestic trip.",
+    "login_username": "demo@webarena.local",
+    "login_usernames": {
+      "notion": "demo@webarena.local"
+    },
+    "require_login": true,
+    "sites": [
+      "notion",
+      "flight-search"
+    ],
+    "task_id": "187",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The Jeju flight budget ('Round-trip flight Gimpo→Jeju') was updated to 276.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\"Round-trip flight Gimpo→Jeju\",\"cells\":\\{[^}]*\"Amount\":\"\\$?276(\\.0+)?\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the Travel Budget database the 'Round-trip flight Gimpo→Jeju' amount was updated to $276 (the cheapest Jul 17-22, 2026 round trip)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A separate view for the Jeju (domestic) trip was created on the Travel Budget database.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_regex": "(?i)view"
+                      },
+                      {
+                        "action_regex": "(?i)jeju"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new view was created on the Travel Budget database that only shows the Jeju destination rows (views are stored client-side, so judge from the trajectory)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "The travel budget in Notion is outdated. Update the flight budget using the second-cheapest flight options for trips departing on July 17, 2026 and returning on July 22, 2026. Exclude the ones that are already paid.",
+    "login_username": "demo@webarena.local",
+    "login_usernames": {
+      "notion": "demo@webarena.local"
+    },
+    "require_login": true,
+    "sites": [
+      "notion",
+      "flight-search"
+    ],
+    "task_id": "188",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Searched the second-cheapest round-trip flights for Jul 17 - Jul 22, 2026 (ICN->SIN, ICN->TPE, GMP->CJU).",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_regex": "(?i)SIN|TPE|CJU|changi|taoyuan|jeju"
+                      },
+                      {
+                        "url_regex": "(?i)SIN|TPE|CJU"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent searched flight-search for round trips departing July 17, 2026 and returning July 22, 2026 for Incheon→Changi, Incheon→Taoyuan and Gimpo→Jeju and read off the second-cheapest option of each."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Updated the Travel Budget flight rows: Incheon→Changi 748, Incheon→Taoyuan 309, Gimpo→Jeju 278.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\"Round-trip flight Incheon→Changi\",\"cells\":\\{[^}]*\"Amount\":\"\\$?748(\\.0+)?\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\"Round-trip flight Incheon→Taoyuan\",\"cells\":\\{[^}]*\"Amount\":\"\\$?309(\\.0+)?\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\"Round-trip flight Gimpo→Jeju\",\"cells\":\\{[^}]*\"Amount\":\"\\$?278(\\.0+)?\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the Travel Budget database the flight rows were updated to the second-cheapest prices: 'Round-trip flight Incheon→Changi' = 748, 'Round-trip flight Incheon→Taoyuan' = 309, 'Round-trip flight Gimpo→Jeju' = 278."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "I’m planning a domestic flight trip with the two people I most recently interacted with across the connected communication platforms. In the Travel Budget database,  assign one person to the accommodation-related items and the other to the activity-related items using the email property. Then share in the group message how much each person should pay.",
+    "login_username": "demo@webarena.local",
+    "login_usernames": {
+      "mattermost": "admin",
+      "notion": "demo@webarena.local"
+    },
+    "previous_task_intent": "I’m planning a domestic flight trip with the two people I most recently interacted with across the connected communication platforms. In the Travel Budget database, for the Domestic Travel view, assign one person to the accommodation-related items and the other to the activity-related items using the email property. Then share in the group message how much each person should pay.",
+    "require_login": true,
+    "sites": [
+      "notion",
+      "mattermost"
+    ],
+    "task_id": "189",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A Mattermost group conversation with Emma (emma.davis) and John (john.doe) was created.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "url": "__MATTERMOST__/api/v4/users/me/channels",
+                  "method": "GET",
+                  "auth_user": "admin",
+                  "auth_mode": "bearer_login",
+                  "login_url": "__MATTERMOST__/api/v4/users/login",
+                  "token_header": "Token",
+                  "site": "mattermost",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"display_name\":\"admin, emma\\.davis, john\\.doe\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A Mattermost group message (or channel) containing admin, Emma Davis and John Doe was created."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The Travel Budget database gained a new 'email' property.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"page\":\"Travel Budget\",\"workspace\":\"Personal Travel\",\"parent\":\"Travel Plans\",\"property_count\":([6-9]|[1-9][0-9])"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"page\":\"Travel Budget\"[^\\]]*\"name\":\"(?i:e-?mail)\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The Travel Budget database in Personal Travel has a new property named 'email'."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "One person is assigned to the Jeju accommodation (unpaid) items and the other to the activity items via the email property ($1,155 accommodation, $400 activities).",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the Travel Budget database, the unpaid Jeju accommodation items (totalling $1,155) are assigned to one of Emma Davis / John Doe and the unpaid Jeju activity items ($400) to the other, using the email property."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The email values used are john.doe@techcorp.com and emma.davis@techcorp.com.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "john\\.doe@techcorp\\.com"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "emma\\.davis@techcorp\\.com"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The email property values in the Travel Budget rows are john.doe@techcorp.com and emma.davis@techcorp.com."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Each person received a Mattermost message with the amount due ($1,155 and $400).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "channel_posts",
+                  "site": "mattermost",
+                  "params": {
+                    "user": "admin"
+                  },
+                  "resolve": [
+                    {
+                      "url": "__MATTERMOST__/api/v4/users/me/channels",
+                      "method": "GET",
+                      "auth_user": "admin",
+                      "auth_mode": "bearer_login",
+                      "login_url": "__MATTERMOST__/api/v4/users/login",
+                      "token_header": "Token",
+                      "extract": "/display_name=admin, emma.davis, john.doe/id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:1,?155)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:400)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "channel_posts",
+                  "site": "mattermost",
+                  "params": {
+                    "user": "admin"
+                  },
+                  "resolve": [
+                    {
+                      "api": "user_by_name",
+                      "params": {
+                        "user": "admin",
+                        "username": "admin"
+                      },
+                      "extract": "id",
+                      "bind": "u1"
+                    },
+                    {
+                      "api": "user_by_name",
+                      "params": {
+                        "user": "admin",
+                        "username": "emma.davis"
+                      },
+                      "extract": "id",
+                      "bind": "u2"
+                    },
+                    {
+                      "api": "dm_channel",
+                      "params": {
+                        "user": "admin"
+                      },
+                      "extract": "id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:1,?155|400)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Emma and John each received a Mattermost message (group or direct) stating how much they should pay ($1,155 for the accommodation items, $400 for the activity items)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "I want to gather breakfast recipe ideas. Find relevant materials for that, then make a database related to these. Note that each row must include the name of the recipe.",
+    "login_username": "demo@webarena.local",
+    "login_usernames": {
+      "notion": "demo@webarena.local",
+      "x-lite": "techvalueinvestor",
+      "yt-lite": "seed_user"
+    },
+    "previous_task_intent": "I want to gather breakfast recipe ideas. Please use the other two sites to find relevant materials, then make a database related to these. Note that each row must include the name of the recipe.",
+    "require_login": true,
+    "sites": [
+      "notion",
+      "x-lite",
+      "yt-lite"
+    ],
+    "task_id": "190",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Searched yt-lite for vegan breakfast recipes and X-lite for breakfast recipes (none exist).",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "url_regex": "(?i)breakfast"
+                      },
+                      {
+                        "action_regex": "(?i)breakfast"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent searched yt-lite (e.g. 'VEGAN BREAKFAST') and X-lite for breakfast recipe material."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A Notion database has three rows: Blueberry Smoothie Bowl, Homemade Cereal, Chocolate PB Overnight Oats.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\"[^\"]*(?i:blueberry smoothie bowl)[^\"]*\",\"cells\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\"[^\"]*(?i:homemade cereal)[^\"]*\",\"cells\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\"[^\"]*(?i:chocolate pb overnight oats)[^\"]*\",\"cells\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new Notion database exists whose rows are named Blueberry Smoothie Bowl, Homemade Cereal and Chocolate PB Overnight Oats (the recipes from the '3 EASY VEGAN BREAKFAST IDEAS' video)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Email the Hiring and Recruiting content to Henry, Mike, John, and Ivy, and send them a direct message asking them to check their email.",
+    "login_username": "demo@webarena.local",
+    "login_usernames": {
+      "mattermost": "admin",
+      "notion": "demo@webarena.local",
+      "thunderbird": "alice@techcorp.local"
+    },
+    "require_login": true,
+    "sites": [
+      "notion",
+      "mattermost",
+      "thunderbird"
+    ],
+    "task_id": "191",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Found and reviewed the 'Hiring and Recruiting' page in Notion.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_regex": "(?i)hiring"
+                      },
+                      {
+                        "url_regex": "(?i)hiring"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent opened the 'Hiring and Recruiting' page in Notion (WebArena HQ) and reviewed its content."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Retrieved the email addresses of Henry, Mike, John and Ivy from Mattermost.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_regex": "(?i)henry|mike|ivy"
+                      },
+                      {
+                        "url_regex": "(?i)henry|mike|ivy|members"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent looked up the email addresses of Henry Taylor, Mike Ross, John Doe and Ivy Chen in Mattermost."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Sent the Hiring and Recruiting content by email to all four (henry.taylor, mike.ross, john.doe, ivy.chen @techcorp.com).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "thunderbird",
+                  "params": {
+                    "user": "alice@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"to\":\"[^\"]*henry\\.taylor@techcorp\\.com[^\"]*\"[^}]*"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"to\":\"[^\"]*mike\\.ross@techcorp\\.com[^\"]*\"[^}]*"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"to\":\"[^\"]*john\\.doe@techcorp\\.com[^\"]*\"[^}]*"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"to\":\"[^\"]*ivy\\.chen@techcorp\\.com[^\"]*\"[^}]*"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"to\":\"[^\"]*techcorp\\.com[^\"]*\"[^}]*\"body\":\"[^\"]*(?i:hiring|recruit|senior frontend engineer)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "An email containing the Hiring and Recruiting page content was sent to henry.taylor@techcorp.com, mike.ross@techcorp.com, john.doe@techcorp.com and ivy.chen@techcorp.com."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Sent each of Henry, Mike, John and Ivy a Mattermost DM asking them to check their email.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "channel_posts",
+                  "site": "mattermost",
+                  "params": {
+                    "user": "admin"
+                  },
+                  "resolve": [
+                    {
+                      "api": "user_by_name",
+                      "params": {
+                        "user": "admin",
+                        "username": "admin"
+                      },
+                      "extract": "id",
+                      "bind": "u1"
+                    },
+                    {
+                      "api": "user_by_name",
+                      "params": {
+                        "user": "admin",
+                        "username": "henry.taylor"
+                      },
+                      "extract": "id",
+                      "bind": "u2"
+                    },
+                    {
+                      "api": "dm_channel",
+                      "params": {
+                        "user": "admin"
+                      },
+                      "extract": "id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:(?i:e-?mail))"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Henry Taylor received a direct message from admin asking him to check his email."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "DM to Mike.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "channel_posts",
+                  "site": "mattermost",
+                  "params": {
+                    "user": "admin"
+                  },
+                  "resolve": [
+                    {
+                      "api": "user_by_name",
+                      "params": {
+                        "user": "admin",
+                        "username": "admin"
+                      },
+                      "extract": "id",
+                      "bind": "u1"
+                    },
+                    {
+                      "api": "user_by_name",
+                      "params": {
+                        "user": "admin",
+                        "username": "mike.ross"
+                      },
+                      "extract": "id",
+                      "bind": "u2"
+                    },
+                    {
+                      "api": "dm_channel",
+                      "params": {
+                        "user": "admin"
+                      },
+                      "extract": "id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:(?i:e-?mail))"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Mike Ross received a direct message from admin asking him to check his email."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r6",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "DM to John.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "channel_posts",
+                  "site": "mattermost",
+                  "params": {
+                    "user": "admin"
+                  },
+                  "resolve": [
+                    {
+                      "api": "user_by_name",
+                      "params": {
+                        "user": "admin",
+                        "username": "admin"
+                      },
+                      "extract": "id",
+                      "bind": "u1"
+                    },
+                    {
+                      "api": "user_by_name",
+                      "params": {
+                        "user": "admin",
+                        "username": "john.doe"
+                      },
+                      "extract": "id",
+                      "bind": "u2"
+                    },
+                    {
+                      "api": "dm_channel",
+                      "params": {
+                        "user": "admin"
+                      },
+                      "extract": "id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:(?i:e-?mail))"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "John Doe received a direct message from admin asking him to check his email."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r7",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "DM to Ivy.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "channel_posts",
+                  "site": "mattermost",
+                  "params": {
+                    "user": "admin"
+                  },
+                  "resolve": [
+                    {
+                      "api": "user_by_name",
+                      "params": {
+                        "user": "admin",
+                        "username": "admin"
+                      },
+                      "extract": "id",
+                      "bind": "u1"
+                    },
+                    {
+                      "api": "user_by_name",
+                      "params": {
+                        "user": "admin",
+                        "username": "ivy.chen"
+                      },
+                      "extract": "id",
+                      "bind": "u2"
+                    },
+                    {
+                      "api": "dm_channel",
+                      "params": {
+                        "user": "admin"
+                      },
+                      "extract": "id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:(?i:e-?mail))"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Ivy Chen received a direct message from admin asking her to check her email."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Make a list of all the contacts with contact information in Notion for all the users on Mattermost.",
+    "login_username": "demo@webarena.local",
+    "login_usernames": {
+      "mattermost": "admin",
+      "notion": "demo@webarena.local"
+    },
+    "previous_task_intent": "Make a list of all the contacts with contact information in Notion for all the users on Mattermost",
+    "require_login": true,
+    "sites": [
+      "notion",
+      "mattermost"
+    ],
+    "task_id": "406",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A notion page is created or an original notion page is edited",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The task account saves a newly created Notion page or saves edits to an existing Notion page to make the requested Mattermost contact list. Verify an actual saved page change; merely viewing a pre-existing directory, drafting unsaved content or claiming completion in the final answer is insufficient. The contact details are evaluated separately."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The notion page should contain the following information: Alice Johnson — alice.johnson@techcorp.com — @alice.johnson Bob Wilson — bob.wilson@techcorp.com — @bob.wilson Charlie Brown — charlie.brown@techcorp.com — @charlie.brown Diana Prince — diana.prince@techcorp.com — @diana.prince Emma Davis — emma.davis@techcorp.com — @emma.davis Frank Miller — frank.miller@techcorp.com — @frank.miller Grace Lee — grace.lee@techcorp.com — @grace.lee Henry Taylor — henry.taylor@techcorp.com — @henry.taylor Ivy Chen — ivy.chen@techcorp.com — @ivy.chen Jane Smith — jane.smith@techcorp.com — @jane.smith John Doe — john.doe@techcorp.com — @john.doe Kevin Martinez — kevin.martinez@techcorp.com — @kevin.martinez Lisa Wang — lisa.wang@techcorp.com — @lisa.wang Mike Ross — mike.ross@techcorp.com — @mike.ross Natalie Kim — natalie.kim@techcorp.com — @natalie.kim",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The same Notion page created or edited for this task contains all fifteen approved Mattermost contacts. Each name must be associated with its own correct email address and @username, as listed in the approved rubric below. Formatting may vary, but swapped fields, missing people, partial lists or information scattered across unrelated pages do not satisfy the criterion. Verify the saved page content rather than only a final answer or the original Mattermost profiles. Approved contact triples: The notion page should contain the following information: Alice Johnson — alice.johnson@techcorp.com — @alice.johnson Bob Wilson — bob.wilson@techcorp.com — @bob.wilson Charlie Brown — charlie.brown@techcorp.com — @charlie.brown Diana Prince — diana.prince@techcorp.com — @diana.prince Emma Davis — emma.davis@techcorp.com — @emma.davis Frank Miller — frank.miller@techcorp.com — @frank.miller Grace Lee — grace.lee@techcorp.com — @grace.lee Henry Taylor — henry.taylor@techcorp.com — @henry.taylor Ivy Chen — ivy.chen@techcorp.com — @ivy.chen Jane Smith — jane.smith@techcorp.com — @jane.smith John Doe — john.doe@techcorp.com — @john.doe Kevin Martinez — kevin.martinez@techcorp.com — @kevin.martinez Lisa Wang — lisa.wang@techcorp.com — @lisa.wang Mike Ross — mike.ross@techcorp.com — @mike.ross Natalie Kim — natalie.kim@techcorp.com — @natalie.kim"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

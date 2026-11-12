@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-heading">
+  <h1>Advisor View</h1>
+  <span class="term-chip">Term: {{ current_term }}</span>
+</div>
+
+<section class="advisor-layout">
+  <aside class="panel advisor-roster">
+    <h2>Students</h2>
+    <form method="GET" action="/advisor" class="student-search">
+      <label class="sr-only" for="student-q">Search students</label>
+      <input id="student-q" name="q" type="text" value="{{ student_query }}" placeholder="Search students" />
+      <button class="btn btn-primary" type="submit">Search</button>
+    </form>
+    <div class="roster-list">
+      {% for student in students %}
+      <a class="roster-item {% if selected_student and selected_student['student_id'] == student['student_id'] %}is-active{% endif %}" href="/advisor?student={{ student['student_id'] }}{% if student_query %}&q={{ student_query|urlencode }}{% endif %}">
+        <strong>{{ student['name'] }}</strong>
+        <span>{{ student['student_id'] }}</span>
+        <span>{{ student['major'] }}</span>
+      </a>
+      {% else %}
+      <p class="muted">No students matched your search.</p>
+      {% endfor %}
+    </div>
+  </aside>
+
+  <section class="advisor-main">
+    {% if selected_student %}
+    <section class="panel">
+      <div class="page-heading">
+        <div>
+          <h2>{{ selected_student['name'] }}</h2>
+          <p class="muted">{{ selected_student['student_id'] }} | {{ selected_student['faculty']|faculty_name }} | Balance ${{ '%.2f'|format(selected_student['current_balance']) }}</p>
+        </div>
+      </div>
+
+      <form method="POST" action="/advisor/update-major" class="stack-form">
+        <input type="hidden" name="student_id" value="{{ selected_student['student_id'] }}" />
+        <label>Major
+          <select name="major">
+            {% for program in programs %}
+            <option value="{{ program['title'] }}" {% if program['title'] == selected_student['major'] %}selected{% endif %}>{{ program['title'] }} | {{ program['faculty']|faculty_name }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>Minor
+          <input type="text" name="minor" value="{{ selected_student['minor'] or '' }}" />
+        </label>
+        <label>Faculty code
+          <input type="text" name="faculty" value="{{ selected_student['faculty'] }}" />
+        </label>
+        <label>Major group
+          <input type="text" name="major_group" value="{{ selected_student['major_group'] }}" />
+        </label>
+        <button class="btn btn-primary" type="submit">Update Major and Minor</button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>Curriculum Change Requests</h2>
+      <table>
+        <thead>
+          <tr><th>Type</th><th>Requested Change</th><th>Faculty</th><th></th></tr>
+        </thead>
+        <tbody>
+          {% for req in curriculum_requests %}
+          <tr>
+            <td>{{ req['request_type'].replace('_', ' ').title() }}</td>
+            <td>{{ req['requested_value'] or 'Remove secondary program' }}</td>
+            <td>{{ (req['requested_faculty'] or selected_student['faculty'])|faculty_name }}</td>
+            <td>
+              <form method="POST" action="/advisor/curriculum-request" class="inline-actions">
+                <input type="hidden" name="request_id" value="{{ req['id'] }}" />
+                <button class="btn btn-primary" name="action" value="approve" type="submit">Approve</button>
+                <button class="btn" name="action" value="reject" type="submit">Reject</button>
+              </form>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="4">No pending curriculum requests.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <section class="panel">
+      <h2>Current Registrations</h2>
+      <table>
+        <thead>
+          <tr><th>CRN</th><th>Course</th><th>Professor</th><th>Schedule</th></tr>
+        </thead>
+        <tbody>
+          {% for c in registered %}
+          <tr>
+            <td>{{ c['crn'] }}</td>
+            <td>{{ c['course_code'] }} - {{ c['title'] }}</td>
+            <td>{{ c['professor'] }}</td>
+            <td>{{ c['days'] }} {{ c['time'] }}</td>
+          </tr>
+          {% else %}
+          <tr><td colspan="4">No registered classes for {{ current_term }}.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <section class="panel">
+      <h2>Waitlisted Classes</h2>
+      <table>
+        <thead>
+          <tr><th>Pos.</th><th>CRN</th><th>Course</th><th></th></tr>
+        </thead>
+        <tbody>
+          {% for c in waitlist %}
+          <tr>
+            <td>{{ c['waitlist_position'] }}</td>
+            <td>{{ c['crn'] }}</td>
+            <td>{{ c['course_code'] }} - {{ c['title'] }}</td>
+            <td>
+              <form method="POST" action="/advisor/force-register">
+                <input type="hidden" name="student_id" value="{{ selected_student['student_id'] }}" />
+                <input type="hidden" name="crn" value="{{ c['crn'] }}" />
+                <button class="btn btn-primary" type="submit">Move Into Course</button>
+              </form>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="4">No waitlisted classes.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <section class="panel">
+      <h2>Transcript</h2>
+      <table>
+        <thead>
+          <tr><th>Term</th><th>Course</th><th>Title</th><th>Grade</th></tr>
+        </thead>
+        <tbody>
+          {% for entry in transcript_entries %}
+          <tr>
+            <td>{{ entry['term'] }}</td>
+            <td>{{ entry['course_code'] }}</td>
+            <td>{{ entry['title'] }}</td>
+            <td>{{ entry['grade'] }}</td>
+          </tr>
+          {% else %}
+          <tr><td colspan="4">No transcript entries found.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+    {% else %}
+    <section class="panel">
+      <h2>Select a student</h2>
+      <p class="muted">Choose a student from the roster to review transcript history, waitlists, major details, and balances.</p>
+    </section>
+    {% endif %}
+  </section>
+</section>
+{% endblock %}

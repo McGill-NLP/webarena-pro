@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-heading">
+  <h1 class="page-title">{{ page_title }}</h1>
+  {% include "_term_selector.html" %}
+</section>
+
+<section class="content-panel">
+  <h2>Current Curriculum</h2>
+  <dl class="curriculum-summary" data-test="current-curriculum">
+    <div><dt>Faculty</dt><dd>{{ curriculum.faculty }}</dd></div>
+    <div><dt>Degree</dt><dd>{{ curriculum.degree }}</dd></div>
+    <div><dt>Major Group</dt><dd>{{ curriculum.program_group }}</dd></div>
+    <div><dt>Primary Major</dt><dd>{{ curriculum.primary_major }}</dd></div>
+    <div><dt>Secondary Program</dt><dd>{{ curriculum.secondary_program or "None" }}</dd></div>
+  </dl>
+</section>
+
+{% if transfer_type == "intra" %}
+<section class="content-panel">
+  <h2>Intrafaculty Transfer Request</h2>
+  <p class="muted">Your current faculty is {{ curriculum.faculty }}. Select another major in {{ curriculum.program_group }} and optionally add a minor from one of the listed Bolder-Kohn faculties.</p>
+  <form method="post" class="records-form" data-test="intrafaculty-transfer-form">
+    <label>
+      Desired major
+      <select name="desired_major" data-test="intra-major-select">
+        {% for major in major_options %}
+        <option value="{{ major }}" {% if major == curriculum.primary_major %}selected{% endif %}>{{ major }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>
+      Desired minor
+      <select name="desired_minor" data-test="intra-minor-select">
+        <option value="">No minor</option>
+        {% for option in minor_options %}
+        <option value="{{ minor_value(option) }}" {% if option.name == curriculum.secondary_program %}selected{% endif %}>{{ option.name }} ({{ option.faculty|faculty_name }})</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>
+      Comments
+      <input type="text" name="comments" data-test="intra-comments" placeholder="Optional comments">
+    </label>
+    <button class="btn btn-primary" type="submit" data-test="intra-transfer-submit">Submit Request</button>
+  </form>
+</section>
+{% else %}
+<section class="content-panel">
+  <h2>Interfaculty Transfer Request</h2>
+  <p class="muted">Select the desired faculty, then choose a major or program group administered by that faculty.</p>
+  <form method="post" class="records-form" data-test="interfaculty-transfer-form">
+    <label>
+      Desired faculty
+      <select name="desired_faculty" data-test="inter-faculty-select" id="desired-faculty">
+        {% for faculty in interfaculty_options %}
+        <option value="{{ faculty }}" {% if faculty == selected_faculty %}selected{% endif %}>{{ faculty|faculty_name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>
+      Desired major or major group
+      <select name="desired_program" data-test="inter-program-select" id="desired-program">
+        {% for faculty, options in interfaculty_options.items() %}
+        <optgroup label="{{ faculty|faculty_name }}" data-faculty="{{ faculty }}">
+          {% for option in options %}
+          <option value="{{ option }}" data-faculty="{{ faculty }}">{{ option }}</option>
+          {% endfor %}
+        </optgroup>
+        {% endfor %}
+      </select>
+    </label>
+    <label>
+      Reason for request
+      <input type="text" name="reason" data-test="inter-reason" placeholder="Brief reason">
+    </label>
+    <button class="btn btn-primary" type="submit" data-test="inter-transfer-submit">Submit Request</button>
+  </form>
+</section>
+
+<script>
+  const facultySelect = document.getElementById("desired-faculty");
+  const programSelect = document.getElementById("desired-program");
+  function syncPrograms() {
+    const faculty = facultySelect.value;
+    let firstVisible = null;
+    for (const option of programSelect.options) {
+      const visible = option.dataset.faculty === faculty;
+      option.hidden = !visible;
+      option.disabled = !visible;
+      if (visible && firstVisible === null) {
+        firstVisible = option;
+      }
+    }
+    if (!programSelect.selectedOptions.length || programSelect.selectedOptions[0].disabled) {
+      programSelect.value = firstVisible ? firstVisible.value : "";
+    }
+  }
+  facultySelect.addEventListener("change", syncPrograms);
+  syncPrograms();
+</script>
+{% endif %}
+{% endblock %}

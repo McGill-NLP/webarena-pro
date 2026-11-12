@@ -1,0 +1,38 @@
+## Temporary Peppermint stack used only for seeding.
+## Run via scripts/seed-local.sh — do NOT use this for production.
+##
+## Bring up:   docker compose -f seed/docker-compose.seed.yml up -d
+## Tear down:  docker compose -f seed/docker-compose.seed.yml down -v
+
+services:
+  peppermint_postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: peppermint
+      POSTGRES_PASSWORD: peppermint
+      POSTGRES_DB: peppermint
+    volumes:
+      - peppermint_seed_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U peppermint -d peppermint"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  peppermint:
+    image: pepperlabs/peppermint:latest
+    ports:
+      - "3000:3000"
+      - "5003:5003"
+    depends_on:
+      peppermint_postgres:
+        condition: service_healthy
+    environment:
+      DB_USERNAME: peppermint
+      DB_PASSWORD: peppermint
+      DB_HOST: peppermint_postgres
+      DATABASE_URL: postgresql://peppermint:peppermint@peppermint_postgres/peppermint
+      SECRET: seed-secret-webarena-peppermint-2024
+
+volumes:
+  peppermint_seed_db:

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-heading">
+  <h1>Weekly Schedule</h1>
+  {% include "_term_selector.html" %}
+</div>
+
+<div class="week-grid">
+  <div class="times">
+    {% for t in time_labels %}
+      <div class="time">{{ t }}</div>
+    {% endfor %}
+  </div>
+  <div class="days">
+    <div class="hdr">
+      <div>Mon</div>
+      <div>Tue</div>
+      <div>Wed</div>
+      <div>Thu</div>
+      <div>Fri</div>
+    </div>
+    <div class="grid-body">
+      {% for col in range(1,6) %}
+      <div class="col">
+        {% for e in events %}
+          {% if e.day_col == col %}
+          <div class="event" style="top: {{ e.top_px }}px; height: {{ e.height_px }}px" data-test="week-event">
+            <div class="event-title">{{ e.title }}</div>
+            <div class="event-sub">{{ e.subtitle }}</div>
+            <div class="event-sub">{{ e.professor }}</div>
+            <div class="event-time">{{ e.time }}</div>
+          </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<p class="muted" style="margin-top:.5rem">Grid spans 08:00–18:00. Events are approximate visualizations.</p>
+{% endblock %}

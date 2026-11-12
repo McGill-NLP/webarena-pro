@@ -1,0 +1,2600 @@
+[
+  {
+    "intent": "favorite all of songs from the first page of the songs tab that contain primarily english lyrics",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser"
+    },
+    "require_login": true,
+    "sites": [
+      "acidwave"
+    ],
+    "task_id": "001",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "All songs on the first page besides: low frame and sandlight should be favorited",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "{\"user_id\":",
+                      "operator": "gte",
+                      "value": 13
+                    },
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"song\":\"Low Frame\"}",
+                      "operator": "eq",
+                      "value": 0
+                    },
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"song\":\"Sandlight\"}",
+                      "operator": "eq",
+                      "value": 0
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "All songs on the first page besides: low frame and sandlight should be favorited"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "create a playlist that is exactly 10 minutes",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser"
+    },
+    "require_login": true,
+    "sites": [
+      "acidwave"
+    ],
+    "task_id": "002",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "There is a new playlist created such that the sum of the song lengths equals exactly 10 minutes",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"total_duration\":\\s*600,\\s*\"song_count\":\\s*[1-9]"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "There is a new playlist created such that the sum of the song lengths equals exactly 10 minutes"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Which song or songs on the first page of the songs tab is a rap song",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser"
+    },
+    "require_login": true,
+    "sites": [
+      "acidwave"
+    ],
+    "task_id": "003",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The final answer identifies “Faultline shift”",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "faultline"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer identifies “Faultline shift”"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Which album with multiple songs is rap",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser"
+    },
+    "require_login": true,
+    "sites": [
+      "acidwave"
+    ],
+    "task_id": "004",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The final answer identifies “City Lights”",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include_any": [
+                    "citylights",
+                    "city lights"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer identifies “City Lights”"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a playlist that is the length of the cheapest flight from montreal to toronto on june second make it be the least amount of songs possible",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser"
+    },
+    "previous_task_intent": "create a playlist that is the length of the cheapest flight from montreal to toronto on june second make it be the least amount of songs possible",
+    "require_login": true,
+    "sites": [
+      "acidwave",
+      "flight-search"
+    ],
+    "task_id": "012",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Found the cheapest YUL -> YYZ flight on June 2, 2026 and its duration (86 minutes = 5,160 s).",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_regex": "(?i)YUL|montreal"
+                      },
+                      {
+                        "url_regex": "(?i)YUL|montreal"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent searched flight-search for Montreal (YUL) to Toronto (YYZ) on June 2, 2026 sorted by cheapest and noted the cheapest flight's duration of 86 minutes (5,160 seconds)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A new Acidwave playlist totals exactly 5,160 seconds with the fewest possible songs (5).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "acidwave",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"total_duration\":5160,\"song_count\":[1-5]\\}"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new Acidwave playlist exists whose songs' durations sum to exactly 5,160 seconds using the least number of songs possible (5)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Search for \"BLACK COFFEE\" and play it. Then check the genre filters and add it to a new playlist named after the verified genre, such as \"VERIFIED_GENRE\".",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser"
+    },
+    "previous_task_intent": "On ALL_DATA, search for \"BLACK COFFEE\" and play it without using genre filters. Guess whether it belongs to ROCK, FOLK, JAZZ, ELECTRONIC, or POP. Then check the genre filters and add it to a new playlist named after the verified genre, such as \"VERIFIED_ROCK\".",
+    "require_login": true,
+    "sites": [
+      "acidwave"
+    ],
+    "task_id": "015",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent correctly creates the verified-genre playlist \"VERIFIED_ROCK\" and adds \"BLACK COFFEE\" to it.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"verified_rock\",\\s*\"user_id\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"playlist\":\\s*\"verified_rock\",\\s*\"song\":\\s*\"black coffee\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent correctly creates the verified-genre playlist \"VERIFIED_ROCK\" and adds \"BLACK COFFEE\" to it."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "In the POP category, find the shortest visible song, play it. Then add it to a playlist named \"SHORTEST_POP_CHECK\".",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser"
+    },
+    "previous_task_intent": "In the POP category, find the shortest visible song, play it, and confirm whether sound is audible. Then add it to a playlist named \"SHORTEST_POP_CHECK\".",
+    "require_login": true,
+    "sites": [
+      "acidwave"
+    ],
+    "task_id": "017",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent correctly identifies, plays, and saves \"SANDLIGHT\" as the shortest visible POP song.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"shortest_pop_check\",\\s*\"user_id\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"playlist\":\\s*\"shortest_pop_check\",\\s*\"song\":\\s*\"sandlight\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent correctly identifies, plays, and saves \"SANDLIGHT\" as the shortest visible POP song."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Among GREYLINE, NEON WANT, RETURN POSTCARD, and BRASS STEP, which song has the longest instrumental intro (i.e., the lyrics start the latest)?",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser"
+    },
+    "require_login": true,
+    "sites": [
+      "acidwave"
+    ],
+    "task_id": "018",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Played all four songs: GREYLINE, NEON WANT, RETURN POSTCARD, and BRASS STEP.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Played all four songs: GREYLINE, NEON WANT, RETURN POSTCARD, and BRASS STEP."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Identified the song with the longest instrumental intro.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Identified the song with the longest instrumental intro."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Listen to \"BASEMENT YEARS\" and tell me when the word \"never\" is first spoken, in mm:ss format.",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser"
+    },
+    "require_login": true,
+    "sites": [
+      "acidwave"
+    ],
+    "task_id": "019",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Played the track \"BASEMENT YEARS.\"",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Played the track \"BASEMENT YEARS.\""
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Identified the timestamp when the word \"never\" first appears: 00:32.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "trust": "both",
+                "config": {
+                  "exact_match": "00:32"
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Identified the timestamp when the word \"never\" first appears: 00:32."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create two playlists with no overlapping songs, each totaling exactly 29:44. One playlist should contain 5 songs, and the other should contain 4 songs.",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser"
+    },
+    "previous_task_intent": "make 2 wholey unique playlists of length 29:44 length which one has 5 songs and one has 4 songs",
+    "require_login": true,
+    "sites": [
+      "acidwave"
+    ],
+    "task_id": "020",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Two new playlists exist.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "{\"name\":",
+                      "operator": "gte",
+                      "value": 2
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Two new playlists exist."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Each playlist has a total duration of exactly 29:44.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"total_duration\":1784",
+                      "operator": "eq",
+                      "value": 2
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Each playlist has a total duration of exactly 29:44."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "One playlist contains exactly 5 songs.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"total_duration\":\\s*1784,\\s*\"song_count\":\\s*5"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "One playlist contains exactly 5 songs."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "One playlist contains exactly 4 songs.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"total_duration\":\\s*1784,\\s*\"song_count\":\\s*4"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "One playlist contains exactly 4 songs."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The two playlists have no overlapping songs.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The two playlists have no overlapping songs."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a playlist named “VOCALS_CONFIRMED” containing only the songs that have clear vocals.",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser"
+    },
+    "previous_task_intent": "Play \"STAYIN' AT HOME - VOCALS\" and \"FLYING AWAY (VOCALS)\". Confirm whether both actually contain clear vocals, then add only the songs where vocals are clearly heard to a playlist named \"VOCALS_CONFIRMED\".",
+    "require_login": true,
+    "sites": [
+      "acidwave"
+    ],
+    "task_id": "022",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent listens to “STAYIN' AT HOME - VOCALS” and “FLYING AWAY (VOCALS)” to confirm whether vocals are clearly heard.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent listens to “STAYIN' AT HOME - VOCALS” and “FLYING AWAY (VOCALS)” to confirm whether vocals are clearly heard."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A playlist named “VOCALS_CONFIRMED” exists.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"vocals_confirmed\",\\s*\"user_id\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A playlist named “VOCALS_CONFIRMED” exists."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The playlist “VOCALS_CONFIRMED” contains “STAYIN' AT HOME - VOCALS.”",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"playlist\":\\s*\"vocals_confirmed\",\\s*\"song\":\\s*\"stayin' at home - vocals\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The playlist “VOCALS_CONFIRMED” contains “STAYIN' AT HOME - VOCALS.”"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The playlist “VOCALS_CONFIRMED” contains “FLYING AWAY (VOCALS).”",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"playlist\":\\s*\"vocals_confirmed\",\\s*\"song\":\\s*\"flying away \\(vocals\\)\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The playlist “VOCALS_CONFIRMED” contains “FLYING AWAY (VOCALS).”"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The playlist “VOCALS_CONFIRMED” contains no extra songs.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"playlist\":\"VOCALS_CONFIRMED\"",
+                      "operator": "lte",
+                      "value": 2
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"playlist\":\\s*\"vocals_confirmed\",\\s*\"song\":\\s*\"stayin' at home - vocals\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"playlist\":\\s*\"vocals_confirmed\",\\s*\"song\":\\s*\"flying away \\(vocals\\)\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The playlist “VOCALS_CONFIRMED” contains no extra songs."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Send Mike a direct message recommending a rock song suitable for someone going through a breakup.",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser",
+      "mattermost": "admin"
+    },
+    "previous_task_intent": "My boy mike is going through a breakup and is into rock. Shoot him a text with a song rec",
+    "require_login": true,
+    "sites": [
+      "acidwave",
+      "mattermost"
+    ],
+    "task_id": "023",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Evaluated Acidwave songs (transcribing at least one) to pick a breakup-appropriate rock song.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_regex": "(?i)transcri|rock|lighthouse"
+                      },
+                      {
+                        "url_regex": "(?i)rock|lighthouse"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent listened to / transcribed at least one Acidwave song and evaluated candidates to find a rock song suitable for someone going through a breakup."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Sent Mike (mike.ross) a direct message recommending 'Lighthouse'.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "channel_posts",
+                  "site": "mattermost",
+                  "params": {
+                    "user": "admin"
+                  },
+                  "resolve": [
+                    {
+                      "api": "user_by_name",
+                      "params": {
+                        "user": "admin",
+                        "username": "admin"
+                      },
+                      "extract": "id",
+                      "bind": "u1"
+                    },
+                    {
+                      "api": "user_by_name",
+                      "params": {
+                        "user": "admin",
+                        "username": "mike.ross"
+                      },
+                      "extract": "id",
+                      "bind": "u2"
+                    },
+                    {
+                      "api": "dm_channel",
+                      "params": {
+                        "user": "admin"
+                      },
+                      "extract": "id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:(?i:lighthouse))"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "admin sent mike.ross a Mattermost direct message recommending the song 'Lighthouse'."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a playlist containing all songs from albums with cassette tapes on the cover that do not have rap verses.",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser"
+    },
+    "previous_task_intent": "Of the albums with caset tapes on them make a playlist of all the songs which have no rap verses",
+    "require_login": true,
+    "sites": [
+      "acidwave"
+    ],
+    "task_id": "024",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent evaluates the songs from albums with cassette tapes on the cover to determine whether they contain rap verses.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent evaluates the songs from albums with cassette tapes on the cover to determine whether they contain rap verses."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A playlist exists containing Velvit Circut, Travel Static, More than numbers, and Flying Away (Vocals).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"playlist\":\\s*\"[^\"]*\",\\s*\"song\":\\s*\"velvet circuit\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"playlist\":\\s*\"[^\"]*\",\\s*\"song\":\\s*\"trailer static\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"playlist\":\\s*\"[^\"]*\",\\s*\"song\":\\s*\"more than numbers[^\"]*\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"playlist\":\\s*\"[^\"]*\",\\s*\"song\":\\s*\"flying away \\(vocals\\)\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A playlist exists containing Velvit Circut, Travel Static, More than numbers, and Flying Away (Vocals)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The playlist does not include Faultline shift or any other song with rap verses.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"song\":\"Faultline Shift\",\"duration\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"playlist\":\\s*\"[^\"]*\",\\s*\"song\":\\s*\"velvet circuit\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The playlist does not include Faultline shift or any other song with rap verses."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Book the next flight to a city mentioned in a folk song.",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser",
+      "password-manager": "agent1"
+    },
+    "require_login": true,
+    "sites": [
+      "acidwave",
+      "flight-search",
+      "password-manager"
+    ],
+    "task_id": "025",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Transcribed at least one song (especially Daily Signal 0912) to find the city mention.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_regex": "(?i)transcri|daily signal"
+                      },
+                      {
+                        "url_regex": "(?i)daily"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent transcribed/listened to at least one Acidwave song (in particular 'Daily Signal 0912') to identify the city mentioned in the lyrics."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A flight to Las Vegas, Hamburg or San Francisco is booked.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "bookings",
+                  "site": "flight-search",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"outbound_flight\":\\s*\\{[^}]*\"origin\":\\s*\"(?:[A-Z]{3})\"[^}]*\"destination\":\\s*\"(?:LAS|HAM|SFO|OAK|SJC)\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A flight-search booking exists whose destination is Las Vegas (LAS), Hamburg (HAM) or San Francisco (SFO)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "List out the 10 most common words and their counts found in folk songs in notion",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser",
+      "notion": "demo@webarena.local"
+    },
+    "require_login": true,
+    "sites": [
+      "acidwave",
+      "notion"
+    ],
+    "task_id": "026",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A Notion document lists the 10 most common folk-song words with counts (the 217, and 165, to 150, a 127, of 114, that 99, you 90, i 88, in 66, is 65).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\\bthe\\b[^}]{0,80}217"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\\band\\b[^}]{0,80}165"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\\bto\\b[^}]{0,80}150"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\\bof\\b[^}]{0,80}114"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A Notion page or database created during the task lists the 10 most common words in the folk songs with their counts: the 217, and 165, to 150, a 127, of 114, that 99, you 90, i 88, in 66, is 65."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Make a playlist of the folk songs which say the word \"place\"",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser"
+    },
+    "previous_task_intent": "Make a playlsit of the songs which say the word \"place\"",
+    "require_login": true,
+    "sites": [
+      "acidwave"
+    ],
+    "task_id": "027",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Transcribe all folk songs",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Transcribe all folk songs"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Make a playlist with Evening Harbor and Daily Signal 0912",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"playlist\":\\s*\"[^\"]*\",\\s*\"song\":\\s*\"evening harbor\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"playlist\":\\s*\"[^\"]*\",\\s*\"song\":\\s*\"daily signal 0912\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Make a playlist with Evening Harbor and Daily Signal 0912"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "I can't believe Wikipedia is banning us Congress members. Some of the longest \"songs\" are actually podcasts and are mislabeled as songs.  Shoot Mike a dm with the name of the podcast that mentions this.",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser",
+      "mattermost": "admin"
+    },
+    "previous_task_intent": "I can't believe wikipedia is banning us congress members. Some of the longest \"songs\" are actually podcasts and mislabeled as songs.  Shoot Mike a dm with the name of the podcast that mentions this.",
+    "require_login": true,
+    "sites": [
+      "acidwave",
+      "mattermost"
+    ],
+    "task_id": "028",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Must dm mike with the name trailer static",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the task account's Mattermost, admin sent Mike (mike.ross) a direct message naming Trailer Static as the Acidwave podcast requested by the user. The title alone is sufficient in that task-related DM; capitalization and surrounding wording may vary. Use the actual sent message and its sender, direct-message recipient, and task context. A draft, a message in a public or group channel, a message to another person, a message received from Mike, an unrelated pre-existing message, a message rejecting Trailer Static as the answer, or only a final chat claim does not satisfy this outcome. The latest approved rubric requires the sent DM; a separate transcription or listening action is not required."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "What is the combined time length of all the folk songs that have the word place (mm:ss)",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser"
+    },
+    "require_login": true,
+    "sites": [
+      "acidwave"
+    ],
+    "task_id": "035",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "agent says 33:52",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "33:52"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "agent says 33:52"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find all albums whose cover contains a cassette tape at first page. Create a playlist named CASSETTE_SET containing all songs from each of those albums.",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser"
+    },
+    "require_login": true,
+    "sites": [
+      "acidwave"
+    ],
+    "task_id": "300",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "FAULTLINE SHIFT and VELVET CIRCUIT are both in playlist \"CASSETTE_SET\"",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "acidwave",
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"playlist\":\\s*\"CASSETTE_SET\",\\s*\"song\":\\s*\"Faultline\\ Shift\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"playlist\":\\s*\"CASSETTE_SET\",\\s*\"song\":\\s*\"Velvet\\ Circuit\""
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "FAULTLINE SHIFT and VELVET CIRCUIT are both in playlist \"CASSETTE_SET\""
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Recommend to Bob 3 movies and 4 folk songs.",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser",
+      "thunderbird": "alice@techcorp.local",
+      "x-lite": "techvalueinvestor"
+    },
+    "previous_task_intent": "recomend to bob 3 movies and 4 folk songs",
+    "require_login": true,
+    "sites": [
+      "acidwave",
+      "x-lite",
+      "thunderbird"
+    ],
+    "task_id": "304",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "An email is sent to Bob",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "thunderbird",
+                  "api": "eval_state",
+                  "params": {
+                    "user": "alice@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?is)\"Sent\":\\s*\\[(?:(?!\\],\\s*\"[^\"\\n]+\"\\s*:).)*\"to\":\\s*\"[^\"\\n]*bob@techcorp\\.local"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "An email is sent to Bob"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The email should include: at least 3 movies from: - Close Encounters of the Third Kind   - Moana 2   - Gladiator 2   - Toy Story   - A Minecraft Movie — called “the Minecraft movie” in the post   - Wicked   - Home Alone   - Die Hard   - Captain America: The Winter Soldier   - Nutcrackers   - Jurassic Park   - Star Wars: The Force Awakens   - Black Hawk Down   - Planes, Trains & Automobiles   - Hot Frosty   - Annihilation   - Guillermo del Toro’s Pinocchio   - Portrait of a Lady on Fire   - Yacht Rock: A Dockumentary and at least four songs from:  - “Underpass” — Saltwater Choir, Dawn Routine   - “Driftwood” — Saltwater Choir, Dawn Routine   - “Cardinal Way” — Hollow Hill, Window Seasons   - “Broken Compass” — Hollow Hill, Window Seasons   - “Daily Signal 0912” — Riverglass Duo, Daily Signals   - “Greyline” — Canyon Morn, Greyline Letters   - “Brass Step” — Riverglass Duo, Brass Step   - “Evening Harbor” — Thespinwires, Evening Harbor",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The email should include: at least 3 movies from: - Close Encounters of the Third Kind   - Moana 2   - Gladiator 2   - Toy Story   - A Minecraft Movie — called “the Minecraft movie” in the post   - Wicked   - Home Alone   - Die Hard   - Captain America: The Winter Soldier   - Nutcrackers   - Jurassic Park   - Star Wars: The Force Awakens   - Black Hawk Down   - Planes, Trains & Automobiles   - Hot Frosty   - Annihilation   - Guillermo del Toro’s Pinocchio   - Portrait of a Lady on Fire   - Yacht Rock: A Dockumentary and at least four songs from:  - “Underpass” — Saltwater Choir, Dawn Routine   - “Driftwood” — Saltwater Choir, Dawn Routine   - “Cardinal Way” — Hollow Hill, Window Seasons   - “Broken Compass” — Hollow Hill, Window Seasons   - “Daily Signal 0912” — Riverglass Duo, Daily Signals   - “Greyline” — Canyon Morn, Greyline Letters   - “Brass Step” — Riverglass Duo, Brass Step   - “Evening Harbor” — Thespinwires, Evening Harbor"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a playlist out of four folk songs that use the word just.",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser"
+    },
+    "previous_task_intent": "create a playlist out of four folk songs that use the word just",
+    "require_login": true,
+    "sites": [
+      "acidwave"
+    ],
+    "task_id": "308",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A playlist is created with the name \"folk songs\"",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "acidwave",
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"folk songs\",\\s*\"user_id\":"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A playlist is created with the name \"folk songs\""
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The playlist contains the next 4 songs, not less or more: - Underpass   - Driftwood   - Daily Signal 0912   - Brass Step",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "acidwave",
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"playlist\":\\s*\"folk\\ songs\",\\s*\"song\":\\s*\"Underpass\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"playlist\":\\s*\"folk\\ songs\",\\s*\"song\":\\s*\"Driftwood\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"playlist\":\\s*\"folk\\ songs\",\\s*\"song\":\\s*\"Daily\\ Signal\\ 0912\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"playlist\":\\s*\"folk\\ songs\",\\s*\"song\":\\s*\"Brass\\ Step\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"folk\\ songs\",[^{}]*\"song_count\":\\s*4\\s*\\}"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The playlist contains the next 4 songs, not less or more: - Underpass   - Driftwood   - Daily Signal 0912   - Brass Step"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Which songs tagged as pop or rock are actually rap.",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser"
+    },
+    "previous_task_intent": "which songs tagged pop or rock are actually rap",
+    "require_login": true,
+    "sites": [
+      "acidwave"
+    ],
+    "task_id": "309",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Agent must decide on these songs: - “Lateblock” — Neon Seance   - “Pulse Diary” — Neon Seance   - “Faultline Shift” — Rain Shadow Drive",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "trust": "pass_only",
+                "config": {
+                  "exact_match": "Lateblock, Pulse Diary, Faultline Shift"
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Agent must decide on these songs: - “Lateblock” — Neon Seance   - “Pulse Diary” — Neon Seance   - “Faultline Shift” — Rain Shadow Drive"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Transcribe Velvet Circuit into a document.",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser",
+      "mydrive": "agent1@test.com"
+    },
+    "previous_task_intent": "please transcribe Velvet Circus",
+    "require_login": true,
+    "sites": [
+      "acidwave",
+      "mydrive"
+    ],
+    "task_id": "310",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A document is created on mydrive with the title \"Velvet Circuit Lyrics\" or any other filename or title.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "both",
+                "config": {
+                  "baseline_ref": "mydrive_files",
+                  "checks": [
+                    {
+                      "type": "snapshot_diff_added",
+                      "predicate": {
+                        "attr_equals": {
+                          "owner": "agent1@test.com",
+                          "inTrash": false,
+                          "document": true
+                        }
+                      },
+                      "min_count": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A document is created on mydrive with the title \"Velvet Circuit Lyrics\" or any other filename or title."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The document should contain the following lyrics: The smell of your body, the sound of your heartbeat The feeling of excitement as the skin is caressed Run, leave it, save me to sleep Your heartbeat, the excitement as the skin is caressed Run, leave it, save me to sleep The smell of your body, the sound of your heartbeat The feeling of excitement as the skin is caressed Now I'm leaving the street, the smell of your body, the sound of your heart, The skin is the rest, what I need is the rest. And myself, arms of a person, who satisfy all needs. No doubt, which sucks, the mouth which sucks, cannot cry. I act in the arms of a person To satisfy all needs No doubt, the man which sucks sucks cannot cry I say I'm satisfied The man which sucks The man which sucks cannot cry I'm satisfied I'm satisfied The man which sucks cannot in mydrive's document feature",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The document should contain the following lyrics: The smell of your body, the sound of your heartbeat The feeling of excitement as the skin is caressed Run, leave it, save me to sleep Your heartbeat, the excitement as the skin is caressed Run, leave it, save me to sleep The smell of your body, the sound of your heartbeat The feeling of excitement as the skin is caressed Now I'm leaving the street, the smell of your body, the sound of your heart, The skin is the rest, what I need is the rest. And myself, arms of a person, who satisfy all needs. No doubt, which sucks, the mouth which sucks, cannot cry. I act in the arms of a person To satisfy all needs No doubt, the man which sucks sucks cannot cry I say I'm satisfied The man which sucks The man which sucks cannot cry I'm satisfied I'm satisfied The man which sucks cannot in mydrive's document feature"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "baseline": [
+        {
+          "name": "mydrive_files",
+          "provider": "mydrive_files",
+          "params": {
+            "site": "mydrive"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Write down every rock song's lyrics in a document.",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser",
+      "mydrive": "agent1@test.com"
+    },
+    "previous_task_intent": "Write down every rock song's lyrics in a mydrive document",
+    "require_login": true,
+    "sites": [
+      "acidwave",
+      "mydrive"
+    ],
+    "task_id": "327",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A document is created on mydrive for the lyrics",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent created and saved a MyDrive document for the Acidwave rock-song lyrics in the task account. A chat answer, an unsaved editor, or merely opening a pre-existing document does not satisfy this criterion."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The lyrics of the following songs should be available: I Am The Eagle Astronaut Vocals Secret Agent 89 - Vocals Time Bomb - Vocals Into the Night Glass Capital Halflight Concrete Garden Heat Map Lighthouse Tide Letters Workman's Hymn Black Coffee Snowfall Westbound Longform Signal Open Ledger Talk Trailer Static Velvet Circuit Faultline Shift Weather Heart",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In that same newly created MyDrive document, each rock song named in the reviewed criterion has its own correctly attributed transcription of its actual lyrics: The lyrics of the following songs should be available: I Am The Eagle Astronaut Vocals Secret Agent 89 - Vocals Time Bomb - Vocals Into the Night Glass Capital Halflight Concrete Garden Heat Map Lighthouse Tide Letters Workman's Hymn Black Coffee Snowfall Westbound Longform Signal Open Ledger Talk Trailer Static Velvet Circuit Faultline Shift Weather Heart. Judge the saved document content against the songs and trajectory evidence. Song titles alone, invented lyrics, a summary, or a final chat claim do not count. Do not require a particular document title or song order."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "All songs have different lyrics",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The saved MyDrive document has a separate song-specific lyric transcription for every song listed in the preceding criterion. The transcriptions must differ as the songs do; copying one song's lyrics under multiple titles or repeating placeholder text does not satisfy this criterion. Repeated words or choruses that actually occur in the songs are allowed."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "For these words: heart, life, and time. Please create a playlist that contains songs that have any of these words in their lyrics and a playlist that contains songs that have all of these words in their lyrics.",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser"
+    },
+    "previous_task_intent": "For these words: heart life and time please create one playlist which contains songs that have any of these words found in its lyrics and one playlist that contains songs that have  all of these words in they're lyrics.",
+    "require_login": true,
+    "sites": [
+      "acidwave"
+    ],
+    "task_id": "328",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "One Playlist should contain these songs: - Flying Away (Vocals) - Astronaut Vocals - Secret Agent 89 - Vocals - Time Bomb - Vocals - Stayin' at Home - Vocals - Life Is But a Dream - Outerline - Halflight - Concrete Garden - Lighthouse - Tide Letters - Longform Signal - Open Ledger Talk - Daily Signal 0912 - Trailer Static - Brass Step - Ember Loop - Faultline Shift - Evening Harbor - Return Postcard",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the task account's Acidwave, the agent created a playlist for songs containing ANY of heart, life, or time. It contains every song in the reviewed list and no songs outside it: One Playlist should contain these songs: - Flying Away (Vocals) - Astronaut Vocals - Secret Agent 89 - Vocals - Time Bomb - Vocals - Stayin' at Home - Vocals - Life Is But a Dream - Outerline - Halflight - Concrete Garden - Lighthouse - Tide Letters - Longform Signal - Open Ledger Talk - Daily Signal 0912 - Trailer Static - Brass Step - Ember Loop - Faultline Shift - Evening Harbor - Return Postcard. Check the persisted membership of one playlist, in any order; scattered songs across multiple playlists, catalogue results, or a final chat list are insufficient. This playlist must be distinct from the ALL-three-words playlist. No particular playlist name is required."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The other playlist should contain these songs: - Longform Signal - Daily Signal 0912 - Ember Loop - Faultline Shift",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the task account's Acidwave, the agent created a second, distinct playlist for songs containing ALL of heart, life, and time. Its exact membership, in any order, is Longform Signal, Daily Signal 0912, Ember Loop, and Faultline Shift. The larger ANY-word playlist cannot satisfy this criterion, even though it contains these four songs. Check the saved second playlist; a proposed list or final chat answer is insufficient. No particular playlist name is required."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Mike is going through a breakup. Please create a playlist of breakup songs, then dm all the titles to him.",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser",
+      "mattermost": "admin"
+    },
+    "previous_task_intent": "Mike is going through a break up please create a playlist of breakup songs then dm the all the titles to him.",
+    "require_login": true,
+    "sites": [
+      "acidwave",
+      "mattermost"
+    ],
+    "task_id": "329",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "created a playlist with at least 4 titles from these ten - I Am The Eagle - Flying Away (Vocals) - Time Bomb - Vocals - Lighthouse - Tide Letters - Faultline Shift - Evening Harbor - Return Postcard - Neon Want - Weather Heart. And no titles from outside this list",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent created a saved Acidwave playlist containing at least four distinct songs from this approved set and no songs outside it: I Am The Eagle; Flying Away (Vocals); Time Bomb - Vocals; Lighthouse; Tide Letters; Faultline Shift; Evening Harbor; Return Postcard; Neon Want; Weather Heart. Judge one playlist in the task account, not songs distributed across playlists. Any subset of four or more and any playlist name/order are allowed."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "dmed mike a list of the exact contents of these songs",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent sent Mike (mike.ross) a Mattermost direct message listing exactly the song titles in the breakup playlist created for this task. Compare the actual saved playlist with the sent message: all selected titles must appear, and no unselected titles may appear. The user asked for titles, so lyrics need not be sent. A draft, a message to another person/channel, or merely claiming in the final answer to have sent it does not count."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Please book a trip connecting all the cities found in Daily Signal and Open Ledger Talk with exactly 3 full days at each location, with the least amount of time spent on an airplane as possible.",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser",
+      "flight-search": "flyingagents",
+      "password-manager": "agent1"
+    },
+    "previous_task_intent": "Please book a trip connecting all the cities found in Daily Signal and Open Ledger Talk with exactly 3 full days at each location with the least amount of time spent on airplane as possible",
+    "require_login": true,
+    "sites": [
+      "acidwave",
+      "password-manager",
+      "flight-search"
+    ],
+    "task_id": "330",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [
+            "r2",
+            "r3"
+          ],
+          "eval_config": {
+            "rubric": "Each Flight occurs exactly 4 days after the previous flight",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "For the same booked trip evaluated by the next two criteria, the Hamburg-to-Athens journey departs exactly four calendar days after the Las-Vegas-via-Amsterdam-to-Hamburg journey, leaving the requested three full days at the destination. Use the booking dates and times, not only a proposed itinerary. Amsterdam is a connection within the first journey; do not require a four-day gap between the two connecting flight segments. Unbooked searches or unrelated bookings do not satisfy the criterion."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "first flight is: Las Vegas → Amsterdam → Hamburg",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The first journey in the trip created for this task is a confirmed booking from Las Vegas to Hamburg with a connection in Amsterdam, in that order. Use the persisted booking and its actual flight segments. An Amsterdam-only destination, a different connection, separate unrelated bookings, search results, or a chat plan do not satisfy this criterion."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The second flight is Hamburg → Athens",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The second journey in that same trip is a confirmed flight booking from Hamburg to Athens. Check the persisted booking and direction; Athens-to-Hamburg, a flight to a different destination, search results, or an unconfirmed itinerary do not satisfy this criterion."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Favorite every song that doesn't have any swear words in it.",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser"
+    },
+    "previous_task_intent": "Favorite every song that doesn't have any swear words in it",
+    "require_login": true,
+    "sites": [
+      "acidwave"
+    ],
+    "task_id": "331",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The following songs should be favorited: I Am The Eagle, Flying Away (Vocals), It's Your Choice (Lyrics by Kristina Rice), Astronaut Vocals, Secret Agent 89 - Vocals, Time Bomb - Vocals, Into the Night, Stayin' at Home - Vocals, Life Is But a Dream, More Than Numbers - Desert Ghost EP Remix, Static Bloom, Outerline, Glass Capital, Heat Map, Lighthouse, Tide Letters, Underpass, Driftwood, Cardinal Way, Broken Compass, Black Coffee, Snowfall, Westbound, Coastal Fog, Riptide Lullaby, Longform Signal, Open Ledger Talk, Daily Signal 0912, Greyline, Return Current, Sandlight, Velvet Circuit, Brass Step, Low Frame, Ember Loop, Evening Harbor, Return Postcard, Basement Years, Dawn Signal, Neon Want, Interior Weather, Low Lantern, Weather Heart",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "acidwave",
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": 200
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "favorites",
+                      "operator": "equals",
+                      "value": [
+                        {
+                          "user_id": "aciduser",
+                          "song": "Astronaut Vocals"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Basement Years"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Black Coffee"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Brass Step"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Broken Compass"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Cardinal Way"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Coastal Fog"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Daily Signal 0912"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Dawn Signal"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Driftwood"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Ember Loop"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Evening Harbor"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Flying Away (Vocals)"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Glass Capital"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Greyline"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Heat Map"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "I Am The Eagle"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Interior Weather"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Into the Night"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "It's Your Choice (Lyrics by Kristina Rice)"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Life Is But a Dream"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Lighthouse"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Longform Signal"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Low Frame"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Low Lantern"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "More Than Numbers - Desert Ghost EP Remix"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Neon Want"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Open Ledger Talk"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Outerline"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Return Current"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Return Postcard"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Riptide Lullaby"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Sandlight"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Secret Agent 89 - Vocals"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Snowfall"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Static Bloom"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Stayin' at Home - Vocals"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Tide Letters"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Time Bomb - Vocals"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Underpass"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Velvet Circuit"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Weather Heart"
+                        },
+                        {
+                          "user_id": "aciduser",
+                          "song": "Westbound"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the task account (aciduser), every song in the reviewed clean-song list is favorited, with no additional swear-word songs newly favorited for this task: The following songs should be favorited: I Am The Eagle, Flying Away (Vocals), It's Your Choice (Lyrics by Kristina Rice), Astronaut Vocals, Secret Agent 89 - Vocals, Time Bomb - Vocals, Into the Night, Stayin' at Home - Vocals, Life Is But a Dream, More Than Numbers - Desert Ghost EP Remix, Static Bloom, Outerline, Glass Capital, Heat Map, Lighthouse, Tide Letters, Underpass, Driftwood, Cardinal Way, Broken Compass, Black Coffee, Snowfall, Westbound, Coastal Fog, Riptide Lullaby, Longform Signal, Open Ledger Talk, Daily Signal 0912, Greyline, Return Current, Sandlight, Velvet Circuit, Brass Step, Low Frame, Ember Loop, Evening Harbor, Return Postcard, Basement Years, Dawn Signal, Neon Want, Interior Weather, Low Lantern, Weather Heart. Judge saved favorites, allowing any display order. Merely listing the songs, finding them in the catalogue, adding them to a playlist, or favoriting them for another account does not count."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Which songs don't have swear words but are in albums that have swear words?",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser"
+    },
+    "require_login": true,
+    "sites": [
+      "acidwave"
+    ],
+    "task_id": "332",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "agent should return the answer: Glass Capital, Heat Map, Black Coffee",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "trust": "pass_only",
+                "config": {
+                  "exact_match": "Glass Capital, Heat Map, Black Coffee"
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer identifies exactly Glass Capital, Heat Map, and Black Coffee as the songs without swear words in albums that contain swear-word songs. Order, punctuation, and explanatory prose may vary. Omitting a title, adding a wrong title, or negating/rejecting the correct list does not satisfy the criterion."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "How many total times is the word time said over the course of the entire catalog.",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser"
+    },
+    "previous_task_intent": "How many total times is the word time said over the course of the entire catalog",
+    "require_login": true,
+    "sites": [
+      "acidwave"
+    ],
+    "task_id": "333",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent should answer with 63",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "trust": "pass_only",
+                "config": {
+                  "exact_match": "63"
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer states that the word time is said 63 times across the entire Acidwave catalogue. Equivalent wording is allowed. A number containing 63 as a substring (such as 163), a per-song count, an alternative count, or a statement denying that the total is 63 does not satisfy this criterion."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Write down every time the word love is said in a bulleted list with the song and timestamp for all songs.",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser",
+      "mydrive": "agent1@test.com"
+    },
+    "previous_task_intent": "Write down every time the word love is said in a bulleted list with song and time stamp over all songs",
+    "require_login": true,
+    "sites": [
+      "acidwave",
+      "mydrive"
+    ],
+    "task_id": "334",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "The list should contain:  - Flying Away (Vocals) — 00:55.76–01:04.42 - Flying Away (Vocals) — 02:23.67–02:29.81 - Lighthouse — 00:39.91–00:43.48 - Tide Letters — 01:32.90–01:36.70 - Longform Signal — 06:56.14–07:00.06 - Longform Signal — 20:39.49–20:46.25 - Longform Signal — 20:51.75–20:56.79 - Daily Signal 0912 — 22:02.88–22:03.52 - Daily Signal 0912 — 22:35.12–22:36.54 - Daily Signal 0912 — 24:47.92–24:49.36 - Trailer Static — 08:28.48–08:28.96 - Trailer Static — 09:39.32–09:42.68 - Trailer Static — 10:33.96–10:37.50 - Trailer Static — 13:43.66–13:45.38 - Trailer Static — 16:17.98–16:19.86 - Trailer Static — 20:22.54–20:26.22 - Trailer Static — 24:52.62–24:56.78 - Brass Step — 00:57.44–01:03.73 - Brass Step — 02:04.90–02:08.22 - Brass Step — 02:11.27–02:13.27",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the MyDrive document created or updated for this task, a bulleted list pairs each of the following 20 occurrences of love with the correct song and timestamp interval: The list should contain:  - Flying Away (Vocals) — 00:55.76–01:04.42 - Flying Away (Vocals) — 02:23.67–02:29.81 - Lighthouse — 00:39.91–00:43.48 - Tide Letters — 01:32.90–01:36.70 - Longform Signal — 06:56.14–07:00.06 - Longform Signal — 20:39.49–20:46.25 - Longform Signal — 20:51.75–20:56.79 - Daily Signal 0912 — 22:02.88–22:03.52 - Daily Signal 0912 — 22:35.12–22:36.54 - Daily Signal 0912 — 24:47.92–24:49.36 - Trailer Static — 08:28.48–08:28.96 - Trailer Static — 09:39.32–09:42.68 - Trailer Static — 10:33.96–10:37.50 - Trailer Static — 13:43.66–13:45.38 - Trailer Static — 16:17.98–16:19.86 - Trailer Static — 20:22.54–20:26.22 - Trailer Static — 24:52.62–24:56.78 - Brass Step — 00:57.44–01:03.73 - Brass Step — 02:04.90–02:08.22 - Brass Step — 02:11.27–02:13.27. Each occurrence must be represented separately, including repeats within one song. Equivalent time formatting is allowed, but timestamps must identify the listed occurrences in the audio. Missing occurrences, swapped song/time pairs, or a final chat list that was not saved in the document do not count."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A mydrive document is created, or the writing is done in an existing document",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent saved the requested song-and-timestamp list in a MyDrive document in the task account. Creating a new document or updating an existing document both satisfy this criterion. An empty document, unsaved edit, or final chat answer alone does not."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a playlist using only the songs that say the word life.",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser"
+    },
+    "previous_task_intent": "Create a playlist using only the songs that say the word life",
+    "require_login": true,
+    "sites": [
+      "acidwave"
+    ],
+    "task_id": "335",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A playlist is created",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "acidwave",
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": 200
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "playlists.0.user_id",
+                      "operator": "equals",
+                      "value": "aciduser"
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "playlists.0.name",
+                      "operator": "exists"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent created and saved a new playlist in the task account's Acidwave for songs saying life. No particular playlist title is required. Merely proposing a playlist or opening an existing unrelated playlist is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The playlist the agent makes should have these songs: Secret Agent 89 - Vocals, Life Is But a Dream, Outerline, Halflight, Concrete Garden, Tide Letters, Longform Signal, Open Ledger Talk, Daily Signal 0912, Brass Step, Ember Loop, Faultline Shift",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "That same new Acidwave playlist contains exactly these twelve songs, in any order: Secret Agent 89 - Vocals; Life Is But a Dream; Outerline; Halflight; Concrete Garden; Tide Letters; Longform Signal; Open Ledger Talk; Daily Signal 0912; Brass Step; Ember Loop; Faultline Shift. Check the saved membership; catalogue matches or songs spread across multiple playlists do not count. Do not require a particular playlist name."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Write down a list of songs with a long gap between vocals (30 seconds or more) and list the length of the gap.",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser",
+      "mydrive": "agent1@test.com"
+    },
+    "previous_task_intent": "Write down a list of songs with a  long gap between vocals (30 second or more) and list the name length of gap",
+    "require_login": true,
+    "sites": [
+      "acidwave",
+      "mydrive"
+    ],
+    "task_id": "336",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A mydrive document is created",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent created and saved a new MyDrive document in the task account for the list of songs with vocal gaps of at least 30 seconds. A chat answer, unsaved editor, or merely opening an existing document is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The list on the document should contain this: - Flying Away (Vocals) — 35.87 seconds - Lateblock — 30.85 seconds",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The list in that same new MyDrive document correctly pairs Flying Away (Vocals) with a 35.87-second gap between vocals and Lateblock with a 30.85-second gap. Both song/duration pairs must be saved in the document. Equivalent units or formatting are allowed; swapped values, missing entries, invented extra qualifying songs, or a chat answer alone do not satisfy this criterion."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create playlist of all the songs that mention the ocean or the sea.",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser"
+    },
+    "previous_task_intent": "Create playlist of all the songs that mention the ocean. or the sea",
+    "require_login": true,
+    "sites": [
+      "acidwave"
+    ],
+    "task_id": "337",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A playlist is created with the following songs: Underpass, Driftwood, Longform Signal, Daily Signal 0912, Trailer Static, Brass Step to user",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent created a saved playlist in the task account's Acidwave containing exactly Underpass, Driftwood, Longform Signal, Daily Signal 0912, Trailer Static, and Brass Step, in any order. All six must belong to the same playlist, with no other songs included. No particular playlist name is required. The task asks for a playlist: returning these names in a final answer, finding them in the catalogue, or distributing them across separate playlists does not satisfy the criterion."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Listen to the recording titled \"Trailer Static\" on Acidwave and identify the cities named in the spoken audio. For each distinct city that has accommodation listings on TravelMap, complete one accommodation booking. Count repeated mentions of the same city only once, and skip cities that have no listings there. You may choose any available property and booking details (dates, number of guests, and length of stay) independently for each city; the bookings do not need to form a single travel itinerary.",
+    "login_username": "aciduser",
+    "login_usernames": {
+      "acidwave": "aciduser",
+      "travelmap": "avery@example.com"
+    },
+    "previous_task_intent": "Listen to the recording titled \"Trailer Static\" on Acidwave and identify the cities named in the spoken audio. For each distinct city that has accommodation listings on TravelMap, complete one accommodation booking on TravelMap. Count repeated mentions of the same city only once, and skip cities that have no listings there. You may choose any available property and booking details (dates, number of guests, and length of stay) independently for each city; the bookings do not need to form a single travel itinerary.",
+    "require_login": true,
+    "sites": [
+      "acidwave",
+      "travelmap"
+    ],
+    "task_id": "403",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Some stay booked at each of these cities: London, New York, Rochester, San Diego, San Francisco",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the task account on TravelMap, the agent completed and saved at least one accommodation booking in each of London, New York, Rochester, San Diego and San Francisco. Verify the city of the actual booked property and the completed booking status for all five cities. Any available property, dates, guest count and stay length are acceptable independently in each city; no connected itinerary or fixed dates are required. Repeated mentions of a city require only one booking. Search results, properties merely present in the catalogue, unfinished checkout, cancelled bookings, unrelated pre-existing reservations or a final claim do not satisfy this outcome. This is the approved booking outcome; do not add a separate transcription/listening criterion."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

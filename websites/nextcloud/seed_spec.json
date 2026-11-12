@@ -1,0 +1,176 @@
+{
+  "version": 2,
+  "random_seed": 20260713,
+  "dataset_license": "CC-BY-4.0",
+  "allowed_asset_licenses": [
+    "Apache-2.0",
+    "CC-BY-4.0",
+    "CC0-1.0"
+  ],
+  "targets": {
+    "files_per_user": 5000,
+    "contacts_per_user": 100,
+    "calendar_events_per_user": 50,
+    "notifications_per_user": 12,
+    "talk_messages_total": 425,
+    "talk_messages_by_author": {
+      "maya.patel": 178,
+      "daniel.brooks": 167,
+      "sarah": 20,
+      "priya": 20,
+      "marcus": 20,
+      "leon": 20
+    }
+  },
+  "file_format_weights": {
+    "txt": 25,
+    "md": 15,
+    "csv": 15,
+    "json": 10,
+    "pdf": 10,
+    "docx": 10,
+    "xlsx": 10,
+    "pptx": 5
+  },
+  "root_work_files_per_user": 6,
+  "open_dataset_derivatives_per_user": {
+    "orders": 160,
+    "invoices": 120,
+    "plots": 157
+  },
+  "managed_folder_targets": {
+    "maya.patel": {
+      "Finance/Invoices": 348,
+      "Finance/Budgets": 212,
+      "Marketing/Campaigns": 286,
+      "Meetings/Meeting Reports": 214,
+      "Operations/Daily Operations": 319,
+      "Operations/Inventory": 248,
+      "People/Recruiting": 142,
+      "People/Training": 126,
+      "Presentations/Quarterly Reviews": 193,
+      "Procurement/Purchase Orders": 292,
+      "Procurement/Purchase Requisitions": 292,
+      "Projects/Proposals": 227,
+      "Projects/Status Reports": 271,
+      "Reports/Monthly Management": 239,
+      "Sales/Account Notes": 156,
+      "Sales/Orders": 348,
+      "Sales/Pipeline": 219,
+      "Analytics/Order Plots": 157,
+      "Legal/Contracts": 182,
+      "Strategy/Plans": 264
+    },
+    "daniel.brooks": {
+      "Finance/Invoices": 348,
+      "Finance/Budgets": 216,
+      "Marketing/Campaigns": 286,
+      "Meetings/Meeting Reports": 214,
+      "Operations/Daily Operations": 319,
+      "Operations/Inventory": 248,
+      "People/Recruiting": 142,
+      "People/Training": 126,
+      "Presentations/Quarterly Reviews": 193,
+      "Procurement/Purchase Orders": 292,
+      "Procurement/Purchase Requisitions": 292,
+      "Projects/Proposals": 227,
+      "Projects/Status Reports": 271,
+      "Reports/Monthly Management": 239,
+      "Sales/Account Notes": 156,
+      "Sales/Orders": 348,
+      "Sales/Pipeline": 219,
+      "Analytics/Order Plots": 157,
+      "Legal/Contracts": 182,
+      "Strategy/Plans": 264
+    }
+  },
+  "purchase_orders_per_user_by_year": {
+    "2022": 42,
+    "2023": 57,
+    "2024": 76,
+    "2025": 68,
+    "2026": 49
+  },
+  "procurement_linkage": {
+    "requisitions_per_purchase_order": 1,
+    "vendor_assessments_per_vendor_per_year": 1,
+    "vendor_notes_per_vendor_per_year": 1,
+    "vendor_master_records_per_vendor": 1
+  },
+  "timesheets_per_user_by_year": {
+    "2022": 12,
+    "2023": 12,
+    "2024": 12,
+    "2025": 12,
+    "2026": 6
+  },
+  "timesheet_worker_categories": [
+    "Full-Time Employees",
+    "Part-Time Employees",
+    "Contractors",
+    "Interns",
+    "Temporary Staff",
+    "Consultants"
+  ],
+  "calendar_anchor": "2026-07-13",
+  "business_workspace_folders": [
+    "Analytics",
+    "Finance",
+    "Legal",
+    "Marketing",
+    "Meetings",
+    "Operations",
+    "People",
+    "Presentations",
+    "Procurement",
+    "Projects",
+    "Reports",
+    "Sales",
+    "Strategy"
+  ],
+  "talk_rooms": [
+    "Research Updates",
+    "Operations Planning",
+    "Product Coordination",
+    "Design Exchange"
+  ],
+  "additional_talk_rooms": [
+    "Finance and Invoices",
+    "Customer Launches",
+    "Office Operations",
+    "Hiring Coordination",
+    "Events and Travel"
+  ],
+  "talk_users": {
+    "maya.patel": "Maya Patel",
+    "daniel.brooks": "Daniel Brooks",
+    "sarah": "Sarah Chen",
+    "priya": "Priya Nair",
+    "marcus": "Marcus Johnson",
+    "leon": "Leon Greene"
+  },
+  "talk_room_support_authors": {
+    "Research Updates": {"priya": 5, "leon": 4},
+    "Operations Planning": {"marcus": 5, "sarah": 4},
+    "Product Coordination": {"priya": 4, "sarah": 3, "marcus": 2},
+    "Design Exchange": {"leon": 5, "priya": 4},
+    "Finance and Invoices": {"sarah": 5, "leon": 4},
+    "Customer Launches": {"leon": 4, "priya": 3, "sarah": 2},
+    "Office Operations": {"marcus": 5, "sarah": 4},
+    "Hiring Coordination": {"priya": 4, "marcus": 5},
+    "Events and Travel": {"leon": 3, "marcus": 3, "sarah": 2},
+    "Project Alpha": {}
+  },
+  "talk_unread_messages": {
+    "maya.patel": {
+      "Finance and Invoices": 5,
+      "Hiring Coordination": 3,
+      "Events and Travel": 4
+    },
+    "daniel.brooks": {
+      "Research Updates": 4,
+      "Product Coordination": 2,
+      "Office Operations": 6
+    }
+  }
+}

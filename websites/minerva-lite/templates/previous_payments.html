@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-heading">
+  <h1 class="page-title">View Previous Payments</h1>
+  {% include "_term_selector.html" %}
+</section>
+
+<section class="payment-list" data-test="previous-payments">
+  <div class="account-totals">
+    <div><span>Full amount paid</span><strong data-test="payments-full-paid">{{ summary.paid|money }}</strong></div>
+    <div><span>Amount due</span><strong data-test="payments-amount-due">{{ summary.balance|money }}</strong></div>
+    <div><span>Full payment due by</span><strong>{{ summary.full_payment_due_by }}</strong></div>
+  </div>
+
+  {% for payment in payments %}
+  <article class="payment-card" data-test="payment-entry">
+    <header>
+      <h2>{{ payment.description }}</h2>
+      <strong>{{ payment.amount|money }}</strong>
+    </header>
+    <dl>
+      <div><dt>Amount paid</dt><dd>{{ payment.amount|money }}</dd></div>
+      <div><dt>Amount due after payment</dt><dd>{{ summary.balance|money }}</dd></div>
+      <div><dt>Description/details</dt><dd>{{ payment.description }}; confirmation {{ payment.confirmation }}</dd></div>
+      <div><dt>Term</dt><dd>{{ payment.term }}</dd></div>
+      <div><dt>Full payment due by</dt><dd>{{ payment.due_by }}</dd></div>
+      <div><dt>Payment method</dt><dd>{{ payment.method }}</dd></div>
+    </dl>
+  </article>
+  {% endfor %}
+</section>
+{% endblock %}

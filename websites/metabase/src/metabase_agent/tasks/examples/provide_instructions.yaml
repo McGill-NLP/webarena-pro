@@ -1,0 +1,21 @@
+id: provide_instructions
+name: Provide instructions for a task
+instruction: >
+  The user wants to learn how to create a dashboard subscription in Metabase.
+  Navigate through Metabase to find the subscription feature and provide
+  step-by-step instructions on how to set up a dashboard subscription
+  that sends weekly email reports.
+start_url: http://localhost:3000
+max_steps: 25
+timeout_seconds: 600
+success_criteria:
+  - url_contains: dashboard
+  - response_contains: subscription
+  - response_contains: email
+tags:
+  - beginner
+  - instructions
+  - documentation
+notes: >
+  Tests the agent's ability to explore UI and explain features.
+  This is a guidance/documentation task rather than an action task.

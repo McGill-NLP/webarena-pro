@@ -1,0 +1,1172 @@
+[
+  {
+    "intent": "Create an electronics product rating table.",
+    "login_username": "admin@admin.com",
+    "require_login": true,
+    "sites": [
+      "metabase"
+    ],
+    "task_id": "122",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A saved question named 'Electronics Product Ratings' exists.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "cards",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"Electronics Product Ratings\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A saved question named 'Electronics Product Ratings' exists."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The question filters Category = Electronics (structured filter) and shows title, vendor, price, rating sorted by rating descending.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "cards",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"electronics product ratings\"[\\s\\S]{0,3000}?\"Electronics\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"electronics product ratings\"[\\s\\S]{0,3000}?(\\[\\s*\"desc\"|\"desc\"\\s*[,\\]])"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The saved question filters the Products table on Category = 'Electronics' (exact structured filter), includes title, vendor, price and rating columns, and sorts by rating descending."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find the highest-rated product in the Products table.",
+    "login_username": "admin@admin.com",
+    "require_login": true,
+    "sites": [
+      "metabase"
+    ],
+    "task_id": "123",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Sorted the Products table by rating descending (or equivalent).",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent sorted the Products table by the rating column in descending order (or viewed an equivalent ordering surface)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The answer names Professional Chef Knife.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "Professional Chef Knife"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer includes the product name 'Professional Chef Knife'."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "The answer includes the 4.9 rating.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "4.9"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer includes the rating value 4.9."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Save a list of high-rated products.",
+    "login_username": "admin@admin.com",
+    "require_login": true,
+    "sites": [
+      "metabase"
+    ],
+    "task_id": "124",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A saved question named 'High-Rated Products' exists.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "cards",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"High-Rated Products\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A saved question named 'High-Rated Products' exists."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The question filters rating >= 4.5 on Products and sorts rating descending.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "cards",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"high-rated products\"[\\s\\S]{0,3000}?4\\.5"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"high-rated products\"[\\s\\S]{0,3000}?(\\[\\s*\"desc\"|\"desc\"\\s*[,\\]])"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The saved question uses the Products table, filters rating >= 4.5 with a structured filter, and sorts rating descending."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "I would like to see the sales dashboard first when I log into Metabase. The dashboard is missing a plot on the monthly revenue trend, and a filter by date.",
+    "login_username": "admin@admin.com",
+    "login_usernames": {
+      "metabase": "admin@admin.com"
+    },
+    "require_login": true,
+    "sites": [
+      "metabase"
+    ],
+    "task_id": "125",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The Sales Overview dashboard (id 2) is the custom homepage.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "setting",
+                  "params": {
+                    "setting_key": "custom-homepage-dashboard"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "^2$"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Metabase is configured so the Sales Overview dashboard shows on the home page by default (custom homepage enabled and pointed at Sales Overview)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Sales Overview has a monthly revenue trend plot.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "dashboard",
+                  "params": {
+                    "dashboard_id": "2"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"[^\"]*(revenue[^\"]*(month|trend)|month[^\"]*revenue)[^\"]*\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The Sales Overview dashboard has a plot showing the trend of revenue per month."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "Sales Overview has a date filter mapped to the revenue plot and the order status card.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "dashboard",
+                  "params": {
+                    "dashboard_id": "2"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"parameters\":\\s*\\[[^\\]]*\"(?:date[^\"]*)\""
+                    },
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"parameter_id\"",
+                      "operator": "gte",
+                      "value": 2
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The Sales Overview dashboard has a date filter, and it is applied (mapped) to both the monthly revenue plot and the Orders by Status card."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find the most expensive product and report its name and price in the format: Product; $XXX.XX",
+    "login_username": "admin@admin.com",
+    "login_usernames": {
+      "metabase": "admin@admin.com"
+    },
+    "require_login": true,
+    "sites": [
+      "metabase"
+    ],
+    "task_id": "126",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The answer identifies Memory Foam Mattress at $499.99.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "Memory Foam Mattress",
+                    "499.99"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer identifies Memory Foam Mattress and reports the price $499.99."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The answer follows the 'Product; $XXX.XX' format.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "Memory Foam Mattress; $499.99"
+                  ]
+                },
+                "trust": "both"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer follows the format 'Product; $XXX.XX' — i.e. 'Memory Foam Mattress; $499.99'."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "How many products are priced above $100.00?",
+    "login_username": "admin@admin.com",
+    "login_usernames": {
+      "metabase": "admin@admin.com"
+    },
+    "require_login": true,
+    "sites": [
+      "metabase"
+    ],
+    "task_id": "127",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The answer states 5.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer identifies that exactly 5 products are priced above $100.00."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Which product category has the most products?",
+    "login_username": "admin@admin.com",
+    "login_usernames": {
+      "metabase": "admin@admin.com"
+    },
+    "require_login": true,
+    "sites": [
+      "metabase"
+    ],
+    "task_id": "128",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The answer identifies Accessories (6 products).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "Accessories"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer identifies Accessories, which has 6 products — more than any other category."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "If James Taylor works at Titan Telecom then how long is a flight from him to his company headquarters in number of minutes (just number).",
+    "login_username": "admin@admin.com",
+    "login_usernames": {
+      "metabase": "admin@admin.com",
+      "pipedrive": "admin@local.host"
+    },
+    "previous_task_intent": "If James taylor works at Titan Telecom then how long is a flight from him to his company headquarters in number of minutes (just number)",
+    "require_login": true,
+    "sites": [
+      "metabase",
+      "pipedrive",
+      "flight-search"
+    ],
+    "task_id": "131",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Found that James Taylor lives in San Jose (Metabase People table).",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_regex": "(?i)james taylor|san jose"
+                      },
+                      {
+                        "url_regex": "(?i)people"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent found in Metabase's People table that James Taylor is located in San Jose, California."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Found that Titan Telecom is headquartered in Atlanta (Pipedrive).",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_regex": "(?i)titan"
+                      },
+                      {
+                        "url_regex": "(?i)titan|compan|organization"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent found in Pipedrive that Titan Telecom is located in Atlanta, Georgia."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The final answer is 277 (minutes, SJC -> ATL one-way).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "277"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer gives the flight time from San Jose to Atlanta as 277 minutes (just the number)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a monthly order_summary combo chart with four layers:\n\n  1. Revenue by acquisition source\n  2. Total revenue over time\n  3. Three-month revenue average over time\n  4. Distinct orders over time",
+    "login_username": "admin@admin.com",
+    "login_usernames": {
+      "metabase": "admin@admin.com"
+    },
+    "previous_task_intent": "Create a monthly order_summary combo chart with four layers:\n\n  1. Revenue — stacked bars by acquisition source\n  2. Total revenue — line\n  3. Three-month revenue average — line\n  4. Distinct orders — line on the right axis",
+    "require_login": true,
+    "sites": [
+      "metabase"
+    ],
+    "task_id": "325",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Acquisition-source revenue appears as stacked bars.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Judge the monthly order_summary combo chart created during this task. All six criteria refer to that same chart. A proposed query, chart name, or final chat claim alone is insufficient; use the trajectory, query/series configuration, and rendered chart evidence. The chart groups order_summary revenue (order_total) by month of order_date and acquisition_source, and displays the source revenue series as stacked bars. Unstacked bars, a table, or stacked counts instead of revenue do not satisfy this criterion."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Total revenue appears as a line",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Judge the monthly order_summary combo chart created during this task. All six criteria refer to that same chart. A proposed query, chart name, or final chat claim alone is insufficient; use the trajectory, query/series configuration, and rendered chart evidence. The chart displays total monthly revenue across all acquisition sources as a line, computed from order_summary.order_total. A single source's revenue or a cumulative running total is not the required monthly total."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The 3-month revenue average appears as a line.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Judge the monthly order_summary combo chart created during this task. All six criteria refer to that same chart. A proposed query, chart name, or final chat claim alone is insufficient; use the trajectory, query/series configuration, and rendered chart evidence. The chart displays the three-month moving average of total monthly revenue as a line. The average uses the current month and the preceding two months in chronological order, rather than averaging individual orders, taking an all-time average, or repeating the total revenue series. Do not require a particular treatment of the initial months with less than three months of history."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Distinct orders appear as a line.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Judge the monthly order_summary combo chart created during this task. All six criteria refer to that same chart. A proposed query, chart name, or final chat claim alone is insufficient; use the trajectory, query/series configuration, and rendered chart evidence. The chart displays the monthly number of distinct order_id values from order_summary as a line. Revenue, item_count, and counts inflated by joins do not satisfy this criterion. The reviewed criterion does not require a particular axis placement."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Months are sorted chronologically.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Judge the monthly order_summary combo chart created during this task. All six criteria refer to that same chart. A proposed query, chart name, or final chat claim alone is insufficient; use the trajectory, query/series configuration, and rendered chart evidence. The created chart's month axis is sorted in ascending chronological order, including across year boundaries when present. Alphabetical month-name ordering or sorting by a measure is not chronological ordering."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r6",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "No list data is included.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Judge the monthly order_summary combo chart created during this task. All six criteria refer to that same chart. A proposed query, chart name, or final chat claim alone is insufficient; use the trajectory, query/series configuration, and rendered chart evidence. The created monthly combo chart contains the requested monthly aggregate series, with no unaggregated per-order list data or list/table layer included in the result. Merely leaving the chart empty does not satisfy this criterion. Viewing source rows while constructing the chart does not by itself violate the final-result criterion."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "All products between 200 and 500 dollars are going on a 20% terminate price decline please update their prices then let all their previous buyers with details of the sale if they are interested in purchasing again.",
+    "login_username": "admin@admin.com",
+    "login_usernames": {
+      "metabase": "admin@admin.com",
+      "thunderbird": "alice@techcorp.local"
+    },
+    "require_login": true,
+    "sites": [
+      "metabase",
+      "thunderbird"
+    ],
+    "task_id": "412",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Ergonomic Wood Chair updated from $249.99 to $199.99 on metabase",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Metabase, the agent persists the price change on the actual product record in the task dataset. Verify the product identity and saved numeric price together. A calculated result in a query, chart, text card or final answer without updating the stored product price is insufficient; so are a different product, a temporary unsaved edit or an unrelated pre-existing value. Ergonomic Wood Chair must be reduced from $249.99 to $199.99."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Memory Foam Mattress updated from $499.99 to $399.99 on metabase",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Metabase, the agent persists the price change on the actual product record in the task dataset. Verify the product identity and saved numeric price together. A calculated result in a query, chart, text card or final answer without updating the stored product price is insufficient; so are a different product, a temporary unsaved edit or an unrelated pre-existing value. Memory Foam Mattress must be reduced from $499.99 to $399.99."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "Email sent to aaron.roberts@example.com about Memory foam Mattress price drop from 499.99 to 399.99 on thunderbird",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Thunderbird, the task account alice@techcorp.local sends a new email to aaron.roberts@example.com describing the Memory Foam Mattress price drop from $499.99 to $399.99. Verify the actual sent message and recipient, with the correct product name and old/new prices in the same email. A draft, a different recipient, incomplete price details, unrelated pre-existing mail or only a final claim is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "Email sent to alice.martin@example.com about Ergonomic Wood Chair price drop from 249.99 to 199.99  on thunderbird",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Thunderbird, the task account alice@techcorp.local sends a new email to alice.martin@example.com describing the Ergonomic Wood Chair price drop from $249.99 to $199.99. Verify the actual sent message and recipient, with the correct product name and old/new prices in the same email. A draft, a different recipient, incomplete price details, unrelated pre-existing mail or only a final claim is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "Email sent to carlos.phillips@example.com about Memory foam Mattress price drop from 499.99 to 399.99  on thunderbird",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Thunderbird, the task account alice@techcorp.local sends a new email to carlos.phillips@example.com describing the Memory Foam Mattress price drop from $499.99 to $399.99. Verify the actual sent message and recipient, with the correct product name and old/new prices in the same email. A draft, a different recipient, incomplete price details, unrelated pre-existing mail or only a final claim is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r6",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "Email sent to carol.davis@example.com about Memory foam Mattress price drop from 499.99 to 399.99  on thunderbird",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Thunderbird, the task account alice@techcorp.local sends a new email to carol.davis@example.com describing the Memory Foam Mattress price drop from $499.99 to $399.99. Verify the actual sent message and recipient, with the correct product name and old/new prices in the same email. A draft, a different recipient, incomplete price details, unrelated pre-existing mail or only a final claim is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r7",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "Email sent to diana.campbell@example.comabout Memory foam Mattress price drop from 499.99 to 399.99 on thunderbird",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Thunderbird, the task account alice@techcorp.local sends a new email to diana.campbell@example.com describing the Memory Foam Mattress price drop from $499.99 to $399.99. Verify the actual sent message and recipient, with the correct product name and old/new prices in the same email. A draft, a different recipient, incomplete price details, unrelated pre-existing mail or only a final claim is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r8",
+          "type": "tiered",
+          "depends_on": [
+            "r1",
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "Email sent to eva.rodriguez@example.com about Ergonomic Wood Chair price drop from 249.99 to 199.99 and about Memory foam Mattress price drop from 499.99 to 399.99 on thunderbird",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Thunderbird, the task account alice@techcorp.local sends a new email to eva.rodriguez@example.com describing both the Ergonomic Wood Chair price drop from $249.99 to $199.99 and the Memory Foam Mattress price drop from $499.99 to $399.99. Verify the actual sent message and recipient, with the correct product name and old/new prices in the same email. A draft, a different recipient, incomplete price details, unrelated pre-existing mail or only a final claim is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r9",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "Email sent to henry.brown@example.com  about Ergonomic Wood Chair price drop from 249.99 to 199.99 on thunderbird",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Thunderbird, the task account alice@techcorp.local sends a new email to henry.brown@example.com describing the Ergonomic Wood Chair price drop from $249.99 to $199.99. Verify the actual sent message and recipient, with the correct product name and old/new prices in the same email. A draft, a different recipient, incomplete price details, unrelated pre-existing mail or only a final claim is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r10",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "Email sent to isabella.jones@example.com  about Ergonomic Wood Chair price drop from 249.99 to 199.99 on thunderbird",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Thunderbird, the task account alice@techcorp.local sends a new email to isabella.jones@example.com describing the Ergonomic Wood Chair price drop from $249.99 to $199.99. Verify the actual sent message and recipient, with the correct product name and old/new prices in the same email. A draft, a different recipient, incomplete price details, unrelated pre-existing mail or only a final claim is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r11",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "Email sent to liam.harris@example.com  about Ergonomic Wood Chair price drop from 249.99 to 199.99 on thunderbird",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Thunderbird, the task account alice@techcorp.local sends a new email to liam.harris@example.com describing the Ergonomic Wood Chair price drop from $249.99 to $199.99. Verify the actual sent message and recipient, with the correct product name and old/new prices in the same email. A draft, a different recipient, incomplete price details, unrelated pre-existing mail or only a final claim is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r12",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "Email sent to zoe.perez@example.com  about Ergonomic Wood Chair price drop from 249.99 to 199.99 on thunderbird",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Thunderbird, the task account alice@techcorp.local sends a new email to zoe.perez@example.com describing the Ergonomic Wood Chair price drop from $249.99 to $199.99. Verify the actual sent message and recipient, with the correct product name and old/new prices in the same email. A draft, a different recipient, incomplete price details, unrelated pre-existing mail or only a final claim is insufficient."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Please reduce all products $100-500 by 20% then please send a mass email to all of the people who purchased saying they recently purchased one of the products with details of the sale and the products asking if they would like to purchase it again.",
+    "login_username": "admin@admin.com",
+    "login_usernames": {
+      "metabase": "admin@admin.com",
+      "thunderbird": "alice@techcorp.local"
+    },
+    "require_login": true,
+    "sites": [
+      "metabase",
+      "thunderbird"
+    ],
+    "task_id": "413",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Incredible Iron Watch reduced from  $129.99  to $103.99  on metabase",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Metabase, the agent persists the price change on the actual product record in the task dataset. Verify the product identity and saved numeric price together. A calculated result in a query, chart, text card or final answer without updating the stored product price is insufficient; so are a different product, a temporary unsaved edit or an unrelated pre-existing value. Incredible Iron Watch must be reduced from $129.99 to $103.99."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Wireless Noise-Cancel Headphones reduced  from $149.99  to $119.99 on metabase",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Metabase, the agent persists the price change on the actual product record in the task dataset. Verify the product identity and saved numeric price together. A calculated result in a query, chart, text card or final answer without updating the stored product price is insufficient; so are a different product, a temporary unsaved edit or an unrelated pre-existing value. Wireless Noise-Cancel Headphones must be reduced from $149.99 to $119.99."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Heavy Duty Steel Table reduced  from $199.99 to $159.99  on metabase",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Metabase, the agent persists the price change on the actual product record in the task dataset. Verify the product identity and saved numeric price together. A calculated result in a query, chart, text card or final answer without updating the stored product price is insufficient; so are a different product, a temporary unsaved edit or an unrelated pre-existing value. Heavy Duty Steel Table must be reduced from $199.99 to $159.99."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Ergonomic Wood Chair reduced from $249.99 to $199.99 on metabase",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Metabase, the agent persists the price change on the actual product record in the task dataset. Verify the product identity and saved numeric price together. A calculated result in a query, chart, text card or final answer without updating the stored product price is insufficient; so are a different product, a temporary unsaved edit or an unrelated pre-existing value. Ergonomic Wood Chair must be reduced from $249.99 to $199.99."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Memory Foam Mattress reduced from $499.99 to $399.99 on metabase",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Metabase, the agent persists the price change on the actual product record in the task dataset. Verify the product identity and saved numeric price together. A calculated result in a query, chart, text card or final answer without updating the stored product price is insufficient; so are a different product, a temporary unsaved edit or an unrelated pre-existing value. Memory Foam Mattress must be reduced from $499.99 to $399.99."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r6",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Mass email contains all of these emails: aaron.roberts@example.com alice.martin@example.com bella.turner@example.com carlos.phillips@example.com carol.davis@example.com diana.campbell@example.com eva.rodriguez@example.com henry.brown@example.com isabella.jones@example.com james.taylor@example.com liam.harris@example.com noah.lewis@example.com olivia.walker@example.com rachel.young@example.com tina.scott@example.com victor.adams@example.com wendy.nelson@example.com xander.carter@example.com yara.mitchell@example.com zoe.perez@example.com",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Thunderbird, alice@techcorp.local sends one mass email to all twenty distinct approved customer addresses listed below. Verify the complete actual recipient set of that same sent message, including Bcc where used; each approved customer must be included once. The task hint permits alice@techcorp.local as the To recipient with customers in Bcc. Recipient names alone, a draft address list, missing or duplicated customers, multiple unrelated messages, unrelated old mail or a final claim are insufficient. Approved customer addresses: Mass email contains all of these emails: aaron.roberts@example.com alice.martin@example.com bella.turner@example.com carlos.phillips@example.com carol.davis@example.com diana.campbell@example.com eva.rodriguez@example.com henry.brown@example.com isabella.jones@example.com james.taylor@example.com liam.harris@example.com noah.lewis@example.com olivia.walker@example.com rachel.young@example.com tina.scott@example.com victor.adams@example.com wendy.nelson@example.com xander.carter@example.com yara.mitchell@example.com zoe.perez@example.com"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r7",
+          "type": "tiered",
+          "depends_on": [
+            "r1",
+            "r2",
+            "r3",
+            "r4",
+            "r5",
+            "r6"
+          ],
+          "eval_config": {
+            "rubric": "Mass email contains the fact that: Incredible Iron Watch reduced from $129.99 to $103.99, Wireless Noise-Cancel Headphones reduced from $149.99 to $119.99, Heavy Duty Steel Table reduced from $199.99 to $159.99, Ergonomic Wood Chair reduced from $249.99 to $199.99, Memory Foam Mattress reduced from $499.99 to $399.99.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The same newly sent mass email to the approved customer set states all five product price changes in this rubric, with each product correctly paired to its original and reduced price. Equivalent monetary formatting is acceptable; omitted products, mixed-up amounts, a percentage alone, draft text, content in another message or a final answer does not satisfy this outcome. Approved price changes: Mass email contains the fact that: Incredible Iron Watch reduced from $129.99 to $103.99, Wireless Noise-Cancel Headphones reduced from $149.99 to $119.99, Heavy Duty Steel Table reduced from $199.99 to $159.99, Ergonomic Wood Chair reduced from $249.99 to $199.99, Memory Foam Mattress reduced from $499.99 to $399.99."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

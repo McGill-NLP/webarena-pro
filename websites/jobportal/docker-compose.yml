@@ -1,0 +1,17 @@
+services:
+  jobportal:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: jobportal:latest
+    container_name: jobportal
+    ports:
+      - "${WP_JOBPORTAL_HOST_PORT:-4510}:8000"
+    environment:
+      DJANGO_SETTINGS_MODULE: core.settings
+      SEED_DATA: "1"
+      SEED_RESET: "0"
+    volumes:
+      - ./data/media:/app/media
+      - ./data/staticfiles:/app/staticfiles
+    restart: unless-stopped

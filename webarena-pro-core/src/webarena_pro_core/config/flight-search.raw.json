@@ -1,0 +1,3620 @@
+[
+  {
+    "intent": "Find the earliest one-way economy flight from San Francisco (SFO) to Seattle (SEA) on 2026-06-15.",
+    "require_login": true,
+    "sites": [
+      "flight-search"
+    ],
+    "task_id": "064",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Searched one-way SFO -> SEA on 2026-06-15 in economy.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent used one-way search from San Francisco (SFO) to Seattle (SEA) on 2026-06-15 in economy."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The answer identifies the UA1681 + AC5009 itinerary (departs 6:42 AM).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "UA1681",
+                    "AC5009"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer identifies the earliest-departing itinerary: United Airlines UA1681 connecting to Air Canada AC5009, departing 6:42 AM."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find the latest-arriving one-way economy flight from Denver (DEN) to Las Vegas (LAS) on 2026-06-15.",
+    "require_login": true,
+    "sites": [
+      "flight-search"
+    ],
+    "task_id": "065",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The answer identifies the UA1976 + WN797 itinerary.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "UA1976",
+                    "WN797"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer identifies United Airlines UA1976 connecting to Southwest WN797 (arrives 11:58 PM — the latest same-day arrival; itineraries arriving the next morning also exist and identifying one of those with a correct arrival time is a defensible alternative reading)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The answer reports the $152 price.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "152"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer reports the $152 price for the UA1976/WN797 itinerary."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find a one-way flight from New York (JFK) to London (STN) for next month’s 1st. I’ll be traveling alone. Among nonstop flights operated by American Airlines, what is the cheapest price?",
+    "require_login": true,
+    "sites": [
+      "flight-search"
+    ],
+    "task_id": "066",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Searched one-way JFK -> STN for the 1st of next month with nonstop + AA filters.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent selected one way, set From to JFK and To to STN, chose the 1st of next month, and applied the Nonstop and American Airlines filters."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Truthfully reports that no nonstop American Airlines flights exist on this route.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The route network has NO nonstop JFK->STN flights (no carrier operates the direct route), so no nonstop American Airlines option can exist on any date. Pass only if the final answer truthfully reports that no such flights were found; any specific price is a fabrication and must fail."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Search for a round-trip flight from Vancouver (YVR) to Las Vegas (LAS) from the 15th to the 27th of next month. Then, tell me the price of the cheapest flight and whether it is nonstop, 1 stop, or 2 stops.",
+    "require_login": true,
+    "sites": [
+      "flight-search"
+    ],
+    "task_id": "067",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Searched round-trip YVR -> LAS for the 15th..27th of next month, sorted by Cheapest.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent selected round trip, set From to YVR and To to LAS with departure on the 15th and return on the 27th of next month, and sorted by Cheapest."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Reports the cheapest fare and its stop count (frozen clock: cheapest outbound $167, 1 stop).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "167",
+                    "1 stop"
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer gives the price of the cheapest flight and whether it is nonstop, 1 stop, or 2 stops. Under the frozen benchmark clock (today=2026-04-01, so next month = May 2026) the cheapest outbound is $167 with 1 stop (cheapest return $119, 1 stop). Accept an answer consistent with those values."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find a one-way flight from Tokyo to Boston departing on the 7th of next month for two people (my wife and me). Among itineraries with up to 1 stop, what is the cheapest price and how long is the flight?",
+    "require_login": true,
+    "sites": [
+      "flight-search"
+    ],
+    "task_id": "068",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Searched one-way Tokyo -> Boston on the 7th of next month for 2 adults with the up-to-1-stop filter (both NRT and HND are valid Tokyo airports).",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent searched one way from Tokyo (NRT and/or HND) to Boston on the 7th of next month for 2 adults and applied an 'up to 1 stop' filter."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Reports the cheapest fare and duration (frozen clock: NRT UA5587+UA4071, $692, 17h16m; HND alternative $729, 16h45m).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include_any": [
+                    "692",
+                    "17h 16m",
+                    "17 h 16"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer reports the cheapest up-to-1-stop fare and its duration. Under the frozen clock (next month = May 2026, departing 2026-05-07) the cheapest is $692 from NRT (UA5587 + UA4071, 17h 16m total); the HND best is $729 (16h 45m). Accept an answer consistent with the NRT option, or the HND option if the agent only searched HND and says so."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find the cheapest weekend fully in June to travel from Vancouver to Toronto (depart Friday, return Sunday), and book both the flights and accommodation for that trip.",
+    "login_usernames": {
+      "password-manager": "agent1",
+      "travelmap": "avery@example.com"
+    },
+    "previous_task_intent": "Find the cheapest weekend fully in June to go from Vancouver to toronto (leave friday return sunday) and book it.",
+    "require_login": true,
+    "sites": [
+      "flight-search",
+      "password-manager",
+      "travelmap"
+    ],
+    "task_id": "069",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Booked the round-trip Vancouver -> Toronto flights for the cheapest June weekend (depart Fri 2026-06-05, return Sun 2026-06-07).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "bookings",
+                  "site": "flight-search",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"outbound_flight\":\\s*\\{[^}]*\"origin\":\\s*\"(?:YVR)\"[^}]*\"destination\":\\s*\"(?:YYZ|YTZ)\"[^}]*\"departure\":\\s*\"2026-06-05"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"return_flight\":\\s*\\{[^}]*\"origin\":\\s*\"(?:YYZ|YTZ)\"[^}]*\"destination\":\\s*\"(?:YVR)\"[^}]*\"departure\":\\s*\"2026-06-07"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A round-trip Vancouver (YVR) to Toronto flight was booked departing Friday June 5, 2026 and returning Sunday June 7, 2026 — the cheapest fully-June weekend."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Booked the Leslieville Garden Suite in Toronto for 2026-06-05 to 2026-06-07 on Travelmap.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "travelmap",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"status\":\\s*\"confirmed\",\\s*\"guest\":\\s*\"avery@example\\.com\",\\s*\"listing\":\\s*\"(?:leslieville-garden-suite)\",\\s*\"check_in\":\\s*\"2026-06-05\",\\s*\"check_out\":\\s*\"2026-06-07\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A confirmed Travelmap booking for the Leslieville Garden Suite (Toronto) exists with check-in June 5, 2026 and check-out June 7, 2026."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Book a flight from toronto to vancouver for next weekend",
+    "login_usernames": {
+      "password-manager": "agent1"
+    },
+    "require_login": true,
+    "sites": [
+      "flight-search",
+      "password-manager"
+    ],
+    "task_id": "070",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A Toronto -> Vancouver flight for next weekend (Apr 3-5 or Apr 10-12, 2026) is booked.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "bookings",
+                  "site": "flight-search",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"outbound_flight\":\\s*\\{[^}]*\"origin\":\\s*\"(?:YYZ|YTZ)\"[^}]*\"destination\":\\s*\"(?:YVR)\"[^}]*\"departure\":\\s*\"2026-04-(0[3-5]|1[0-2])"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A flight from Toronto to Vancouver was booked for next weekend (the site's date is April 1, 2026, so departing April 3-5 or April 10-12, 2026)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Copied the travel credit card information from the password manager for the payment step.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "url_regex": "(?i)card|vault|password"
+                      },
+                      {
+                        "action_regex": "(?i)copy|4111|4532|5500|3714"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent retrieved the payment card details from the password manager (viewed/copied a card entry) and used them in the flight booking."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Apply for a design job located where the flight time from Cape Town, South Africa is shortest.",
+    "login_usernames": {
+      "jobportal": "alice_seeker"
+    },
+    "previous_task_intent": "apply for a design job that is the closest to cape town south africa",
+    "require_login": true,
+    "sites": [
+      "flight-search",
+      "jobportal"
+    ],
+    "task_id": "071",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Compared flight times from Cape Town to the design-job cities (Berlin, London, Toronto, Montreal, San Francisco).",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_regex": "(?i)CPT|cape town"
+                      },
+                      {
+                        "url_regex": "(?i)CPT|cape"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent searched flight-search for flights from Cape Town to the cities that have design jobs on the job portal and compared their flight times."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Applied (as alice_seeker) for a design job in the city with the shortest flight from Cape Town (authored: Berlin; London is shorter in the deployed flight data — either accepted).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "jobportal",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"job_title\":\\s*\"(Product Illustrator|Visual Designer|Product Designer|Brand Designer)\"[^}]*\"applicant\":\\s*\"alice_seeker\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "alice_seeker submitted an application to a design job located in Berlin (Northstar Commerce: Product Illustrator, Visual Designer or Product Designer) or in London (RiverPay Brand Designer, whose flight from Cape Town is actually the shortest)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Book a flight and accommodations to the city with the highest paying design job for next thursday come back sunday",
+    "login_usernames": {
+      "jobportal": "alice_seeker",
+      "password-manager": "agent1",
+      "travelmap": "avery@example.com"
+    },
+    "previous_task_intent": "Book a flight and accomadations to the city with the highest paying design job for next thursday come back sunday",
+    "require_login": true,
+    "sites": [
+      "flight-search",
+      "jobportal",
+      "travelmap",
+      "password-manager"
+    ],
+    "task_id": "072",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Identified San Francisco (Helix AI Senior UX Designer, $140k-$170k) as the highest-paying design job's city.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_regex": "(?i)design"
+                      },
+                      {
+                        "url_regex": "(?i)design|helix"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent looked at design jobs on the job portal and identified San Francisco (Helix AI, Senior UX Designer, $140,000-$170,000) as the city of the highest-paying design job."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Booked a flight to San Francisco departing next Thursday (Apr 2 or Apr 9, 2026) and returning Sunday (Apr 5 or Apr 12).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "bookings",
+                  "site": "flight-search",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"outbound_flight\":\\s*\\{[^}]*\"origin\":\\s*\"(?:[A-Z]{3})\"[^}]*\"destination\":\\s*\"(?:SFO|OAK|SJC)\"[^}]*\"departure\":\\s*\"2026-04-(02|09)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"return_flight\":\\s*\\{[^}]*\"origin\":\\s*\"(?:SFO|OAK|SJC)\"[^}]*\"destination\":\\s*\"(?:[A-Z]{3})\"[^}]*\"departure\":\\s*\"2026-04-(05|12)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A round-trip flight to San Francisco was booked, departing on the coming Thursday (April 2 or April 9, 2026 relative to the site's date of April 1, 2026) and returning on the following Sunday."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Booked accommodation in San Francisco for the same Thursday-to-Sunday dates.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "travelmap",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"status\":\\s*\"confirmed\",\\s*\"guest\":\\s*\"avery@example\\.com\",\\s*\"listing\":\\s*\"(?:inside-airbnb-united-states-ca-san-francisco-[^\"]*)\",\\s*\"check_in\":\\s*\"2026-04-(02|09)\",\\s*\"check_out\":\\s*\"2026-04-(05|12)\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A confirmed Travelmap booking exists for a San Francisco listing from the coming Thursday (April 2 or 9, 2026) to the following Sunday (April 5 or 12)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "How many one-way economy flights from San Francisco (SFO) to Seattle (SEA) on 2026-06-15 are priced at $125 or less?",
+    "require_login": true,
+    "sites": [
+      "flight-search"
+    ],
+    "task_id": "073",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The correct count depends on the display currency: in USD there are 4 flights at $125 or less (cheapest $118); in the site's default display currency (geolocation defaults to Seoul -> KRW) a 125 filter yields 0. Accept 4 with USD or 0 if the agent used the default currency and says so consistently; fail any other number.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The correct count depends on the display currency: in USD there are 4 flights at $125 or less (cheapest $118); in the site's default display currency (geolocation defaults to Seoul -> KRW) a 125 filter yields 0. Accept 4 with USD or 0 if the agent used the default currency and says so consistently; fail any other number."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Book a flight from New York to Sinop, Turkey on July 25, 2026. I’m not sure how much Turkish Lira I should exchange, so find a relevant video, summarize it briefly in a new Notion page, and create a turkey folder in the cloud to store travel photos.",
+    "login_usernames": {
+      "nextcloud": "maya.patel",
+      "notion": "demo@webarena.local",
+      "password-manager": "agent1",
+      "yt-lite": "seed_user"
+    },
+    "require_login": true,
+    "sites": [
+      "flight-search",
+      "password-manager",
+      "nextcloud",
+      "notion",
+      "yt-lite"
+    ],
+    "task_id": "074",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Booked a flight from New York to Sinop (NOP) on 2026-07-25.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "bookings",
+                  "site": "flight-search",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"outbound_flight\":\\s*\\{[^}]*\"origin\":\\s*\"(?:JFK|LGA|EWR)\"[^}]*\"destination\":\\s*\"(?:NOP)\"[^}]*\"departure\":\\s*\"2026-07-25"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A flight from New York to Sinop, Turkey (NOP) departing July 25, 2026 was booked (payment completed)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Found and watched the yt-lite video 'Spending 100 Turkish Liras on a Bazaar vs. Supermarket (Sali Pazari Kadiköy)'.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "yt-lite",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(fv1195)\",\\s*\"watched_at\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent opened/watched the yt-lite video titled 'Spending 100 Turkish Liras on a Bazaar vs. Supermarket (Sali Pazari Kadiköy)'."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Created a new Notion page briefly summarizing the Turkish Lira video.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"text\":\"[^\"]*(?i:lira)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new Notion page was created during the task whose content briefly summarizes the Turkish Lira bazaar-vs-supermarket video."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Created a 'turkey' folder in Nextcloud.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "file_exists",
+                  "site": "nextcloud",
+                  "params": {
+                    "user": "maya.patel",
+                    "path": "turkey"
+                  },
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": [
+                        200,
+                        207,
+                        301
+                      ]
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "file_exists",
+                  "site": "nextcloud",
+                  "params": {
+                    "user": "maya.patel",
+                    "path": "Turkey"
+                  },
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": [
+                        200,
+                        207,
+                        301
+                      ]
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A folder named 'turkey' exists in Nextcloud (maya.patel's files)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find a flight from Las Vegas to South Africa for July 1, 2026. Then, find a video about South Africa, and create a brief summary of it on a new Notion page.",
+    "login_usernames": {
+      "nextcloud": "maya.patel",
+      "notion": "demo@webarena.local",
+      "yt-lite": "seed_user"
+    },
+    "previous_task_intent": "Book a flight from Las Vegas to South Africa for July 1, 2026. Then, find a video about South Africa, and create a brief summary of it on a new Notion page.",
+    "require_login": true,
+    "sites": [
+      "flight-search",
+      "yt-lite",
+      "notion",
+      "nextcloud"
+    ],
+    "task_id": "075",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Found (and booked) a flight from Las Vegas to South Africa on 2026-07-01.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "bookings",
+                  "site": "flight-search",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"outbound_flight\":\\s*\\{[^}]*\"origin\":\\s*\"(?:LAS)\"[^}]*\"destination\":\\s*\"(?:JNB|CPT|DUR)\"[^}]*\"departure\":\\s*\"2026-07-01"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_regex": "(?i)JNB|CPT|johannesburg|cape town|south africa"
+                      },
+                      {
+                        "url_regex": "(?i)JNB|CPT"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent searched flight-search for a flight from Las Vegas to South Africa (Johannesburg or Cape Town) on July 1, 2026 and found one (booking it is acceptable)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Found and watched the yt-lite video 'South Africa Is NOT What You THINK!'.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "yt-lite",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(fv080)\",\\s*\"watched_at\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent opened/watched the yt-lite video titled 'South Africa Is NOT What You THINK!'."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Created a new Notion page with a brief summary of the video.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"text\":\"[^\"]*(?i:south africa)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new Notion page was created during the task containing a brief summary of the 'South Africa Is NOT What You THINK!' video."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Book a round-trip flight from London to New York and reserve accommodation in New York from July 3, 2026 to July 19, 2026. Then, find my old photos taken in New York and tell me how long it’s been since my last visit.",
+    "login_usernames": {
+      "immich": "admin@immich.local",
+      "password-manager": "agent1",
+      "travelmap": "avery@example.com"
+    },
+    "require_login": true,
+    "sites": [
+      "flight-search",
+      "immich",
+      "travelmap",
+      "password-manager"
+    ],
+    "task_id": "076",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Booked a round-trip flight from London to New York departing 2026-07-03 and returning 2026-07-19.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "bookings",
+                  "site": "flight-search",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"outbound_flight\":\\s*\\{[^}]*\"origin\":\\s*\"(?:LHR|LGW|STN|LTN|LCY)\"[^}]*\"destination\":\\s*\"(?:JFK|LGA|EWR)\"[^}]*\"departure\":\\s*\"2026-07-03"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"return_flight\":\\s*\\{[^}]*\"origin\":\\s*\"(?:JFK|LGA|EWR)\"[^}]*\"destination\":\\s*\"(?:LHR|LGW|STN|LTN|LCY)\"[^}]*\"departure\":\\s*\"2026-07-19"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A round-trip flight from London to New York was booked in flight-search, departing July 3, 2026 and returning July 19, 2026 (booking confirmed with payment details)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Reserved accommodation in New York for 2026-07-03 to 2026-07-19 on Travelmap.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "travelmap",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"status\":\\s*\"confirmed\",\\s*\"guest\":\\s*\"avery@example\\.com\",\\s*\"listing\":\\s*\"(?:brooklyn-brownstone-floor|inside-airbnb-united-states-ny-new-york-city-[^\"]*)\",\\s*\"check_in\":\\s*\"2026-07-03\",\\s*\"check_out\":\\s*\"2026-07-19\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A confirmed Travelmap booking exists for a New York listing with check-in July 3, 2026 and check-out July 19, 2026."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Determined from the Immich photo metadata that the last New York visit was 13 years ago.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "13"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent inspected the New York photos in Immich and reported that the last visit was 13 years ago."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Set the displayed currency to USD. Find the fastest one-way economy flight from New York (JFK) to Los Angeles (LAX) on 2026-06-15. If multiple flights are tied for the shortest total travel time, choose the first tied flight shown after sorting by Fastest.",
+    "require_login": true,
+    "sites": [
+      "flight-search"
+    ],
+    "task_id": "077",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The answer identifies DL6387.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "DL6387"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer identifies Delta Air Lines flight DL6387 as the first Fastest-sorted tied itinerary (multiple nonstops tie at 379 minutes)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The answer gives the 3:30 PM departure and 6:49 PM arrival.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "3:30",
+                    "6:49"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer reports the departure 3:30 PM and arrival 6:49 PM (total travel time 3h 19m, nonstop)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The answer reports the USD price ($309).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "309"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer reports the price in USD after switching the display currency to USD: $309."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sites": [
+      "flight-search"
+    ],
+    "task_id": "338",
+    "require_login": true,
+    "intent": "What is the most expensive flight leaving August 7th from Montreal but not going more than 600 km answer in airport code : price (usd)",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "must search for all cities within 600 km of Montreal",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The trajectory shows that the agent searched Flight Search for departures from Montreal on August 7, 2026 to all cities served by the benchmark that are within 600 km of Montreal, comparing the relevant destination searches for the most expensive flight. Judge coverage from the actual searches and results, including the eligible cities beyond Toronto. Searching only one city, listing airport names without searching, using a different departure date, or merely returning the expected airport/price does not satisfy this action criterion."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "must search for Toronto",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The trajectory shows an actual Flight Search search from Montreal to Toronto departing August 7, 2026 as part of the within-600-km comparison. A Toronto airport code in the final answer, a mention of Toronto without a search, a Toronto-to-Montreal search, or a search on a different date is insufficient."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find the cheapest multi-city economy itinerary for one adult departing Montreal (YUL) on September 20, 2026, visiting Lisbon (LIS) and Berlin (BER) exactly once, spending two nights in one city and three nights in the other, and departing the final city for Montreal on September 26. Intercity flights must arrive on the same local calendar day so every lodging night is usable. Then find the cheapest available Travelmap accommodation for one guest for the corresponding dates. Report the route (City1, num nights as int), (City2, num nights), combined total in US$X,XXX.XX.",
+    "login_usernames": {
+      "firefly": "test@example.com",
+      "travelmap": "avery@example.com"
+    },
+    "previous_task_intent": "Find the cheapest multi-city economy itinerary for one adult departing Montreal (YUL) on September 20, 2026, visiting Lisbon (LIS) and Berlin (BER) exactly once, spending two nights in one city and three nights in the other, and departing the final city for Montreal on September 26. Intercity flights must arrive on the same local calendar day so every lodging night is usable. Then find the cheapest available Travelmap accommodation for one guest for the corresponding dates. Report the route (City1, num nights as int), (City2, num nights), combined total in US$X,XXX.XX. An example would be: (Seattle, 2), (Los Angeles, 3), US$1,009.33",
+    "require_login": true,
+    "sites": [
+      "flight-search",
+      "travelmap",
+      "firefly"
+    ],
+    "task_id": "340",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Searches all possible flights",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The trajectory shows a comprehensive Flight Search comparison of the feasible multi-city economy itineraries for one adult: leave Montreal (YUL) September 20, 2026, visit Lisbon (LIS) and Berlin (BER) exactly once, and depart the final city for Montreal September 26, 2026. Cover both city orders and both allocations of two nights in one city and three in the other, using local arrival dates and intercity flights that arrive the same local calendar day so lodging nights remain usable. Evaluate the relevant flight options within those constraints; unrelated routes are not required. Searching only the winning route or merely asserting that all flights were checked is insufficient. No booking is required."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Searches all possible stays on travel map",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The trajectory shows a comprehensive Travelmap comparison of available accommodation for one guest in Lisbon and Berlin for the feasible date ranges corresponding to both city orders and both two-night/three-night allocations of the September 20-26, 2026 trip. Compare the relevant available stays using their complete stay totals, including applicable fees, and correct local check-in/check-out dates. Merely naming the cities, inspecting only one listing without comparing available alternatives, using mismatched dates, or claiming all stays were checked without search evidence is insufficient. Flight and accommodation research may occur in either order. No booking is required."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r1",
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "Produces this exact answer: (Lisbon, 2), (Berlin, 3), US$1,946.00",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "trust": "pass_only",
+                "config": {
+                  "exact_match": "(Lisbon, 2), (Berlin, 3), US$1,946.00"
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer gives the reviewed route, night allocation, and combined flight-and-accommodation total in the requested format: (Lisbon, 2), (Berlin, 3), US$1,946.00. Judge the ordered cities, the associated night counts, and the complete USD total. Harmless whitespace or capitalization differences are acceptable; reversed cities, swapped night counts, a different total or currency, alternative answers, or negating the reviewed answer do not satisfy this criterion."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "In Flight Search, find a city reachable from Montreal (YUL) by a nonstop flight with a displayed duration between 3 and 4 hours, inclusive. Then book a one-way flight from that city to Boston (BOS), using any available departure date and fare. Montreal is only the reference point for choosing the origin city; book only the chosen city-to-Boston leg.",
+    "login_username": "flyingagents",
+    "login_usernames": {
+      "flight-search": "flyingagents"
+    },
+    "previous_task_intent": "Book a flight starting between 3 and 4  hours from Montreal and arriving in Boston",
+    "require_login": true,
+    "sites": [
+      "flight-search"
+    ],
+    "task_id": "344",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Must find a city that is a 3-4 hour flight away from Montreal",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "both",
+                "config": {
+                  "api": "eval_state",
+                  "site": "flight-search",
+                  "checks": [
+                    {
+                      "type": "json_predicate",
+                      "guards": [
+                        {
+                          "label": "execution start must be a nonnegative integer",
+                          "predicate": {
+                            "all": [
+                              {
+                                "type": [
+                                  {
+                                    "ref": "context.task_start_time_ms"
+                                  },
+                                  "integer"
+                                ]
+                              },
+                              {
+                                "gte": [
+                                  {
+                                    "ref": "context.task_start_time_ms"
+                                  },
+                                  0
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "label": "supported response schema is required",
+                          "predicate": {
+                            "all": [
+                              {
+                                "eq": [
+                                  {
+                                    "ref": "data.schema_version"
+                                  },
+                                  1
+                                ]
+                              },
+                              {
+                                "type": [
+                                  {
+                                    "ref": "data.generation"
+                                  },
+                                  "string"
+                                ]
+                              },
+                              {
+                                "type": [
+                                  {
+                                    "ref": "data.events"
+                                  },
+                                  "array"
+                                ]
+                              },
+                              {
+                                "type": [
+                                  {
+                                    "ref": "data.bookings"
+                                  },
+                                  "array"
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "label": "execution history must be complete",
+                          "predicate": {
+                            "any": [
+                              {
+                                "eq": [
+                                  {
+                                    "ref": "data.discarded_through_ms",
+                                    "default": null
+                                  },
+                                  null
+                                ]
+                              },
+                              {
+                                "all": [
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "data.discarded_through_ms"
+                                      },
+                                      "integer"
+                                    ]
+                                  },
+                                  {
+                                    "lt": [
+                                      {
+                                        "ref": "data.discarded_through_ms"
+                                      },
+                                      {
+                                        "ref": "context.task_start_time_ms"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "label": "event timestamps must be integers",
+                          "predicate": {
+                            "every": {
+                              "from": {
+                                "ref": "data.events"
+                              },
+                              "as": "event",
+                              "where": {
+                                "all": [
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "event"
+                                      },
+                                      "object"
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "event.started_at_ms"
+                                      },
+                                      "integer"
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "label": "current search evidence must contain structured legs and offers",
+                          "predicate": {
+                            "every": {
+                              "from": {
+                                "query": {
+                                  "from": {
+                                    "ref": "data.events"
+                                  },
+                                  "as": "event",
+                                  "where": {
+                                    "all": [
+                                      {
+                                        "gte": [
+                                          {
+                                            "ref": "event.started_at_ms"
+                                          },
+                                          {
+                                            "ref": "context.task_start_time_ms"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "eq": [
+                                          {
+                                            "ref": "event.kind"
+                                          },
+                                          "search"
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                }
+                              },
+                              "as": "search",
+                              "where": {
+                                "all": [
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "search.legs"
+                                      },
+                                      "array"
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "search.offers"
+                                      },
+                                      "array"
+                                    ]
+                                  },
+                                  {
+                                    "every": {
+                                      "from": {
+                                        "ref": "search.legs"
+                                      },
+                                      "as": "leg",
+                                      "where": {
+                                        "all": [
+                                          {
+                                            "type": [
+                                              {
+                                                "ref": "leg"
+                                              },
+                                              "object"
+                                            ]
+                                          },
+                                          {
+                                            "type": [
+                                              {
+                                                "ref": "leg.origin"
+                                              },
+                                              "string"
+                                            ]
+                                          },
+                                          {
+                                            "type": [
+                                              {
+                                                "ref": "leg.destination"
+                                              },
+                                              "string"
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "every": {
+                                      "from": {
+                                        "ref": "search.offers"
+                                      },
+                                      "as": "offer",
+                                      "where": {
+                                        "all": [
+                                          {
+                                            "type": [
+                                              {
+                                                "ref": "offer"
+                                              },
+                                              "object"
+                                            ]
+                                          },
+                                          {
+                                            "type": [
+                                              {
+                                                "ref": "offer.id"
+                                              },
+                                              "string"
+                                            ]
+                                          },
+                                          {
+                                            "type": [
+                                              {
+                                                "ref": "offer.origin"
+                                              },
+                                              "string"
+                                            ]
+                                          },
+                                          {
+                                            "type": [
+                                              {
+                                                "ref": "offer.destination"
+                                              },
+                                              "string"
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "label": "current booking records must be structured",
+                          "predicate": {
+                            "every": {
+                              "from": {
+                                "ref": "data.bookings"
+                              },
+                              "as": "booking",
+                              "where": {
+                                "all": [
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "booking"
+                                      },
+                                      "object"
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "booking.booking_id"
+                                      },
+                                      "string"
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "booking.status"
+                                      },
+                                      "string"
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "booking.outbound_flight"
+                                      },
+                                      "object"
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "booking.outbound_flight.origin"
+                                      },
+                                      "string"
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "booking.outbound_flight.destination"
+                                      },
+                                      "string"
+                                    ]
+                                  },
+                                  {
+                                    "any": [
+                                      {
+                                        "type": [
+                                          {
+                                            "ref": "booking.return_flight"
+                                          },
+                                          "null"
+                                        ]
+                                      },
+                                      {
+                                        "type": [
+                                          {
+                                            "ref": "booking.return_flight"
+                                          },
+                                          "object"
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "booking.multi_city_flights"
+                                      },
+                                      "array"
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "bindings": [
+                        {
+                          "name": "current_events",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "data.events"
+                              },
+                              "as": "event",
+                              "where": {
+                                "gte": [
+                                  {
+                                    "ref": "event.started_at_ms"
+                                  },
+                                  {
+                                    "ref": "context.task_start_time_ms"
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "name": "searches",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "current_events"
+                              },
+                              "as": "event",
+                              "where": {
+                                "eq": [
+                                  {
+                                    "ref": "event.kind"
+                                  },
+                                  "search"
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "name": "offers",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "searches"
+                              },
+                              "as": "search",
+                              "select": {
+                                "ref": "search.offers"
+                              },
+                              "flatten": true
+                            }
+                          }
+                        },
+                        {
+                          "name": "researched_offers",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "offers"
+                              },
+                              "as": "offer",
+                              "where": {
+                                "all": [
+                                  {
+                                    "eq": [
+                                      {
+                                        "ref": "offer.origin"
+                                      },
+                                      "YUL"
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "offer.stops"
+                                      },
+                                      "integer"
+                                    ]
+                                  },
+                                  {
+                                    "eq": [
+                                      {
+                                        "ref": "offer.stops"
+                                      },
+                                      0
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "offer.total_duration_minutes"
+                                      },
+                                      "integer"
+                                    ]
+                                  },
+                                  {
+                                    "gte": [
+                                      {
+                                        "ref": "offer.total_duration_minutes"
+                                      },
+                                      180
+                                    ]
+                                  },
+                                  {
+                                    "lte": [
+                                      {
+                                        "ref": "offer.total_duration_minutes"
+                                      },
+                                      240
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "name": "eligible_origins",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "researched_offers"
+                              },
+                              "as": "offer",
+                              "where": {
+                                "in": [
+                                  {
+                                    "ref": "offer.destination"
+                                  },
+                                  [
+                                    "ATL",
+                                    "YWG",
+                                    "MCO",
+                                    "MSY",
+                                    "TPA",
+                                    "FPO",
+                                    "YQR",
+                                    "MIA",
+                                    "FLL",
+                                    "NAS",
+                                    "PBI",
+                                    "YXE",
+                                    "RSW",
+                                    "ZSA",
+                                    "CCC",
+                                    "CFG",
+                                    "SNU",
+                                    "VRA"
+                                  ]
+                                ]
+                              },
+                              "select": {
+                                "ref": "offer.destination"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "name": "created_booking_ids",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "current_events"
+                              },
+                              "as": "event",
+                              "where": {
+                                "eq": [
+                                  {
+                                    "ref": "event.kind"
+                                  },
+                                  "booking"
+                                ]
+                              },
+                              "select": {
+                                "ref": "event.booking_id"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "name": "valid_bookings",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "data.bookings"
+                              },
+                              "as": "booking",
+                              "where": {
+                                "all": [
+                                  {
+                                    "in": [
+                                      {
+                                        "ref": "booking.booking_id"
+                                      },
+                                      {
+                                        "ref": "created_booking_ids"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "eq": [
+                                      {
+                                        "ref": "booking.status"
+                                      },
+                                      "confirmed"
+                                    ]
+                                  },
+                                  {
+                                    "eq": [
+                                      {
+                                        "ref": "booking.return_flight"
+                                      },
+                                      null
+                                    ]
+                                  },
+                                  {
+                                    "eq": [
+                                      {
+                                        "ref": "booking.multi_city_flights"
+                                      },
+                                      []
+                                    ]
+                                  },
+                                  {
+                                    "in": [
+                                      {
+                                        "ref": "booking.outbound_flight.origin"
+                                      },
+                                      {
+                                        "ref": "eligible_origins"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "eq": [
+                                      {
+                                        "ref": "booking.outbound_flight.destination"
+                                      },
+                                      "BOS"
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "name": "latest_destination_search",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "searches"
+                              },
+                              "as": "search",
+                              "where": {
+                                "some": {
+                                  "from": {
+                                    "ref": "search.legs"
+                                  },
+                                  "as": "leg",
+                                  "where": {
+                                    "eq": [
+                                      {
+                                        "upper": {
+                                          "ref": "leg.destination"
+                                        }
+                                      },
+                                      "BOS"
+                                    ]
+                                  }
+                                }
+                              },
+                              "take": "last"
+                            }
+                          }
+                        },
+                        {
+                          "name": "latest_legs",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "latest_destination_search"
+                              },
+                              "as": "search",
+                              "select": {
+                                "ref": "search.legs"
+                              },
+                              "flatten": true
+                            }
+                          }
+                        },
+                        {
+                          "name": "selected_legs",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "latest_legs"
+                              },
+                              "as": "leg",
+                              "where": {
+                                "all": [
+                                  {
+                                    "eq": [
+                                      {
+                                        "upper": {
+                                          "ref": "leg.destination"
+                                        }
+                                      },
+                                      "BOS"
+                                    ]
+                                  },
+                                  {
+                                    "in": [
+                                      {
+                                        "upper": {
+                                          "ref": "leg.origin"
+                                        }
+                                      },
+                                      {
+                                        "ref": "eligible_origins"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "predicate": {
+                        "some": {
+                          "from": {
+                            "ref": "researched_offers"
+                          },
+                          "as": "offer"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Flight Search, the agent identifies an origin city using a nonstop flight FROM Montreal (YUL) whose displayed duration is between 180 and 240 minutes inclusive. Use the actual search results or flight details in the trajectory to establish eligibility. A driving time, distance, a connecting journey duration, a flight in the reverse direction, an unsupported claim, or a duration outside that inclusive range is insufficient. Any available date and fare are allowed. The Montreal-to-city leg is research only and need not be booked."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "Must pick one of these cities  1. Atlanta (ATL) — 3h 02m   2. Winnipeg (YWG) — 3h 04m   3. Orlando (MCO) — 3h 28m   4. New Orleans (MSY) — 3h 28m   5. Tampa (TPA) — 3h 31m   6. Freeport (FPO) — 3h 35m   7. Regina (YQR) — 3h 42m   8. Miami (MIA) — 3h 46m   9. Fort Lauderdale (FLL) — 3h 48m   10. Nassau (NAS) — 3h 50m   11. West Palm Beach (PBI) — 3h 50m   12. Saskatoon (YXE) — 3h 54m   13. Fort Myers (RSW) — 3h 55m   14. San Salvador, Bahamas (ZSA) — 3h 55m   15. Cayo Coco (CCC) — 4h   16. Cienfuegos (CFG) — 4h   17. Santa Clara (SNU) — 4h   18. Varadero (VRA) — 4h",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "both",
+                "config": {
+                  "api": "eval_state",
+                  "site": "flight-search",
+                  "checks": [
+                    {
+                      "type": "json_predicate",
+                      "guards": [
+                        {
+                          "label": "execution start must be a nonnegative integer",
+                          "predicate": {
+                            "all": [
+                              {
+                                "type": [
+                                  {
+                                    "ref": "context.task_start_time_ms"
+                                  },
+                                  "integer"
+                                ]
+                              },
+                              {
+                                "gte": [
+                                  {
+                                    "ref": "context.task_start_time_ms"
+                                  },
+                                  0
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "label": "supported response schema is required",
+                          "predicate": {
+                            "all": [
+                              {
+                                "eq": [
+                                  {
+                                    "ref": "data.schema_version"
+                                  },
+                                  1
+                                ]
+                              },
+                              {
+                                "type": [
+                                  {
+                                    "ref": "data.generation"
+                                  },
+                                  "string"
+                                ]
+                              },
+                              {
+                                "type": [
+                                  {
+                                    "ref": "data.events"
+                                  },
+                                  "array"
+                                ]
+                              },
+                              {
+                                "type": [
+                                  {
+                                    "ref": "data.bookings"
+                                  },
+                                  "array"
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "label": "execution history must be complete",
+                          "predicate": {
+                            "any": [
+                              {
+                                "eq": [
+                                  {
+                                    "ref": "data.discarded_through_ms",
+                                    "default": null
+                                  },
+                                  null
+                                ]
+                              },
+                              {
+                                "all": [
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "data.discarded_through_ms"
+                                      },
+                                      "integer"
+                                    ]
+                                  },
+                                  {
+                                    "lt": [
+                                      {
+                                        "ref": "data.discarded_through_ms"
+                                      },
+                                      {
+                                        "ref": "context.task_start_time_ms"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "label": "event timestamps must be integers",
+                          "predicate": {
+                            "every": {
+                              "from": {
+                                "ref": "data.events"
+                              },
+                              "as": "event",
+                              "where": {
+                                "all": [
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "event"
+                                      },
+                                      "object"
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "event.started_at_ms"
+                                      },
+                                      "integer"
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "label": "current search evidence must contain structured legs and offers",
+                          "predicate": {
+                            "every": {
+                              "from": {
+                                "query": {
+                                  "from": {
+                                    "ref": "data.events"
+                                  },
+                                  "as": "event",
+                                  "where": {
+                                    "all": [
+                                      {
+                                        "gte": [
+                                          {
+                                            "ref": "event.started_at_ms"
+                                          },
+                                          {
+                                            "ref": "context.task_start_time_ms"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "eq": [
+                                          {
+                                            "ref": "event.kind"
+                                          },
+                                          "search"
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                }
+                              },
+                              "as": "search",
+                              "where": {
+                                "all": [
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "search.legs"
+                                      },
+                                      "array"
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "search.offers"
+                                      },
+                                      "array"
+                                    ]
+                                  },
+                                  {
+                                    "every": {
+                                      "from": {
+                                        "ref": "search.legs"
+                                      },
+                                      "as": "leg",
+                                      "where": {
+                                        "all": [
+                                          {
+                                            "type": [
+                                              {
+                                                "ref": "leg"
+                                              },
+                                              "object"
+                                            ]
+                                          },
+                                          {
+                                            "type": [
+                                              {
+                                                "ref": "leg.origin"
+                                              },
+                                              "string"
+                                            ]
+                                          },
+                                          {
+                                            "type": [
+                                              {
+                                                "ref": "leg.destination"
+                                              },
+                                              "string"
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "every": {
+                                      "from": {
+                                        "ref": "search.offers"
+                                      },
+                                      "as": "offer",
+                                      "where": {
+                                        "all": [
+                                          {
+                                            "type": [
+                                              {
+                                                "ref": "offer"
+                                              },
+                                              "object"
+                                            ]
+                                          },
+                                          {
+                                            "type": [
+                                              {
+                                                "ref": "offer.id"
+                                              },
+                                              "string"
+                                            ]
+                                          },
+                                          {
+                                            "type": [
+                                              {
+                                                "ref": "offer.origin"
+                                              },
+                                              "string"
+                                            ]
+                                          },
+                                          {
+                                            "type": [
+                                              {
+                                                "ref": "offer.destination"
+                                              },
+                                              "string"
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "label": "current booking records must be structured",
+                          "predicate": {
+                            "every": {
+                              "from": {
+                                "ref": "data.bookings"
+                              },
+                              "as": "booking",
+                              "where": {
+                                "all": [
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "booking"
+                                      },
+                                      "object"
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "booking.booking_id"
+                                      },
+                                      "string"
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "booking.status"
+                                      },
+                                      "string"
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "booking.outbound_flight"
+                                      },
+                                      "object"
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "booking.outbound_flight.origin"
+                                      },
+                                      "string"
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "booking.outbound_flight.destination"
+                                      },
+                                      "string"
+                                    ]
+                                  },
+                                  {
+                                    "any": [
+                                      {
+                                        "type": [
+                                          {
+                                            "ref": "booking.return_flight"
+                                          },
+                                          "null"
+                                        ]
+                                      },
+                                      {
+                                        "type": [
+                                          {
+                                            "ref": "booking.return_flight"
+                                          },
+                                          "object"
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "booking.multi_city_flights"
+                                      },
+                                      "array"
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "bindings": [
+                        {
+                          "name": "current_events",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "data.events"
+                              },
+                              "as": "event",
+                              "where": {
+                                "gte": [
+                                  {
+                                    "ref": "event.started_at_ms"
+                                  },
+                                  {
+                                    "ref": "context.task_start_time_ms"
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "name": "searches",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "current_events"
+                              },
+                              "as": "event",
+                              "where": {
+                                "eq": [
+                                  {
+                                    "ref": "event.kind"
+                                  },
+                                  "search"
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "name": "offers",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "searches"
+                              },
+                              "as": "search",
+                              "select": {
+                                "ref": "search.offers"
+                              },
+                              "flatten": true
+                            }
+                          }
+                        },
+                        {
+                          "name": "researched_offers",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "offers"
+                              },
+                              "as": "offer",
+                              "where": {
+                                "all": [
+                                  {
+                                    "eq": [
+                                      {
+                                        "ref": "offer.origin"
+                                      },
+                                      "YUL"
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "offer.stops"
+                                      },
+                                      "integer"
+                                    ]
+                                  },
+                                  {
+                                    "eq": [
+                                      {
+                                        "ref": "offer.stops"
+                                      },
+                                      0
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "offer.total_duration_minutes"
+                                      },
+                                      "integer"
+                                    ]
+                                  },
+                                  {
+                                    "gte": [
+                                      {
+                                        "ref": "offer.total_duration_minutes"
+                                      },
+                                      180
+                                    ]
+                                  },
+                                  {
+                                    "lte": [
+                                      {
+                                        "ref": "offer.total_duration_minutes"
+                                      },
+                                      240
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "name": "eligible_origins",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "researched_offers"
+                              },
+                              "as": "offer",
+                              "where": {
+                                "in": [
+                                  {
+                                    "ref": "offer.destination"
+                                  },
+                                  [
+                                    "ATL",
+                                    "YWG",
+                                    "MCO",
+                                    "MSY",
+                                    "TPA",
+                                    "FPO",
+                                    "YQR",
+                                    "MIA",
+                                    "FLL",
+                                    "NAS",
+                                    "PBI",
+                                    "YXE",
+                                    "RSW",
+                                    "ZSA",
+                                    "CCC",
+                                    "CFG",
+                                    "SNU",
+                                    "VRA"
+                                  ]
+                                ]
+                              },
+                              "select": {
+                                "ref": "offer.destination"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "name": "created_booking_ids",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "current_events"
+                              },
+                              "as": "event",
+                              "where": {
+                                "eq": [
+                                  {
+                                    "ref": "event.kind"
+                                  },
+                                  "booking"
+                                ]
+                              },
+                              "select": {
+                                "ref": "event.booking_id"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "name": "valid_bookings",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "data.bookings"
+                              },
+                              "as": "booking",
+                              "where": {
+                                "all": [
+                                  {
+                                    "in": [
+                                      {
+                                        "ref": "booking.booking_id"
+                                      },
+                                      {
+                                        "ref": "created_booking_ids"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "eq": [
+                                      {
+                                        "ref": "booking.status"
+                                      },
+                                      "confirmed"
+                                    ]
+                                  },
+                                  {
+                                    "eq": [
+                                      {
+                                        "ref": "booking.return_flight"
+                                      },
+                                      null
+                                    ]
+                                  },
+                                  {
+                                    "eq": [
+                                      {
+                                        "ref": "booking.multi_city_flights"
+                                      },
+                                      []
+                                    ]
+                                  },
+                                  {
+                                    "in": [
+                                      {
+                                        "ref": "booking.outbound_flight.origin"
+                                      },
+                                      {
+                                        "ref": "eligible_origins"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "eq": [
+                                      {
+                                        "ref": "booking.outbound_flight.destination"
+                                      },
+                                      "BOS"
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "name": "latest_destination_search",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "searches"
+                              },
+                              "as": "search",
+                              "where": {
+                                "some": {
+                                  "from": {
+                                    "ref": "search.legs"
+                                  },
+                                  "as": "leg",
+                                  "where": {
+                                    "eq": [
+                                      {
+                                        "upper": {
+                                          "ref": "leg.destination"
+                                        }
+                                      },
+                                      "BOS"
+                                    ]
+                                  }
+                                }
+                              },
+                              "take": "last"
+                            }
+                          }
+                        },
+                        {
+                          "name": "latest_legs",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "latest_destination_search"
+                              },
+                              "as": "search",
+                              "select": {
+                                "ref": "search.legs"
+                              },
+                              "flatten": true
+                            }
+                          }
+                        },
+                        {
+                          "name": "selected_legs",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "latest_legs"
+                              },
+                              "as": "leg",
+                              "where": {
+                                "all": [
+                                  {
+                                    "eq": [
+                                      {
+                                        "upper": {
+                                          "ref": "leg.destination"
+                                        }
+                                      },
+                                      "BOS"
+                                    ]
+                                  },
+                                  {
+                                    "in": [
+                                      {
+                                        "upper": {
+                                          "ref": "leg.origin"
+                                        }
+                                      },
+                                      {
+                                        "ref": "eligible_origins"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "predicate": {
+                        "any": [
+                          {
+                            "some": {
+                              "from": {
+                                "ref": "valid_bookings"
+                              },
+                              "as": "booking"
+                            }
+                          },
+                          {
+                            "some": {
+                              "from": {
+                                "ref": "selected_legs"
+                              },
+                              "as": "leg"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The city selected as the origin of the requested Boston flight is one of the reviewed eligible cities: Atlanta (ATL), Winnipeg (YWG), Orlando (MCO), New Orleans (MSY), Tampa (TPA), Freeport (FPO), Regina (YQR), Miami (MIA), Fort Lauderdale (FLL), Nassau (NAS), West Palm Beach (PBI), Saskatoon (YXE), Fort Myers (RSW), San Salvador in the Bahamas (ZSA), Cayo Coco (CCC), Cienfuegos (CFG), Santa Clara (SNU), or Varadero (VRA). It must be the same city whose nonstop Montreal departure established eligibility in the preceding criterion. Merely listing every eligible city without choosing one, confusing San Salvador in the Bahamas with another city, or using an unrelated qualifying city elsewhere in the trajectory is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r1",
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "A book trip from the chosen city to Boston is booked",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "both",
+                "config": {
+                  "api": "eval_state",
+                  "site": "flight-search",
+                  "checks": [
+                    {
+                      "type": "json_predicate",
+                      "guards": [
+                        {
+                          "label": "execution start must be a nonnegative integer",
+                          "predicate": {
+                            "all": [
+                              {
+                                "type": [
+                                  {
+                                    "ref": "context.task_start_time_ms"
+                                  },
+                                  "integer"
+                                ]
+                              },
+                              {
+                                "gte": [
+                                  {
+                                    "ref": "context.task_start_time_ms"
+                                  },
+                                  0
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "label": "supported response schema is required",
+                          "predicate": {
+                            "all": [
+                              {
+                                "eq": [
+                                  {
+                                    "ref": "data.schema_version"
+                                  },
+                                  1
+                                ]
+                              },
+                              {
+                                "type": [
+                                  {
+                                    "ref": "data.generation"
+                                  },
+                                  "string"
+                                ]
+                              },
+                              {
+                                "type": [
+                                  {
+                                    "ref": "data.events"
+                                  },
+                                  "array"
+                                ]
+                              },
+                              {
+                                "type": [
+                                  {
+                                    "ref": "data.bookings"
+                                  },
+                                  "array"
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "label": "execution history must be complete",
+                          "predicate": {
+                            "any": [
+                              {
+                                "eq": [
+                                  {
+                                    "ref": "data.discarded_through_ms",
+                                    "default": null
+                                  },
+                                  null
+                                ]
+                              },
+                              {
+                                "all": [
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "data.discarded_through_ms"
+                                      },
+                                      "integer"
+                                    ]
+                                  },
+                                  {
+                                    "lt": [
+                                      {
+                                        "ref": "data.discarded_through_ms"
+                                      },
+                                      {
+                                        "ref": "context.task_start_time_ms"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "label": "event timestamps must be integers",
+                          "predicate": {
+                            "every": {
+                              "from": {
+                                "ref": "data.events"
+                              },
+                              "as": "event",
+                              "where": {
+                                "all": [
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "event"
+                                      },
+                                      "object"
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "event.started_at_ms"
+                                      },
+                                      "integer"
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "label": "current search evidence must contain structured legs and offers",
+                          "predicate": {
+                            "every": {
+                              "from": {
+                                "query": {
+                                  "from": {
+                                    "ref": "data.events"
+                                  },
+                                  "as": "event",
+                                  "where": {
+                                    "all": [
+                                      {
+                                        "gte": [
+                                          {
+                                            "ref": "event.started_at_ms"
+                                          },
+                                          {
+                                            "ref": "context.task_start_time_ms"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "eq": [
+                                          {
+                                            "ref": "event.kind"
+                                          },
+                                          "search"
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                }
+                              },
+                              "as": "search",
+                              "where": {
+                                "all": [
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "search.legs"
+                                      },
+                                      "array"
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "search.offers"
+                                      },
+                                      "array"
+                                    ]
+                                  },
+                                  {
+                                    "every": {
+                                      "from": {
+                                        "ref": "search.legs"
+                                      },
+                                      "as": "leg",
+                                      "where": {
+                                        "all": [
+                                          {
+                                            "type": [
+                                              {
+                                                "ref": "leg"
+                                              },
+                                              "object"
+                                            ]
+                                          },
+                                          {
+                                            "type": [
+                                              {
+                                                "ref": "leg.origin"
+                                              },
+                                              "string"
+                                            ]
+                                          },
+                                          {
+                                            "type": [
+                                              {
+                                                "ref": "leg.destination"
+                                              },
+                                              "string"
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "every": {
+                                      "from": {
+                                        "ref": "search.offers"
+                                      },
+                                      "as": "offer",
+                                      "where": {
+                                        "all": [
+                                          {
+                                            "type": [
+                                              {
+                                                "ref": "offer"
+                                              },
+                                              "object"
+                                            ]
+                                          },
+                                          {
+                                            "type": [
+                                              {
+                                                "ref": "offer.id"
+                                              },
+                                              "string"
+                                            ]
+                                          },
+                                          {
+                                            "type": [
+                                              {
+                                                "ref": "offer.origin"
+                                              },
+                                              "string"
+                                            ]
+                                          },
+                                          {
+                                            "type": [
+                                              {
+                                                "ref": "offer.destination"
+                                              },
+                                              "string"
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "label": "current booking records must be structured",
+                          "predicate": {
+                            "every": {
+                              "from": {
+                                "ref": "data.bookings"
+                              },
+                              "as": "booking",
+                              "where": {
+                                "all": [
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "booking"
+                                      },
+                                      "object"
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "booking.booking_id"
+                                      },
+                                      "string"
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "booking.status"
+                                      },
+                                      "string"
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "booking.outbound_flight"
+                                      },
+                                      "object"
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "booking.outbound_flight.origin"
+                                      },
+                                      "string"
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "booking.outbound_flight.destination"
+                                      },
+                                      "string"
+                                    ]
+                                  },
+                                  {
+                                    "any": [
+                                      {
+                                        "type": [
+                                          {
+                                            "ref": "booking.return_flight"
+                                          },
+                                          "null"
+                                        ]
+                                      },
+                                      {
+                                        "type": [
+                                          {
+                                            "ref": "booking.return_flight"
+                                          },
+                                          "object"
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "booking.multi_city_flights"
+                                      },
+                                      "array"
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "bindings": [
+                        {
+                          "name": "current_events",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "data.events"
+                              },
+                              "as": "event",
+                              "where": {
+                                "gte": [
+                                  {
+                                    "ref": "event.started_at_ms"
+                                  },
+                                  {
+                                    "ref": "context.task_start_time_ms"
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "name": "searches",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "current_events"
+                              },
+                              "as": "event",
+                              "where": {
+                                "eq": [
+                                  {
+                                    "ref": "event.kind"
+                                  },
+                                  "search"
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "name": "offers",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "searches"
+                              },
+                              "as": "search",
+                              "select": {
+                                "ref": "search.offers"
+                              },
+                              "flatten": true
+                            }
+                          }
+                        },
+                        {
+                          "name": "researched_offers",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "offers"
+                              },
+                              "as": "offer",
+                              "where": {
+                                "all": [
+                                  {
+                                    "eq": [
+                                      {
+                                        "ref": "offer.origin"
+                                      },
+                                      "YUL"
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "offer.stops"
+                                      },
+                                      "integer"
+                                    ]
+                                  },
+                                  {
+                                    "eq": [
+                                      {
+                                        "ref": "offer.stops"
+                                      },
+                                      0
+                                    ]
+                                  },
+                                  {
+                                    "type": [
+                                      {
+                                        "ref": "offer.total_duration_minutes"
+                                      },
+                                      "integer"
+                                    ]
+                                  },
+                                  {
+                                    "gte": [
+                                      {
+                                        "ref": "offer.total_duration_minutes"
+                                      },
+                                      180
+                                    ]
+                                  },
+                                  {
+                                    "lte": [
+                                      {
+                                        "ref": "offer.total_duration_minutes"
+                                      },
+                                      240
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "name": "eligible_origins",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "researched_offers"
+                              },
+                              "as": "offer",
+                              "where": {
+                                "in": [
+                                  {
+                                    "ref": "offer.destination"
+                                  },
+                                  [
+                                    "ATL",
+                                    "YWG",
+                                    "MCO",
+                                    "MSY",
+                                    "TPA",
+                                    "FPO",
+                                    "YQR",
+                                    "MIA",
+                                    "FLL",
+                                    "NAS",
+                                    "PBI",
+                                    "YXE",
+                                    "RSW",
+                                    "ZSA",
+                                    "CCC",
+                                    "CFG",
+                                    "SNU",
+                                    "VRA"
+                                  ]
+                                ]
+                              },
+                              "select": {
+                                "ref": "offer.destination"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "name": "created_booking_ids",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "current_events"
+                              },
+                              "as": "event",
+                              "where": {
+                                "eq": [
+                                  {
+                                    "ref": "event.kind"
+                                  },
+                                  "booking"
+                                ]
+                              },
+                              "select": {
+                                "ref": "event.booking_id"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "name": "valid_bookings",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "data.bookings"
+                              },
+                              "as": "booking",
+                              "where": {
+                                "all": [
+                                  {
+                                    "in": [
+                                      {
+                                        "ref": "booking.booking_id"
+                                      },
+                                      {
+                                        "ref": "created_booking_ids"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "eq": [
+                                      {
+                                        "ref": "booking.status"
+                                      },
+                                      "confirmed"
+                                    ]
+                                  },
+                                  {
+                                    "eq": [
+                                      {
+                                        "ref": "booking.return_flight"
+                                      },
+                                      null
+                                    ]
+                                  },
+                                  {
+                                    "eq": [
+                                      {
+                                        "ref": "booking.multi_city_flights"
+                                      },
+                                      []
+                                    ]
+                                  },
+                                  {
+                                    "in": [
+                                      {
+                                        "ref": "booking.outbound_flight.origin"
+                                      },
+                                      {
+                                        "ref": "eligible_origins"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "eq": [
+                                      {
+                                        "ref": "booking.outbound_flight.destination"
+                                      },
+                                      "BOS"
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "name": "latest_destination_search",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "searches"
+                              },
+                              "as": "search",
+                              "where": {
+                                "some": {
+                                  "from": {
+                                    "ref": "search.legs"
+                                  },
+                                  "as": "leg",
+                                  "where": {
+                                    "eq": [
+                                      {
+                                        "upper": {
+                                          "ref": "leg.destination"
+                                        }
+                                      },
+                                      "BOS"
+                                    ]
+                                  }
+                                }
+                              },
+                              "take": "last"
+                            }
+                          }
+                        },
+                        {
+                          "name": "latest_legs",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "latest_destination_search"
+                              },
+                              "as": "search",
+                              "select": {
+                                "ref": "search.legs"
+                              },
+                              "flatten": true
+                            }
+                          }
+                        },
+                        {
+                          "name": "selected_legs",
+                          "value": {
+                            "query": {
+                              "from": {
+                                "ref": "latest_legs"
+                              },
+                              "as": "leg",
+                              "where": {
+                                "all": [
+                                  {
+                                    "eq": [
+                                      {
+                                        "upper": {
+                                          "ref": "leg.destination"
+                                        }
+                                      },
+                                      "BOS"
+                                    ]
+                                  },
+                                  {
+                                    "in": [
+                                      {
+                                        "upper": {
+                                          "ref": "leg.origin"
+                                        }
+                                      },
+                                      {
+                                        "ref": "eligible_origins"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "predicate": {
+                        "some": {
+                          "from": {
+                            "ref": "valid_bookings"
+                          },
+                          "as": "booking"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent completes and saves a confirmed one-way Flight Search booking from that same chosen eligible city TO Boston (BOS) in the task account. Verify the booking origin, destination, confirmation status, and correspondence to the city selected and researched in the preceding criteria. Any available departure date and fare are acceptable; the booked leg itself has no 3-4-hour duration requirement and need not be nonstop. Search results, an unconfirmed checkout, a cancelled booking, a booking from another city, a Boston-to-city booking, or only booking Montreal-to-city does not count. A chat claim of booking is insufficient; the task requests booking only the chosen city-to-Boston leg."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

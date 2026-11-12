@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ title or site_content.name }}</title>
+    <link rel="stylesheet" href="{{ request.app.url_path_for('static', path='styles.css') }}" />
+    <script defer src="{{ request.app.url_path_for('static', path='travelmap.js') }}"></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="brand" href="/">
+          <span class="brand-mark">TM</span>
+          <span>
+            <strong>{{ site_content.name }}</strong>
+            <small>{{ site_content.tagline }}</small>
+          </span>
+        </a>
+        <nav class="main-nav">
+          <a href="/">Homes</a>
+          <a href="/trips">Trips</a>
+          <a href="/wishlists">Saved</a>
+          <a href="/inbox">Messages</a>
+          <a href="/host">Host</a>
+        </nav>
+        <div class="nav-actions">
+          {% if current_user %}
+            <span class="persona-pill nav-persona">
+              <span>{{ current_user.name }}</span>
+              <small class="persona-home">{{ current_user.hometown }}</small>
+            </span>
+            <form class="nav-logout-form" method="post" action="/logout">
+              <button class="ghost-button nav-button" type="submit">Log Out</button>
+            </form>
+          {% else %}
+            <a class="primary-button" href="/login?next={{ request.url.path }}">Sign In</a>
+          {% endif %}
+        </div>
+      </header>
+
+      {% if notice %}
+        <div class="notice-banner">{{ notice }}</div>
+      {% endif %}
+
+      <main class="content">{% block content %}{% endblock %}</main>
+
+      <footer class="site-footer">
+        <div>
+          <strong>{{ site_content.footer_headline }}</strong>
+          <p>{{ site_content.footer_copy }}</p>
+        </div>
+        <div>
+          <strong>Hosting designed around the details</strong>
+          <p>Thoughtful homes, clear communication, and neighborhoods that are good to come back to.</p>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,2099 @@
+[
+  {
+    "intent": "Find which vacation month was more expensive: June 2025 or August 2025.",
+    "login_username": "test@example.com",
+    "login_usernames": {
+      "firefly": "test@example.com"
+    },
+    "previous_task_intent": "Find which Vacation month was more expensive: June 2025 or August 2025.",
+    "require_login": true,
+    "sites": [
+      "firefly"
+    ],
+    "task_id": "050",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent filtered or grouped transactions using the \"Vacation\" tag or category field, not by searching for the word \"Vacation\" in transaction titles.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "url_regex": "(?i)/tags/"
+                      },
+                      {
+                        "url_regex": "(?i)/categories/"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent filtered or grouped transactions using the \"Vacation\" tag or category field, not by searching for the word \"Vacation\" in transaction titles."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent applied date filters or navigated to views bounded exactly to the months of June 2025 and August 2025.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "url_regex": "(?i)(start|end)=2025-0[68]-"
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent applied date filters or navigated to views bounded exactly to the months of June 2025 and August 2025."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The final answer explicitly identifies June 2025 as the more expensive month.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "june"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer explicitly identifies June 2025 as the more expensive month."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The final answer includes the specific numerical spending totals for the compared months.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer includes the specific numerical spending totals for the compared months."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Save a short note comparing June and August 2025 Vacation spending.",
+    "login_username": "test@example.com",
+    "login_usernames": {
+      "firefly": "test@example.com",
+      "nextcloud": "maya.patel"
+    },
+    "require_login": true,
+    "sites": [
+      "firefly",
+      "nextcloud"
+    ],
+    "task_id": "051",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Calculated Vacation-tagged spending for June 2025 (C$3,452.65) and August 2025 (C$1,448.70) separately.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "url_regex": "(?i)/tags/"
+                      },
+                      {
+                        "url_regex": "(?i)vacation"
+                      },
+                      {
+                        "action_regex": "(?i)vacation"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent used the Vacation tag in Firefly to total June 2025 and August 2025 spending separately."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A Nextcloud text note says June 2025 Vacation spending was higher, including C$3,452.65 and C$1,448.70.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "url": "__NEXTCLOUD__/index.php/apps/notes/api/v1/notes",
+                  "method": "GET",
+                  "auth_user": "maya.patel",
+                  "headers": {
+                    "Accept": "application/json"
+                  },
+                  "site": "nextcloud",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "3,?452\\.65"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "1,?448\\.70"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)june"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A text note in Nextcloud states that June 2025 Vacation spending was higher than August 2025 and includes the amounts C$3,452.65 and C$1,448.70."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Email Bob the monthly amount for Spotify Premium.",
+    "login_username": "test@example.com",
+    "login_usernames": {
+      "firefly": "test@example.com",
+      "thunderbird": "alice@techcorp.local"
+    },
+    "require_login": true,
+    "sites": [
+      "firefly",
+      "thunderbird"
+    ],
+    "task_id": "052",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Found the Spotify Premium bill (C$11.99/month) in Firefly.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_regex": "(?i)spotify"
+                      },
+                      {
+                        "url_regex": "(?i)bills|spotify"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent found the Spotify Premium bill/subscription in Firefly and confirmed its monthly amount of C$11.99."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Emailed Bob Martin (bob@techcorp.local) saying Spotify Premium costs C$11.99 per month.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "thunderbird",
+                  "params": {
+                    "user": "bob@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"INBOX\":\\[(?:(?!\"[A-Za-z]+\":\\[)[\\s\\S])*?\"body\":\"[^\"]*(?i:spotify)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"INBOX\":\\[(?:(?!\"[A-Za-z]+\":\\[)[\\s\\S])*?\"body\":\"[^\"]*[^\"]*11\\.99"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "bob@techcorp.local received an email from alice stating that Spotify Premium costs C$11.99 per month."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find the largest expense in March 2026, excluding rent, income, transfers, and refunds.",
+    "login_username": "test@example.com",
+    "login_usernames": {
+      "firefly": "test@example.com"
+    },
+    "require_login": true,
+    "sites": [
+      "firefly"
+    ],
+    "task_id": "053",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Correct if the answer names Farm Boy, date 2026-03-20, and amount C$129.74.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "farm boy",
+                    "129.74"
+                  ],
+                  "must_include_any": [
+                    "2026-03-20",
+                    "march 20"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Correct if the answer names Farm Boy, date 2026-03-20, and amount C$129.74."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create 3 piggybank, first one named tuitionfees, set target amount as 1000, save on accounts TD chequing. Second one named mealplan, set target amount as 100, save on TD Savings. Third one named opuscard, set target amount as 60, save on cash wallet.",
+    "login_username": "test@example.com",
+    "login_usernames": {
+      "firefly": "test@example.com"
+    },
+    "require_login": true,
+    "sites": [
+      "firefly"
+    ],
+    "task_id": "054",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "there are 3 new piggybank shown under the piggybank categories, first one named tuitionfees, second one named mealplan, third one named opuscard.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"tuitionfees\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"mealplan\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"opuscard\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "there are 3 new piggybank shown under the piggybank categories, first one named tuitionfees, second one named mealplan, third one named opuscard."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "tuitionfees got target amount as 1000, mealplan got 100, opuscard got 60",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"tuitionfees\",\\s*\"target_amount\":\\s*\"1000\\.?0*\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"mealplan\",\\s*\"target_amount\":\\s*\"100\\.?0*\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"opuscard\",\\s*\"target_amount\":\\s*\"60\\.?0*\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "tuitionfees got target amount as 1000, mealplan got 100, opuscard got 60"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a piggy bank named with flight, let the amount be 300, and save it in the cash wallet, then go to flight search. Find the cheapest one-way economy flight from New York (JFK) to Los Angeles (LAX) on 2026-06-15. If there is a flight has a price smaller than 300, then post the message of the flight in X; otherwise, complain about the price in the post.",
+    "login_username": "test@example.com",
+    "login_usernames": {
+      "firefly": "test@example.com",
+      "x-lite": "techvalueinvestor"
+    },
+    "previous_task_intent": "create a piggy bank named with flight, let the amount be 300 and save on cash wallet, then go to flight search。 Find the cheapest one-way economy flight from New York (JFK) to Los Angeles (LAX) on 2026-06-15, if there is a flight has a price smaller than 300, then post the message of flight in X, otherwise complain the price in the post",
+    "require_login": true,
+    "sites": [
+      "firefly",
+      "flight-search",
+      "x-lite"
+    ],
+    "task_id": "055",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A piggy bank named 'flight' with target 300 saved under the Cash Wallet account exists.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "firefly",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"account_id\":4,\"name\":\"flight\",\"target_amount\":\"300\\.?0*\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A Firefly piggy bank named 'flight' exists with target amount 300 and is linked to the Cash Wallet account."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Identified the cheapest JFK->LAX one-way economy flight on 2026-06-15 (American Airlines 7:30 PM -> 4:10 AM +1, 1 stop via DFW, 11h 40m).",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_regex": "(?i)JFK|LAX"
+                      },
+                      {
+                        "url_regex": "(?i)JFK|LAX"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent searched a one-way economy JFK -> LAX flight for June 15, 2026 and identified the cheapest itinerary (American Airlines departing 7:30 PM, arriving 4:10 AM +1, 1 stop via DFW, 11h 40m)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Posted on X-lite complaining that the cheapest flight (C$367) is above the 300 budget.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state_table",
+                  "site": "x-lite",
+                  "params": {
+                    "table": "tweets"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"content\":\"[^\"]*(?:(?i:300|budget|expensive|over|above|too ))[^\"]*\"[^}]*\"user_id\":\"u41\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new X-lite post by techvalueinvestor complains that the cheapest JFK -> LAX flight price is above the 300 flight budget (it must NOT claim a flight under 300 was found)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find the monthly amount of Spotify Premium",
+    "login_username": "test@example.com",
+    "login_usernames": {
+      "firefly": "test@example.com"
+    },
+    "require_login": true,
+    "sites": [
+      "firefly"
+    ],
+    "task_id": "056",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Opened the Subscriptions section or searched for Spotify Premium.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "url_regex": "(?i)subscription"
+                      },
+                      {
+                        "url_regex": "(?i)bills"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Opened the Subscriptions section or searched for Spotify Premium."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Report the saved monthly amount.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "11.99"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Report the saved monthly amount."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "For February 2026, set the following budgets: Groceries C$300, Gas & Transportation C$50, Entertainment C$25, Utilities & Bills C$100, Dining Out C$10, Shopping C$40. Then determine which budgets are exceeded and by how much. Report each exceeded budget in the format <Category>: C$XX.XX over, separated by ;.",
+    "login_username": "test@example.com",
+    "login_usernames": {
+      "firefly": "test@example.com"
+    },
+    "require_login": true,
+    "sites": [
+      "firefly"
+    ],
+    "task_id": "057",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Correct if a Groceries budget of C$300 is set for February 2026.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"budget_id\":\\s*1,\\s*\"start_date\":\\s*\"2026-02-01\",\\s*\"end_date\":\\s*\"2026-02-2[89]\",\\s*\"amount\":\\s*\"300\\.?0*\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Correct if a Groceries budget of C$300 is set for February 2026."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Correct if a Gas & Transportation budget of C$50 is set for February 2026.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"budget_id\":\\s*2,\\s*\"start_date\":\\s*\"2026-02-01\",\\s*\"end_date\":\\s*\"2026-02-2[89]\",\\s*\"amount\":\\s*\"50\\.?0*\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Correct if a Gas & Transportation budget of C$50 is set for February 2026."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Correct if an Entertainment budget of C$25 is set for February 2026.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"budget_id\":\\s*3,\\s*\"start_date\":\\s*\"2026-02-01\",\\s*\"end_date\":\\s*\"2026-02-2[89]\",\\s*\"amount\":\\s*\"25\\.?0*\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Correct if an Entertainment budget of C$25 is set for February 2026."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Correct if a Utilities & Bills budget of C$100 is set for February 2026.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"budget_id\":\\s*4,\\s*\"start_date\":\\s*\"2026-02-01\",\\s*\"end_date\":\\s*\"2026-02-2[89]\",\\s*\"amount\":\\s*\"100\\.?0*\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Correct if a Utilities & Bills budget of C$100 is set for February 2026."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Correct if a Dining Out budget of C$10 is set for February 2026.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"budget_id\":\\s*5,\\s*\"start_date\":\\s*\"2026-02-01\",\\s*\"end_date\":\\s*\"2026-02-2[89]\",\\s*\"amount\":\\s*\"10\\.?0*\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Correct if a Dining Out budget of C$10 is set for February 2026."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r6",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Correct if a Shopping budget of C$40 is set for February 2026.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"budget_id\":\\s*6,\\s*\"start_date\":\\s*\"2026-02-01\",\\s*\"end_date\":\\s*\"2026-02-2[89]\",\\s*\"amount\":\\s*\"40\\.?0*\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Correct if a Shopping budget of C$40 is set for February 2026."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r7",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Correct if the Groceries budget is reported as exceeded by C$162.12.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "162.12"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Correct if the Groceries budget is reported as exceeded by C$162.12."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r8",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Correct if the Gas & Transportation budget is reported as exceeded by C$168.73.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "168.73"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Correct if the Gas & Transportation budget is reported as exceeded by C$168.73."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r9",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Correct if the Entertainment budget is reported as exceeded by C$3.98.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "3.98"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Correct if the Entertainment budget is reported as exceeded by C$3.98."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r10",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Correct if the Utilities & Bills budget is reported as exceeded by C$127.04.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "127.04"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Correct if the Utilities & Bills budget is reported as exceeded by C$127.04."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r11",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Correct if the Dining Out budget is reported as exceeded by C$104.12.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "104.12"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Correct if the Dining Out budget is reported as exceeded by C$104.12."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r12",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Correct if the Shopping budget is reported as exceeded by C$225.07.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "225.07"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Correct if the Shopping budget is reported as exceeded by C$225.07."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Check the January 2026 Restaurants budget and calculate January 2026 Restaurants spending. Transfer the remaining budget amount from TD Chequing to TD Savings with the description \"Restaurant Budget Savings\".",
+    "login_username": "test@example.com",
+    "login_usernames": {
+      "firefly": "test@example.com"
+    },
+    "require_login": true,
+    "sites": [
+      "firefly"
+    ],
+    "task_id": "058",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A transfer is created from TD Chequing to TD Savings.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"type\":\\s*\"Transfer\"[^}]*\"source\":\\s*\"TD Chequing\",\\s*\"destination\":\\s*\"TD Savings\",\\s*\"amount\":\\s*\"52\\.550*\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A transfer is created from TD Chequing to TD Savings."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The transferred amount is C$52.55.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"type\":\\s*\"Transfer\",\\s*\"description\":\\s*\"Restaurant Budget Savings\",[^}]*\"destination\":\\s*\"TD Savings\",\\s*\"amount\":\\s*\"52\\.550*\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The transferred amount is C$52.55."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The transfer description is \"Restaurant Budget Savings\".",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"type\":\\s*\"Transfer\",\\s*\"description\":\\s*\"Restaurant Budget Savings\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The transfer description is \"Restaurant Budget Savings\"."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Check whether the Spotify Premium subscription was paid in December 2025. If no matching transaction exists, create a transaction for it from TD Chequing.",
+    "login_username": "test@example.com",
+    "login_usernames": {
+      "firefly": "test@example.com"
+    },
+    "require_login": true,
+    "sites": [
+      "firefly"
+    ],
+    "task_id": "059",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Correct if a new transaction is created.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"type\":\\s*\"Withdrawal\",[^}]*\"date\":\\s*\"2025-12-[0-9]{2}\",\\s*\"bill_id\":\\s*(2|null),\\s*\"source\":\\s*\"TD Chequing\",\\s*\"destination\":\\s*\"Spotify\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Correct if a new transaction is created."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Correct if the source account of the transaction is TD Chequing.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"date\":\\s*\"2025-12-[0-9]{2}\",\\s*\"bill_id\":\\s*(2|null),\\s*\"source\":\\s*\"TD Chequing\",\\s*\"destination\":\\s*\"Spotify\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Correct if the source account of the transaction is TD Chequing."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Correct if the destination account of the transaction is Spotify.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"date\":\\s*\"2025-12-[0-9]{2}\",\\s*\"bill_id\":\\s*(2|null),\\s*\"source\":\\s*\"TD Chequing\",\\s*\"destination\":\\s*\"Spotify\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Correct if the destination account of the transaction is Spotify."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Correct if the transaction amount is $11.99.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"date\":\\s*\"2025-12-[0-9]{2}\",\\s*\"bill_id\":\\s*(2|null),\\s*\"source\":\\s*\"TD Chequing\",\\s*\"destination\":\\s*\"Spotify\",\\s*\"amount\":\\s*\"11\\.990*\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Correct if the transaction amount is $11.99."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Correct if the transaction is linked to the Spotify Premium subscription.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"date\":\\s*\"2025-12-[0-9]{2}\",\\s*\"bill_id\":\\s*2,\\s*\"source\":\\s*\"TD Chequing\",\\s*\"destination\":\\s*\"Spotify\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Correct if the transaction is linked to the Spotify Premium subscription."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a new asset account named MapleTrust Savings with an initial balance of C$2,000. Then transfer C$500 from TD Chequing to MapleTrust Savings with the description \"Initial Deposit\".",
+    "login_username": "test@example.com",
+    "login_usernames": {
+      "firefly": "test@example.com"
+    },
+    "require_login": true,
+    "sites": [
+      "firefly"
+    ],
+    "task_id": "060",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A new asset account is created in Firefly.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"MapleTrust Savings\",\\s*\"type\":\\s*\"Asset account\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new asset account is created in Firefly."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The new asset account is named \"MapleTrust Savings\".",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"MapleTrust Savings\",\\s*\"type\":\\s*\"Asset account\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The new asset account is named \"MapleTrust Savings\"."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The new asset account has an initial balance of C$2,000.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"type\":\\s*\"Opening balance\"[^}]*\"destination\":\\s*\"MapleTrust Savings\",\\s*\"amount\":\\s*\"2,?000\\.?0*\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The new asset account has an initial balance of C$2,000."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Atransfer is created in Firefly.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"type\":\\s*\"Transfer\"[^}]*\"destination\":\\s*\"MapleTrust Savings\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Atransfer is created in Firefly."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The transfer source account is TD Chequing.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"type\":\\s*\"Transfer\"[^}]*\"source\":\\s*\"TD Chequing\",\\s*\"destination\":\\s*\"MapleTrust Savings\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The transfer source account is TD Chequing."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r6",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The transfer destination account is MapleTrust Savings.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"type\":\\s*\"Transfer\"[^}]*\"destination\":\\s*\"MapleTrust Savings\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The transfer destination account is MapleTrust Savings."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r7",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The transfer amount is C$500.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"type\":\\s*\"Transfer\"[^}]*\"source\":\\s*\"TD Chequing\",\\s*\"destination\":\\s*\"MapleTrust Savings\",\\s*\"amount\":\\s*\"500\\.?0*\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The transfer amount is C$500."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r8",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The transfer description is \"Initial Deposit\".",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"type\":\\s*\"Transfer\",\\s*\"description\":\\s*\"Initial Deposit\",[^}]*\"source\":\\s*\"TD Chequing\",\\s*\"destination\":\\s*\"MapleTrust Savings\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The transfer description is \"Initial Deposit\"."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Tag all transactions in the Groceries, Rent, and Utilities & Bills categories as Essential. Tag all transactions in the Dining Out, Entertainment, and Shopping categories as Discretionary. Then calculate the total amount spent on Essential transactions and on Discretionary transactions between the two first months of 2026. Report the totals in the format: Essential: C$X,XXX.XX; Discretionary: C$X,XXX.XX.",
+    "login_username": "test@example.com",
+    "login_usernames": {
+      "firefly": "test@example.com"
+    },
+    "previous_task_intent": "Tag all transactions in the Groceries, Rent, and Utilities & Bills categories as Essential. Tag all transactions in the Dining Out, Entertainment, and Shopping categories as Discretionary. Then calculate the total amount spent on Essential transactions and on Discretionary transactions between January 1 and February 28, 2026 (inclusive). Report the totals in the format: Essential: C$X,XXX.XX; Discretionary: C$X,XXX.XX.",
+    "require_login": true,
+    "sites": [
+      "firefly"
+    ],
+    "task_id": "061",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A new tag named \"Essential\" is created.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"tag\":\\s*\"Essential\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new tag named \"Essential\" is created."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "All transactions in the Groceries, Rent, and Utilities & Bills categories are tagged Essential.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "All transactions in the Groceries, Rent, and Utilities & Bills categories are tagged Essential."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A new tag named \"Discretionary\" is created.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"tag\":\\s*\"Discretionary\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new tag named \"Discretionary\" is created."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "All transactions in the Dining Out, Entertainment, and Shopping categories are tagged Discretionary.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "All transactions in the Dining Out, Entertainment, and Shopping categories are tagged Discretionary."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The reported total amount of Essential-tagged transactions between January 1 and February 28, 2026 is C$4,169.41.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include_any": [
+                    "4,169.41",
+                    "4169.41"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The reported total amount of Essential-tagged transactions between January 1 and February 28, 2026 is C$4,169.41."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r6",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The reported total amount of Discretionary-tagged transactions between January 1 and February 28, 2026 is C$563.99.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "563.99"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The reported total amount of Discretionary-tagged transactions between January 1 and February 28, 2026 is C$563.99."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "In Firefly, find the most expensive single transaction tagged Vacation between June 1 and August 31, 2025, and note its amount and report in the following form: 2025 max: C$X,XXX.XX\n\nThen in flight-search, find the cheapest one-way economy flight from JFK to LAX on 2026-08-15, and note its price. If the JFK-to-LAX 2026 flight is cheaper than the most expensive 2025 Vacation transaction, create a piggy bank in Firefly named \"Cheaper Flight Fund\" with target amount equal to the JFK-to-LAX flight price, saving from TD Chequing, and add C$50 from TD Chequing to it. Otherwise, do nothing.",
+    "login_username": "test@example.com",
+    "login_usernames": {
+      "firefly": "test@example.com"
+    },
+    "require_login": true,
+    "sites": [
+      "firefly",
+      "flight-search"
+    ],
+    "task_id": "062",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Reported the 2025 max Vacation transaction: Lufthansa flight YOW to Frankfurt, C$1,295.00 ('2025 max: C$1,295.00').",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "1,295.00"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent reported the most expensive Vacation-tagged transaction between June 1 and August 31, 2025 as the Lufthansa flight YOW to Frankfurt at C$1,295.00, in the form '2025 max: C$1,295.00'."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A new piggy bank named 'Cheaper Flight Fund' exists, saving from TD Chequing, with target C$374 (the cheapest JFK->LAX 2026-08-15 fare).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "firefly",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"account_id\":1,\"name\":\"Cheaper Flight Fund\",\"target_amount\":\"374\\.?0*\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A Firefly piggy bank named 'Cheaper Flight Fund' exists, linked to the TD Chequing account, with a target amount equal to the cheapest JFK-to-LAX flight price found (C$374)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "C$50 was added to the Cheaper Flight Fund piggy bank.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "firefly",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\"Cheaper Flight Fund\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"piggy_bank_events\":\\[[^\\]]*\"amount\":\"50\\.?0*\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "C$50 was added (saved) into the 'Cheaper Flight Fund' piggy bank from TD Chequing."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find the cheapest flight from Montreal to Denver from August 7th to August 14th and then create a piggy bank for it.",
+    "login_username": "test@example.com",
+    "login_usernames": {
+      "firefly": "test@example.com"
+    },
+    "previous_task_intent": "find the cheapest flight from Montreal to Denver on august 7th to august 14th and then create a piggy bank for it",
+    "require_login": true,
+    "sites": [
+      "firefly",
+      "flight-search"
+    ],
+    "task_id": "339",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Find that the cheapest round-trip itinerary is identified as C$608.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "From actual Flight Search results, the agent identifies C$608 as the cheapest round-trip economy itinerary for one adult from Montreal (YUL) to Denver (DEN), departing August 7, 2026 and returning August 14, 2026. Judge the search/comparison evidence and the total in Canadian dollars. A one-way fare, USD 608, a different date pair, or a bare unsupported final-answer claim does not satisfy this action criterion. Booking the flight is not required."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Find that the outbound itinerary is Air Canada AC8436 and AC4776, connecting through Toronto (YYZ).",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "For the Montreal-to-Denver round trip on August 7-14, 2026, the agent inspects and identifies the outbound August 7 itinerary as Air Canada AC8436 followed by AC4776, connecting through Toronto (YYZ), in that order. Judge the actual search results or itinerary details in the trajectory. Unrelated flight numbers, the reverse direction, a different connection or date, or a final claim without search evidence is insufficient. Booking is not required."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Find that The return itinerary is United Airlines UA168 and UA9009, connecting through Chicago (ORD).",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "For that Montreal-to-Denver round trip, the agent inspects and identifies the return August 14, 2026 itinerary from Denver to Montreal as United Airlines UA168 followed by UA9009, connecting through Chicago (ORD), in that order. Judge the actual search results or itinerary details in the trajectory. A reversed route, different flight numbers, a different date or connection, or a final claim without search evidence is insufficient. Booking is not required."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [
+            "r1",
+            "r2",
+            "r3"
+          ],
+          "eval_config": {
+            "rubric": "create a new piggy bank for exactly 608 dollars",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent creates and saves a new Firefly piggy bank in the task account for the researched Montreal-Denver trip with a target of exactly C$608.00. Judge the saved piggy bank and creation evidence, not just a matching number or a final claim. An existing unrelated piggy bank, a draft, a different currency or target, or depositing 608 into a bank with a different target is insufficient. The reviewed criterion does not require a particular name, funding account, target date, initial deposit, or flight booking."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "In Firefly, adjust the amounts in the Budgeted column for the seven existing budgets for the month currently selected on the Budgets page: Groceries, Gas & Transportation, Entertainment, Utilities & Bills, Dining Out, Shopping, and Restaurants. Scale their current budgeted amounts proportionally so their combined total is C$2,000, preserving each category's share as closely as possible. Round each resulting amount to the nearest whole Canadian dollar and save the changes for that month. Leave transactions and other months unchanged.",
+    "login_username": "test@example.com",
+    "login_usernames": {
+      "firefly": "test@example.com"
+    },
+    "previous_task_intent": "standardize the budget to 2000 dollars",
+    "require_login": true,
+    "sites": [
+      "firefly"
+    ],
+    "task_id": "343",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Groceries — C$656",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the task account's Firefly, the agent saves the Budgeted amount for the existing Groceries budget as exactly C$656 for the month that was selected on the Budgets page when this task began. Establish that month from the initial task/trajectory evidence, not the evaluator's wall clock or a later month selected by the agent. Verify the saved monthly budget limit for this named category in Canadian dollars. A matching amount in another category, another month, another account or currency, a transaction or spending total, a newly created duplicate budget, an unsaved edit, or a final-answer claim is insufficient. For this category, transactions and other months must remain unchanged. Assess this category independently; the other six categories have their own rubric nodes."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Gas & Transportation — C$328",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the task account's Firefly, the agent saves the Budgeted amount for the existing Gas & Transportation budget as exactly C$328 for the month that was selected on the Budgets page when this task began. Establish that month from the initial task/trajectory evidence, not the evaluator's wall clock or a later month selected by the agent. Verify the saved monthly budget limit for this named category in Canadian dollars. A matching amount in another category, another month, another account or currency, a transaction or spending total, a newly created duplicate budget, an unsaved edit, or a final-answer claim is insufficient. For this category, transactions and other months must remain unchanged. Assess this category independently; the other six categories have their own rubric nodes."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Entertainment — C$87",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the task account's Firefly, the agent saves the Budgeted amount for the existing Entertainment budget as exactly C$87 for the month that was selected on the Budgets page when this task began. Establish that month from the initial task/trajectory evidence, not the evaluator's wall clock or a later month selected by the agent. Verify the saved monthly budget limit for this named category in Canadian dollars. A matching amount in another category, another month, another account or currency, a transaction or spending total, a newly created duplicate budget, an unsaved edit, or a final-answer claim is insufficient. For this category, transactions and other months must remain unchanged. Assess this category independently; the other six categories have their own rubric nodes."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Utilities & Bills — C$328",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the task account's Firefly, the agent saves the Budgeted amount for the existing Utilities & Bills budget as exactly C$328 for the month that was selected on the Budgets page when this task began. Establish that month from the initial task/trajectory evidence, not the evaluator's wall clock or a later month selected by the agent. Verify the saved monthly budget limit for this named category in Canadian dollars. A matching amount in another category, another month, another account or currency, a transaction or spending total, a newly created duplicate budget, an unsaved edit, or a final-answer claim is insufficient. For this category, transactions and other months must remain unchanged. Assess this category independently; the other six categories have their own rubric nodes."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Dining Out — C$164",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the task account's Firefly, the agent saves the Budgeted amount for the existing Dining Out budget as exactly C$164 for the month that was selected on the Budgets page when this task began. Establish that month from the initial task/trajectory evidence, not the evaluator's wall clock or a later month selected by the agent. Verify the saved monthly budget limit for this named category in Canadian dollars. A matching amount in another category, another month, another account or currency, a transaction or spending total, a newly created duplicate budget, an unsaved edit, or a final-answer claim is insufficient. For this category, transactions and other months must remain unchanged. Assess this category independently; the other six categories have their own rubric nodes."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r6",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Shopping — C$273",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the task account's Firefly, the agent saves the Budgeted amount for the existing Shopping budget as exactly C$273 for the month that was selected on the Budgets page when this task began. Establish that month from the initial task/trajectory evidence, not the evaluator's wall clock or a later month selected by the agent. Verify the saved monthly budget limit for this named category in Canadian dollars. A matching amount in another category, another month, another account or currency, a transaction or spending total, a newly created duplicate budget, an unsaved edit, or a final-answer claim is insufficient. For this category, transactions and other months must remain unchanged. Assess this category independently; the other six categories have their own rubric nodes."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r7",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Restaurants — C$164",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the task account's Firefly, the agent saves the Budgeted amount for the existing Restaurants budget as exactly C$164 for the month that was selected on the Budgets page when this task began. Establish that month from the initial task/trajectory evidence, not the evaluator's wall clock or a later month selected by the agent. Verify the saved monthly budget limit for this named category in Canadian dollars. A matching amount in another category, another month, another account or currency, a transaction or spending total, a newly created duplicate budget, an unsaved edit, or a final-answer claim is insufficient. For this category, transactions and other months must remain unchanged. Assess this category independently; the other six categories have their own rubric nodes."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

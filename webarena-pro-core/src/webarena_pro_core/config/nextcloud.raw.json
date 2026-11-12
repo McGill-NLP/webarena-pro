@@ -1,0 +1,2625 @@
+[
+  {
+    "intent": "Set up a poll for the first Project Charlie meeting with options at 10 AM, 2 PM, and 5 PM, and share it in a group conversation with me, Betty, Daniel, Barbara, and Alex. I’m available at all three times, so please mark all three options and add a checkmark reaction afterward.",
+    "login_username": "maya.patel",
+    "previous_task_intent": "For Project Charlie, create a group chat with me, Betty, Daniel, Barbara, and Alex, and set up a poll for the first meeting time with options 10 AM, 2 PM, and 5 PM. I’m available at all three times, so vote for all of them and add a green checkmark reaction after voting.",
+    "require_login": true,
+    "sites": [
+      "nextcloud"
+    ],
+    "task_id": "159",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A new group conversation created by the current user during this task for Project Charlie includes the current user, Betty, Daniel, Barbara, and Alex. Accept any conversation title; a title alone or an unrelated conversation is insufficient. Verify the participants in the conversation. Verify creation during this task; joining or reusing a pre-existing group is insufficient.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "nextcloud_saved_state",
+                "trust": "both",
+                "config": {
+                  "user": "maya.patel",
+                  "criterion": "group",
+                  "participants": [
+                    "Betty",
+                    "Daniel",
+                    "Barbara",
+                    "Alex"
+                  ],
+                  "room_baseline_ref": "task_rooms"
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new group conversation created by the current user during this task for Project Charlie includes the current user, Betty, Daniel, Barbara, and Alex. Accept any conversation title; a title alone or an unrelated conversation is insufficient. Verify the participants in the conversation. Verify creation during this task; joining or reusing a pre-existing group is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "A saved poll in a newly created Project Charlie group conversation offers exactly 10 AM, 2 PM, and 5 PM. Accept equivalent time formatting and any conversation title.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "nextcloud_saved_state",
+                "trust": "both",
+                "config": {
+                  "user": "maya.patel",
+                  "criterion": "poll",
+                  "participants": [
+                    "Betty",
+                    "Daniel",
+                    "Barbara",
+                    "Alex"
+                  ],
+                  "times": [
+                    600,
+                    840,
+                    1020
+                  ],
+                  "room_baseline_ref": "task_rooms"
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A saved poll in a newly created Project Charlie group conversation offers exactly 10 AM, 2 PM, and 5 PM. Accept equivalent time formatting and any conversation title."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "The current user's votes are registered for all three options (10 AM, 2 PM, and 5 PM) of the same saved poll in a group created during this task with the current user, Betty, Daniel, Barbara, and Alex. Votes from different polls cannot be combined.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "nextcloud_saved_state",
+                "trust": "both",
+                "config": {
+                  "user": "maya.patel",
+                  "criterion": "votes",
+                  "participants": [
+                    "Betty",
+                    "Daniel",
+                    "Barbara",
+                    "Alex"
+                  ],
+                  "times": [
+                    600,
+                    840,
+                    1020
+                  ],
+                  "room_baseline_ref": "task_rooms"
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The current user's votes are registered for all three options (10 AM, 2 PM, and 5 PM) of the same saved poll in a group created during this task with the current user, Betty, Daniel, Barbara, and Alex. Votes from different polls cannot be combined."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The current user's saved green checkmark (✅) reaction is on the same poll message after the user voted for all three options (10 AM, 2 PM, and 5 PM), in a group created during this task with the current user, Betty, Daniel, Barbara, and Alex. Verify both the saved reaction and its order after voting; a click attempt, another user's reaction, or votes on a different poll is insufficient.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "nextcloud_saved_state",
+                "trust": "both",
+                "config": {
+                  "user": "maya.patel",
+                  "criterion": "reaction",
+                  "participants": [
+                    "Betty",
+                    "Daniel",
+                    "Barbara",
+                    "Alex"
+                  ],
+                  "times": [
+                    600,
+                    840,
+                    1020
+                  ],
+                  "room_baseline_ref": "task_rooms"
+                }
+              },
+              {
+                "tier": 1,
+                "type": "nextcloud_reaction_ui",
+                "trust": "pass_only",
+                "config": {
+                  "user": "maya.patel",
+                  "criterion": "reaction",
+                  "participants": [
+                    "Betty",
+                    "Daniel",
+                    "Barbara",
+                    "Alex"
+                  ],
+                  "times": [
+                    600,
+                    840,
+                    1020
+                  ],
+                  "room_baseline_ref": "task_rooms"
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The current user's saved green checkmark (✅) reaction is on the same poll message after the user voted for all three options (10 AM, 2 PM, and 5 PM), in a group created during this task with the current user, Betty, Daniel, Barbara, and Alex. Verify both the saved reaction and its order after voting; a click attempt, another user's reaction, or votes on a different poll is insufficient."
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "baseline": [
+        {
+          "name": "task_rooms",
+          "provider": "talk_rooms",
+          "params": {
+            "user": "maya.patel"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a new quick reference Markdown file named Client Meeting Update.md for the Project Alpha client meeting change.",
+    "login_username": "maya.patel",
+    "require_login": true,
+    "sites": [
+      "nextcloud"
+    ],
+    "task_id": "160",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent viewed the Project Alpha Talk history.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "url_contains": "apps/spreed"
+                      },
+                      {
+                        "action_contains": "Project Alpha"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent viewed the Project Alpha Talk history."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A file named 'Client Meeting Update.md' exists in the Nextcloud file directory.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "file_exists",
+                  "params": {
+                    "user": "maya.patel",
+                    "path": "Client Meeting Update.md"
+                  },
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": [
+                        200,
+                        207
+                      ]
+                    }
+                  ]
+                },
+                "trust": "both"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A file named 'Client Meeting Update.md' exists."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "The file content states the client meeting moved to next Thursday.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "file_exists",
+                  "params": {
+                    "user": "maya.patel",
+                    "path": "Client Meeting Update.md"
+                  },
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": 200
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)next\\s+thursday"
+                    }
+                  ]
+                },
+                "trust": "both"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The file content states the client meeting moved to next Thursday."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Add a calendar reminder for the Project Alpha UI mockups deadline.",
+    "login_username": "maya.patel",
+    "require_login": true,
+    "sites": [
+      "nextcloud"
+    ],
+    "task_id": "161",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent viewed the contents of 'Project_Alpha_Notes.txt'.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_contains": "Project_Alpha_Notes"
+                      },
+                      {
+                        "url_contains": "Project_Alpha_Notes"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent opened Project_Alpha_Notes.txt."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent clicked save/submit to persist the calendar event.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_contains": "save"
+                      },
+                      {
+                        "action_contains": "Save"
+                      },
+                      {
+                        "action_contains": "submit"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent saved the calendar event."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A saved calendar event reminds Maya about the Project Alpha UI mockups deadline. Accept equivalent descriptive titles or descriptions; no exact event title is required. An unrelated Project Alpha event is insufficient.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "calendar_events",
+                  "params": {
+                    "user": "maya.patel"
+                  },
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": 207
+                    },
+                    {
+                      "type": "caldav_event",
+                      "predicate": {
+                        "all": [
+                          {
+                            "attr_regex": {
+                              "text": "(?i)\\bproject\\s+alpha\\b"
+                            }
+                          },
+                          {
+                            "attr_regex": {
+                              "text": "(?i)\\bUI\\s+mockups\\b"
+                            }
+                          },
+                          {
+                            "attr_regex": {
+                              "text": "(?i)\\b(?:deadline|due|reminder)\\b"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A saved calendar event reminds Maya about the Project Alpha UI mockups deadline. Accept equivalent descriptive titles or descriptions; no exact event title is required. An unrelated Project Alpha event is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [
+            "r3"
+          ],
+          "eval_config": {
+            "rubric": "The event date is the upcoming Friday.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The calendar event is scheduled on the upcoming Friday relative to the task date."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find Leon Greene's contact info for the budget follow-up.",
+    "login_username": "maya.patel",
+    "previous_task_intent": "Find Sarah Garcia's contact info for the budget follow-up.",
+    "require_login": true,
+    "sites": [
+      "nextcloud"
+    ],
+    "task_id": "162",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent searched for or selected 'Leon Greene' within the Contacts application.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "url_contains": "apps/contacts"
+                      },
+                      {
+                        "action_contains": "Leon Greene"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent searched/selected 'Leon Greene' in Contacts."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent sent a message to the user containing the email address leon@cedarstone.test.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "leon@cedarstone.test"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent's message contains leon@cedarstone.test."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent sent a message to the user containing the phone number 9999999999.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "9999999999"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent's message contains the phone number 9999999999."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find the total due on the freelance invoice and create a payment reminder.",
+    "login_username": "daniel.brooks",
+    "require_login": true,
+    "sites": [
+      "nextcloud"
+    ],
+    "task_id": "163",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent opened the file 'Freelance_Invoice_Template.txt'.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_contains": "Freelance_Invoice_Template"
+                      },
+                      {
+                        "url_contains": "Freelance_Invoice_Template"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent opened 'Freelance_Invoice_Template.txt'."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A saved calendar payment reminder for the freelance invoice (#0045) exists. Accept equivalent descriptive event titles or descriptions; no exact event title is required. A reminder for another invoice is insufficient.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "calendar_events",
+                  "params": {
+                    "user": "daniel.brooks"
+                  },
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": 207
+                    },
+                    {
+                      "type": "caldav_event",
+                      "predicate": {
+                        "all": [
+                          {
+                            "attr_regex": {
+                              "text": "(?i)\\bfreelance\\b"
+                            }
+                          },
+                          {
+                            "attr_regex": {
+                              "text": "(?i)\\binvoice\\b"
+                            }
+                          },
+                          {
+                            "attr_regex": {
+                              "text": "(?i)\\b(?:payment|due|reminder)\\b"
+                            }
+                          },
+                          {
+                            "attr_regex": {
+                              "text": "(?is)^(?!.*(?:\\binvoice\\s*(?:(?:number|no\\.?)\\s*)?#?\\s*|#\\s*)(?!0*45\\b)\\d+).*"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A saved calendar payment reminder for the freelance invoice (#0045) exists. Accept equivalent descriptive event titles or descriptions; no exact event title is required. A reminder for another invoice is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "The event is scheduled for the exact date 2026-05-12.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "calendar_events",
+                  "params": {
+                    "user": "daniel.brooks"
+                  },
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": 207
+                    },
+                    {
+                      "type": "caldav_event",
+                      "predicate": {
+                        "all": [
+                          {
+                            "attr_regex": {
+                              "text": "(?i)\\bfreelance\\b"
+                            }
+                          },
+                          {
+                            "attr_regex": {
+                              "text": "(?i)\\binvoice\\b"
+                            }
+                          },
+                          {
+                            "attr_regex": {
+                              "text": "(?i)\\b(?:payment|due|reminder)\\b"
+                            }
+                          },
+                          {
+                            "attr_regex": {
+                              "text": "(?is)^(?!.*(?:\\binvoice\\s*(?:(?:number|no\\.?)\\s*)?#?\\s*|#\\s*)(?!0*45\\b)\\d+).*"
+                            }
+                          },
+                          {
+                            "attr_equals": {
+                              "date": "2026-05-12"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The event is scheduled for 2026-05-12."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "The event displays the exact amount $2,125.00 in its title or description.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "calendar_events",
+                  "params": {
+                    "user": "daniel.brooks"
+                  },
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": 207
+                    },
+                    {
+                      "type": "caldav_event",
+                      "predicate": {
+                        "all": [
+                          {
+                            "attr_regex": {
+                              "text": "(?i)\\bfreelance\\b"
+                            }
+                          },
+                          {
+                            "attr_regex": {
+                              "text": "(?i)\\binvoice\\b"
+                            }
+                          },
+                          {
+                            "attr_regex": {
+                              "text": "(?i)\\b(?:payment|due|reminder)\\b"
+                            }
+                          },
+                          {
+                            "attr_regex": {
+                              "text": "(?is)^(?!.*(?:\\binvoice\\s*(?:(?:number|no\\.?)\\s*)?#?\\s*|#\\s*)(?!0*45\\b)\\d+).*"
+                            }
+                          },
+                          {
+                            "attr_regex": {
+                              "text": "(?<![\\d,])(?:2,125|2125)\\.00(?!\\d)"
+                            }
+                          },
+                          {
+                            "attr_equals": {
+                              "date": "2026-05-12"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The event displays the exact amount $2,125.00 in its title or description."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Email Bob the main follow-ups from the Project Alpha notes.",
+    "login_username": "maya.patel",
+    "login_usernames": {
+      "nextcloud": "maya.patel",
+      "thunderbird": "alice@techcorp.local"
+    },
+    "require_login": true,
+    "sites": [
+      "nextcloud",
+      "thunderbird"
+    ],
+    "task_id": "164",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent opened the Project Alpha notes.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_contains": "Project_Alpha"
+                      },
+                      {
+                        "action_contains": "Project Alpha"
+                      },
+                      {
+                        "url_contains": "Project_Alpha"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent opened the Project Alpha notes."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Bob Martin receives an email containing the three Project Alpha follow-ups.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "api": "eval_state",
+                  "site": "thunderbird",
+                  "params": {
+                    "user": "bob@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)project alpha"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Bob Martin receives an email containing the three Project Alpha follow-ups."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "For Project Charlie, create a group conversation with me, Betty, Daniel, Barbara, and Alex, and set up a poll for the first meeting time with options 10 AM, 2 PM, and 5 PM. I’m available at all three times, so vote for all of them and add a green checkmark reaction after voting.",
+    "login_username": "maya.patel",
+    "login_usernames": {
+      "nextcloud": "maya.patel"
+    },
+    "require_login": true,
+    "sites": [
+      "nextcloud"
+    ],
+    "task_id": "165",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A new group conversation created by the current user during this task for Project Charlie includes the current user, Betty, Daniel, Barbara, and Alex. Accept any conversation title; a title alone or an unrelated conversation is insufficient. Verify the participants in the conversation. Verify creation during this task; joining or reusing a pre-existing group is insufficient.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "nextcloud_saved_state",
+                "trust": "both",
+                "config": {
+                  "user": "maya.patel",
+                  "criterion": "group",
+                  "participants": [
+                    "Betty",
+                    "Daniel",
+                    "Barbara",
+                    "Alex"
+                  ],
+                  "room_baseline_ref": "task_rooms"
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new group conversation created by the current user during this task for Project Charlie includes the current user, Betty, Daniel, Barbara, and Alex. Accept any conversation title; a title alone or an unrelated conversation is insufficient. Verify the participants in the conversation. Verify creation during this task; joining or reusing a pre-existing group is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "A saved poll in a newly created Project Charlie group conversation offers exactly 10 AM, 2 PM, and 5 PM. Accept equivalent time formatting and any conversation title.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "nextcloud_saved_state",
+                "trust": "both",
+                "config": {
+                  "user": "maya.patel",
+                  "criterion": "poll",
+                  "participants": [
+                    "Betty",
+                    "Daniel",
+                    "Barbara",
+                    "Alex"
+                  ],
+                  "times": [
+                    600,
+                    840,
+                    1020
+                  ],
+                  "room_baseline_ref": "task_rooms"
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A saved poll in a newly created Project Charlie group conversation offers exactly 10 AM, 2 PM, and 5 PM. Accept equivalent time formatting and any conversation title."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "The current user's votes are registered for all three options (10 AM, 2 PM, and 5 PM) of the same saved poll in a group created during this task with the current user, Betty, Daniel, Barbara, and Alex. Votes from different polls cannot be combined.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "nextcloud_saved_state",
+                "trust": "both",
+                "config": {
+                  "user": "maya.patel",
+                  "criterion": "votes",
+                  "participants": [
+                    "Betty",
+                    "Daniel",
+                    "Barbara",
+                    "Alex"
+                  ],
+                  "times": [
+                    600,
+                    840,
+                    1020
+                  ],
+                  "room_baseline_ref": "task_rooms"
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The current user's votes are registered for all three options (10 AM, 2 PM, and 5 PM) of the same saved poll in a group created during this task with the current user, Betty, Daniel, Barbara, and Alex. Votes from different polls cannot be combined."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The current user's saved green checkmark (✅) reaction is on the same poll message after the user voted for all three options (10 AM, 2 PM, and 5 PM), in a group created during this task with the current user, Betty, Daniel, Barbara, and Alex. Verify both the saved reaction and its order after voting; a click attempt, another user's reaction, or votes on a different poll is insufficient.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "nextcloud_saved_state",
+                "trust": "both",
+                "config": {
+                  "user": "maya.patel",
+                  "criterion": "reaction",
+                  "participants": [
+                    "Betty",
+                    "Daniel",
+                    "Barbara",
+                    "Alex"
+                  ],
+                  "times": [
+                    600,
+                    840,
+                    1020
+                  ],
+                  "room_baseline_ref": "task_rooms"
+                }
+              },
+              {
+                "tier": 1,
+                "type": "nextcloud_reaction_ui",
+                "trust": "pass_only",
+                "config": {
+                  "user": "maya.patel",
+                  "criterion": "reaction",
+                  "participants": [
+                    "Betty",
+                    "Daniel",
+                    "Barbara",
+                    "Alex"
+                  ],
+                  "times": [
+                    600,
+                    840,
+                    1020
+                  ],
+                  "room_baseline_ref": "task_rooms"
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The current user's saved green checkmark (✅) reaction is on the same poll message after the user voted for all three options (10 AM, 2 PM, and 5 PM), in a group created during this task with the current user, Betty, Daniel, Barbara, and Alex. Verify both the saved reaction and its order after voting; a click attempt, another user's reaction, or votes on a different poll is insufficient."
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "baseline": [
+        {
+          "name": "task_rooms",
+          "provider": "talk_rooms",
+          "params": {
+            "user": "maya.patel"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Add Eric (555-0987, eric.samuel@cloud.com), Mark, Thomas, and Sarah to the “marketing team” contact group.",
+    "login_username": "maya.patel",
+    "login_usernames": {
+      "nextcloud": "maya.patel"
+    },
+    "require_login": true,
+    "sites": [
+      "nextcloud"
+    ],
+    "task_id": "166",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Eric Samuel added with phone 555-0987 and email eric.samuel@cloud.com.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "contacts",
+                  "params": {
+                    "user": "maya.patel"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_contains",
+                      "value": "Eric Samuel"
+                    },
+                    {
+                      "type": "body_contains",
+                      "value": "555-0987"
+                    },
+                    {
+                      "type": "body_contains",
+                      "value": "eric.samuel@cloud.com"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Eric Samuel exists with phone 555-0987 and email eric.samuel@cloud.com."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A contact group named 'marketing team' exists.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "contacts",
+                  "params": {
+                    "user": "maya.patel"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_contains",
+                      "value": "marketing team"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A contact group 'marketing team' exists."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "Eric, Mark, Thomas, and Sarah are in the 'marketing team' group.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "contacts",
+                  "params": {
+                    "user": "maya.patel"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_contains",
+                      "value": "Mark"
+                    },
+                    {
+                      "type": "body_contains",
+                      "value": "Thomas"
+                    },
+                    {
+                      "type": "body_contains",
+                      "value": "Sarah"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Eric, Mark, Thomas, Sarah are all members of 'marketing team'."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Enable dark mode and set the language to English, the region to the United States, and the timezone to New York.",
+    "login_username": "maya.patel",
+    "login_usernames": {
+      "nextcloud": "maya.patel"
+    },
+    "require_login": true,
+    "sites": [
+      "nextcloud"
+    ],
+    "task_id": "167",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The interface is set to dark mode.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "ui_state",
+                "config": {
+                  "checks": [
+                    {
+                      "method": "element_exists",
+                      "selector": "[data-themes*=dark], html.dark",
+                      "min_count": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "action_contains": "dark"
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The interface is set to dark mode."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The timezone is set to New York.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_contains": "New_York"
+                      },
+                      {
+                        "action_contains": "New York"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The timezone is set to America/New_York."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Download all files from the documents folder, then permanently delete them.",
+    "login_username": "maya.patel",
+    "login_usernames": {
+      "nextcloud": "maya.patel"
+    },
+    "require_login": true,
+    "sites": [
+      "nextcloud"
+    ],
+    "task_id": "168",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent downloaded all files in the Documents folder.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_contains": "download"
+                      },
+                      {
+                        "action_contains": "Download"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent downloaded the Documents files."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "All files in Documents were deleted (folder has no files).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "list_directory",
+                  "params": {
+                    "user": "maya.patel",
+                    "path": "documents"
+                  },
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "<d:getcontentlength>",
+                      "operator": "eq",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The Documents folder no longer contains any files."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Deleted files were permanently removed from trash.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "url": "__NEXTCLOUD__/remote.php/dav/trashbin/maya.patel/trash/",
+                  "method": "PROPFIND",
+                  "auth_user": "maya.patel",
+                  "headers": {
+                    "Depth": "1"
+                  },
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "<d:getcontentlength>",
+                      "operator": "eq",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The trash/Deleted Files contains no files."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find the safari music file with the longest duration and share it with Karen with edit access.",
+    "login_username": "maya.patel",
+    "login_usernames": {
+      "nextcloud": "maya.patel"
+    },
+    "require_login": true,
+    "sites": [
+      "nextcloud"
+    ],
+    "task_id": "169",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The file safariloop0S22m2.mp3 is shared with Karen Robinson.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "shares_list",
+                  "params": {
+                    "user": "maya.patel"
+                  },
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": 200
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "ocs.meta.statuscode",
+                      "value": 200
+                    },
+                    {
+                      "type": "json_array_match",
+                      "path": "ocs.data",
+                      "predicate": {
+                        "all": [
+                          {
+                            "all": [
+                              {
+                                "attr_equals": {
+                                  "item_type": "file"
+                                }
+                              },
+                              {
+                                "attr_regex": {
+                                  "path": "(?:^|/)safariloop0S22m2\\.mp3$"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "attr_equals": {
+                              "share_type": 4
+                            }
+                          },
+                          {
+                            "attr_regex": {
+                              "share_with": "(?i)^karen\\.r@cedarstone\\.test$"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "safariloop0S22m2.mp3 is shared with Karen Robinson."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "Karen Robinson has edit access (Allow Editing permission) for the file.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "shares_list",
+                  "params": {
+                    "user": "maya.patel"
+                  },
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": 200
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "ocs.meta.statuscode",
+                      "value": 200
+                    },
+                    {
+                      "type": "json_array_match",
+                      "path": "ocs.data",
+                      "predicate": {
+                        "all": [
+                          {
+                            "all": [
+                              {
+                                "all": [
+                                  {
+                                    "attr_equals": {
+                                      "item_type": "file"
+                                    }
+                                  },
+                                  {
+                                    "attr_regex": {
+                                      "path": "(?:^|/)safariloop0S22m2\\.mp3$"
+                                    }
+                                  }
+                                ]
+                              },
+                              {
+                                "attr_equals": {
+                                  "share_type": 4
+                                }
+                              },
+                              {
+                                "attr_regex": {
+                                  "share_with": "(?i)^karen\\.r@cedarstone\\.test$"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "any": [
+                              {
+                                "attr_equals": {
+                                  "permissions": 3
+                                }
+                              },
+                              {
+                                "attr_equals": {
+                                  "permissions": 7
+                                }
+                              },
+                              {
+                                "attr_equals": {
+                                  "permissions": 11
+                                }
+                              },
+                              {
+                                "attr_equals": {
+                                  "permissions": 15
+                                }
+                              },
+                              {
+                                "attr_equals": {
+                                  "permissions": 19
+                                }
+                              },
+                              {
+                                "attr_equals": {
+                                  "permissions": 23
+                                }
+                              },
+                              {
+                                "attr_equals": {
+                                  "permissions": 27
+                                }
+                              },
+                              {
+                                "attr_equals": {
+                                  "permissions": 31
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Karen Robinson has edit access on the file."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Send the Marketing Assistant resume files in both .docx and .pdf formats to Nancy, Lisa, and Richard in a group chat. Then, request the creation of a “Marketing Assistant Interview Result” file in the interview folder and share the file request link with them. Set the expiration date to the end of next week (Sunday of the following calendar week), and protect it with the password 'marketing'.",
+    "login_username": "maya.patel",
+    "login_usernames": {
+      "nextcloud": "maya.patel"
+    },
+    "require_login": true,
+    "sites": [
+      "nextcloud"
+    ],
+    "task_id": "170",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A group conversation with Nancy, Lisa, and Richard exists.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A group conversation including Nancy, Lisa, and Richard exists."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Both resume files (.docx and .pdf) were shared in the group chat.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Both the .docx and .pdf Marketing Assistant resume files were shared in the group conversation."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "An 'interview' folder exists in Files.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "file_exists",
+                  "params": {
+                    "user": "maya.patel",
+                    "path": "interview"
+                  },
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": [
+                        200,
+                        207,
+                        301
+                      ]
+                    }
+                  ]
+                },
+                "trust": "both"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "An 'interview' folder exists."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [
+            "r3"
+          ],
+          "eval_config": {
+            "rubric": "A file request titled 'Marketing Assistant Interview Result' was created with its expiration date set to the end of next week (Sunday of the calendar week following the task execution date's week).",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A file request named 'Marketing Assistant Interview Result' is created and saved in the interview folder with its expiration date set to the end of next week: Sunday of the calendar week following the task execution date's week, using Monday-Sunday weeks. Resolve this from the task execution date supplied in the evaluation context, not the grading date or historical submission date. If the task starts on a Sunday, use the Sunday seven days later. Verify the title, folder and expiration date on the same newly saved file request. A missing or wrong expiration date, a draft, or a final-answer claim alone is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The file request link was shared in the group conversation.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The file request link was shared in the group conversation."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create /marketing/strategy.md, write today’s date in the format 'date: dd/mm/yyyy', and add the file to favorites.",
+    "login_username": "maya.patel",
+    "login_usernames": {
+      "nextcloud": "maya.patel"
+    },
+    "require_login": true,
+    "sites": [
+      "nextcloud"
+    ],
+    "task_id": "171",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A folder named 'marketing' exists.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "file_exists",
+                  "params": {
+                    "user": "maya.patel",
+                    "path": "marketing"
+                  },
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": [
+                        200,
+                        207,
+                        301
+                      ]
+                    }
+                  ]
+                },
+                "trust": "both"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A folder named 'marketing' exists."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "strategy.md exists inside the marketing folder.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "file_exists",
+                  "params": {
+                    "user": "maya.patel",
+                    "path": "marketing/strategy.md"
+                  },
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": [
+                        200,
+                        207
+                      ]
+                    }
+                  ]
+                },
+                "trust": "both"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "strategy.md exists inside the marketing folder."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "/marketing/strategy.md contains the task execution date in the format date: dd/mm/yyyy.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "file_exists",
+                  "params": {
+                    "user": "maya.patel",
+                    "path": "marketing/strategy.md"
+                  },
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": 200
+                    },
+                    {
+                      "type": "body_date_equals_task_start",
+                      "pattern": "(?<!\\w)date:[ \\t]*(?P<date>\\d{2}/\\d{2}/\\d{4})(?!\\d)",
+                      "format": "%d/%m/%Y"
+                    }
+                  ]
+                },
+                "trust": "both"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "/marketing/strategy.md contains the task execution date in the format date: dd/mm/yyyy. Use the task execution date supplied in evaluation context, not the grading date or a historical example date. A different date or a final-answer claim alone is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "strategy.md is added to favorites.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "url": "__NEXTCLOUD__/remote.php/dav/files/maya.patel/marketing/strategy.md",
+                  "method": "PROPFIND",
+                  "auth_user": "maya.patel",
+                  "headers": {
+                    "Depth": "0"
+                  },
+                  "body": "<?xml version=\"1.0\"?><d:propfind xmlns:d=\"DAV:\" xmlns:oc=\"http://owncloud.org/ns\"><d:prop><oc:favorite/></d:prop></d:propfind>",
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": 207
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "<oc:favorite>\\s*1\\s*</oc:favorite>"
+                    }
+                  ]
+                },
+                "trust": "both"
+              },
+              {
+                "tier": 1,
+                "type": "ui_state",
+                "config": {
+                  "checks": [
+                    {
+                      "method": "element_exists",
+                      "selector": "[data-cy-files-content]:not(:has(.files-list__loading-icon, .files-list__refresh-icon)):has([data-cy-files-content-breadcrumbs] a.router-link-exact-active:is([href$='?dir=/marketing'], [href$='?dir=%2Fmarketing'])) [data-cy-files-list-row][data-cy-files-list-row-name='strategy.md']:not(.files-list__row--loading):not(:has(.files-list__row--failed)) .files-list__row-icon-favorite:visible"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "strategy.md is added to favorites."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a new folder and copy the bird image, elephant image, and music file from the Safari folder into it. Then, share the folder in a group chat with Susan, Matthew, and Robert.",
+    "login_username": "maya.patel",
+    "login_usernames": {
+      "nextcloud": "maya.patel"
+    },
+    "require_login": true,
+    "sites": [
+      "nextcloud"
+    ],
+    "task_id": "176",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A new destination folder was created for the requested Safari files. Accept any folder name. The original Safari folder or a pre-existing folder alone is insufficient.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "nextcloud_saved_state",
+                "trust": "both",
+                "config": {
+                  "user": "maya.patel",
+                  "criterion": "new_folder",
+                  "baseline_ref": "safari_files"
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new destination folder was created for the requested Safari files. Accept any folder name. The original Safari folder or a pre-existing folder alone is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The Safari source files AfricansafariAug2014-025.jpg (bird), Elephantsafari.jpg (elephant), and one of SafariMusicLoop.mp3, Safariloop.wav.mp3, or safariloop0S22m2.mp3 (music) were copied into the same newly created destination folder. Accept any destination folder name and renamed copies when their content matches the sources. Verify all three requested files and that their originals remain in Safari; a count of three arbitrary files or moving the originals is insufficient.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "nextcloud_saved_state",
+                "trust": "both",
+                "config": {
+                  "user": "maya.patel",
+                  "criterion": "copied_files",
+                  "baseline_ref": "safari_files",
+                  "source_files": [
+                    [
+                      "safari/AfricansafariAug2014-025.jpg"
+                    ],
+                    [
+                      "safari/Elephantsafari.jpg"
+                    ],
+                    [
+                      "safari/SafariMusicLoop.mp3",
+                      "safari/Safariloop.wav.mp3",
+                      "safari/safariloop0S22m2.mp3"
+                    ]
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The Safari source files AfricansafariAug2014-025.jpg (bird), Elephantsafari.jpg (elephant), and one of SafariMusicLoop.mp3, Safariloop.wav.mp3, or safariloop0S22m2.mp3 (music) were copied into the same newly created destination folder. Accept any destination folder name and renamed copies when their content matches the sources. Verify all three requested files and that their originals remain in Safari; a count of three arbitrary files or moving the originals is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A new group conversation created by the current user during this task includes the current user, Susan, Matthew, and Robert. Verify the participants; the existence of an unrelated conversation or a title alone is insufficient. Verify creation during this task; joining or reusing a pre-existing group is insufficient.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "nextcloud_saved_state",
+                "trust": "both",
+                "config": {
+                  "user": "maya.patel",
+                  "criterion": "group",
+                  "participants": [
+                    "Susan",
+                    "Matthew",
+                    "Robert"
+                  ],
+                  "room_baseline_ref": "task_rooms"
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new group conversation created by the current user during this task includes the current user, Susan, Matthew, and Robert. Verify the participants; the existence of an unrelated conversation or a title alone is insufficient. Verify creation during this task; joining or reusing a pre-existing group is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The same newly created destination folder containing copies of the Safari files AfricansafariAug2014-025.jpg (bird), Elephantsafari.jpg (elephant), and one of SafariMusicLoop.mp3, Safariloop.wav.mp3, or safariloop0S22m2.mp3 (music) was shared in a group created during this task with the current user, Susan, Matthew, and Robert. Accept any folder or conversation name and renamed copies when their content matches. The saved share must refer to that folder and conversation; typing a name, sharing unrelated files, or claiming completion alone is insufficient.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "nextcloud_saved_state",
+                "trust": "both",
+                "config": {
+                  "user": "maya.patel",
+                  "criterion": "folder_share",
+                  "participants": [
+                    "Susan",
+                    "Matthew",
+                    "Robert"
+                  ],
+                  "baseline_ref": "safari_files",
+                  "source_files": [
+                    [
+                      "safari/AfricansafariAug2014-025.jpg"
+                    ],
+                    [
+                      "safari/Elephantsafari.jpg"
+                    ],
+                    [
+                      "safari/SafariMusicLoop.mp3",
+                      "safari/Safariloop.wav.mp3",
+                      "safari/safariloop0S22m2.mp3"
+                    ]
+                  ],
+                  "room_baseline_ref": "task_rooms"
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The same newly created destination folder containing copies of the Safari files AfricansafariAug2014-025.jpg (bird), Elephantsafari.jpg (elephant), and one of SafariMusicLoop.mp3, Safariloop.wav.mp3, or safariloop0S22m2.mp3 (music) was shared in a group created during this task with the current user, Susan, Matthew, and Robert. Accept any folder or conversation name and renamed copies when their content matches. The saved share must refer to that folder and conversation; typing a name, sharing unrelated files, or claiming completion alone is insufficient."
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "baseline": [
+        {
+          "name": "safari_files",
+          "provider": "webdav_files",
+          "params": {
+            "user": "maya.patel",
+            "include_dirs": true,
+            "include_ids": true
+          }
+        },
+        {
+          "name": "task_rooms",
+          "provider": "talk_rooms",
+          "params": {
+            "user": "maya.patel"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Add all the CEOs of current and previous leads to the contacts on NextCloud.",
+    "login_usernames": {
+      "pipedrive": "admin@local.host",
+      "nextcloud": "maya.patel"
+    },
+    "require_login": true,
+    "sites": [
+      "nextcloud",
+      "pipedrive"
+    ],
+    "task_id": "303",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A document in Nextcloud is created",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The Pipedrive CEOs (James Smith, Charles Jackson, Joshua Torres, and Jeffrey Diaz) are added as contacts in the task account’s Nextcloud Contacts address book, with their available contact information. Creating a document alone does not satisfy the task intent (the source rubric mistakenly calls the result a document)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Carry over James Smith",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "both",
+                "config": {
+                  "api": "contacts_report",
+                  "params": {
+                    "user": "maya.patel"
+                  },
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": 207
+                    },
+                    {
+                      "type": "carddav_contact",
+                      "name": "James Smith",
+                      "email": "james.smith@techcorp.io",
+                      "phone": "+1-200-555-1000",
+                      "company": "TechCorp Inc.",
+                      "title": "CEO"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "James Smith appears in Nextcloud Contacts with the available contact information copied from the corresponding Pipedrive CEO contact. Merely mentioning the name or viewing a pre-existing unrelated contact is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Carry over Charles Jackson",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "both",
+                "config": {
+                  "api": "contacts_report",
+                  "params": {
+                    "user": "maya.patel"
+                  },
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": 207
+                    },
+                    {
+                      "type": "carddav_contact",
+                      "name": "Charles Jackson",
+                      "email": "charles.jackson@atlasconsulting.com",
+                      "phone": "+1-218-555-1018",
+                      "company": "Atlas Consulting Group",
+                      "title": "CEO"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Charles Jackson appears in Nextcloud Contacts with the available contact information copied from the corresponding Pipedrive CEO contact. Merely mentioning the name or viewing a pre-existing unrelated contact is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Carry over Joshua Torres",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "both",
+                "config": {
+                  "api": "contacts_report",
+                  "params": {
+                    "user": "maya.patel"
+                  },
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": 207
+                    },
+                    {
+                      "type": "carddav_contact",
+                      "name": "Joshua Torres",
+                      "email": "joshua.torres@tidalwavemedia.com",
+                      "phone": "+1-236-555-1036",
+                      "company": "Tidal Wave Media",
+                      "title": "CEO"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Joshua Torres appears in Nextcloud Contacts with the available contact information copied from the corresponding Pipedrive CEO contact. Merely mentioning the name or viewing a pre-existing unrelated contact is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Carry over Jeffrey Diaz",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "both",
+                "config": {
+                  "api": "contacts_report",
+                  "params": {
+                    "user": "maya.patel"
+                  },
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": 207
+                    },
+                    {
+                      "type": "carddav_contact",
+                      "name": "Jeffrey Diaz",
+                      "email": "jeffrey.diaz@brightanalytics.com",
+                      "phone": "+1-254-555-1054",
+                      "company": "Bright Horizons Analytics",
+                      "title": "CEO"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Jeffrey Diaz appears in Nextcloud Contacts with the available contact information copied from the corresponding Pipedrive CEO contact. Merely mentioning the name or viewing a pre-existing unrelated contact is insufficient."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a spreadsheet with everyone's contact information from Mattermost",
+    "login_username": "maya.patel",
+    "login_usernames": {
+      "mattermost": "admin",
+      "nextcloud": "maya.patel"
+    },
+    "previous_task_intent": "create a spreadsheet with everyone's contact information from mattermost",
+    "require_login": true,
+    "sites": [
+      "nextcloud",
+      "mattermost"
+    ],
+    "task_id": "307",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A spreadsheet is created in nextcloud",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A spreadsheet is created in nextcloud"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "Spreadsheet must include the contact information for: John Doe   Jane Smith   Bob Wilson   Alice Johnson   Charlie Brown   Diana Prince   Emma Davis   Frank Miller   Grace Lee   Henry Taylor   Ivy Chen   Kevin Martinez   Lisa Wang   Mike Ross   Natalie Kim",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Spreadsheet must include the contact information for: John Doe   Jane Smith   Bob Wilson   Alice Johnson   Charlie Brown   Diana Prince   Emma Davis   Frank Miller   Grace Lee   Henry Taylor   Ivy Chen   Kevin Martinez   Lisa Wang   Mike Ross   Natalie Kim"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a folder called  11-13kb and move all files of 11-13kb in the drive into it.",
+    "login_username": "maya.patel",
+    "login_usernames": {
+      "nextcloud": "maya.patel"
+    },
+    "previous_task_intent": "Create folder called  11-13kb and move all files 11-13kb in the drive into it",
+    "require_login": true,
+    "sites": [
+      "nextcloud"
+    ],
+    "task_id": "411",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Folder contains: code-scanning-alerts.md",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the task account maya.patel on Nextcloud, the source file code-scanning-alerts.md is moved into the new folder named 11-13kb. Verify the actual source file identity, its saved destination under that folder, and evidence of moving it out of its original location. The source path in the rubric disambiguates the file; preserving its source subdirectory layout inside the destination is not required. A same-named unrelated file, a copy that leaves the source unmoved, a shortcut, a search result, an unrelated folder or a final claim is insufficient. Grade this file independently of the other eight; all nodes must refer to the same requested destination folder."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Folder contains: codeql/codeql-cli.md",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the task account maya.patel on Nextcloud, the source file codeql/codeql-cli.md is moved into the new folder named 11-13kb. Verify the actual source file identity, its saved destination under that folder, and evidence of moving it out of its original location. The source path in the rubric disambiguates the file; preserving its source subdirectory layout inside the destination is not required. A same-named unrelated file, a copy that leaves the source unmoved, a shortcut, a search result, an unrelated folder or a final claim is insufficient. Grade this file independently of the other eight; all nodes must refer to the same requested destination folder."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Folder contains: learning-about-projects/quickstart-for-projects.md",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the task account maya.patel on Nextcloud, the source file learning-about-projects/quickstart-for-projects.md is moved into the new folder named 11-13kb. Verify the actual source file identity, its saved destination under that folder, and evidence of moving it out of its original location. The source path in the rubric disambiguates the file; preserving its source subdirectory layout inside the destination is not required. A same-named unrelated file, a copy that leaves the source unmoved, a shortcut, a search result, an unrelated folder or a final claim is insufficient. Grade this file independently of the other eight; all nodes must refer to the same requested destination folder."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Folder contains: disabling-or-limiting-github-actions-for-your-organization.md",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the task account maya.patel on Nextcloud, the source file disabling-or-limiting-github-actions-for-your-organization.md is moved into the new folder named 11-13kb. Verify the actual source file identity, its saved destination under that folder, and evidence of moving it out of its original location. The source path in the rubric disambiguates the file; preserving its source subdirectory layout inside the destination is not required. A same-named unrelated file, a copy that leaves the source unmoved, a shortcut, a search result, an unrelated folder or a final claim is insufficient. Grade this file independently of the other eight; all nodes must refer to the same requested destination folder."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Folder contains: about-repositories.md",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the task account maya.patel on Nextcloud, the source file about-repositories.md is moved into the new folder named 11-13kb. Verify the actual source file identity, its saved destination under that folder, and evidence of moving it out of its original location. The source path in the rubric disambiguates the file; preserving its source subdirectory layout inside the destination is not required. A same-named unrelated file, a copy that leaves the source unmoved, a shortcut, a search result, an unrelated folder or a final claim is insufficient. Grade this file independently of the other eight; all nodes must refer to the same requested destination folder."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r6",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Folder contains: github-acceptable-use-policies.md",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the task account maya.patel on Nextcloud, the source file github-acceptable-use-policies.md is moved into the new folder named 11-13kb. Verify the actual source file identity, its saved destination under that folder, and evidence of moving it out of its original location. The source path in the rubric disambiguates the file; preserving its source subdirectory layout inside the destination is not required. A same-named unrelated file, a copy that leaves the source unmoved, a shortcut, a search result, an unrelated folder or a final claim is insufficient. Grade this file independently of the other eight; all nodes must refer to the same requested destination folder."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r7",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Folder contains: github-private-information-removal-policy.md",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the task account maya.patel on Nextcloud, the source file github-private-information-removal-policy.md is moved into the new folder named 11-13kb. Verify the actual source file identity, its saved destination under that folder, and evidence of moving it out of its original location. The source path in the rubric disambiguates the file; preserving its source subdirectory layout inside the destination is not required. A same-named unrelated file, a copy that leaves the source unmoved, a shortcut, a search result, an unrelated folder or a final claim is insufficient. Grade this file independently of the other eight; all nodes must refer to the same requested destination folder."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r8",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Folder contains: github-statement-against-modern-slavery-and-child-labor.md",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the task account maya.patel on Nextcloud, the source file github-statement-against-modern-slavery-and-child-labor.md is moved into the new folder named 11-13kb. Verify the actual source file identity, its saved destination under that folder, and evidence of moving it out of its original location. The source path in the rubric disambiguates the file; preserving its source subdirectory layout inside the destination is not required. A same-named unrelated file, a copy that leaves the source unmoved, a shortcut, a search result, an unrelated folder or a final claim is insufficient. Grade this file independently of the other eight; all nodes must refer to the same requested destination folder."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r9",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Folder contains: community-membership.md",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the task account maya.patel on Nextcloud, the source file community-membership.md is moved into the new folder named 11-13kb. Verify the actual source file identity, its saved destination under that folder, and evidence of moving it out of its original location. The source path in the rubric disambiguates the file; preserving its source subdirectory layout inside the destination is not required. A same-named unrelated file, a copy that leaves the source unmoved, a shortcut, a search result, an unrelated folder or a final claim is insufficient. Grade this file independently of the other eight; all nodes must refer to the same requested destination folder."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,18 @@
+id: filter_and_save_question
+name: Filter and save a question
+instruction: >
+  Open the Order Summary question, filter the state to "TX" (Texas), and save
+  the filtered result as a new question named "Texas Orders".
+start_url: http://localhost:3000
+max_steps: 25
+timeout_seconds: 600
+success_criteria:
+  - saved_question_exists
+  - question_name_contains: Texas
+tags:
+  - beginner
+  - question
+  - filter
+notes: >
+  This is the MVP demo task. Uses the order_summary view which has a state
+  column. Texas (TX) has multiple customers in the seed data.

@@ -1,0 +1,40 @@
+# Postfix main.cf — local-delivery only SMTP for Thunderbird container
+
+smtpd_banner = $myhostname ESMTP
+biff = no
+append_dot_mydomain = no
+
+# Local domain
+myhostname = techcorp.local
+mydomain = techcorp.local
+myorigin = $mydomain
+
+# Accept connections only from localhost (Roundcube connects here)
+inet_interfaces = loopback-only
+inet_protocols = ipv4
+
+# Relay nothing externally — local delivery only
+mynetworks = 127.0.0.0/8
+relayhost =
+
+# Virtual mailbox delivery
+virtual_mailbox_domains = techcorp.local
+virtual_mailbox_maps = hash:/etc/postfix/vmailbox
+virtual_mailbox_base = /var/vmail
+virtual_minimum_uid = 100
+virtual_uid_maps = static:5000
+virtual_gid_maps = static:5000
+
+# Disable local system delivery
+mydestination =
+local_recipient_maps =
+local_transport = error:local delivery disabled
+
+# Timeouts / limits appropriate for local container
+maximal_queue_lifetime = 1d
+bounce_queue_lifetime = 1d
+message_size_limit = 10240000
+
+# TLS disabled (local only)
+smtpd_use_tls = no
+smtp_use_tls = no

@@ -1,0 +1,304 @@
+{
+  "description": "Pinned authentic customer-order records and their deterministic allocations.",
+  "order_dataset": {
+    "bundled_path": "financial_documents/ecommerce-orders/E-Commerce DataSet.xlsx",
+    "bytes": 5151356,
+    "destination_path": "Sales/Orders/Open Dataset Source/E-Commerce DataSet.xlsx",
+    "sha256": "67cc68d5e87295e622801ac7ec7f095de05ba94eb45c8ebf32cc8531edfe6037"
+  },
+  "order_records": [
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_001.xlsx",
+      "id": "ecommerce-order-001",
+      "line_count": 2,
+      "order_id": "FC__3__296__RS__657__1216__1308861465",
+      "owner": "maya.patel"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_002.xlsx",
+      "id": "ecommerce-order-002",
+      "line_count": 1,
+      "order_id": "FC__3__296__RS__664__1238__58147367",
+      "owner": "maya.patel"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_001.xlsx",
+      "id": "ecommerce-order-003",
+      "line_count": 2,
+      "order_id": "FC__3__296__RS__616__1139__1308857858",
+      "owner": "daniel.brooks"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_002.xlsx",
+      "id": "ecommerce-order-004",
+      "line_count": 1,
+      "order_id": "FC__3__2__RS__2__1__3006075214",
+      "owner": "daniel.brooks"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_003.xlsx",
+      "id": "ecommerce-order-005",
+      "line_count": 2,
+      "order_id": "FC__3__296__RS__616__1139__1308873780",
+      "owner": "maya.patel"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_004.xlsx",
+      "id": "ecommerce-order-006",
+      "line_count": 1,
+      "order_id": "FC__3__296__RS__652__1200__1325959053",
+      "owner": "maya.patel"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_003.xlsx",
+      "id": "ecommerce-order-007",
+      "line_count": 2,
+      "order_id": "FC__3__296__RS__616__1139__1308864965",
+      "owner": "daniel.brooks"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_004.xlsx",
+      "id": "ecommerce-order-008",
+      "line_count": 1,
+      "order_id": "FC__6__281__RS__523__808__237272",
+      "owner": "daniel.brooks"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_005.xlsx",
+      "id": "ecommerce-order-009",
+      "line_count": 2,
+      "order_id": "FC__3__296__RS__652__1200__1326316632",
+      "owner": "maya.patel"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_006.xlsx",
+      "id": "ecommerce-order-010",
+      "line_count": 1,
+      "order_id": "FC__6__281__RS__523__808__238597",
+      "owner": "maya.patel"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_005.xlsx",
+      "id": "ecommerce-order-011",
+      "line_count": 3,
+      "order_id": "FC__3__296__RS__652__1200__1326943077",
+      "owner": "daniel.brooks"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_006.xlsx",
+      "id": "ecommerce-order-012",
+      "line_count": 1,
+      "order_id": "FC__6__281__RS__523__808__243784",
+      "owner": "daniel.brooks"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_007.xlsx",
+      "id": "ecommerce-order-013",
+      "line_count": 5,
+      "order_id": "FC__3__2__RS__69__61__54560582",
+      "owner": "maya.patel"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_008.xlsx",
+      "id": "ecommerce-order-014",
+      "line_count": 1,
+      "order_id": "FC__3__296__RS__664__1238__58138624",
+      "owner": "maya.patel"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_007.xlsx",
+      "id": "ecommerce-order-015",
+      "line_count": 16,
+      "order_id": "FC__3__2__RS__69__61__54560583",
+      "owner": "daniel.brooks"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_008.xlsx",
+      "id": "ecommerce-order-016",
+      "line_count": 1,
+      "order_id": "FC__3__296__RS__664__1238__58137494",
+      "owner": "daniel.brooks"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_009.xlsx",
+      "id": "ecommerce-order-017",
+      "line_count": 2,
+      "order_id": "FC__3__296__RS__652__1200__1327941864",
+      "owner": "maya.patel"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_010.xlsx",
+      "id": "ecommerce-order-018",
+      "line_count": 1,
+      "order_id": "FC__3__296__RS__664__1238__58137952",
+      "owner": "maya.patel"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_009.xlsx",
+      "id": "ecommerce-order-019",
+      "line_count": 2,
+      "order_id": "FC__3__296__RS__616__1139__1308885515",
+      "owner": "daniel.brooks"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_010.xlsx",
+      "id": "ecommerce-order-020",
+      "line_count": 1,
+      "order_id": "FC__3__296__RS__643__1171__1308880174",
+      "owner": "daniel.brooks"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_011.xlsx",
+      "id": "ecommerce-order-021",
+      "line_count": 2,
+      "order_id": "FC__3__296__RS__616__1139__1308878906",
+      "owner": "maya.patel"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_012.xlsx",
+      "id": "ecommerce-order-022",
+      "line_count": 1,
+      "order_id": "FC__3__296__RS__664__1238__57867493",
+      "owner": "maya.patel"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_011.xlsx",
+      "id": "ecommerce-order-023",
+      "line_count": 2,
+      "order_id": "FC__3__296__RS__657__1216__1308895823",
+      "owner": "daniel.brooks"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_012.xlsx",
+      "id": "ecommerce-order-024",
+      "line_count": 1,
+      "order_id": "FC__3__296__RS__652__1200__1326116403",
+      "owner": "daniel.brooks"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_013.xlsx",
+      "id": "ecommerce-order-025",
+      "line_count": 2,
+      "order_id": "FC__3__296__RS__616__1139__1308891553",
+      "owner": "maya.patel"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_014.xlsx",
+      "id": "ecommerce-order-026",
+      "line_count": 1,
+      "order_id": "FC__3__296__RS__616__1139__1308865057",
+      "owner": "maya.patel"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_013.xlsx",
+      "id": "ecommerce-order-027",
+      "line_count": 17,
+      "order_id": "FC__3__2__RS__69__61__54560976",
+      "owner": "daniel.brooks"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_014.xlsx",
+      "id": "ecommerce-order-028",
+      "line_count": 1,
+      "order_id": "FC__3__296__RS__657__1216__1308859699",
+      "owner": "daniel.brooks"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_015.xlsx",
+      "id": "ecommerce-order-029",
+      "line_count": 2,
+      "order_id": "FC__3__296__RS__616__1139__1363378018",
+      "owner": "maya.patel"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_016.xlsx",
+      "id": "ecommerce-order-030",
+      "line_count": 1,
+      "order_id": "FC__3__2__RS__2__1__3006075790",
+      "owner": "maya.patel"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_015.xlsx",
+      "id": "ecommerce-order-031",
+      "line_count": 2,
+      "order_id": "FC__3__296__RS__643__1171__1362978184",
+      "owner": "daniel.brooks"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_016.xlsx",
+      "id": "ecommerce-order-032",
+      "line_count": 1,
+      "order_id": "FC__3__296__RS__664__1238__58090250",
+      "owner": "daniel.brooks"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_017.xlsx",
+      "id": "ecommerce-order-033",
+      "line_count": 2,
+      "order_id": "FC__3__296__RS__652__1200__1367450187",
+      "owner": "maya.patel"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_018.xlsx",
+      "id": "ecommerce-order-034",
+      "line_count": 1,
+      "order_id": "FC__3__296__RS__664__1238__57867568",
+      "owner": "maya.patel"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_017.xlsx",
+      "id": "ecommerce-order-035",
+      "line_count": 6,
+      "order_id": "FC__3__2__RS__69__61__54560590",
+      "owner": "daniel.brooks"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_018.xlsx",
+      "id": "ecommerce-order-036",
+      "line_count": 1,
+      "order_id": "FC__3__296__RS__664__1238__57503124",
+      "owner": "daniel.brooks"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_019.xlsx",
+      "id": "ecommerce-order-037",
+      "line_count": 2,
+      "order_id": "FC__3__296__RS__616__1139__1347793723",
+      "owner": "maya.patel"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_020.xlsx",
+      "id": "ecommerce-order-038",
+      "line_count": 1,
+      "order_id": "FC__3__296__RS__664__1238__57503150",
+      "owner": "maya.patel"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_019.xlsx",
+      "id": "ecommerce-order-039",
+      "line_count": 3,
+      "order_id": "FC__3__44__RS__88__675__MMJPO-1516-11-84749",
+      "owner": "daniel.brooks"
+    },
+    {
+      "document_destination_path": "Sales/Orders/Open Dataset Documents/Customer_Order_020.xlsx",
+      "id": "ecommerce-order-040",
+      "line_count": 1,
+      "order_id": "FC__3__296__RS__643__1171__1308865192",
+      "owner": "daniel.brooks"
+    }
+  ],
+  "sources": {
+    "ecommerce-orders": {
+      "creator": "Debjit Roy and Vishal Bansal",
+      "doi": "10.17632/ggbkd8ck3x.1",
+      "file_url": "https://data.mendeley.com/public-files/datasets/ggbkd8ck3x/files/f128acca-c449-455c-bfc9-1f63de988771/file_downloaded",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "revision": "version 1 (2020-11-23)",
+      "source_url": "https://data.mendeley.com/datasets/ggbkd8ck3x/1",
+      "title": "E-Commerce Dataset"
+    }
+  },
+  "version": 2
+}

@@ -1,0 +1,22 @@
+id: manage_permissions
+name: Manage collection permissions
+instruction: >
+  First, create a new collection called "Sales Reports" if it doesn't exist.
+  Then navigate to its permissions settings and:
+  1. Ensure the Admin group has full access (curate)
+  2. Give the All Users group view access to the collection
+  Save the permission changes.
+start_url: http://localhost:3000
+max_steps: 40
+timeout_seconds: 600
+success_criteria:
+  - collection_permission_set
+  - url_contains: collection
+tags:
+  - advanced
+  - permissions
+  - admin
+notes: >
+  Tests permission management for collections.
+  Requires admin access. Creates the collection if needed.
+  Default groups in Metabase: Administrators, All Users.

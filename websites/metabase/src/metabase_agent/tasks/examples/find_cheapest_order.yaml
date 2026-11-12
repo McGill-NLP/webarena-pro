@@ -1,0 +1,17 @@
+id: find_cheapest_order
+name: Find the cheapest order item
+instruction: >
+  "Find the order item with the lowest unit price in the Order Items table from the sample-db database. Report its Order ID."
+start_url: http://localhost:3000
+start_url: http://localhost:3000/browse/databases
+max_steps: 20
+timeout_seconds: 300
+success_criteria:
+  - response_contains_any: [79, 20, 64, 75, 188, 99, 56, 54, 9, 68, 181, 194, 69, 44, 170, 34]
+tags:
+  - beginner
+  - browse
+  - view
+notes: >
+  Simple browse task - navigate to Order Items and visually identify the lowest price.
+  No sorting required - agent just needs to scan visible data.

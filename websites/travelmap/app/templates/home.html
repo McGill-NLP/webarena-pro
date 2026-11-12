@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <section class="hero">
+    <div>
+      <p class="eyebrow">{{ site_content.hero_eyebrow }}</p>
+      <h1>{{ site_content.hero_title }}</h1>
+      <p class="hero-copy">{{ site_content.hero_copy }}</p>
+      <div class="hero-stat-row">
+        <article class="hero-stat">
+          <strong>{{ marketplace_listing_count }}</strong>
+          <span>homes across the marketplace</span>
+        </article>
+        <article class="hero-stat">
+          <strong>{{ city_count }}</strong>
+          <span>destinations to explore</span>
+        </article>
+        <article class="hero-stat">
+          <strong>4.9+</strong>
+          <span>average guest rating</span>
+        </article>
+      </div>
+    </div>
+    <div class="editorial-stack">
+      {% for card in editorial_cards %}
+        <article class="editorial-card">
+          <img src="{{ card.listing.primary_image }}" alt="{{ card.listing.title }}" />
+          <div class="editorial-card-copy">
+            <span class="eyebrow compact">{{ card.listing.city }}</span>
+            <h2>{{ card.listing.title }}</h2>
+            <p>{{ card.content.tagline }}</p>
+            <a class="inline-link" href="{{ request.app.url_path_for('listing_detail', slug=card.listing.slug) }}">View stay</a>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="panel search-panel">
+    <div class="panel-heading">
+      <div>
+        <p class="eyebrow">Search stays</p>
+        <h2>Refine by city, guests, price, and amenities</h2>
+      </div>
+      <p class="helper-copy">Leave any field blank if you want to keep the search open-ended.</p>
+    </div>
+    <form class="search-grid" method="get" action="/">
+      <label>
+        Search
+        <input type="text" name="q" value="{{ request.query_params.get('q', '') }}" placeholder="Search by city, neighborhood, or style" />
+      </label>
+      <label>
+        City
+        <select name="city">
+          <option value="">Any city</option>
+          {% for option in cities %}
+            <option value="{{ option }}" {% if request.query_params.get('city') == option %}selected{% endif %}>{{ option }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>
+        Guests
+        <input type="number" min="1" name="guests" value="{{ request.query_params.get('guests', '') }}" placeholder="2" />
+      </label>
+      <label>
+        Max Nightly Price
+        <input type="number" min="50" name="max_price" value="{{ request.query_params.get('max_price', '') }}" placeholder="250" />
+      </label>
+      <label>
+        Property type
+        <select name="property_type">
+          <option value="">Any property type</option>
+          {% for option in property_types %}
+            <option value="{{ option }}" {% if request.query_params.get('property_type') == option %}selected{% endif %}>{{ option }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>
+        Amenity
+        <select name="amenity">
+          <option value="">Any amenity</option>
+          {% for option in amenities %}
+            <option value="{{ option }}" {% if request.query_params.get('amenity') == option %}selected{% endif %}>{{ option }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>
+        Sort
+        <select name="sort">
+          {% set selected_sort = request.query_params.get('sort', 'recommended') %}
+          <option value="recommended" {% if selected_sort == 'recommended' %}selected{% endif %}>Recommended</option>
+          <option value="rating" {% if selected_sort == 'rating' %}selected{% endif %}>Top rated</option>
+          <option value="price_low" {% if selected_sort == 'price_low' %}selected{% endif %}>Price: low to high</option>
+          <option value="price_high" {% if selected_sort == 'price_high' %}selected{% endif %}>Price: high to low</option>
+        </select>
+      </label>
+      <button class="primary-button wide-button" type="submit">Update Search</button>
+    </form>
+  </section>
+
+  <section class="section-header">
+    <div>
+      <p class="eyebrow">Guest favorites</p>
+      <h2>{{ results_count }} home{{ "" if results_count == 1 else "s" }} in view</h2>
+    </div>
+    {% if results_count != marketplace_listing_count %}
+      <span class="helper-copy">Showing filtered matches from {{ marketplace_listing_count }} total homes.</span>
+    {% else %}
+      <span class="helper-copy">Curated homes for quick city breaks, longer weekends, and slower trips.</span>
+    {% endif %}
+  </section>
+
+  <section class="listing-grid">
+    {% for card in home_cards %}
+      {% set listing = card.listing %}
+      <article class="listing-card">
+        <div class="card-image-shell">
+          <a class="image-frame" href="{{ request.app.url_path_for('listing_detail', slug=listing.slug) }}">
+            <img src="{{ listing.primary_image }}" alt="{{ listing.title }}" />
+          </a>
+          <span class="card-badge">{{ card.card_meta.label }}</span>
+        </div>
+        <div class="listing-card-body">
+          <h3><a href="{{ request.app.url_path_for('listing_detail', slug=listing.slug) }}">{{ listing.title }}</a></h3>
+          <p class="listing-card-subline">{{ card.card_meta.date_range }}</p>
+          <div class="card-price-row">
+            <span><strong>{{ card.card_meta.total_price_display }}</strong></span>
+            <span>★ {{ card.card_meta.rating_display }}</span>
+          </div>
+        </div>
+      </article>
+    {% endfor %}
+  </section>
+
+  {% if not home_cards %}
+    <section class="empty-state">
+      <h3>No listings matched those filters.</h3>
+      <p>Try widening the city, amenity, or price filters to bring more homes back into view.</p>
+    </section>
+  {% endif %}
+
+  {% if total_pages > 1 %}
+    <nav class="pagination" aria-label="Listing pages">
+      {% if current_page > 1 %}
+        <a class="secondary-button" href="{{ request.url.include_query_params(page=current_page - 1) }}">Previous</a>
+      {% endif %}
+      <span>Page {{ current_page }} of {{ total_pages }}</span>
+      {% if current_page < total_pages %}
+        <a class="secondary-button" href="{{ request.url.include_query_params(page=current_page + 1) }}">Next</a>
+      {% endif %}
+    </nav>
+  {% endif %}
+{% endblock %}

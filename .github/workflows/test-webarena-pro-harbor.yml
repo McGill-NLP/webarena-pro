@@ -1,0 +1,83 @@
+name: Test webarena-pro-harbor
+
+on:
+  pull_request:
+    branches: [main, dev]
+  push:
+    branches: [main, dev]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  harbor-integration:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    defaults:
+      run:
+        working-directory: webarena-pro-harbor
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: astral-sh/setup-uv@v5
+      - name: Configure Ubuntu package downloads
+        run: |
+          # Use Ubuntu's HTTPS archive instead of cloud-provider mirrors.
+          for apt_sources in /etc/apt/sources.list /etc/apt/sources.list.d/ubuntu.sources; do
+            if [ -f "$apt_sources" ]; then
+              sudo sed -i -E 's|mirror\+file:/etc/apt/apt-mirrors.txt|https://archive.ubuntu.com/ubuntu/|g; s|https?://[^ /]*archive\.ubuntu\.com/ubuntu/?|https://archive.ubuntu.com/ubuntu/|g' "$apt_sources"
+            fi
+          done
+          sudo tee /etc/apt/apt.conf.d/80webarena-ci-network > /dev/null <<'APT'
+          Acquire::Retries "2";
+          Acquire::http::Timeout "30";
+          Acquire::https::Timeout "30";
+          APT
+      - name: Install locked adapter and browser dependencies
+        timeout-minutes: 7
+        run: |
+          uv sync --locked --group dev
+          uv run --locked webarena-pro-mcp install
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          uv run --locked python -m playwright install --with-deps chromium
+      - name: Test export, policy, real HTTP MCP, and Core grading
+        env:
+          WP_HARBOR_BROWSER_TESTS: '1'
+        run: |
+          uv run --locked ruff check src tests
+          uv run --locked pytest -q tests ../webarena-pro-core/tests/test_external_website_environment.py ../webarena-pro-core/tests/test_judge_audit.py ../webarena-pro-core/tests/test_judge_cache.py ../webarena-pro-core/tests/test_llm_judge.py ../webarena-pro-mcp/tests/test_environment.py ../webarena-pro-mcp/tests/test_evaluation.py ../webarena-pro-mcp/tests/test_session.py ../webarena-pro-mcp/tests/test_observations.py
+      - name: Build the runtime and install the reference Harbor revision
+        run: |
+          uv run --locked webarena-pro-harbor build-runtime --tag webarena-pro-harbor:issue167
+          uv tool install 'harbor @ git+https://github.com/harbor-framework/harbor.git@981a4b246aef3c68b3d1b5aa27cecb703692b1f9'
+      - name: Run two isolated native Harbor trials
+        env:
+          WP_HARBOR_EVAL_TOKEN: harbor-fixture-only-token
+        run: |
+          uv run --locked python tests/prepare_smoke.py ./exported/smoke
+          uv run --locked webarena-pro-harbor preflight-networks --concurrency 2
+          harbor run -p ./exported/smoke -a oracle -e docker -n 2 -k 2 -o ./jobs --job-name smoke
+          uv run --locked python tests/assert_smoke.py ./jobs/smoke
+      - name: Retain failed setup diagnostics after native Harbor cleanup
+        env:
+          WP_HARBOR_EVAL_TOKEN: harbor-fixture-only-token
+        run: |
+          uv run --locked python tests/prepare_setup_failure.py ./exported/setup-failure
+          if ! harbor run -p ./exported/setup-failure -a oracle -e docker -n 1 -k 1 -o ./jobs --job-name setup-failure; then
+            echo "Harbor reported failure; checking for the specific expected setup error."
+          fi
+          uv run --locked python tests/assert_setup_failure.py ./jobs/setup-failure "$WP_HARBOR_EVAL_TOKEN"
+      - name: Build distributions
+        run: uv build
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: harbor-smoke-results
+          path: webarena-pro-harbor/jobs/

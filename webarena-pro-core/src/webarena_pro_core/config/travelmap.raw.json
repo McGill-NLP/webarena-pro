@@ -1,0 +1,1038 @@
+[
+  {
+    "intent": "Book the cheapest House on the website and book it for this weekend",
+    "login_username": "avery@example.com",
+    "require_login": true,
+    "sites": [
+      "travelmap"
+    ],
+    "task_id": "246",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent selected the cheapest property by using a price-sorting feature or viewing a price-ordered listing; if the agent did not view a sorted listing or equivalent ordering surface showing this, the rubric must be marked fail.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent selected the cheapest property by using a price-sorting feature or viewing a price-ordered listing; if the agent did not view a sorted listing or equivalent ordering surface showing this, the rubric must be marked fail."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent set the booking dates to span from Saturday of the current week to Sunday.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent set the booking dates to span from Saturday of the current week to Sunday."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A booking confirmation or success state is visible for the property \"Montreal Plateau Book Nook\".",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"status\":\\s*\"confirmed\",\\s*\"guest\":\\s*\"avery@example\\.com\",\\s*\"listing\":\\s*\"montreal-plateau-book-nook\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A booking confirmation or success state is visible for the property \"Montreal Plateau Book Nook\"."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "What city has the cheapest average house price and what is it rounded to the dollar give answer in format: City; $XXX",
+    "require_login": true,
+    "sites": [
+      "travelmap"
+    ],
+    "task_id": "247",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The final answer identifies Montreal as the city with the cheapest average house price",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "montreal"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer identifies Montreal as the city with the cheapest average house price"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The final answer follows the required format: “Montreal; $203”.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "montreal; $203"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer follows the required format: “Montreal; $203”."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Read the Leslieville listing details, house rules, and check-in policy, then message Maya asking whether early check-in around 1 PM is possible and whether keypad instructions arrive the same day.",
+    "login_username": "avery@example.com",
+    "login_usernames": {
+      "travelmap": "avery@example.com"
+    },
+    "require_login": true,
+    "sites": [
+      "travelmap"
+    ],
+    "task_id": "248",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Opens and reviews the Leslieville listing details.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "url_regex": "leslieville"
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Opens and reviews the Leslieville listing details."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Reviews the Leslieville house rules.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Reviews the Leslieville house rules."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Reviews the Leslieville check-in policy.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Reviews the Leslieville check-in policy."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Sends Maya a message asking whether early check-in around 1 PM is possible.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"sender\":\\s*\"avery@example.com\",\\s*\"body\":\\s*\"[^\"]*(early[^\\\"]*check|check[- ]?in[^\\\"]*1\\s*pm|1\\s*pm)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Sends Maya a message asking whether early check-in around 1 PM is possible."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Sends Maya a message asking whether keypad instructions arrive the same day.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"sender\":\\s*\"avery@example.com\",\\s*\"body\":\\s*\"[^\"]*keypad"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Sends Maya a message asking whether keypad instructions arrive the same day."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r6",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Inbox shows the new message in the Leslieville thread.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"thread_id\":1,",
+                      "operator": "gte",
+                      "value": 3
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Inbox shows the new message in the Leslieville thread."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r7",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The final response includes a summary of the listing details, house rules, and check-in policy.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final response includes a summary of the listing details, house rules, and check-in policy."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Review the existing Vancouver trip, open the listing, check the bike-storage details, review the existing conversation with Priya in Inbox, then return to Trips and cancel booking BKG-2001.",
+    "login_username": "avery@example.com",
+    "login_usernames": {
+      "travelmap": "avery@example.com"
+    },
+    "require_login": true,
+    "sites": [
+      "travelmap"
+    ],
+    "task_id": "249",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Opens the existing Vancouver trip in Trips and associated vancouver listing",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "url_regex": "(?i)trips"
+                      },
+                      {
+                        "url_regex": "vancouver-seawall-studio"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Opens the existing Vancouver trip in Trips and associated vancouver listing"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Reviews the listing’s bike-storage details and existing Inbox conversation with Priya.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Reviews the listing’s bike-storage details and existing Inbox conversation with Priya."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Cancels booking BKG-2001.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"confirmation_code\":\\s*\"BKG-2001\",\\s*\"status\":\\s*\"canceled\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Cancels booking BKG-2001."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Trips shows BKG-2001 as canceled and The final response summarizes the booking information, bike-storage details, and Priya conversation.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Trips shows BKG-2001 as canceled and The final response summarizes the booking information, bike-storage details, and Priya conversation."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Log out of Avery Chen, then sign in as Jordan Rivera using jordan@example.com with password demo123. Review Jordan’s hosted inventory, block Joshua Tree Artist Dome from June 14-16, 2026, for maintenance, then navigate back through Homes to confirm the listing still loads and shows the added busy dates.",
+    "login_username": "avery@example.com",
+    "login_usernames": {
+      "travelmap": "avery@example.com"
+    },
+    "require_login": true,
+    "sites": [
+      "travelmap"
+    ],
+    "task_id": "250",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Logs out of Avery Chen and signs in as Jordan Rivera using jordan@example.com and password demo123.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "action_regex": "jordan@example\\.com"
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Logs out of Avery Chen and signs in as Jordan Rivera using jordan@example.com and password demo123."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Reviews Jordan’s hosted inventory.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Reviews Jordan’s hosted inventory."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Opens Joshua Tree Artist Dome as a hosted listing.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "url_regex": "joshua-tree-artist-dome"
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Opens Joshua Tree Artist Dome as a hosted listing."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Blocks Joshua Tree Artist Dome from June 14-16, 2026, for maintenance.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"listing\":\\s*\"joshua-tree-artist-dome\",\\s*\"date\":\\s*\"2026-06-14\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"listing\":\\s*\"joshua-tree-artist-dome\",\\s*\"date\":\\s*\"2026-06-15\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Blocks Joshua Tree Artist Dome from June 14-16, 2026, for maintenance."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Navigates back through Homes and reopens or confirms the listing still loads.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Navigates back through Homes and reopens or confirms the listing still loads."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r6",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "June 14, 15 2026, is unavailable on Joshua Tree Artist Dome. The final response summarizes Jordan’s hosted inventory information.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "June 14, 15 2026, is unavailable on Joshua Tree Artist Dome. The final response summarizes Jordan’s hosted inventory information."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Log out of Avery Chen, then sign in as Leo Martinez using leo@example.com with password demo123. Plan a Montreal work trip: search for Montreal, open Montreal Plateau Book Nook, review rules and cancellation details, message Jordan asking about pet approval, then book April 8-11, 2026, for 2 guests and verify both Inbox and Trips.",
+    "login_username": "avery@example.com",
+    "login_usernames": {
+      "travelmap": "avery@example.com"
+    },
+    "require_login": true,
+    "sites": [
+      "travelmap"
+    ],
+    "task_id": "251",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Logs out of Avery Chen and signs in as Leo Martinez using leo@example.com and password demo123.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "action_regex": "leo@example\\.com"
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Logs out of Avery Chen and signs in as Leo Martinez using leo@example.com and password demo123."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Searches for Montreal stays. and opens montreal plateau Book Nook",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "url_regex": "montreal-plateau-book-nook"
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Searches for Montreal stays. and opens montreal plateau Book Nook"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Reviews the listing rules and cancellation details",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Reviews the listing rules and cancellation details"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Sends Jordan a message asking about pet approval.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"sender\":\\s*\"leo@example.com\",\\s*\"body\":\\s*\"[^\"]*pet"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Sends Jordan a message asking about pet approval."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Books Montreal Plateau Book Nook for April 8-11, 2026, for 2 guests.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"guest\":\\s*\"leo@example.com\",\\s*\"listing\":\\s*\"montreal-plateau-book-nook\",\\s*\"check_in\":\\s*\"2026-04-08\",\\s*\"check_out\":\\s*\"2026-04-11\",\\s*\"guests\":\\s*2"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Books Montreal Plateau Book Nook for April 8-11, 2026, for 2 guests."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r6",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Trips shows a Montreal Plateau Book Nook booking for April 8-11, 2026, for 2 guests.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"status\":\\s*\"confirmed\",\\s*\"guest\":\\s*\"leo@example.com\",\\s*\"listing\":\\s*\"montreal-plateau-book-nook\",\\s*\"check_in\":\\s*\"2026-04-08\",\\s*\"check_out\":\\s*\"2026-04-11\",\\s*\"guests\":\\s*2"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Trips shows a Montreal Plateau Book Nook booking for April 8-11, 2026, for 2 guests."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r7",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Inbox contains Leo’s new message to Jordan asking about pet approval.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"sender\":\\s*\"leo@example.com\",\\s*\"body\":\\s*\"[^\"]*pet"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Inbox contains Leo’s new message to Jordan asking about pet approval."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "First, handle the existing Vancouver trip by opening Trips, reviewing booking BKG-2001, opening the associated Vancouver listing, checking the bike-storage details, and reviewing the existing Inbox conversation with Priya. Then return to Trips and cancel booking BKG-2001. After that, find Joshua Tree Artist Dome, read the host bio and policies, save the listing, and send Jordan a message asking whether sunset hot-tub use is allowed and whether cell service is reliable for arrival.",
+    "login_username": "avery@example.com",
+    "login_usernames": {
+      "travelmap": "avery@example.com"
+    },
+    "require_login": true,
+    "sites": [
+      "travelmap"
+    ],
+    "task_id": "252",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Reviews the existing Vancouver trip end-to-end by opening Trips, inspecting booking BKG-2001, opening the associated listing, checking bike-storage details, and reviewing the existing Inbox conversation with Priya.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Reviews the existing Vancouver trip end-to-end by opening Trips, inspecting booking BKG-2001, opening the associated listing, checking bike-storage details, and reviewing the existing Inbox conversation with Priya."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Returns to Trips and cancels booking BKG-2001.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"confirmation_code\":\\s*\"BKG-2001\",\\s*\"status\":\\s*\"canceled\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Returns to Trips and cancels booking BKG-2001."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Finds Joshua Tree Artist Dome, reviews the host bio and policies, saves the listing, and sends Jordan a message asking about both sunset hot-tub use and reliable cell service for arrival.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Finds Joshua Tree Artist Dome, reviews the host bio and policies, saves the listing, and sends Jordan a message asking about both sunset hot-tub use and reliable cell service for arrival."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Trips shows BKG-2001 as canceled. Joshua Tree Artist Dome is saved and Inbox contains a Joshua Tree thread with Avery’s new message to Jordan. The final response summarizes the Vancouver booking, bike-storage details, Priya conversation, Joshua Tree host bio, and Joshua Tree policies.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"confirmation_code\":\\s*\"BKG-2001\",\\s*\"status\":\\s*\"canceled\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"user\":\\s*\"avery@example.com\",\\s*\"listing\":\\s*\"joshua-tree-artist-dome\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"listing\":\\s*\"joshua-tree-artist-dome\",\\s*\"guest\":\\s*\"avery@example.com\""
+                    },
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"sender\":\"avery@example.com\"",
+                      "operator": "gte",
+                      "value": 3
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Trips shows BKG-2001 as canceled. Joshua Tree Artist Dome is saved and Inbox contains a Joshua Tree thread with Avery’s new message to Jordan. The final response summarizes the Vancouver booking, bike-storage details, Priya conversation, Joshua Tree host bio, and Joshua Tree policies."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Of the North American cities with over 1 million people east of the Mississippi River. What city is the cheapest to travel to and stay in from NYC for a vacation between September 4 and 6. Please tell me the city and the overall price.",
+    "login_username": "avery@example.com",
+    "login_usernames": {
+      "travelmap": "avery@example.com"
+    },
+    "previous_task_intent": "of the north american cities with over 1 million people east of the mississippi river what city is the cheapest to travel to and stay in from NYC for a vacation September 4–6, 2026 please tell me city; overall price",
+    "require_login": true,
+    "sites": [
+      "travelmap",
+      "flight-search"
+    ],
+    "task_id": "341",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "should answer: Toronto; $206.54",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "trust": "pass_only",
+                "config": {
+                  "exact_match": "Toronto; $206.54"
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "For the September 4-6, 2026 vacation from NYC, the final answer identifies Toronto as the cheapest qualifying city and gives $206.54 as the combined travel-and-stay total. Equivalent wording and number formatting are allowed. Another city, a different total, a one-way fare or lodging-only amount presented as the total, a list of conflicting alternatives, or negating the Toronto/$206.54 answer does not satisfy the reviewed outcome. The task asks for the city and overall price, not a booking."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find me the median price of a place to stay in Berlin, Madrid, London, and Amsterdam.",
+    "login_username": "avery@example.com",
+    "login_usernames": {
+      "travelmap": "avery@example.com"
+    },
+    "previous_task_intent": "Find me the median price of a place to stay in Berlin, Madrid, London, and Amsterdam",
+    "require_login": true,
+    "sites": [
+      "travelmap"
+    ],
+    "task_id": "416",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Agent answered with Berlin: $100.00, Madrid: $101.00; London;  $102.50, Amsterdam: $272.335",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer gives all four approved TravelMap median listing prices correctly paired with their cities: Berlin $100.00, Madrid $101.00, London $102.50 and Amsterdam $272.335. Accept equivalent numerical notation (for example 100 instead of 100.00) and arbitrary ordering, but preserve the approved values including Amsterdam's three decimal places. A different aggregate such as a mean, swapped cities, missing cities, negated values, unrelated larger numbers containing the targets as substrings or contradictory alternatives are insufficient."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

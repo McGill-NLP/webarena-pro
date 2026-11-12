@@ -1,0 +1,1217 @@
+[
+  {
+    "intent": "Sign up for comp 525",
+    "require_login": true,
+    "sites": [
+      "minerva-lite"
+    ],
+    "task_id": "132",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent retrieved the Course Reference Number (CRN) for \"COMP 525\" from the class search interface.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_regex": "122180"
+                      },
+                      {
+                        "url_regex": "(?i)(comp.*525|122180)"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent retrieved the Course Reference Number (CRN) for \"COMP 525\" from the class search interface."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The agent submitted the add/drop form containing the retrieved CRN for \"COMP 525\".",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"crn\":\\s*\"122180\",\\s*\"student_id\":\\s*260123456(?!\\d)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent submitted the add/drop form containing the retrieved CRN for \"COMP 525\"."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "The course \"COMP 525\" is displayed as a registered class on the final confirmation or schedule view.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"crn\":\\s*\"122180\",\\s*\"student_id\":\\s*260123456(?!\\d)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The course \"COMP 525\" is displayed as a registered class on the final confirmation or schedule view."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Pay off the bill",
+    "login_username": "260123456",
+    "login_usernames": {
+      "minerva-lite": "260123456",
+      "password-manager": "agent1"
+    },
+    "require_login": true,
+    "sites": [
+      "minerva-lite",
+      "password-manager"
+    ],
+    "task_id": "133",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "acount balance is 0",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "all": [
+                      {
+                        "action_contains": "1248.32"
+                      },
+                      {
+                        "url_contains": "pay-bill"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "acount balance is 0"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Sign up for three classes that will most help me complete my degree in the winter",
+    "login_username": "260123456",
+    "login_usernames": {
+      "minerva-lite": "260123456"
+    },
+    "require_login": true,
+    "sites": [
+      "minerva-lite"
+    ],
+    "task_id": "134",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Copy CRN",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "action_regex": "(?i)copy"
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Copy CRN"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Signed up for both of MATH 223 - Linear Algebra - CRN 220068   - MATH 240 - Discrete Structures - CRN 220071COMP 307 - Principles of Web Development - CRN 222174",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"crn\":\\s*\"220068\",\\s*\"student_id\":\\s*260123456(?!\\d)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"crn\":\\s*\"220071\",\\s*\"student_id\":\\s*260123456(?!\\d)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"crn\":\\s*\"222174\",\\s*\"student_id\":\\s*260123456(?!\\d)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Signed up for both of MATH 223 - Linear Algebra - CRN 220068   - MATH 240 - Discrete Structures - CRN 220071COMP 307 - Principles of Web Development - CRN 222174"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "View computer science required courses",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "url_regex": "(?i)general\\?.*comp"
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "View computer science required courses"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Click on the general tab",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "url_regex": "/general"
+                      },
+                      {
+                        "action_regex": "(?i)general"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Click on the general tab"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "signed up for one of: COMP 330 (Theory of Computation)  COMP 350 (Numerical Computing)  COMP 360 (Algorithm Design)  MATH 318 (Mathematical Logic)  MATH 323 (Probability)  MATH 324 (Statistics)  MATH 340 (Discrete Mathematics)",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"crn\":\\s*\"(220037|220038|220082|220083|220089)\",\\s*\"student_id\":\\s*260123456(?!\\d)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "signed up for one of: COMP 330 (Theory of Computation)  COMP 350 (Numerical Computing)  COMP 360 (Algorithm Design)  MATH 318 (Mathematical Logic)  MATH 323 (Probability)  MATH 324 (Statistics)  MATH 340 (Discrete Mathematics)"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "There is a conference in Seattle from October 30 to November 10. If I would miss fewer than 12 classes, book the cheapest flight and accommodation combo.",
+    "login_username": "260123456",
+    "login_usernames": {
+      "minerva-lite": "260123456",
+      "password-manager": "agent1",
+      "travelmap": "avery@example.com"
+    },
+    "previous_task_intent": "Theres a conference a conference on october 30th to november 10th in seattle\n  if I would miss less than 12 classes then book the cheapest flight and\n  accomodations combo",
+    "require_login": true,
+    "sites": [
+      "minerva-lite",
+      "flight-search",
+      "password-manager",
+      "travelmap"
+    ],
+    "task_id": "135",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Checked Alice's Fall 2026 schedule (COMP 206 MWF, COMP 273 MW, MATH 222 TR) and counted 11 missed meetings.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "url_regex": "(?i)schedule|registration"
+                      },
+                      {
+                        "action_regex": "(?i)schedule"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent viewed Alice Chen's Fall 2026 class schedule in Minerva-lite (COMP 206 MWF, COMP 273 MW, MATH 222 TR) and determined she would miss 11 class meetings between Oct 30 and Nov 10, 2026."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Concluded 11 < 12 so the booking should proceed.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent reasoned that 11 missed classes is fewer than the threshold of 12, so it proceeded to book."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Booked the cheapest flight to Seattle for Oct 30 -> Nov 10 (sorted/compared by price) using the card from the password manager.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "bookings",
+                  "site": "flight-search",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"outbound_flight\":\\s*\\{[^}]*\"origin\":\\s*\"(?:[A-Z]{3})\"[^}]*\"destination\":\\s*\"(?:SEA)\"[^}]*\"departure\":\\s*\"2026-10-30"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"return_flight\":\\s*\\{[^}]*\"origin\":\\s*\"(?:SEA)\"[^}]*\"destination\":\\s*\"(?:[A-Z]{3})\"[^}]*\"departure\":\\s*\"2026-11-10"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A round-trip flight to Seattle departing October 30, 2026 and returning November 10, 2026 was booked, choosing the cheapest option and paying with card details from the password manager."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Booked the cheapest Seattle accommodation for Oct 30 -> Nov 10 on Travelmap.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "travelmap",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"status\":\\s*\"confirmed\",\\s*\"guest\":\\s*\"avery@example\\.com\",\\s*\"listing\":\\s*\"(?:inside-airbnb-united-states-wa-seattle-[^\"]*)\",\\s*\"check_in\":\\s*\"2026-10-30\",\\s*\"check_out\":\\s*\"2026-11-10\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A confirmed Travelmap booking for a Seattle listing exists from October 30 to November 10, 2026, chosen as the cheapest option."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Between the contacts in mattermost and next cloud how many contacts are there total and is there enough space PHYS 230 for everyone to take it together answer in the form: n contacts yes or n contacts no",
+    "login_username": "260123456",
+    "login_usernames": {
+      "mattermost": "john.doe",
+      "minerva-lite": "260123456",
+      "nextcloud": "maya.patel"
+    },
+    "require_login": true,
+    "sites": [
+      "minerva-lite",
+      "mattermost",
+      "nextcloud"
+    ],
+    "task_id": "136",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Final answer in the required format: '46 contacts no' (authored) — '116 contacts no' also accepted for the deployed 100-contact address book.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include_any": [
+                    "46 contacts no",
+                    "116 contacts no"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer follows the format 'n contacts no', reporting the combined Mattermost + Nextcloud contact count (46 with the 30-contact address book the task assumes; 116 with the deployed 100-contact address book) and concluding there is NOT enough space in PHYS 230 (38 open seats)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find the cheapest 4-day round-trip flight from ICN to KIX during the first week of October 2026 that minimizes missed classes based on my current schedule. Then ask whether Emma is available. Also, post the itinerary and ask who else can join the trip (in case). Finally, add this as a new trip in the Travel Budget database, making sure to distinguish it from the existing trip.",
+    "login_username": "260123456",
+    "login_usernames": {
+      "mattermost": "admin",
+      "minerva-lite": "260123456",
+      "notion": "demo@webarena.local",
+      "x-lite": "techvalueinvestor"
+    },
+    "require_login": true,
+    "sites": [
+      "minerva-lite",
+      "flight-search",
+      "mattermost",
+      "notion",
+      "x-lite"
+    ],
+    "task_id": "137",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Found the $186 ICN -> KIX ticket departing Oct 1 and returning Oct 4 (booking is acceptable).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "bookings",
+                  "site": "flight-search",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"outbound_flight\":\\s*\\{[^}]*\"origin\":\\s*\"(?:ICN|GMP)\"[^}]*\"destination\":\\s*\"(?:KIX|ITM)\"[^}]*\"departure\":\\s*\"2026-10-01"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_regex": "(?i)KIX|osaka"
+                      },
+                      {
+                        "url_regex": "(?i)KIX|osaka"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent identified the cheapest ICN -> KIX round trip departing October 1 and returning October 4, 2026 (about $186) that fits Alice's class schedule."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Posted the itinerary on X-lite asking who else can join.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state_table",
+                  "site": "x-lite",
+                  "params": {
+                    "table": "tweets"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"content\":\"[^\"]*(?:(?i:KIX|osaka|ICN|incheon))[^\"]*\"[^}]*\"user_id\":\"u41\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new X-lite post by techvalueinvestor shares the ICN -> KIX October 1-4 itinerary and asks who else can join the trip."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Asked Emma (emma.davis) in a Mattermost direct message whether she is available.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "channel_posts",
+                  "site": "mattermost",
+                  "params": {
+                    "user": "admin"
+                  },
+                  "resolve": [
+                    {
+                      "api": "user_by_name",
+                      "params": {
+                        "user": "admin",
+                        "username": "admin"
+                      },
+                      "extract": "id",
+                      "bind": "u1"
+                    },
+                    {
+                      "api": "user_by_name",
+                      "params": {
+                        "user": "admin",
+                        "username": "emma.davis"
+                      },
+                      "extract": "id",
+                      "bind": "u2"
+                    },
+                    {
+                      "api": "dm_channel",
+                      "params": {
+                        "user": "admin"
+                      },
+                      "extract": "id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:(?i:availab|join|osaka|kix|trip))"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A Mattermost direct message from admin to Emma Davis asks whether she is available for / can join the Osaka trip."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Added the trip as a new row in the Travel Budget database with a property that distinguishes it from the existing Osaka trip.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"page\":\"Travel Budget\",\"workspace\":\"Personal Travel\",\"parent\":\"Travel Plans\",\"property_count\":([6-9]|[1-9][0-9])"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The Travel Budget database in the Personal Travel workspace has a new entry for the October ICN -> KIX trip that is distinguishable from the existing Osaka trip (e.g. a date or a new property/value)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Leave the original waitlist and register for an open section of the same subject with the same professor, as long as it fits my schedule. I prefer a section with a meeting time similar to the original waitlisted class.",
+    "login_username": "260123456",
+    "login_usernames": {
+      "minerva-lite": "260123456"
+    },
+    "require_login": true,
+    "sites": [
+      "minerva-lite"
+    ],
+    "task_id": "138",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Register for CRN 121518.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"crn\":\\s*\"121518\",\\s*\"student_id\":\\s*260123456(?!\\d)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Register for CRN 121518."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Leave the original waitlist (CRN 120043)",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_contains",
+                      "value": "\"crn\":\"120130\",\"position\""
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"crn\":\"120043\",\"position\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Leave the original waitlist (CRN 120043)"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "For next semester, please register me for a course that helps satisfy an unmet requirement for my major. I prefer a section that keeps my schedule clustered on as few days as possible.",
+    "login_username": "260123456",
+    "login_usernames": {
+      "minerva-lite": "260123456"
+    },
+    "require_login": true,
+    "sites": [
+      "minerva-lite"
+    ],
+    "task_id": "139",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Agent should reply that the user has already registered for the required course.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include_any": [
+                    "already registered",
+                    "already enrolled",
+                    "already signed up",
+                    "already taking"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Agent should reply that the user has already registered for the required course."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find the cheapest 4-day round-trip flight from ICN to Osaka during the first week of October 2026 that minimizes missed classes based on my current schedule. Book the travel, and then report which classes I would miss.",
+    "login_username": "260123456",
+    "login_usernames": {
+      "minerva-lite": "260123456"
+    },
+    "require_login": true,
+    "sites": [
+      "minerva-lite",
+      "flight-search"
+    ],
+    "task_id": "140",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Booked the ICN -> KIX round trip departing 2026-10-01 and returning 2026-10-04 (cheapest fit for Alice's schedule).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "bookings",
+                  "site": "flight-search",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"outbound_flight\":\\s*\\{[^}]*\"origin\":\\s*\"(?:ICN|GMP)\"[^}]*\"destination\":\\s*\"(?:KIX|ITM)\"[^}]*\"departure\":\\s*\"2026-10-01"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"return_flight\":\\s*\\{[^}]*\"origin\":\\s*\"(?:KIX|ITM)\"[^}]*\"destination\":\\s*\"(?:ICN|GMP)\"[^}]*\"departure\":\\s*\"2026-10-04"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A round-trip flight from Incheon (ICN) to Osaka (KIX) departing October 1, 2026 and returning October 4, 2026 was booked (the ~$186 cheapest option fitting the class schedule)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Reported that the only class missed is the COMP 206 lecture.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "COMP 206"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer states that the only class Alice would miss is the COMP 206 lecture (Thursday departure after 12:00 PM, Sunday return)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Sign up for 2 classes that I still need to complete my major, with room for at least 3 of my friends for this term (fall).",
+    "login_username": "260123456",
+    "login_usernames": {
+      "minerva-lite": "260123456"
+    },
+    "previous_task_intent": "Sign up for 2 classes that I still need to compete my major with room for at least 3 of my friends for this term (fall)",
+    "require_login": true,
+    "sites": [
+      "minerva-lite"
+    ],
+    "task_id": "410",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Accessed the general tab",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The trajectory shows the agent accessing the General tab in the task student account on Minerva-lite to inspect academic/program information. A final claim, a similarly named browser tab or only viewing another Minerva section does not establish this required action."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Accessed transcript",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The trajectory shows the agent accessing the student transcript in Minerva-lite to inspect completed coursework. A final claim, a registration page or another student's transcript is insufficient. This action is independent of accessing the General tab."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Signed up for MATH 240",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The student account 260123456 completes registration for MATH 240 for the requested Fall term in Minerva-lite. Verify the saved enrolled/registered state for that course and term. Establish from the task trajectory that the selected section had space for the student and at least three friends before registration (at least four open seats), or at least three seats remain immediately afterward. Waitlists, search results, a draft registration, another course/term, an unrelated pre-existing enrollment or a final claim are insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Signed up for MATH 223",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The student account 260123456 completes registration for MATH 223 for the requested Fall term in Minerva-lite. Verify the saved enrolled/registered state for that course and term. Establish from the task trajectory that the selected section had space for the student and at least three friends before registration (at least four open seats), or at least three seats remain immediately afterward. Waitlists, search results, a draft registration, another course/term, an unrelated pre-existing enrollment or a final claim are insufficient."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Sign up for 2 classes that are required for the math major (BA) but not found in a group and 2 classes that are required for the chemistry majors, again not found in a group.",
+    "login_username": "260123456",
+    "login_usernames": {
+      "minerva-lite": "260123456"
+    },
+    "previous_task_intent": "Sign up for 2 classes that are required for the math major (BA) not found in a group and 2 classes that are required for the chemestry majors again not found in a group.",
+    "require_login": true,
+    "sites": [
+      "minerva-lite"
+    ],
+    "task_id": "414",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Agent signed up for 2 of CHEM 213 (Introductory Physical Chemistry 1: Thermodynamics) CHEM 242 (Organic Chemistry 1 for Chemistry and Biochemistry) CHEM 252 (Organic Chemistry 2 for Chemistry and Biochemistry) CHEM 267 (Introductory Chemical Analysis) CHEM 273 (Introductory Physical Chemistry 2: Kinetics and Methods) CHEM 281 (Inorganic Chemistry) CHEM 302 (Introductory Organic Chemistry) CHEM 332 (Biological Chemistry) CHEM 345 (Introduction to Quantum Chemistry) CHEM 355 (Applications of Quantum Chemistry) CHEM 365 (Statistical Thermodynamics) CHEM 367 (Instrumental Analysis) CHEM 377 (Instrumental Analysis) CHEM 381 (Inorganic Chemistry) CHEM 392 (Experimental Chemistry) CHEM 493 (Advanced Physical Chemistry Laboratory) MATH 222 (Calculus 3) PHYS 242 (Electricity and Magnetism)",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the task student account 260123456 on Minerva-lite, the agent completes two new course registrations from the approved Chemistry-major list below, for required courses outside selection groups. Verify distinct course identities and saved enrolled status, not search results, course descriptions, waitlists or final claims. The combined task requests two Chemistry choices and two Math BA choices; a shared course such as MATH 222 must not be counted twice as both a Chemistry slot and a Math slot. Existing unrelated registrations are insufficient. Approved Chemistry list: Agent signed up for 2 of CHEM 213 (Introductory Physical Chemistry 1: Thermodynamics) CHEM 242 (Organic Chemistry 1 for Chemistry and Biochemistry) CHEM 252 (Organic Chemistry 2 for Chemistry and Biochemistry) CHEM 267 (Introductory Chemical Analysis) CHEM 273 (Introductory Physical Chemistry 2: Kinetics and Methods) CHEM 281 (Inorganic Chemistry) CHEM 302 (Introductory Organic Chemistry) CHEM 332 (Biological Chemistry) CHEM 345 (Introduction to Quantum Chemistry) CHEM 355 (Applications of Quantum Chemistry) CHEM 365 (Statistical Thermodynamics) CHEM 367 (Instrumental Analysis) CHEM 377 (Instrumental Analysis) CHEM 381 (Inorganic Chemistry) CHEM 392 (Experimental Chemistry) CHEM 493 (Advanced Physical Chemistry Laboratory) MATH 222 (Calculus 3) PHYS 242 (Electricity and Magnetism)"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Agent signed up for 2 of MATH 222 (Calculus) MATH 235 (Algebra) MATH 236 (Algebra) MATH 242 (Analysis) MATH 243 (Analysis) MATH 323 (Probability)",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the task student account 260123456 on Minerva-lite, the agent completes two new course registrations from MATH 222, MATH 235, MATH 236, MATH 242, MATH 243 and MATH 323, the approved Math BA required courses outside selection groups. Verify distinct course identities and saved enrolled status. The combined task requests four distinct course registrations allocated as two Chemistry and two Math choices; do not double-count a shared registration such as MATH 222 for both groups. Search results, waitlists, existing unrelated registrations or final claims are insufficient."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Pay the bill, then register the expense on Firefly, then switch your major to math, create a course load for this semester, which is 3 courses only courses required and needed for the math major, not found in a selection group.",
+    "login_username": "260123456",
+    "login_usernames": {
+      "firefly": "test@example.com",
+      "minerva-lite": "260123456",
+      "password-manager": "agent1"
+    },
+    "previous_task_intent": "Pay the bill then register the expense on firefly then switch your major to math create a course load for this semester which is 3 courses only courses required and needed for the math major not found in a selection group",
+    "require_login": true,
+    "sites": [
+      "minerva-lite",
+      "password-manager",
+      "firefly"
+    ],
+    "task_id": "418",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Bill paid on minerva using the credentials from password manager",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The Minerva-lite student account 260123456 completes payment of the outstanding bill using the payment credentials retrieved from the task account in Password Manager. Verify both the credential retrieval/use in the trajectory and a saved successful payment/settled bill state. Merely viewing the bill or card, a draft payment, a declined payment, unrelated prior payment or a final claim is insufficient. Do not reproduce secret payment details in the evaluation explanation."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "Firefly expense created of amount $1,248.32",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "After paying the Minerva bill, the task account test@example.com creates and saves a Firefly expense of exactly $1,248.32 for that same payment. Verify the actual new expense transaction, its amount, expense direction and connection to the tuition/bill payment. An income, transfer, budget limit, unrelated pre-existing transaction, wrong amount, unsaved form or final claim is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "Major switched to Math",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The student account 260123456 saves a change of major to Mathematics in Minerva-lite. Verify the current program/major record for the task student, not merely viewing the Math program requirements, a draft selection, another student or a final claim."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [
+            "r3"
+          ],
+          "eval_config": {
+            "rubric": "dropped comp 206 and comp 273",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the same student account and semester, the agent successfully drops both COMP 206 and COMP 273. Verify their removal from active enrolled courses using saved state and trajectory evidence. Viewing the classes, removing only one, dropping another term or merely claiming completion is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [
+            "r3",
+            "r4"
+          ],
+          "eval_config": {
+            "rubric": "signed up for 2 of MATH 236, MATH 242, MATH 243, MATH 249, MATH 316, MATH 323",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The student account 260123456 completes two new registrations from MATH 236, MATH 242, MATH 243, MATH 249, MATH 316 and MATH 323 for the requested semester. These are the approved additional required Math courses outside selection groups; the existing needed Math course plus these two should leave the requested three-course Math load after dropping COMP 206 and COMP 273. Verify distinct course identities and saved enrolled status. Course searches, waitlists, registrations for another term, duplicates, unrelated pre-existing enrollments or final claims are insufficient."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

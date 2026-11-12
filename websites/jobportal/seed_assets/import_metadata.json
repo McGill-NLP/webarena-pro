@@ -1,0 +1,217 @@
+{
+  "seed": 20260710,
+  "sample_size": 10807,
+  "sampling_method": "Proportional stratified reservoir sample without replacement by formatted_work_type, plus deterministic reservoir enrichment for portal categories below 100 jobs",
+  "source_job_type_counts": {
+    "Full-time": 98814,
+    "Internship": 983,
+    "Contract": 12117,
+    "Part-time": 9696,
+    "Temporary": 1190,
+    "Volunteer": 562,
+    "Other": 487
+  },
+  "sampled_job_type_counts": {
+    "Full-time": 8575,
+    "Contract": 1072,
+    "Part-time": 864,
+    "Temporary": 107,
+    "Internship": 84,
+    "Volunteer": 63,
+    "Other": 42
+  },
+  "classified_job_counts": {
+    "ACCOUNTANT": 352,
+    "ADVOCATE": 198,
+    "AGRICULTURE": 100,
+    "APPAREL": 100,
+    "ARTS": 100,
+    "AUTOMOBILE": 145,
+    "AVIATION": 100,
+    "BANKING": 232,
+    "BPO": 186,
+    "BUSINESS-DEVELOPMENT": 493,
+    "CHEF": 138,
+    "CONSTRUCTION": 310,
+    "CONSULTANT": 290,
+    "DESIGNER": 215,
+    "DIGITAL-MEDIA": 581,
+    "ENGINEERING": 1585,
+    "FINANCE": 495,
+    "FITNESS": 100,
+    "HEALTHCARE": 2161,
+    "HR": 243,
+    "INFORMATION-TECHNOLOGY": 947,
+    "PUBLIC-RELATIONS": 8,
+    "SALES": 1382,
+    "TEACHER": 346
+  },
+  "portal_category_counts": {
+    "Accountant": 352,
+    "Advocate": 198,
+    "Agriculture": 100,
+    "Apparel": 100,
+    "Arts": 100,
+    "Automobile": 145,
+    "Aviation": 100,
+    "BPO": 100,
+    "Banking": 232,
+    "Business Development": 407,
+    "Chef": 138,
+    "Construction": 310,
+    "Consultant": 290,
+    "Data & AI": 83,
+    "Design": 86,
+    "Designer": 129,
+    "Digital Media": 403,
+    "Engineering": 1585,
+    "Finance": 495,
+    "Fitness": 100,
+    "HR": 243,
+    "Healthcare": 2161,
+    "Information Technology": 864,
+    "Marketing": 86,
+    "Operations": 86,
+    "Product": 86,
+    "Public Relations": 100,
+    "Sales": 1382,
+    "Teacher": 346
+  },
+  "portal_category_floor": 100,
+  "category_enrichment_counts": {
+    "Agriculture": 86,
+    "Apparel": 32,
+    "Arts": 80,
+    "Aviation": 43,
+    "BPO": 9,
+    "Data & AI": 83,
+    "Design": 86,
+    "Fitness": 38,
+    "Marketing": 86,
+    "Operations": 86,
+    "Product": 86,
+    "Public Relations": 92
+  },
+  "resume_category_counts": {
+    "ACCOUNTANT": 118,
+    "ADVOCATE": 118,
+    "AGRICULTURE": 63,
+    "APPAREL": 97,
+    "ARTS": 103,
+    "AUTOMOBILE": 36,
+    "AVIATION": 117,
+    "BANKING": 115,
+    "BPO": 22,
+    "BUSINESS-DEVELOPMENT": 120,
+    "CHEF": 118,
+    "CONSTRUCTION": 112,
+    "CONSULTANT": 115,
+    "DESIGNER": 107,
+    "DIGITAL-MEDIA": 96,
+    "ENGINEERING": 118,
+    "FINANCE": 118,
+    "FITNESS": 117,
+    "HEALTHCARE": 115,
+    "HR": 110,
+    "INFORMATION-TECHNOLOGY": 120,
+    "PUBLIC-RELATIONS": 111,
+    "SALES": 116,
+    "TEACHER": 102
+  },
+  "resume_count": 2484,
+  "company_count": 5226,
+  "sign_in_employer_count": 20,
+  "sign_in_employers": [
+    {
+      "company": "Advance Auto Parts",
+      "username": "linkedin_employer_9185"
+    },
+    {
+      "company": "Capital One",
+      "username": "linkedin_employer_1419"
+    },
+    {
+      "company": "CareerStaff Unlimited",
+      "username": "linkedin_employer_3706049"
+    },
+    {
+      "company": "Circle K",
+      "username": "linkedin_employer_12446"
+    },
+    {
+      "company": "Cogent Communications",
+      "username": "linkedin_employer_163139"
+    },
+    {
+      "company": "Dice",
+      "username": "linkedin_employer_6849"
+    },
+    {
+      "company": "Ingersoll Rand",
+      "username": "linkedin_employer_3175"
+    },
+    {
+      "company": "Insight Global",
+      "username": "linkedin_employer_11056"
+    },
+    {
+      "company": "J. Galt",
+      "username": "linkedin_employer_73013724"
+    },
+    {
+      "company": "Liberty Healthcare and Rehabilitation Services",
+      "username": "linkedin_employer_53345529"
+    },
+    {
+      "company": "Lowe's Companies, Inc.",
+      "username": "linkedin_employer_4128"
+    },
+    {
+      "company": "Petco",
+      "username": "linkedin_employer_7795"
+    },
+    {
+      "company": "Sally Beauty",
+      "username": "linkedin_employer_23337"
+    },
+    {
+      "company": "Solomon Page",
+      "username": "linkedin_employer_14352"
+    },
+    {
+      "company": "TEKsystems",
+      "username": "linkedin_employer_2152"
+    },
+    {
+      "company": "The Job Network",
+      "username": "linkedin_employer_167757"
+    },
+    {
+      "company": "Vacasa",
+      "username": "linkedin_employer_1471368"
+    },
+    {
+      "company": "Verizon",
+      "username": "linkedin_employer_1103"
+    },
+    {
+      "company": "VolunteerMatch",
+      "username": "linkedin_employer_22503"
+    },
+    {
+      "company": "Wells Fargo",
+      "username": "linkedin_employer_1235"
+    }
+  ],
+  "employer_password": "LinkedInDemo123!",
+  "sources": {
+    "jobs": {
+      "url": "https://www.kaggle.com/datasets/arshkon/linkedin-job-postings",
+      "license": "CC BY-SA 4.0"
+    },
+    "resumes": {
+      "url": "https://www.kaggle.com/datasets/hassnainzaidi/resume-classification-dataset-for-nlp",
+      "license": "CC0: Public Domain"
+    }
+  }
+}

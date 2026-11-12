@@ -1,0 +1,39 @@
+[project]
+name = "webarena-pro-mcp"
+version = "0.1.0"
+description = "Agent-independent browser and media MCP runtime for WebArena Pro"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    "webarena-pro-core[verifier]",
+    "webarena-pro-media[transcription]",
+    "mcp==2.3.0",
+    "playwright==1.64.1",
+    "openai>=2.0,<3",
+    "httpx>=0.28,<1",
+    "jsonschema>=4.23,<5",
+    "uvicorn>=0.38,<1",
+]
+
+[project.scripts]
+webarena-pro-mcp = "webarena_pro_mcp.cli:main"
+webarena-pro-media-mcp = "webarena_pro_mcp.media_server:main"
+webarena-pro-media-mcp-omni = "webarena_pro_mcp.media_server:omni_main"
+
+[build-system]
+requires = ["uv_build>=0.8,<0.9"]
+build-backend = "uv_build"
+
+[tool.uv.sources]
+webarena-pro-core = { path = "../webarena-pro-core", editable = true }
+webarena-pro-media = { path = "../webarena-pro-media", editable = true }
+
+[dependency-groups]
+dev = ["pytest>=9.0", "pytest-asyncio>=1.0"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = ["browser: real Chromium and Playwright MCP integration (requires installed runtime)"]

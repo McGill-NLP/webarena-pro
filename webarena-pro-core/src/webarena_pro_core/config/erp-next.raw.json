@@ -1,0 +1,1784 @@
+[
+  {
+    "intent": "Look at the first 20 sales invoices, and write down the name of the first 3 invoices that are unpaid in a new page in notion website",
+    "login_username": "agent1@erpnext.local",
+    "login_usernames": {
+      "erp-next": "agent1@erpnext.local",
+      "notion": "demo@webarena.local"
+    },
+    "require_login": true,
+    "sites": [
+      "erp-next",
+      "notion"
+    ],
+    "task_id": "037",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A new Notion page lists the first three unpaid sales invoices: Brussels Consulting SPRL, Helsinki Supply Oy, Ljubljana Commerce doo.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)brussels consulting sprl"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)helsinki supply oy"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)ljubljana commerce doo"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new Notion page contains the names of the first three unpaid sales invoices from ERPNext: Brussels Consulting SPRL, Helsinki Supply Oy and Ljubljana Commerce doo."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Add a new delivery note for customer Boreal Retail Partners East Office with the MAT-DN-RET series with source warehouse Goods In Transit - WAC for one ACOUSTIC-PANEL",
+    "login_username": "agent1@erpnext.local",
+    "login_usernames": {
+      "erp-next": "agent1@erpnext.local"
+    },
+    "previous_task_intent": "Add a new delivery note for customer Boreal Retail Partners East Office with with the MAT-DN-RET series with source warehouse Goods In Transit - WAC for one ACOUSTIC-PANEL",
+    "require_login": true,
+    "sites": [
+      "erp-next"
+    ],
+    "task_id": "038",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Navigated to the Delivery Note section and created a new note.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "url_regex": "(?i)delivery-note"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent navigated to the delivery note section and created a new delivery note."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A delivery note exists for Boreal Retail Partners East Office with series MAT-DN-RET, source warehouse Goods In Transit - WAC, and 1x ACOUSTIC-PANEL.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "resource",
+                  "params": {
+                    "doctype": "Delivery Note",
+                    "query": "filters=[[\"customer_name\",\"like\",\"%Boreal Retail Partners East Office%\"]]&fields=[\"name\",\"customer\",\"customer_name\"]&limit_page_length=0"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"MAT-DN-RET-"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "resource",
+                  "params": {
+                    "doctype": "Delivery Note/{dn_name}",
+                    "query": "limit_page_length=0"
+                  },
+                  "resolve": [
+                    {
+                      "api": "resource",
+                      "params": {
+                        "doctype": "Delivery Note",
+                        "query": "filters=[[\"name\",\"like\",\"MAT-DN-RET-%\"]]&fields=[\"name\"]&limit_page_length=0"
+                      },
+                      "extract": "data.0.name",
+                      "bind": "dn_name"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"customer_name\":\\s*\"Boreal Retail Partners East Office\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"set_warehouse\":\\s*\"Goods In Transit - WAC\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"item_code\":\\s*\"ACOUSTIC-PANEL"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"qty\":\\s*1\\.0"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new delivery note exists for Boreal Retail Partners East Office using the MAT-DN-RET series, source warehouse 'Goods In Transit - WAC', with item ACOUSTIC-PANEL quantity 1."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Comment on the first 4 overdue sales invoices, and comment a reminder of overdue on each of them.",
+    "login_username": "agent1@erpnext.local",
+    "login_usernames": {
+      "erp-next": "agent1@erpnext.local"
+    },
+    "require_login": true,
+    "sites": [
+      "erp-next"
+    ],
+    "task_id": "039",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "At least 4 overdue-themed comments exist on Sales Invoice records (the overdue set is boot-date-dependent, so the check is structural).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "resource",
+                  "params": {
+                    "doctype": "Comment",
+                    "query": "filters=[[\"reference_doctype\",\"=\",\"Sales Invoice\"],[\"comment_type\",\"=\",\"Comment\"]]&fields=[\"name\",\"reference_name\",\"content\"]&limit_page_length=0"
+                  },
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"reference_name\"",
+                      "operator": "gte",
+                      "value": 4
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)overdue"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Each of the first 4 overdue sales invoices (in the default list order) has a new comment reminding about the overdue status."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The comments were placed on the FIRST 4 overdue invoices specifically.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The 4 commented invoices are the first 4 overdue sales invoices in the default list ordering, and each comment relates to the overdue status."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Add the comment “largest mixed order: 20 items.” to the purchase order with the most item rows.",
+    "login_username": "agent1@erpnext.local",
+    "login_usernames": {
+      "erp-next": "agent1@erpnext.local"
+    },
+    "previous_task_intent": "Find the purchase order with the most item rows and comment on it with largest mixed order: 20 items.",
+    "require_login": true,
+    "sites": [
+      "erp-next"
+    ],
+    "task_id": "040",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The comment 'largest mixed order: 20 items.' exists on PUR-ORD-2026-00012 (Central European Parts, remarks 'Seeded PO-010').",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "resource",
+                  "params": {
+                    "doctype": "Comment",
+                    "query": "filters=[[\"reference_doctype\",\"=\",\"Purchase Order\"],[\"reference_name\",\"=\",\"PUR-ORD-2026-00012\"]]&fields=[\"name\",\"content\",\"reference_name\"]&limit_page_length=0"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)largest mixed order:?\\s*20 items"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A comment with the text 'largest mixed order: 20 items.' was added to purchase order PUR-ORD-2026-00012 (the PO with the most item rows, supplier Central European Parts), not to the supplier record."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Which supplier has the purchase order with the highest item counts? Report the item-row count, and total quantity count as well.",
+    "login_username": "agent1@erpnext.local",
+    "login_usernames": {
+      "erp-next": "agent1@erpnext.local"
+    },
+    "previous_task_intent": "Which supplier has the purchase order with the highest item counts?",
+    "require_login": true,
+    "sites": [
+      "erp-next"
+    ],
+    "task_id": "041",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The answer identifies Central European Parts.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "Central European Parts"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer identifies Central European Parts as the supplier."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The answer references PUR-ORD-2026-00012.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "PUR-ORD-2026-00012"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer references purchase order PUR-ORD-2026-00012."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The answer states 20 item rows and total quantity 357.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "20",
+                    "357"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer states that the purchase order has 20 item rows and a total quantity of 357."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a purchase order for a new project, \"Break Room\". From the supplier Euro Office Supplies, order 2 coffee machines and a bookshelf, both required in two weeks from now. Apply a discount of 5%, submit, and tell me how much the order would cost.",
+    "login_username": "agent1@erpnext.local",
+    "login_usernames": {
+      "erp-next": "agent1@erpnext.local"
+    },
+    "require_login": true,
+    "sites": [
+      "erp-next"
+    ],
+    "task_id": "042",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A project named 'Break Room' exists.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "resource",
+                  "params": {
+                    "doctype": "Project",
+                    "query": "filters=[[\"project_name\",\"=\",\"Break Room\"]]&fields=[\"name\"]&limit_page_length=0"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new project named 'Break Room' was created."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A SUBMITTED purchase order for Euro Office Supplies exists with 2x coffee machine, 1x bookshelf, and a 5% discount.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "resource",
+                  "params": {
+                    "doctype": "Purchase Order/{po_name}",
+                    "query": "limit_page_length=0"
+                  },
+                  "resolve": [
+                    {
+                      "api": "resource",
+                      "params": {
+                        "doctype": "Purchase Order",
+                        "query": "filters=[[\"supplier\",\"=\",\"Euro Office Supplies\"],[\"docstatus\",\"=\",1],[\"project\",\"!=\",\"\"]]&fields=[\"name\",\"project\"]&limit_page_length=0&order_by=creation%20desc"
+                      },
+                      "extract": "data.0.name",
+                      "bind": "po_name"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"item_code\":\\s*\"COFFEE-MACH-001\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"item_code\":\\s*\"BOOKSHELF-001\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"additional_discount_percentage\":\\s*5\\.0"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"docstatus\":\\s*1"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A submitted purchase order from Euro Office Supplies exists for the 'Break Room' project with 2 coffee machines, 1 bookshelf, and a 5% discount applied."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "The answer reports the order cost (612.75 euros at standard buying rates).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include_any": [
+                    "612.75",
+                    "612,75"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent answered with the total cost of the order: 612.75 euros (2x coffee machine at 180 + 1x bookshelf at 285, minus 5% discount)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a purchase invoice for Euro Office Supplies latest order with a due date in 1 month from now with taxes of 15%. Reply with the invoice ID.",
+    "login_username": "agent1@erpnext.local",
+    "login_usernames": {
+      "erp-next": "agent1@erpnext.local"
+    },
+    "require_login": true,
+    "sites": [
+      "erp-next"
+    ],
+    "task_id": "043",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A submitted purchase invoice exists for Euro Office Supplies covering the latest order's 11x Laser Printer.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "resource",
+                  "params": {
+                    "doctype": "Purchase Invoice/{pinv_name}",
+                    "query": "limit_page_length=0"
+                  },
+                  "resolve": [
+                    {
+                      "api": "resource",
+                      "params": {
+                        "doctype": "Purchase Invoice",
+                        "query": "filters=[[\"supplier\",\"=\",\"Euro Office Supplies\"]]&fields=[\"name\"]&limit_page_length=0&order_by=creation%20desc"
+                      },
+                      "extract": "data.0.name",
+                      "bind": "pinv_name"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"item_code\":\\s*\"PRINTER-001\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"qty\":\\s*11.0"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"docstatus\":\\s*1"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A submitted purchase invoice exists for Euro Office Supplies' latest order (11 laser printers) with 15% taxes."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The answer replies with the invoice ID (ACC-PINV-2026-00063).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "ACC-PINV-2026-00063"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer states the created invoice's ID. With a fresh environment the next purchase invoice number is ACC-PINV-2026-00063."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a new delivery note for Boreal Retail Partners East Office using the MAT-DN-RET series, source warehouse Goods In Transit - WAC, and one acoustic panel.",
+    "login_username": "agent1@erpnext.local",
+    "login_usernames": {
+      "erp-next": "agent1@erpnext.local"
+    },
+    "previous_task_intent": "Add a new delivery note for customer Boreal Retail Partners East Office with with the MAT-DN-RET series with source warehouse Goods In Transit - WAC for one ACOUSTIC-PANEL",
+    "require_login": true,
+    "sites": [
+      "erp-next"
+    ],
+    "task_id": "044",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Navigated to the Delivery Note section and created a new note.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "url_regex": "(?i)delivery-note"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent navigated to the delivery note section and created a new delivery note."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A delivery note exists for Boreal Retail Partners East Office with series MAT-DN-RET, source warehouse Goods In Transit - WAC, and 1x ACOUSTIC-PANEL-120.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "both",
+                "config": {
+                  "api": "resource",
+                  "params": {
+                    "doctype": "Delivery Note",
+                    "query": "filters=[[\"Delivery Note\",\"customer_name\",\"=\",\"Boreal Retail Partners East Office\"],[\"Delivery Note\",\"name\",\"like\",\"MAT-DN-RET-%\"],[\"Delivery Note\",\"naming_series\",\"=\",\"MAT-DN-RET-.YYYY.-\"],[\"Delivery Note\",\"set_warehouse\",\"=\",\"Goods In Transit - WAC\"],[\"Delivery Note\",\"docstatus\",\"<\",2],[\"Delivery Note Item\",\"item_code\",\"=\",\"ACOUSTIC-PANEL-120\"],[\"Delivery Note Item\",\"qty\",\"=\",1],[\"Delivery Note Item\",\"warehouse\",\"=\",\"Goods In Transit - WAC\"]]&fields=[\"name\"]&limit_page_length=0"
+                  },
+                  "checks": [
+                    {
+                      "type": "json_path",
+                      "path": "data",
+                      "operator": "length_gte",
+                      "value": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new delivery note exists for Boreal Retail Partners East Office using the MAT-DN-RET series, source warehouse 'Goods In Transit - WAC', with item ACOUSTIC-PANEL-120 quantity 1."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Just based on buying and selling data this year what is the profit (don't look at accounting tab) Just give number (no commas or dollar signs, yes decimals yes negative sign if applicable)",
+    "login_username": "agent1@erpnext.local",
+    "login_usernames": {
+      "erp-next": "agent1@erpnext.local"
+    },
+    "require_login": true,
+    "sites": [
+      "erp-next"
+    ],
+    "task_id": "045",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The answer equals this year's selling total minus buying total.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include_any": [
+                    "-187845.95",
+                    "-187846.0"
+                  ]
+                },
+                "trust": "both"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer equals total selling minus total buying for the current year based on the buying/selling dashboards. In this environment that is -187845.95 (selling 190935.5 - buying 378781.45); the answer must be that number (allowing rounding to 2 decimals), negative sign included."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Please put james taylor's  december 2024 order on metabase order summaries into a new sales order in ERP-next. If you need his Companies contact information for a new contact he works at Titan Telecom which can be found in pipedrive. His email is james@<company website>. Disregard any non required fields. He was ordering ASSET-AV-CAMERA. Put delivery date as the day of the order.",
+    "login_username": "agent1@erpnext.local",
+    "login_usernames": {
+      "erp-next": "agent1@erpnext.local",
+      "metabase": "admin@admin.com",
+      "pipedrive": "admin@local.host"
+    },
+    "require_login": true,
+    "sites": [
+      "erp-next",
+      "metabase",
+      "pipedrive"
+    ],
+    "task_id": "046",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A new customer 'Titan Telecom' exists in ERPNext with contact james@titantelecom.net / +1-404-555-2424.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "resource",
+                  "site": "erp-next",
+                  "params": {
+                    "doctype": "Customer",
+                    "query": "filters=[[\"customer_name\",\"like\",\"%Titan Telecom%\"]]&fields=[\"name\",\"customer_name\"]&limit_page_length=0"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"customer_name\":\\s*\"[^\"]*Titan Telecom"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new Customer named Titan Telecom was created in ERPNext using the Pipedrive contact information (james@titantelecom.net, +1-404-555-2424)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A Sales Order for Titan Telecom exists with ASSET-AV-CAMERA at rate 246.04 and delivery date equal to the order date.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "resource",
+                  "site": "erp-next",
+                  "params": {
+                    "doctype": "Sales Order/{so_name}",
+                    "query": "limit_page_length=0"
+                  },
+                  "resolve": [
+                    {
+                      "api": "resource",
+                      "params": {
+                        "doctype": "Sales Order",
+                        "query": "filters=[[\"customer_name\",\"like\",\"%Titan Telecom%\"]]&fields=[\"name\"]&limit_page_length=0"
+                      },
+                      "extract": "data.0.name",
+                      "bind": "so_name"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"customer(_name)?\":\\s*\"[^\"]*Titan Telecom"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"item_code\":\\s*\"ASSET-AV-CAMERA\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"rate\":\\s*246\\.04"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new Sales Order exists in ERPNext for customer Titan Telecom containing item ASSET-AV-CAMERA with a unit rate of 246.04 and a delivery date equal to the order date (James Taylor's December 2024 order #196 from Metabase)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Report how many items are currently available in Stock.",
+    "login_username": "agent2@erpnext.local",
+    "login_usernames": {
+      "erp-next": "agent2@erpnext.local"
+    },
+    "require_login": true,
+    "sites": [
+      "erp-next"
+    ],
+    "task_id": "047",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The answer states the Stock page's Item count (105).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "105"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer states that there are 105 available items in Stock (the Item count shown on the Stock workspace)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a new Quality Goal with the goal “Achieve CPU yields of 80% per wafer”, monitoring frequency None, and one objective requiring CPU yield to reach a target of 80% with UOM Percent.",
+    "login_username": "agent1@erpnext.local",
+    "login_usernames": {
+      "erp-next": "agent1@erpnext.local"
+    },
+    "require_login": true,
+    "sites": [
+      "erp-next"
+    ],
+    "task_id": "049",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A Quality Goal 'Achieve CPU yields of 80% per wafer' exists with frequency None and an objective targeting 80 Percent.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "resource",
+                  "params": {
+                    "doctype": "Quality Goal/{qg_name}",
+                    "query": "limit_page_length=0"
+                  },
+                  "resolve": [
+                    {
+                      "api": "resource",
+                      "params": {
+                        "doctype": "Quality Goal",
+                        "query": "filters=[[\"goal\",\"like\",\"%CPU yields of 80%%\"]]&fields=[\"name\"]&limit_page_length=0"
+                      },
+                      "extract": "data.0.name",
+                      "bind": "qg_name"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"goal\":\\s*\"Achieve CPU yields of 80% per wafer\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"frequency\":\\s*\"None\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"objective\":\\s*\"[^\"]*CPU yield"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"target\":\\s*\"?80"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"uom\":\\s*\"Percent\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A saved Quality Goal exists with goal 'Achieve CPU yields of 80% per wafer', monitoring frequency None, and one objective for CPU yield with target 80 and UOM Percent."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "An enabled unit of measure named “Percent” exists after execution.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "resource",
+                  "params": {
+                    "doctype": "UOM/Percent",
+                    "query": ""
+                  },
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": 200
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.name",
+                      "value": "Percent"
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.uom_name",
+                      "value": "Percent"
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.enabled",
+                      "value": 1
+                    }
+                  ]
+                },
+                "trust": "both"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "An enabled unit of measure named “Percent” exists after execution."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create and submit a Sales Invoice for this new customer:\n\n  - Company: Maple Lantern Architecture Inc.\n  - Customer type: Company\n  - Customer group: All Customer Groups\n  - Territory: All Territories\n  - Contact: Evelyn Hart, Sales Operations Manager\n  - Email: evelyn.hart@maplelantern.example\n  - Phone: +1 613-555-0147\n  - Mobile: +1 613-555-0192\n  - Address: Suite 420, 100 Example Boulevard, Ottawa, Ontario K1P 5G4, Canada\n\n  Invoice details:\n\n  - Posting date: August 7, 2026\n  - Due date: August 21, 2026\n  - Price list: Standard Selling\n  - Currency: EUR\n  - Remarks: Ottawa studio workstation setup\n  - 4 × Executive Desk\n  - 8 × 27in 4K Monitor \n  - 4 × Ergo Office Chair \n  - 4 × USB-C Docking Station \n  - 4 × Cable Management Kit",
+    "login_username": "agent1@erpnext.local",
+    "login_usernames": {
+      "erp-next": "agent1@erpnext.local"
+    },
+    "require_login": true,
+    "sites": [
+      "erp-next"
+    ],
+    "task_id": "322",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The invoice contains exactly:       - 4 × DESK-001 at €430       - 8 × MONITOR-001 at €590       - 4 × OFFICE-CHAIR-001 at €150       - 4 × DOCKING-STATION-001 at €181       - 4 × CABLE-MGMT-001 at €34",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "erp-next",
+                  "api": "resource",
+                  "params": {
+                    "doctype": "Sales Invoice/{invoice_name}",
+                    "query": ""
+                  },
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": 200
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.customer_name",
+                      "operator": "equals",
+                      "value": "Maple Lantern Architecture Inc."
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.remarks",
+                      "operator": "equals",
+                      "value": "Ottawa studio workstation setup"
+                    },
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"item_code\"",
+                      "operator": "eq",
+                      "value": 5
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.items.0.item_code",
+                      "operator": "equals",
+                      "value": "DESK-001"
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.items.0.qty",
+                      "operator": "equals",
+                      "value": 4
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.items.0.rate",
+                      "operator": "equals",
+                      "value": 430
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.items.1.item_code",
+                      "operator": "equals",
+                      "value": "MONITOR-001"
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.items.1.qty",
+                      "operator": "equals",
+                      "value": 8
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.items.1.rate",
+                      "operator": "equals",
+                      "value": 590
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.items.2.item_code",
+                      "operator": "equals",
+                      "value": "OFFICE-CHAIR-001"
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.items.2.qty",
+                      "operator": "equals",
+                      "value": 4
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.items.2.rate",
+                      "operator": "equals",
+                      "value": 150
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.items.3.item_code",
+                      "operator": "equals",
+                      "value": "DOCKING-STATION-001"
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.items.3.qty",
+                      "operator": "equals",
+                      "value": 4
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.items.3.rate",
+                      "operator": "equals",
+                      "value": 181
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.items.4.item_code",
+                      "operator": "equals",
+                      "value": "CABLE-MGMT-001"
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.items.4.qty",
+                      "operator": "equals",
+                      "value": 4
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.items.4.rate",
+                      "operator": "equals",
+                      "value": 34
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.currency",
+                      "operator": "equals",
+                      "value": "EUR"
+                    }
+                  ],
+                  "resolve": [
+                    {
+                      "api": "resource",
+                      "site": "erp-next",
+                      "params": {
+                        "doctype": "Sales Invoice",
+                        "query": "filters=[[\"customer_name\",\"=\",\"Maple Lantern Architecture Inc.\"],[\"remarks\",\"=\",\"Ottawa studio workstation setup\"]]&fields=[\"name\"]&order_by=creation desc&limit_page_length=1"
+                      },
+                      "extract": "data.0.name",
+                      "bind": "invoice_name"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The Sales Invoice created for Maple Lantern Architecture Inc. with remarks 'Ottawa studio workstation setup' contains exactly these five item lines, in any order, with these quantities and EUR unit rates: 4 x DESK-001 at 430; 8 x MONITOR-001 at 590; 4 x OFFICE-CHAIR-001 at 150; 4 x DOCKING-STATION-001 at 181; 4 x CABLE-MGMT-001 at 34. There are no additional item lines. Matching item names or prices on unrelated invoices or in the item catalogue does not count."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The net total before tax is €7,900.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "erp-next",
+                  "api": "resource",
+                  "params": {
+                    "doctype": "Sales Invoice/{invoice_name}",
+                    "query": ""
+                  },
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": 200
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.customer_name",
+                      "operator": "equals",
+                      "value": "Maple Lantern Architecture Inc."
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.remarks",
+                      "operator": "equals",
+                      "value": "Ottawa studio workstation setup"
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.net_total",
+                      "operator": "equals",
+                      "value": 7900
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.currency",
+                      "operator": "equals",
+                      "value": "EUR"
+                    }
+                  ],
+                  "resolve": [
+                    {
+                      "api": "resource",
+                      "site": "erp-next",
+                      "params": {
+                        "doctype": "Sales Invoice",
+                        "query": "filters=[[\"customer_name\",\"=\",\"Maple Lantern Architecture Inc.\"],[\"remarks\",\"=\",\"Ottawa studio workstation setup\"]]&fields=[\"name\"]&order_by=creation desc&limit_page_length=1"
+                      },
+                      "extract": "data.0.name",
+                      "bind": "invoice_name"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "That same Maple Lantern Architecture Inc. Sales Invoice for the Ottawa studio workstation setup has a net total before tax of EUR 7,900. A total on another invoice or only in the final chat answer does not count."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A submitted invoice exists with:       - Posting date: August 7, 2026       - Due date: August 21, 2026       - Currency: EUR       - Price list: Standard Selling       - Remarks: Ottawa studio workstation setup",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "erp-next",
+                  "api": "resource",
+                  "params": {
+                    "doctype": "Sales Invoice/{invoice_name}",
+                    "query": ""
+                  },
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": 200
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.customer_name",
+                      "operator": "equals",
+                      "value": "Maple Lantern Architecture Inc."
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.remarks",
+                      "operator": "equals",
+                      "value": "Ottawa studio workstation setup"
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.posting_date",
+                      "operator": "equals",
+                      "value": "2026-08-07"
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.due_date",
+                      "operator": "equals",
+                      "value": "2026-08-21"
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.currency",
+                      "operator": "equals",
+                      "value": "EUR"
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.selling_price_list",
+                      "operator": "equals",
+                      "value": "Standard Selling"
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.docstatus",
+                      "operator": "equals",
+                      "value": 1
+                    }
+                  ],
+                  "resolve": [
+                    {
+                      "api": "resource",
+                      "site": "erp-next",
+                      "params": {
+                        "doctype": "Sales Invoice",
+                        "query": "filters=[[\"customer_name\",\"=\",\"Maple Lantern Architecture Inc.\"],[\"remarks\",\"=\",\"Ottawa studio workstation setup\"]]&fields=[\"name\"]&order_by=creation desc&limit_page_length=1"
+                      },
+                      "extract": "data.0.name",
+                      "bind": "invoice_name"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "That same Maple Lantern Architecture Inc. Sales Invoice is submitted (not draft or cancelled), with posting date August 7, 2026, due date August 21, 2026, currency EUR, price list Standard Selling, and remarks 'Ottawa studio workstation setup'. All attributes must belong to this invoice."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Create Maple Lantern Architecture Inc. as a Company customer.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "erp-next",
+                  "api": "resource",
+                  "params": {
+                    "doctype": "Customer",
+                    "query": "filters=[[\"customer_name\",\"=\",\"Maple Lantern Architecture Inc.\"]]&fields=[\"customer_name\",\"customer_type\"]&limit_page_length=1"
+                  },
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": 200
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.0.customer_name",
+                      "operator": "equals",
+                      "value": "Maple Lantern Architecture Inc."
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.0.customer_type",
+                      "operator": "equals",
+                      "value": "Company"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new ERPNext customer named Maple Lantern Architecture Inc. was created with customer type Company. An Individual customer or a name appearing only in a draft invoice does not satisfy this criterion."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The invoice is submitted.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "erp-next",
+                  "api": "resource",
+                  "params": {
+                    "doctype": "Sales Invoice/{invoice_name}",
+                    "query": ""
+                  },
+                  "checks": [
+                    {
+                      "type": "status_code",
+                      "expected": 200
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.customer_name",
+                      "operator": "equals",
+                      "value": "Maple Lantern Architecture Inc."
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.remarks",
+                      "operator": "equals",
+                      "value": "Ottawa studio workstation setup"
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "data.docstatus",
+                      "operator": "equals",
+                      "value": 1
+                    }
+                  ],
+                  "resolve": [
+                    {
+                      "api": "resource",
+                      "site": "erp-next",
+                      "params": {
+                        "doctype": "Sales Invoice",
+                        "query": "filters=[[\"customer_name\",\"=\",\"Maple Lantern Architecture Inc.\"],[\"remarks\",\"=\",\"Ottawa studio workstation setup\"]]&fields=[\"name\"]&order_by=creation desc&limit_page_length=1"
+                      },
+                      "extract": "data.0.name",
+                      "bind": "invoice_name"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The Sales Invoice created for Maple Lantern Architecture Inc. with remarks 'Ottawa studio workstation setup' was submitted and remains submitted, not draft or cancelled. Submission of an unrelated invoice does not count."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "If I bought all of these items, would I still have enough room in my budget?\n\n  1. Executive Desk\n  2. Mechanical Keyboard\n  3. Wireless Mouse\n  4. HD Webcam\n  5. Laser Printer\n  6. A4 Paper Pack\n  7. Premium Pen Set\n  8. Magnetic Whiteboard\n  9. Ring Binder A4\n  10. Whiteboard Marker Set\n\nUse $C1.5 = 1 Euro\nAnswer with remaining budget (including negative ) and then answer so:\n$XX.XX; YES or -$XX.XX; NO",
+    "login_username": "agent1@erpnext.local",
+    "login_usernames": {
+      "erp-next": "agent1@erpnext.local",
+      "firefly": "test@example.com"
+    },
+    "previous_task_intent": "If I bought all of these Items would I still have enough room in my budget \n\n  1. Executive Desk\n  2. Mechanical Keyboard\n  3. Wireless Mouse\n  4. HD Webcamt\n  5. Laser Printer\n  6. A4 Paper Pack\n  7. Premium Pen Set\n  8. Magnetic Whiteboard\n  9. Ring Binder A4\n  10. Whiteboard Marker Set\n\nUse $C1.5 = 1 Euro\nAnswer with remaining budget (including negative ) and then answer so:\n$XX.XX; YES or -$XX.XX; NO",
+    "require_login": true,
+    "sites": [
+      "erp-next",
+      "firefly"
+    ],
+    "task_id": "323",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Must say: $0.75; YES",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "trust": "pass_only",
+                "config": {
+                  "exact_match": "$0.75; YES"
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Must say: $0.75; YES"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Add month-on-month revenues and expenses from ERP-Next to Firefly (January to May)",
+    "login_username": "agent1@erpnext.local",
+    "login_usernames": {
+      "erp-next": "agent1@erpnext.local",
+      "firefly": "test@example.com"
+    },
+    "previous_task_intent": "Add month on month revenues and expenses from ERP-Next to firefly (January to may)",
+    "require_login": true,
+    "sites": [
+      "erp-next",
+      "firefly"
+    ],
+    "task_id": "326",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "May 31: deposit €24,957.50; withdrawal €38,058.40.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "For the May 31 month-end in the ERPNext reporting period used for this task, the agent created in Firefly one deposit of EUR 24,957.50 representing ERPNext revenue into the EUR ledger account, and one withdrawal of EUR 38,058.40 representing ERPNext expenses out of that same ledger. Both transactions must be recorded on the stated month-end, with the correct deposit/withdrawal direction, exact amounts, and EUR currency. Use the same reporting year and ledger as the other January-May entries in this import. Check the persisted Firefly transactions using the trajectory and UI evidence; ERPNext source totals, a final chat answer, or an unsaved form alone do not count. Pre-existing unrelated transactions, duplicated entries for this month's import, swapped directions, or matching numeric amounts in another currency do not satisfy the criterion."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "April 30: deposit €5,460.00; withdrawal €4,408.80.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "For the April 30 month-end in the ERPNext reporting period used for this task, the agent created in Firefly one deposit of EUR 5,460.00 representing ERPNext revenue into the EUR ledger account, and one withdrawal of EUR 4,408.80 representing ERPNext expenses out of that same ledger. Both transactions must be recorded on the stated month-end, with the correct deposit/withdrawal direction, exact amounts, and EUR currency. Use the same reporting year and ledger as the other January-May entries in this import. Check the persisted Firefly transactions using the trajectory and UI evidence; ERPNext source totals, a final chat answer, or an unsaved form alone do not count. Pre-existing unrelated transactions, duplicated entries for this month's import, swapped directions, or matching numeric amounts in another currency do not satisfy the criterion."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "March 31: deposit €37,761.25; withdrawal €35,792.80.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "For the March 31 month-end in the ERPNext reporting period used for this task, the agent created in Firefly one deposit of EUR 37,761.25 representing ERPNext revenue into the EUR ledger account, and one withdrawal of EUR 35,792.80 representing ERPNext expenses out of that same ledger. Both transactions must be recorded on the stated month-end, with the correct deposit/withdrawal direction, exact amounts, and EUR currency. Use the same reporting year and ledger as the other January-May entries in this import. Check the persisted Firefly transactions using the trajectory and UI evidence; ERPNext source totals, a final chat answer, or an unsaved form alone do not count. Pre-existing unrelated transactions, duplicated entries for this month's import, swapped directions, or matching numeric amounts in another currency do not satisfy the criterion."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "February 28: deposit €8,668.75; withdrawal €5,709.60.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "For the February 28 month-end in the ERPNext reporting period used for this task, the agent created in Firefly one deposit of EUR 8,668.75 representing ERPNext revenue into the EUR ledger account, and one withdrawal of EUR 5,709.60 representing ERPNext expenses out of that same ledger. Both transactions must be recorded on the stated month-end, with the correct deposit/withdrawal direction, exact amounts, and EUR currency. Use the same reporting year and ledger as the other January-May entries in this import. Check the persisted Firefly transactions using the trajectory and UI evidence; ERPNext source totals, a final chat answer, or an unsaved form alone do not count. Pre-existing unrelated transactions, duplicated entries for this month's import, swapped directions, or matching numeric amounts in another currency do not satisfy the criterion."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "January 31: deposit €18,856.25; withdrawal €15,972.80.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "For the January 31 month-end in the ERPNext reporting period used for this task, the agent created in Firefly one deposit of EUR 18,856.25 representing ERPNext revenue into the EUR ledger account, and one withdrawal of EUR 15,972.80 representing ERPNext expenses out of that same ledger. Both transactions must be recorded on the stated month-end, with the correct deposit/withdrawal direction, exact amounts, and EUR currency. Use the same reporting year and ledger as the other January-May entries in this import. Check the persisted Firefly transactions using the trajectory and UI evidence; ERPNext source totals, a final chat answer, or an unsaved form alone do not count. Pre-existing unrelated transactions, duplicated entries for this month's import, swapped directions, or matching numeric amounts in another currency do not satisfy the criterion."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Look into the account receivables, find the largest grand total sales invoice that is overdue, then comment on the customer's account page, reminding them of the overdue invoice, the amount overdue, and the past due due date.",
+    "login_username": "agent1@erpnext.local",
+    "login_usernames": {
+      "erp-next": "agent1@erpnext.local"
+    },
+    "require_login": true,
+    "sites": [
+      "erp-next"
+    ],
+    "task_id": "342",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "\"Bratislava Services sro\" customer page was opened under selling > Customer > \"Bratislava Services sro\"",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The trajectory shows that the agent opened the ERPNext Customer record for Bratislava Services sro, the customer specified by the reviewed largest-overdue-sales-invoice task. This is the customer account page in Selling > Customer, not merely the customer name in an invoice, search result, or final answer. Direct navigation to the same Customer record is acceptable; a particular sequence of menu clicks is not required."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "New comment on the \"Bratislava Services sro\" customer page",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent posts and saves a new overdue-invoice reminder comment on the ERPNext Customer record for Bratislava Services sro in the task account. The comment must concern that customer's overdue sales invoice. Judge the submitted comment and creation evidence in the trajectory. A pre-existing comment, unsaved text, a comment on the Sales Invoice instead of the Customer record, a different customer, an email, or a final claim of completion is insufficient. Date and amount are assessed by the following criteria."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "Reminder comment contains payment due date: 04-04-2026",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The same new overdue-invoice reminder comment posted for this task on the Bratislava Services sro Customer record states that the invoice was due on April 4, 2026 (04-04-2026). Equivalent unambiguous date formatting is acceptable. The date must be part of the actual saved reminder and identified as the past due date, not merely an invoice field visible elsewhere, a comment creation date, an unrelated existing comment, a future proposed due date, or text in the final chat answer."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "Reminder comment contains invoice total € 15,300.00, with either € sign or EUR currency specified",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The same new overdue-invoice reminder comment posted for this task on the Bratislava Services sro Customer record states that the overdue invoice amount is EUR 15,300.00, explicitly using either EUR or the euro symbol. Equivalent numerical formatting is acceptable. Judge the amount and currency together in the saved reminder; a different amount or currency, 15,300 without a currency, a number that only contains 15,300 as a substring, an unrelated existing comment, or a final chat answer does not satisfy the criterion. The amount must describe the overdue invoice, not a hypothetical or negated value."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,9 @@
+node_modules/
+frontend/dist/
+.venv/
+.venv_*/
+__pycache__/
+*.pyc
+.uv_cache/
+.uv_pythons/
+flight-search-arm64.tar

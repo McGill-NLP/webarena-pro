@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>{{ playlist.name }}</h2>
+
+<h3>Videos in Playlist</h3>
+<div class="video-grid">
+    {% for v in videos %}
+    <div class="video-card">
+        <a href="/watch/{{ v.id }}" class="card-link">
+            <div class="thumb-wrap">
+                <img src="{{ v.thumbnail }}" class="thumb">
+                <span class="duration-badge">{{ v.duration or '0:00' }}</span>
+            </div>
+            <div class="video-info">
+                <div class="video-title">{{ v.title }}</div>
+                <div class="video-meta">{{ v.channel }}</div>
+            </div>
+        </a>
+        <div class="card-actions">
+            <a href="/playlists/{{ playlist.id }}/remove/{{ v.id }}" class="btn-small btn-danger">Remove</a>
+        </div>
+    </div>
+    {% else %}
+    <p class="empty-state">This playlist is empty.</p>
+    {% endfor %}
+</div>
+
+<hr>
+
+<h3>Add More Videos</h3>
+<div class="video-grid">
+    {% for v in all_videos %}
+    <div class="video-card">
+        <a href="/watch/{{ v.id }}" class="card-link">
+            <div class="thumb-wrap">
+                <img src="{{ v.thumbnail }}" class="thumb">
+                <span class="duration-badge">{{ v.duration or '0:00' }}</span>
+            </div>
+            <div class="video-info">
+                <div class="video-title">{{ v.title }}</div>
+                <div class="video-meta">{{ v.channel }}</div>
+            </div>
+        </a>
+        <div class="card-actions">
+            <a href="/playlists/{{ playlist.id }}/add/{{ v.id }}"
+               class="btn-small">Add</a>
+        </div>
+    </div>
+    {% else %}
+    <p class="empty-state">No more videos to add.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}

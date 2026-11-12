@@ -1,0 +1,52 @@
+name: Test media package
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  helpers:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        package: [webarena-pro-media]
+    defaults:
+      run:
+        working-directory: ${{ matrix.package }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: astral-sh/setup-uv@v5
+      - name: Configure Ubuntu package downloads
+        run: |
+          # Use Ubuntu's HTTPS archive instead of cloud-provider mirrors.
+          for apt_sources in /etc/apt/sources.list /etc/apt/sources.list.d/ubuntu.sources; do
+            if [ -f "$apt_sources" ]; then
+              sudo sed -i -E 's|mirror\+file:/etc/apt/apt-mirrors.txt|https://archive.ubuntu.com/ubuntu/|g; s|https?://[^ /]*archive\.ubuntu\.com/ubuntu/?|https://archive.ubuntu.com/ubuntu/|g' "$apt_sources"
+            fi
+          done
+          sudo tee /etc/apt/apt.conf.d/80webarena-ci-network > /dev/null <<'APT'
+          Acquire::Retries "2";
+          Acquire::http::Timeout "30";
+          Acquire::https::Timeout "30";
+          APT
+      - name: Install package and browser
+        run: |
+          uv sync --python 3.12 --locked --group dev
+          uv run --locked python -m playwright install --with-deps chromium
+      - name: Install media fixture dependencies
+        if: matrix.package == 'webarena-pro-media'
+        run: sudo apt-get install -y --no-install-recommends ffmpeg
+      - name: Test sync and async APIs
+        run: uv run --locked pytest -q tests
+      - name: Build wheel and source distribution
+        run: uv build

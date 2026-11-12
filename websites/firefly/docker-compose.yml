@@ -1,0 +1,14 @@
+services:
+  app:
+    build: .
+    image: firefly-populated:latest
+    container_name: firefly
+    restart: unless-stopped
+    ports:
+      - "80:8080"
+    # The base fireflyiii/core image declares an anonymous VOLUME at
+    # /var/www/html/storage/upload for user-uploaded attachments. We
+    # back it with tmpfs so no persistent volume is created — nothing
+    # about state leaks outside the image.
+    tmpfs:
+      - /var/www/html/storage/upload

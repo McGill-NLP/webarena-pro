@@ -1,0 +1,12 @@
+{
+"search_input": "[data-test=search-input]",
+"search_button": "[data-test=search-button]",
+"video_card": "[data-test=video-card]",
+"video_title": "[data-test=video-title]",
+"video_channel": "[data-test=video-channel]",
+"video_views": "[data-test=video-views]",
+"watch_add_to_playlist": "[data-test=add-to-playlist]",
+"playlist_name_input": "[data-test=playlist-name-input]",
+"playlist_create_button": "[data-test=playlist-create]",
+"playlist_list": "[data-test=playlist-list]"
+}

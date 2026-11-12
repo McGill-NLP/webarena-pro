@@ -1,0 +1,10 @@
+services:
+  webarena:
+    image: webarena-travelmap:latest
+    build:
+      context: .
+    ports:
+      - "4230:4230"
+    environment:
+      PORT: "4230"
+      SESSION_SECRET: "local-dev-secret"

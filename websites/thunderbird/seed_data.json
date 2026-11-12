@@ -1,0 +1,339 @@
+{
+  "domain": "techcorp.local",
+  "users": [
+    {
+      "email": "alice@techcorp.local",
+      "name": "Alice Chen",
+      "password": "User@Secure123",
+      "role": "Lead Developer"
+    },
+    {
+      "email": "bob@techcorp.local",
+      "name": "Bob Martin",
+      "password": "User@Secure123",
+      "role": "Project Manager"
+    },
+    {
+      "email": "carol@techcorp.local",
+      "name": "Carol White",
+      "password": "User@Secure123",
+      "role": "UX Designer"
+    },
+    {
+      "email": "david@techcorp.local",
+      "name": "David Kim",
+      "password": "User@Secure123",
+      "role": "QA Engineer"
+    }
+  ],
+  "emails": [
+    {
+      "id": "msg-001",
+      "message_id": "<20260105-001@techcorp.local>",
+      "from": "alice@techcorp.local",
+      "to": ["david@techcorp.local"],
+      "subject": "Welcome to the Team!",
+      "date": "2026-01-05T09:00:00",
+      "body": "Hi David,\n\nWelcome to TechCorp! We're thrilled to have you on board as our new QA Engineer.\n\nYour first week will include:\n- Monday: HR onboarding and office tour\n- Tuesday: Meet the engineering team\n- Wednesday: Set up your dev environment (I'll pair with you)\n- Thursday: First look at our test suite\n- Friday: Sprint planning meeting\n\nFeel free to reach out anytime if you have questions. My desk is right next to the coffee machine — come say hi!\n\nLooking forward to working with you,\nAlice",
+      "delivery": {
+        "alice@techcorp.local": {"folder": "Sent", "flags": ["\\Seen"]},
+        "david@techcorp.local": {"folder": "INBOX", "flags": ["\\Seen"]}
+      }
+    },
+    {
+      "id": "msg-002",
+      "message_id": "<20260115-001@techcorp.local>",
+      "from": "bob@techcorp.local",
+      "to": ["alice@techcorp.local", "carol@techcorp.local", "david@techcorp.local"],
+      "subject": "Q1 2026 Planning Meeting - Action Items",
+      "date": "2026-01-15T14:30:00",
+      "body": "Hi team,\n\nGreat discussion today! Here's a summary of action items from the Q1 planning meeting:\n\n1. Alice: Finalize the API refactor by Jan 31\n2. Carol: Deliver updated design system components by Feb 5\n3. David: Set up automated regression test suite by Jan 28\n4. All: Review and comment on the Q1 roadmap doc (link in Notion)\n\nKey milestones:\n- Feb 1: Internal beta of new dashboard\n- Mar 1: Public beta release\n- Mar 31: GA launch\n\nLet's sync again next Monday at 10am. Calendar invite to follow.\n\nThanks,\nBob",
+      "delivery": {
+        "bob@techcorp.local": {"folder": "Sent", "flags": ["\\Seen"]},
+        "alice@techcorp.local": {"folder": "Work", "flags": ["\\Seen"]},
+        "carol@techcorp.local": {"folder": "Archive", "flags": ["\\Seen"]},
+        "david@techcorp.local": {"folder": "INBOX", "flags": ["\\Seen"]}
+      }
+    },
+    {
+      "id": "msg-003",
+      "message_id": "<20260116-001@techcorp.local>",
+      "from": "alice@techcorp.local",
+      "to": ["bob@techcorp.local"],
+      "subject": "Re: Q1 2026 Planning Meeting - Action Items",
+      "date": "2026-01-16T09:15:00",
+      "in_reply_to": "<20260115-001@techcorp.local>",
+      "references": ["<20260115-001@techcorp.local>"],
+      "body": "Hi Bob,\n\nThanks for the summary! The API refactor timeline looks achievable.\n\nOne concern: the authentication module still has some tech debt that might slow things down. I'll schedule a 30-min review with you this week to walk through it — shouldn't be a blocker but good to have visibility.\n\nAlso, I'll need Carol's updated button components before I can finish the API integration layer. Can we sync on that dependency?\n\nCheers,\nAlice\n\n---\nOn Jan 15, Bob Martin wrote:\n> Hi team,\n> Great discussion today! Here's a summary of action items...",
+      "delivery": {
+        "alice@techcorp.local": {"folder": "Sent", "flags": ["\\Seen"]},
+        "bob@techcorp.local": {"folder": "INBOX", "flags": ["\\Seen"]}
+      }
+    },
+    {
+      "id": "msg-004",
+      "message_id": "<20260117-001@techcorp.local>",
+      "from": "david@techcorp.local",
+      "to": ["bob@techcorp.local"],
+      "subject": "Re: Q1 2026 Planning Meeting - Action Items",
+      "date": "2026-01-17T11:00:00",
+      "in_reply_to": "<20260115-001@techcorp.local>",
+      "references": ["<20260115-001@techcorp.local>"],
+      "body": "Hi Bob,\n\nJan 28 deadline for the regression suite works for me. I've already started outlining the test cases for the payment flow.\n\nQuestion: should I include end-to-end tests covering the new API endpoints Alice is refactoring? I want to make sure I'm not duplicating what the unit tests already cover.\n\nThanks,\nDavid\n\n---\nOn Jan 15, Bob Martin wrote:\n> Hi team,\n> Great discussion today!...",
+      "delivery": {
+        "david@techcorp.local": {"folder": "Sent", "flags": ["\\Seen"]},
+        "bob@techcorp.local": {"folder": "INBOX", "flags": ["\\Seen"]}
+      }
+    },
+    {
+      "id": "msg-005",
+      "message_id": "<20260118-001@techcorp.local>",
+      "from": "bob@techcorp.local",
+      "to": ["david@techcorp.local", "alice@techcorp.local"],
+      "subject": "Re: Q1 2026 Planning Meeting - Action Items",
+      "date": "2026-01-18T15:45:00",
+      "in_reply_to": "<20260117-001@techcorp.local>",
+      "references": ["<20260115-001@techcorp.local>", "<20260117-001@techcorp.local>"],
+      "body": "David,\n\nYes, please include E2E tests for Alice's new endpoints. Alice can share the Swagger spec once the refactor is 50% done.\n\nAlice — can you send David the API spec draft by Monday?\n\nThanks both,\nBob",
+      "delivery": {
+        "bob@techcorp.local": {"folder": "Sent", "flags": ["\\Seen"]},
+        "david@techcorp.local": {"folder": "INBOX", "flags": ["\\Seen"]},
+        "alice@techcorp.local": {"folder": "INBOX", "flags": ["\\Seen"]}
+      }
+    },
+    {
+      "id": "msg-006",
+      "message_id": "<20260210-001@techcorp.local>",
+      "from": "carol@techcorp.local",
+      "to": ["alice@techcorp.local", "bob@techcorp.local"],
+      "subject": "Design Review: New Dashboard Mockups",
+      "date": "2026-02-10T10:00:00",
+      "body": "Hi Alice and Bob,\n\nI've finished the first round of mockups for the new dashboard. Key changes:\n\n1. Sidebar redesign — collapsible with icon-only mode\n2. Card-based layout for metrics (replaces the old table)\n3. New color palette (accessible AA compliant)\n4. Mobile-responsive breakpoints added\n\nFigma link: [View Mockups in Figma]\n\nI'd love feedback on the sidebar behavior before I start the hi-fi version. Specifically:\n- Should collapsed state persist across sessions?\n- Any objections to the card layout for the mobile view?\n\nLooking forward to your thoughts!\nCarol",
+      "delivery": {
+        "carol@techcorp.local": {"folder": "Sent", "flags": ["\\Seen"]},
+        "alice@techcorp.local": {"folder": "INBOX", "flags": ["\\Seen"]},
+        "bob@techcorp.local": {"folder": "INBOX", "flags": ["\\Seen"]}
+      }
+    },
+    {
+      "id": "msg-007",
+      "message_id": "<20260211-001@techcorp.local>",
+      "from": "alice@techcorp.local",
+      "to": ["carol@techcorp.local"],
+      "subject": "Re: Design Review: New Dashboard Mockups",
+      "date": "2026-02-11T14:20:00",
+      "in_reply_to": "<20260210-001@techcorp.local>",
+      "references": ["<20260210-001@techcorp.local>"],
+      "body": "Hi Carol,\n\nLove the new direction! The card layout is a huge improvement.\n\nAnswers to your questions:\n1. Yes, sidebar state should definitely persist — I'll add it as a user preference in the API response.\n2. Card layout on mobile looks great. No objections.\n\nOne request: could you add an empty state design for the metrics cards? We'll need it for new users with no data yet.\n\nGreat work!\nAlice\n\n---\nOn Feb 10, Carol White wrote:\n> Hi Alice and Bob,\n> I've finished the first round of mockups...",
+      "delivery": {
+        "alice@techcorp.local": {"folder": "Sent", "flags": ["\\Seen"]},
+        "carol@techcorp.local": {"folder": "INBOX", "flags": ["\\Seen"]}
+      }
+    },
+    {
+      "id": "msg-008",
+      "message_id": "<20260220-001@techcorp.local>",
+      "from": "alice@techcorp.local",
+      "to": ["carol@techcorp.local"],
+      "subject": "Brand Guidelines Update - Action Required",
+      "date": "2026-02-20T11:30:00",
+      "body": "Hi Carol,\n\nThe brand team sent over the updated guidelines. A few things affect our product:\n\n1. New primary blue: #1A56DB (was #2563EB)\n2. Body font changed to Inter (was system-ui)\n3. Border-radius on buttons updated to 8px (was 6px)\n\nCan you update the component library before the Feb 28 code freeze? The changes are small but we want everything consistent for the beta.\n\nFull guidelines doc attached (PDF).\n\nThanks,\nAlice",
+      "delivery": {
+        "alice@techcorp.local": {"folder": "Sent", "flags": ["\\Seen"]},
+        "carol@techcorp.local": {"folder": "INBOX", "flags": ["\\Seen"]}
+      }
+    },
+    {
+      "id": "msg-009",
+      "message_id": "<20260301-001@techcorp.local>",
+      "from": "alice@techcorp.local",
+      "to": ["bob@techcorp.local"],
+      "subject": "Sprint Planning Notes - Sprint 14",
+      "date": "2026-03-01T16:00:00",
+      "body": "Hi Bob,\n\nNotes from today's sprint planning:\n\nCommitted stories:\n- AUTH-234: OAuth2 token refresh (Alice, 5pts)\n- DASH-89: Export to CSV feature (Alice, 3pts)\n- UI-45: Notification badge component (Carol, 2pts)\n- QA-67: Smoke test automation (David, 8pts)\n\nDeferred to Sprint 15:\n- PERF-12: Redis caching layer (needs architecture review)\n\nVelocity: 18pts (team capacity is 20pts, leaving buffer for bugs)\n\nSprint 14 ends March 15. Demo on March 16 at 2pm.\n\nAlice",
+      "delivery": {
+        "alice@techcorp.local": {"folder": "Sent", "flags": ["\\Seen"]},
+        "bob@techcorp.local": {"folder": "INBOX", "flags": ["\\Seen"]}
+      }
+    },
+    {
+      "id": "msg-010",
+      "message_id": "<20260303-001@techcorp.local>",
+      "from": "david@techcorp.local",
+      "to": ["alice@techcorp.local"],
+      "subject": "Critical Bug: Payment Processing Failure on Checkout",
+      "date": "2026-03-03T08:45:00",
+      "body": "Hi Alice,\n\nFound a critical bug in staging — payment processing fails for orders over $999.99.\n\nSteps to reproduce:\n1. Add items totaling $1000+ to cart\n2. Proceed to checkout\n3. Enter any valid card details\n4. Click \"Pay Now\"\n\nExpected: Payment processes successfully\nActual: 500 error — \"Invalid amount format\"\n\nStack trace (truncated):\n  PaymentService.processCharge(amount=1000.00) → TypeError: amount exceeds MAX_INT16\n\nRoot cause (my guess): amount field is int16 in the payment service. Should be int32 or decimal.\n\nThis will block the beta launch. Marking as P0.\n\nDavid",
+      "delivery": {
+        "david@techcorp.local": {"folder": "Sent", "flags": ["\\Seen"]},
+        "alice@techcorp.local": {"folder": "INBOX", "flags": ["\\Seen", "\\Answered"]}
+      }
+    },
+    {
+      "id": "msg-011",
+      "message_id": "<20260303-002@techcorp.local>",
+      "from": "alice@techcorp.local",
+      "to": ["david@techcorp.local"],
+      "subject": "Re: Critical Bug: Payment Processing Failure on Checkout",
+      "date": "2026-03-03T09:30:00",
+      "in_reply_to": "<20260303-001@techcorp.local>",
+      "references": ["<20260303-001@techcorp.local>"],
+      "body": "David,\n\nGood catch — you're right. The amount field in PaymentService was declared as SMALLINT. Fixed in branch `fix/payment-amount-overflow`.\n\nChanges:\n- Migrated `amount` column from SMALLINT to NUMERIC(12,2)\n- Added server-side validation (max $999,999.99)\n- Added regression test in PaymentServiceTest.java\n\nPR: #412 — please review ASAP so we can get this merged today.\n\nAlice\n\n---\nOn Mar 3, David Kim wrote:\n> Found a critical bug in staging...",
+      "delivery": {
+        "alice@techcorp.local": {"folder": "Sent", "flags": ["\\Seen"]},
+        "david@techcorp.local": {"folder": "INBOX", "flags": ["\\Seen", "\\Answered"]}
+      }
+    },
+    {
+      "id": "msg-012",
+      "message_id": "<20260304-001@techcorp.local>",
+      "from": "bob@techcorp.local",
+      "to": ["carol@techcorp.local"],
+      "subject": "Fwd: Critical Bug: Payment Processing Failure on Checkout",
+      "date": "2026-03-04T10:00:00",
+      "in_reply_to": "<20260303-001@techcorp.local>",
+      "references": ["<20260303-001@techcorp.local>"],
+      "body": "Carol,\n\nFYI — Alice is fixing this today. Just wanted you to be aware in case there are any UI-side error handling screens we should update.\n\nLet me know if the current error messages cover the payment failure case.\n\nBob\n\n-------- Forwarded Message --------\nFrom: David Kim <david@techcorp.local>\nDate: Mon, 03 Mar 2026 08:45:00\nSubject: Critical Bug: Payment Processing Failure on Checkout\nTo: alice@techcorp.local\n\nHi Alice,\n\nFound a critical bug in staging — payment processing fails for orders over $999.99...",
+      "delivery": {
+        "bob@techcorp.local": {"folder": "Sent", "flags": ["\\Seen"]},
+        "carol@techcorp.local": {"folder": "INBOX", "flags": []}
+      }
+    },
+    {
+      "id": "msg-013",
+      "message_id": "<20260307-001@techcorp.local>",
+      "from": "carol@techcorp.local",
+      "to": ["david@techcorp.local"],
+      "subject": "UI Testing Request: Dashboard Redesign",
+      "date": "2026-03-07T13:00:00",
+      "body": "Hi David,\n\nThe dashboard redesign components are ready for QA. Can you run through the test cases in TestRail under project \"Dashboard v2\"?\n\nPriority flows to test:\n1. Widget drag-and-drop (Chrome + Firefox)\n2. Date range picker (all browsers)\n3. CSV export button (verify download triggers)\n4. Mobile layout at 375px and 768px\n\nKnown issue to skip: The tooltip on the bar chart flickers in Safari — I have a ticket open for that.\n\nLet me know if anything's unclear!\nCarol",
+      "delivery": {
+        "carol@techcorp.local": {"folder": "Sent", "flags": ["\\Seen"]},
+        "david@techcorp.local": {"folder": "INBOX", "flags": []}
+      }
+    },
+    {
+      "id": "msg-014",
+      "message_id": "<20260308-001@techcorp.local>",
+      "from": "david@techcorp.local",
+      "to": ["carol@techcorp.local"],
+      "subject": "Re: UI Testing Request: Dashboard Redesign",
+      "date": "2026-03-08T16:45:00",
+      "in_reply_to": "<20260307-001@techcorp.local>",
+      "references": ["<20260307-001@techcorp.local>"],
+      "body": "Hi Carol,\n\nTest results for Dashboard v2:\n\nPASS:\n- Widget drag-and-drop: Chrome 122, Firefox 124 ✓\n- Date range picker: Chrome, Firefox, Edge ✓\n- CSV export: Chrome, Firefox ✓\n- Mobile 375px: ✓\n- Mobile 768px: ✓\n\nFAIL:\n- CSV export in Safari 17.3 — download doesn't trigger (new issue, separate from your tooltip bug)\n- Date range picker on Edge: loses focus after selecting start date (intermittent)\n\nI've opened tickets QA-78 and QA-79 for the failures. Let me know if you need screen recordings.\n\nDavid",
+      "delivery": {
+        "david@techcorp.local": {"folder": "Sent", "flags": ["\\Seen"]},
+        "carol@techcorp.local": {"folder": "INBOX", "flags": ["\\Seen"]}
+      }
+    },
+    {
+      "id": "msg-015",
+      "message_id": "<20260310-001@techcorp.local>",
+      "from": "bob@techcorp.local",
+      "to": ["alice@techcorp.local"],
+      "subject": "Weekly Status Update - Week of March 10",
+      "date": "2026-03-10T08:00:00",
+      "body": "Hi Alice,\n\nWeekly status update for stakeholders. Please review and add your section before I send it at 5pm today.\n\n--- Engineering (please fill in) ---\n\nCompleted this week:\n- [Alice to fill in]\n\nIn progress:\n- [Alice to fill in]\n\nBlockers:\n- [Alice to fill in]\n\n--- PM section (Bob) ---\n\nCompleted:\n- Finalized scope for Sprint 15\n- Met with design to prioritize Q2 features\n\nIn progress:\n- Coordinating with marketing on beta launch plan\n\nThanks,\nBob",
+      "delivery": {
+        "bob@techcorp.local": {"folder": "Sent", "flags": ["\\Seen"]},
+        "alice@techcorp.local": {"folder": "INBOX", "flags": []}
+      }
+    },
+    {
+      "id": "msg-016",
+      "message_id": "<20260315-001@techcorp.local>",
+      "from": "carol@techcorp.local",
+      "to": ["alice@techcorp.local", "bob@techcorp.local", "david@techcorp.local"],
+      "subject": "Team Lunch Friday? 🍕",
+      "date": "2026-03-15T12:30:00",
+      "body": "Hey team,\n\nHow does everyone feel about a team lunch this Friday to celebrate hitting the internal beta milestone?\n\nWe agreed on pizza from Pizzeria Napoli on Main St — they do a great group lunch set. The menu name for our planning space should be Pizza.\n\nOptions:\n- 12:00pm\n- 12:30pm\n- 1:00pm\n\nReply with your preference and any dietary restrictions. I'll book once I hear from everyone!\n\nCarol",
+      "delivery": {
+        "carol@techcorp.local": {"folder": "Sent", "flags": ["\\Seen"]},
+        "alice@techcorp.local": {"folder": "INBOX", "flags": []},
+        "bob@techcorp.local": {"folder": "INBOX", "flags": []},
+        "david@techcorp.local": {"folder": "INBOX", "flags": []}
+      }
+    },
+    {
+      "id": "msg-017",
+      "message_id": "<20260318-001@techcorp.local>",
+      "from": "bob@techcorp.local",
+      "to": ["alice@techcorp.local", "carol@techcorp.local", "david@techcorp.local"],
+      "subject": "Sprint Review Tomorrow - 2pm",
+      "date": "2026-03-18T09:00:00",
+      "body": "Hi everyone,\n\nReminder: Sprint 14 Review is tomorrow (Wednesday) at 2pm in the Maple conference room.\n\nPresentation order:\n1. Alice: API refactor demo (10 min)\n2. Carol: Dashboard UI walkthrough (15 min)\n3. David: QA smoke test suite demo (10 min)\n4. Bob: Sprint metrics and Q2 preview (5 min)\n\nPlease make sure your demos are running in staging before the meeting. Zoom link for remote attendees in the calendar invite.\n\nSee you there!\nBob",
+      "delivery": {
+        "bob@techcorp.local": {"folder": "Sent", "flags": ["\\Seen"]},
+        "alice@techcorp.local": {"folder": "INBOX", "flags": []},
+        "carol@techcorp.local": {"folder": "INBOX", "flags": []},
+        "david@techcorp.local": {"folder": "INBOX", "flags": []}
+      }
+    },
+    {
+      "id": "msg-018",
+      "message_id": "<20260320-001@techcorp.local>",
+      "from": "david@techcorp.local",
+      "to": ["alice@techcorp.local"],
+      "subject": "Test Suite Results - Week 12",
+      "date": "2026-07-11T17:00:00",
+      "body": "Hi Alice,\n\nWeek 12 test suite results:\n\nTotal tests: 847\nPassed: 831 (98.1%)\nFailed: 12 (1.4%)\nSkipped: 4 (0.5%)\n\nNew failures this week (all in payment module):\n- PaymentServiceTest::testRefundAmountPrecision (flaky, investigating)\n- PaymentServiceTest::testCurrencyConversionRounding (fails on JDK 21 only)\n\nAll 12 failures are pre-existing from last week — nothing introduced by your latest commits.\n\nFull report attached.\n\nDavid",
+      "delivery": {
+        "david@techcorp.local": {"folder": "Sent", "flags": ["\\Seen"]},
+        "alice@techcorp.local": {"folder": "INBOX", "flags": []}
+      }
+    },
+    {
+      "id": "msg-019",
+      "message_id": "<20251220-001@techcorp.local>",
+      "from": "bob@techcorp.local",
+      "to": ["alice@techcorp.local"],
+      "subject": "Q4 2025 Budget Report",
+      "date": "2025-12-20T10:00:00",
+      "body": "Hi Alice,\n\nPlease find the Q4 budget report attached. No action needed — just keeping engineering leadership in the loop.\n\nHighlights:\n- Cloud infra spend: $24,300 (3% under budget)\n- Tooling licenses: $8,100 (on target)\n- Headcount: 0 variance\n\nFull report is in the Finance folder in Google Drive.\n\nBob",
+      "delivery": {
+        "bob@techcorp.local": {"folder": "Sent", "flags": ["\\Seen"]},
+        "alice@techcorp.local": {"folder": "Trash", "flags": ["\\Seen"]}
+      }
+    },
+    {
+      "id": "msg-020",
+      "message_id": "<20260312-001@newsletter.example>",
+      "from": "noreply@newsletter.example",
+      "to": ["alice@techcorp.local"],
+      "subject": "TechCrunch Daily: AI dominates Q1 fundraising",
+      "date": "2026-03-12T06:00:00",
+      "body": "TechCrunch Daily Newsletter\n\nTop Stories:\n- AI dominates Q1 fundraising with $48B raised\n- Apple announces new iPad Pro lineup\n- GitHub Copilot adds voice coding support\n\nThis email was sent to alice@techcorp.local. To unsubscribe, click here.\nTechCrunch, 410 Townsend St, San Francisco, CA 94107",
+      "delivery": {
+        "alice@techcorp.local": {"folder": "Trash", "flags": []}
+      }
+    },
+    {
+      "id": "msg-021",
+      "message_id": "<20260305-001@techcorp.local>",
+      "from": "david@techcorp.local",
+      "to": ["alice@techcorp.local", "carol@techcorp.local"],
+      "subject": "Bug Report: Dashboard Widget Loading Spinner",
+      "date": "2026-03-05T14:30:00",
+      "body": "Hi Alice and Carol,\n\nMinor bug found in Dashboard v2 — the loading spinner for widgets doesn't disappear after data loads in certain edge cases.\n\nReproduction:\n1. Open dashboard with slow network throttling (Fast 3G in DevTools)\n2. Reload the page\n3. Wait for widgets to load\n\nExpected: Spinner disappears after data loads\nActual: Spinner stays visible over the loaded data (z-index issue?)\n\nScreenshot attached. Happy to dig deeper if helpful.\n\nDavid",
+      "delivery": {
+        "david@techcorp.local": {"folder": "Sent", "flags": ["\\Seen"]},
+        "alice@techcorp.local": {"folder": "INBOX", "flags": ["\\Seen"]},
+        "carol@techcorp.local": {"folder": "INBOX", "flags": ["\\Seen"]}
+      }
+    },
+    {
+      "id": "msg-022",
+      "message_id": "<20260301-002@techcorp.local>",
+      "from": "alice@techcorp.local",
+      "to": ["bob@techcorp.local"],
+      "subject": "Security Review: New Auth Endpoints",
+      "date": "2026-03-01T11:00:00",
+      "body": "Hi Bob,\n\nCompleted the security review for the new OAuth2 endpoints. Summary:\n\nPASS:\n- PKCE implementation correct\n- Token expiry enforced (15min access, 7day refresh)\n- Rate limiting on /auth/token (100 req/min per IP)\n\nACTION REQUIRED:\n- /auth/introspect endpoint returns full token payload — should only return active status and scopes per RFC 7662\n- Missing CORS header validation on /auth/callback\n\nI've opened security tickets SEC-44 and SEC-45. Both are medium severity and should be fixed before beta.\n\nAlice",
+      "delivery": {
+        "alice@techcorp.local": {"folder": "Work", "flags": ["\\Seen"]},
+        "bob@techcorp.local": {"folder": "INBOX", "flags": ["\\Seen"]}
+      }
+    }
+  ]
+}

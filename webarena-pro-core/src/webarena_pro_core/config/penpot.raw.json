@@ -1,0 +1,1619 @@
+[
+  {
+    "intent": "Make a project and in it and then make 5 textboxes with the word sublime in them and arrange them in a pentagon on the screen",
+    "require_login": true,
+    "sites": [
+      "penpot"
+    ],
+    "task_id": "201",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A new project was created (default team has more than the seed Drafts project).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "rpc",
+                  "params": {
+                    "command": "get-projects",
+                    "body": "{\"team-id\": \"{team_id}\"}"
+                  },
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"teamId\"",
+                      "operator": "gte",
+                      "value": 2
+                    }
+                  ],
+                  "resolve": [
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-profile",
+                        "body": "{}"
+                      },
+                      "extract": "defaultTeamId",
+                      "bind": "team_id"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new project was created."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The file contains 5 text shapes, each containing the word 'sublime'.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "rpc",
+                  "params": {
+                    "command": "get-file",
+                    "body": "{\"id\": \"{file_id}\"}"
+                  },
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"type\":\"text\"",
+                      "operator": "gte",
+                      "value": 5
+                    },
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"text\":\"sublime\"",
+                      "operator": "gte",
+                      "value": 5
+                    }
+                  ],
+                  "resolve": [
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-profile",
+                        "body": "{}"
+                      },
+                      "extract": "defaultTeamId",
+                      "bind": "team_id"
+                    },
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-team-recent-files",
+                        "body": "{\"team-id\": \"{team_id}\"}"
+                      },
+                      "extract": "0.id",
+                      "bind": "file_id"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "There are 5 textboxes each containing the word 'sublime'."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "The five textboxes are arranged in a pentagon on the canvas.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The five 'sublime' textboxes are arranged in a pentagon formation on the screen."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a new file with three pages. Rename the pages to Rectangle, Triangle, and Circle, and add the corresponding shape to each page.",
+    "login_username": "admin@penpot.local",
+    "login_usernames": {
+      "penpot": "admin@penpot.local"
+    },
+    "require_login": true,
+    "sites": [
+      "penpot"
+    ],
+    "task_id": "202",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The file has three pages.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "rpc",
+                  "params": {
+                    "command": "get-file",
+                    "body": "{\"id\": \"{file_id}\"}"
+                  },
+                  "checks": [
+                    {
+                      "type": "json_path",
+                      "path": "data.pages",
+                      "operator": "length_gte",
+                      "value": 3
+                    }
+                  ],
+                  "resolve": [
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-profile",
+                        "body": "{}"
+                      },
+                      "extract": "defaultTeamId",
+                      "bind": "team_id"
+                    },
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-team-recent-files",
+                        "body": "{\"team-id\": \"{team_id}\"}"
+                      },
+                      "extract": "0.id",
+                      "bind": "file_id"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The file contains a total of three pages."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "Pages are named Rectangle, Triangle, and Circle.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "rpc",
+                  "params": {
+                    "command": "get-file",
+                    "body": "{\"id\": \"{file_id}\"}"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"(?i:rectangle)\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"(?i:triangle)\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"(?i:circle)\""
+                    }
+                  ],
+                  "resolve": [
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-profile",
+                        "body": "{}"
+                      },
+                      "extract": "defaultTeamId",
+                      "bind": "team_id"
+                    },
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-team-recent-files",
+                        "body": "{\"team-id\": \"{team_id}\"}"
+                      },
+                      "extract": "0.id",
+                      "bind": "file_id"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The three pages are renamed to Rectangle, Triangle, and Circle."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "A rectangle, a triangle (path), and a circle shape exist, each on its matching page.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "rpc",
+                  "params": {
+                    "command": "get-file",
+                    "body": "{\"id\": \"{file_id}\"}"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"type\":\\s*\"rect\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"type\":\\s*\"circle\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"type\":\\s*\"(?:path|bool)\""
+                    }
+                  ],
+                  "resolve": [
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-profile",
+                        "body": "{}"
+                      },
+                      "extract": "defaultTeamId",
+                      "bind": "team_id"
+                    },
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-team-recent-files",
+                        "body": "{\"team-id\": \"{team_id}\"}"
+                      },
+                      "extract": "0.id",
+                      "bind": "file_id"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Each page contains its corresponding shape: a rectangle on the Rectangle page, a triangle on the Triangle page, and a circle on the Circle page."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a new file and draw a rectangle of any size and transform it into an octagon. You can enter edit mode by double-clicking the shape.",
+    "login_username": "admin@penpot.local",
+    "login_usernames": {
+      "penpot": "admin@penpot.local"
+    },
+    "require_login": true,
+    "sites": [
+      "penpot"
+    ],
+    "task_id": "203",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A path shape with at least 8 vertices (>=7 line segments) exists.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "rpc",
+                  "params": {
+                    "command": "get-file",
+                    "body": "{\"id\": \"{file_id}\"}"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"type\":\\s*\"path\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"content\":\"M(?:[^\"L]*L){7}"
+                    }
+                  ],
+                  "resolve": [
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-profile",
+                        "body": "{}"
+                      },
+                      "extract": "defaultTeamId",
+                      "bind": "team_id"
+                    },
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-team-recent-files",
+                        "body": "{\"team-id\": \"{team_id}\"}"
+                      },
+                      "extract": "0.id",
+                      "bind": "file_id"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A rectangle was transformed into a path with eight vertices."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The vertices are adjusted to form an octagon shape.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The eight vertices are arranged to form an octagon shape (roughly regular, convex)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a new file and make a 1000×1000 board named “Base Modal” and design a calendar modal component inside it. The modal should be an 800×800 rectangle with a white background (#ffffff), 12px border radius, and a drop shadow of 0 0 12px #000000 at 15% opacity. Inside the modal, include a 48px “Title” text, a 36px “description” text, and a 700×200 button with background color #dfdfdf and 12px border radius. Then, group the rectangle, texts, and button together.",
+    "login_username": "admin@penpot.local",
+    "login_usernames": {
+      "penpot": "admin@penpot.local"
+    },
+    "require_login": true,
+    "sites": [
+      "penpot"
+    ],
+    "task_id": "204",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A 1000x1000 board named 'Base Modal' exists.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "rpc",
+                  "params": {
+                    "command": "get-file",
+                    "body": "{\"id\": \"{file_id}\"}"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"(?i:base modal)\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"type\":\\s*\"frame\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"width\":\\s*1000"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"height\":\\s*1000"
+                    }
+                  ],
+                  "resolve": [
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-profile",
+                        "body": "{}"
+                      },
+                      "extract": "defaultTeamId",
+                      "bind": "team_id"
+                    },
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-team-recent-files",
+                        "body": "{\"team-id\": \"{team_id}\"}"
+                      },
+                      "extract": "0.id",
+                      "bind": "file_id"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A 1000x1000 board renamed to 'Base Modal' exists."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "An 800x800 rectangle with #ffffff fill, 12px radius, and 0 0 12px #000000 shadow at 15% opacity exists.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "rpc",
+                  "params": {
+                    "command": "get-file",
+                    "body": "{\"id\": \"{file_id}\"}"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"width\":\\s*800"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"height\":\\s*800"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"fillColor\":\\s*\"#ffffff\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"r1\":\\s*12"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"blur\":\\s*12"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"color\":\\s*\"#000000\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"opacity\":\\s*0\\.15"
+                    }
+                  ],
+                  "resolve": [
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-profile",
+                        "body": "{}"
+                      },
+                      "extract": "defaultTeamId",
+                      "bind": "team_id"
+                    },
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-team-recent-files",
+                        "body": "{\"team-id\": \"{team_id}\"}"
+                      },
+                      "extract": "0.id",
+                      "bind": "file_id"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "An 800x800 rectangle with white background (#ffffff), 12px border radius and a 0 0 12px #000000 drop shadow at 15% opacity exists inside the board."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "A 'Title' text with 48px font size exists.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "rpc",
+                  "params": {
+                    "command": "get-file",
+                    "body": "{\"id\": \"{file_id}\"}"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"text\":\\s*\"Title\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"fontSize\":\\s*\"48\""
+                    }
+                  ],
+                  "resolve": [
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-profile",
+                        "body": "{}"
+                      },
+                      "extract": "defaultTeamId",
+                      "bind": "team_id"
+                    },
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-team-recent-files",
+                        "body": "{\"team-id\": \"{team_id}\"}"
+                      },
+                      "extract": "0.id",
+                      "bind": "file_id"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A 'Title' text with font size 48px exists inside the rectangle."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "A 'description' text with 36px font size exists.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "rpc",
+                  "params": {
+                    "command": "get-file",
+                    "body": "{\"id\": \"{file_id}\"}"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"text\":\\s*\"description\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"fontSize\":\\s*\"36\""
+                    }
+                  ],
+                  "resolve": [
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-profile",
+                        "body": "{}"
+                      },
+                      "extract": "defaultTeamId",
+                      "bind": "team_id"
+                    },
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-team-recent-files",
+                        "body": "{\"team-id\": \"{team_id}\"}"
+                      },
+                      "extract": "0.id",
+                      "bind": "file_id"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A 'description' text with font size 36px exists inside the rectangle."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "A 700x200 button with #dfdfdf background and 12px radius exists.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "rpc",
+                  "params": {
+                    "command": "get-file",
+                    "body": "{\"id\": \"{file_id}\"}"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"width\":\\s*700"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"height\":\\s*200"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"fillColor\":\\s*\"#dfdfdf\""
+                    }
+                  ],
+                  "resolve": [
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-profile",
+                        "body": "{}"
+                      },
+                      "extract": "defaultTeamId",
+                      "bind": "team_id"
+                    },
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-team-recent-files",
+                        "body": "{\"team-id\": \"{team_id}\"}"
+                      },
+                      "extract": "0.id",
+                      "bind": "file_id"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A 700x200 button with background color #dfdfdf and 12px border radius exists inside the rectangle."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r6",
+          "type": "tiered",
+          "depends_on": [
+            "r2",
+            "r3",
+            "r4",
+            "r5"
+          ],
+          "eval_config": {
+            "rubric": "The rectangle, texts and button are grouped together.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "rpc",
+                  "params": {
+                    "command": "get-file",
+                    "body": "{\"id\": \"{file_id}\"}"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"type\":\\s*\"group\""
+                    }
+                  ],
+                  "resolve": [
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-profile",
+                        "body": "{}"
+                      },
+                      "extract": "defaultTeamId",
+                      "bind": "team_id"
+                    },
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-team-recent-files",
+                        "body": "{\"team-id\": \"{team_id}\"}"
+                      },
+                      "extract": "0.id",
+                      "bind": "file_id"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The rectangle, 'Title', 'description', and the button are grouped together."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "create a file and draw a picture of a duck only using the pencil",
+    "login_username": "admin@penpot.local",
+    "login_usernames": {
+      "penpot": "admin@penpot.local"
+    },
+    "require_login": true,
+    "sites": [
+      "penpot"
+    ],
+    "task_id": "205",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The drawing uses only freehand paths (no rectangles, circles, or boards).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "rpc",
+                  "params": {
+                    "command": "get-file",
+                    "body": "{\"id\": \"{file_id}\"}"
+                  },
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"type\":\"rect\"",
+                      "operator": "eq",
+                      "value": 0
+                    },
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"type\":\"circle\"",
+                      "operator": "eq",
+                      "value": 0
+                    },
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"type\":\"frame\"",
+                      "operator": "eq",
+                      "value": 1
+                    },
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"type\":\"path\"",
+                      "operator": "gte",
+                      "value": 1
+                    }
+                  ],
+                  "resolve": [
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-profile",
+                        "body": "{}"
+                      },
+                      "extract": "defaultTeamId",
+                      "bind": "team_id"
+                    },
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-team-recent-files",
+                        "body": "{\"team-id\": \"{team_id}\"}"
+                      },
+                      "extract": "0.id",
+                      "bind": "file_id"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "All drawn objects were created with the pencil (freehand paths) only."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The drawing resembles a duck.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "There is a duck-resembling drawing on the screen."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a new team named Alpha and invite jane@techcorp.com, eric@techcorp.com, alice@techcorp.com, and bob@techcorp.com as editors. Then, create a new project called Project Alpha and add four files named jane, eric, alice, and bob.",
+    "login_username": "admin@penpot.local",
+    "login_usernames": {
+      "penpot": "admin@penpot.local"
+    },
+    "require_login": true,
+    "sites": [
+      "penpot"
+    ],
+    "task_id": "206",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A team named Alpha exists.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "rpc",
+                  "params": {
+                    "command": "get-teams",
+                    "body": "{}"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"Alpha\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new team named Alpha was created."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "jane, eric, alice, and bob are invited to Alpha as editors.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "rpc",
+                  "params": {
+                    "command": "get-team-invitations",
+                    "body": "{\"team-id\": \"{alpha_id}\"}"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"email\":\\s*\"jane@techcorp.com\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"email\":\\s*\"eric@techcorp.com\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"email\":\\s*\"alice@techcorp.com\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"email\":\\s*\"bob@techcorp.com\""
+                    },
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"role\":\"editor\"",
+                      "operator": "gte",
+                      "value": 4
+                    }
+                  ],
+                  "resolve": [
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-teams",
+                        "body": "{}"
+                      },
+                      "extract": "name=Alpha.id",
+                      "bind": "alpha_id"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "jane@techcorp.com, eric@techcorp.com, alice@techcorp.com and bob@techcorp.com were invited to the Alpha team as editors."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "A project named Project Alpha exists in the Alpha team.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "rpc",
+                  "params": {
+                    "command": "get-projects",
+                    "body": "{\"team-id\": \"{alpha_id}\"}"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"Project Alpha\""
+                    }
+                  ],
+                  "resolve": [
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-teams",
+                        "body": "{}"
+                      },
+                      "extract": "name=Alpha.id",
+                      "bind": "alpha_id"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new project named Project Alpha was created in the Alpha team."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [
+            "r3"
+          ],
+          "eval_config": {
+            "rubric": "Project Alpha contains four files named jane, eric, alice, and bob.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "rpc",
+                  "params": {
+                    "command": "get-project-files",
+                    "body": "{\"project-id\": \"{project_id}\"}"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"(?i:jane)\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"(?i:eric)\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"(?i:alice)\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"(?i:bob)\""
+                    }
+                  ],
+                  "resolve": [
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-teams",
+                        "body": "{}"
+                      },
+                      "extract": "name=Alpha.id",
+                      "bind": "alpha_id"
+                    },
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-projects",
+                        "body": "{\"team-id\": \"{alpha_id}\"}"
+                      },
+                      "extract": "name=Project Alpha.id",
+                      "bind": "project_id"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Four files named jane, eric, alice, and bob exist in Project Alpha."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "create a file and inside of it create 3 lines that intersect at one point",
+    "login_username": "admin@penpot.local",
+    "login_usernames": {
+      "penpot": "admin@penpot.local"
+    },
+    "require_login": true,
+    "sites": [
+      "penpot"
+    ],
+    "task_id": "207",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Three line (path) shapes exist.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "rpc",
+                  "params": {
+                    "command": "get-file",
+                    "body": "{\"id\": \"{file_id}\"}"
+                  },
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"type\":\"path\"",
+                      "operator": "eq",
+                      "value": 3
+                    }
+                  ],
+                  "resolve": [
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-profile",
+                        "body": "{}"
+                      },
+                      "extract": "defaultTeamId",
+                      "bind": "team_id"
+                    },
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-team-recent-files",
+                        "body": "{\"team-id\": \"{team_id}\"}"
+                      },
+                      "extract": "0.id",
+                      "bind": "file_id"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Three lines were created."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The three lines intersect at a single common point.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The three lines intersect at one common point."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "create a square and then create a circle inscribed inside of the square",
+    "login_username": "admin@penpot.local",
+    "login_usernames": {
+      "penpot": "admin@penpot.local"
+    },
+    "require_login": true,
+    "sites": [
+      "penpot"
+    ],
+    "task_id": "208",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A square (rect) and a circle exist.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "rpc",
+                  "params": {
+                    "command": "get-file",
+                    "body": "{\"id\": \"{file_id}\"}"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"type\":\\s*\"rect\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"type\":\\s*\"circle\""
+                    }
+                  ],
+                  "resolve": [
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-profile",
+                        "body": "{}"
+                      },
+                      "extract": "defaultTeamId",
+                      "bind": "team_id"
+                    },
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-team-recent-files",
+                        "body": "{\"team-id\": \"{team_id}\"}"
+                      },
+                      "extract": "0.id",
+                      "bind": "file_id"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A square and a circle were created."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The circle is inscribed in the square (same center, diameter equal to the side, touching all four sides).",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The circle is centered at the same spot as the square and touches each side of the square at exactly one point (inscribed)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a smiley face",
+    "login_username": "admin@penpot.local",
+    "login_usernames": {
+      "penpot": "admin@penpot.local"
+    },
+    "require_login": true,
+    "sites": [
+      "penpot"
+    ],
+    "task_id": "209",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "There is a smiling face on the screen.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "There is a smiling face drawn on the screen (e.g. a face outline with eyes and an upward-curving mouth)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a new project and use the lines to make a heart",
+    "login_username": "admin@penpot.local",
+    "login_usernames": {
+      "penpot": "admin@penpot.local"
+    },
+    "require_login": true,
+    "sites": [
+      "penpot"
+    ],
+    "task_id": "212",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Only line/path objects were used (no rects, circles, or boards).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "rpc",
+                  "params": {
+                    "command": "get-file",
+                    "body": "{\"id\": \"{file_id}\"}"
+                  },
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"type\":\"rect\"",
+                      "operator": "eq",
+                      "value": 0
+                    },
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"type\":\"circle\"",
+                      "operator": "eq",
+                      "value": 0
+                    },
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"type\":\"frame\"",
+                      "operator": "eq",
+                      "value": 1
+                    },
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"type\":\"path\"",
+                      "operator": "gte",
+                      "value": 1
+                    }
+                  ],
+                  "resolve": [
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-profile",
+                        "body": "{}"
+                      },
+                      "extract": "defaultTeamId",
+                      "bind": "team_id"
+                    },
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-team-recent-files",
+                        "body": "{\"team-id\": \"{team_id}\"}"
+                      },
+                      "extract": "0.id",
+                      "bind": "file_id"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Only lines were used — no other shape types are present."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The lines form a heart shape.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "There is a heart-shaped object on the screen made out of lines."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Using the Path tool, create an open path containing at least three corner nodes. Select the middle node, convert it from a corner node to a curved node, and adjust its Bézier handles until the adjoining segments form a clearly visible smooth curve. Leave the path open and exit editing mode.",
+    "login_username": "admin@penpot.local",
+    "login_usernames": {
+      "penpot": "admin@penpot.local"
+    },
+    "previous_task_intent": "Using the Path tool, create an open path containing at least three corner nodes. Enter node-editing mode, select the middle node, convert it from a corner node to a curved node using Make curve, and adjust its Bézier handles until the adjoining segments form a clearly visible smooth curve. Leave the path open and exit node-editing mode.",
+    "require_login": true,
+    "sites": [
+      "penpot"
+    ],
+    "task_id": "320",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A path is created with 3 or more corner nodes",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent used the Path tool to create an open path initially containing at least three corner nodes. Judge the initial construction from the trajectory; the middle node is expected to be curved in the final result."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The middle node is converted to a curve node using make curve",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The middle node of that same path was converted from corner to curve using Make curve, or the equivalent corner-to-curve control, and its Bézier handles were adjusted."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "A path is created with a curve in it",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The resulting path has a clearly visible smooth curve in the segments adjoining the converted middle node, remains open, and is left with node-editing mode exited."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

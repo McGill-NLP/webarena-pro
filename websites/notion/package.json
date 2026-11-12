@@ -1,0 +1,38 @@
+{
+  "name": "notion-sandbox",
+  "private": true,
+  "scripts": {
+    "clean:next": "node -e \"require('fs').rmSync('.next',{recursive:true,force:true})\"",
+    "dev": "NEXT_TELEMETRY_DISABLED=1 node ./node_modules/next/dist/bin/next dev",
+    "build": "NEXT_TELEMETRY_DISABLED=1 node ./node_modules/next/dist/bin/next build",
+    "start": "NEXT_TELEMETRY_DISABLED=1 node ./node_modules/next/dist/bin/next start",
+    "lint": "NEXT_TELEMETRY_DISABLED=1 node ./node_modules/next/dist/bin/next lint",
+    "prisma:generate": "node ./node_modules/prisma/build/index.js generate",
+    "prisma:deploy": "node ./node_modules/prisma/build/index.js migrate deploy",
+    "prisma:migrate": "node ./node_modules/prisma/build/index.js migrate dev",
+    "db:seed": "node ./node_modules/prisma/build/index.js db seed",
+    "db:reset": "node ./node_modules/tsx/dist/cli.mjs scripts/reset.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "5.10.2",
+    "emoji-picker-react": "^4.18.0",
+    "lucide-react": "^0.577.0",
+    "next": "14.2.35",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "20.11.19",
+    "@types/react": "18.2.57",
+    "@types/react-dom": "18.2.19",
+    "autoprefixer": "10.4.17",
+    "postcss": "8.4.35",
+    "prisma": "5.10.2",
+    "tailwindcss": "3.4.1",
+    "tsx": "4.7.1",
+    "typescript": "5.3.3"
+  },
+  "prisma": {
+    "seed": "node ./node_modules/tsx/dist/cli.mjs prisma/seed.ts"
+  }
+}

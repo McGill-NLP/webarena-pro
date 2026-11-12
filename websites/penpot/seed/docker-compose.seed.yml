@@ -1,0 +1,72 @@
+## Temporary Penpot stack used only for seeding.
+## Run via scripts/seed-local.sh — do NOT use this for production.
+##
+## Bring up:   docker compose -f seed/docker-compose.seed.yml up -d
+## Tear down:  docker compose -f seed/docker-compose.seed.yml down -v
+
+services:
+  penpot-frontend:
+    image: penpotapp/frontend:2.14.1
+    ports:
+      - "9001:80"
+    depends_on:
+      penpot-backend:
+        condition: service_started
+      penpot-exporter:
+        condition: service_started
+    environment:
+      - PENPOT_FLAGS=enable-login-with-password
+
+  penpot-backend:
+    image: penpotapp/backend:2.14.1
+    ports:
+      - "6060:6060"
+    volumes:
+      - penpot_assets:/opt/data/assets
+    depends_on:
+      penpot-postgres:
+        condition: service_healthy
+      penpot-redis:
+        condition: service_started
+    environment:
+      - PENPOT_FLAGS=enable-registration enable-login-with-password disable-email-verification disable-smtp enable-prepl-server
+      - PENPOT_DATABASE_URI=postgresql://penpot-postgres/penpot
+      - PENPOT_DATABASE_USERNAME=penpot
+      - PENPOT_DATABASE_PASSWORD=penpot
+      - PENPOT_REDIS_URI=redis://penpot-redis/0
+      - PENPOT_ASSETS_STORAGE_BACKEND=assets-fs
+      - PENPOT_STORAGE_ASSETS_FS_DIRECTORY=/opt/data/assets
+      - PENPOT_TELEMETRY_ENABLED=false
+      - PENPOT_SECRET_KEY=seed-secret-key-webarena-penpot-2024-not-for-production
+
+  penpot-exporter:
+    image: penpotapp/exporter:2.14.1
+    environment:
+      - PENPOT_PUBLIC_URI=http://penpot-frontend
+      - PENPOT_FLAGS=enable-login-with-password
+
+  penpot-postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=penpot
+      - POSTGRES_USER=penpot
+      - POSTGRES_PASSWORD=penpot
+    volumes:
+      - penpot_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U penpot -d penpot"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  penpot-redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  penpot_db:
+  penpot_assets:

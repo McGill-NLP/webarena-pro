@@ -1,0 +1,23 @@
+id: create_dashboard
+name: Create a dashboard with specific elements
+instruction: >
+  Create a new dashboard named "Sales Overview" with the following elements:
+  1. A scalar card showing total revenue (SUM of order_items.subtotal)
+  2. A bar chart showing sales by state (use order_summary view, group by state)
+  3. A line chart showing order count over time (orders.created_at by month)
+  Save the dashboard when complete.
+start_url: http://localhost:3000
+max_steps: 50
+timeout_seconds: 900
+success_criteria:
+  - dashboard_exists
+  - dashboard_name_contains: Sales Overview
+  - dashboard_card_count: 3
+tags:
+  - intermediate
+  - dashboard
+  - create
+notes: >
+  Tests dashboard creation with multiple visualization types.
+  Tables: order_items (subtotal), order_summary (state, order_total), orders (created_at).
+  States include: TX, CA, NY, IL, AZ, PA, FL, OH, etc.

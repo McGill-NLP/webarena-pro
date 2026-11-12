@@ -1,0 +1,1484 @@
+[
+  {
+    "intent": "Close issue 61",
+    "login_username": "james@peppermint.local",
+    "require_login": true,
+    "sites": [
+      "peppermint"
+    ],
+    "task_id": "213",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Navigated to/selected issue 61.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_regex": "(?i)#?61\\b"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent navigated to or selected the issue with the exact ID 61."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Clicked close (or equivalent) on issue 61.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_regex": "(?i)close"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent clicked the close button or equivalent control while viewing issue 61."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Issue 61 is closed in the backend.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "ticket",
+                  "checks": [
+                    {
+                      "type": "json_path",
+                      "path": "ticket.isComplete",
+                      "operator": "equals",
+                      "value": true
+                    }
+                  ],
+                  "resolve": [
+                    {
+                      "api": "tickets_all",
+                      "extract": "tickets.Number=61.id",
+                      "bind": "ticket_id"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Issue 61 is in a closed state."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find who is handling the VPN drops during client calls ticket.",
+    "login_username": "admin@admin.com",
+    "require_login": true,
+    "sites": [
+      "peppermint"
+    ],
+    "task_id": "214",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Opened the VPN drops ticket details.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_regex": "(?i)VPN drops"
+                      },
+                      {
+                        "action_regex": "(?i)#1\\b"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent opened the details page for the ticket titled 'VPN drops every 10 minutes during client calls'."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The answer identifies James Carter (james@peppermint.local).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include_any": [
+                    "James",
+                    "james@peppermint.local"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer identifies 'James Carter' or 'james@peppermint.local'."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find the public fix already suggested for the VPN drops ticket.",
+    "login_username": "admin@admin.com",
+    "require_login": true,
+    "sites": [
+      "peppermint"
+    ],
+    "task_id": "215",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Opened the VPN ticket and viewed James's public comment.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_regex": "(?i)VPN drops"
+                      },
+                      {
+                        "action_regex": "(?i)#1\\b"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent opened the ticket titled 'VPN drops every 10 minutes during client calls' and viewed the public comment from James."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The answer includes updating the VPN client to 5.4.2.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "5.4.2"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer includes the instruction to update the VPN client to version 5.4.2."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The answer includes rebooting / testing again.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include_any": [
+                    "reboot",
+                    "test again",
+                    "restart"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer includes the instruction to reboot or test again."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Summarize the current high-priority incident tickets owner and status",
+    "login_username": "admin@admin.com",
+    "previous_task_intent": "Summarize the current high-priority incident tickets.",
+    "require_login": true,
+    "sites": [
+      "peppermint"
+    ],
+    "task_id": "216",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Isolated tickets via structured Priority=High and Type=Incident filters.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent isolated the tickets using structured filters for Priority='High' and Type='Incident' (via filter or sort), rather than keyword searches."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Reports #101 with owner James (status done).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "101",
+                    "James"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The response lists ticket #101 with owner James and status done."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Reports #102 with owner Priya (status in progress).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "102",
+                    "Priya"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The response lists ticket #102 with owner Priya and status in progress."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Reports #103 with owner Marcus (status in progress).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "103",
+                    "Marcus"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The response lists ticket #103 with owner Marcus and status in progress."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "No unrelated tickets outside the current high-priority incident set (which in this environment also contains unassigned incidents #308, #344, #463).",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The response does not list tickets outside the high-priority incident set. Note: besides #101-#103, this environment also contains high-priority incidents #308, #344 and #463 (unassigned); listing those is CORRECT, not unrelated."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Report drostangreen’s comment from the database error discussion.",
+    "login_username": "admin@admin.com",
+    "previous_task_intent": "get drostangreen's comment from a database error",
+    "require_login": true,
+    "sites": [
+      "peppermint"
+    ],
+    "task_id": "217",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Opened the discussion titled 'I keep Getting a database error. Pls. help'.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "url_regex": "(?i)discussions/500"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent opened the discussion titled 'I keep Getting a database error. Pls. help'."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The answer contains drostangreen's comment (the docker-compose pgdata mount fix: /var/lib/postgresql/).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include_any": [
+                    "/var/lib/postgresql",
+                    "pgdata"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final response contains the text of drostangreen's comment: the docs' postgres path is incorrect and the docker compose line should change from 'pgdata:/var/lib/postgresql/data' to 'pgdata:/var/lib/postgresql/'."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "get drostangreen‘s comment from a database error discussion.",
+    "login_username": "admin@admin.com",
+    "require_login": true,
+    "sites": [
+      "peppermint"
+    ],
+    "task_id": "218",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Clicked the 'send feedback' element (opens the GitHub discussions).",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "url_regex": "(?i)github\\.com/Peppermint-Lab/peppermint/discussions"
+                      },
+                      {
+                        "action_regex": "(?i)send feedback"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent clicked the 'send feedback' element."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Opened the discussion titled 'I keep Getting a database error. Pls. help'.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "url_regex": "(?i)discussions/500"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent opened the discussion titled 'I keep Getting a database error. Pls. help'."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The answer contains drostangreen's comment (the docker-compose pgdata mount fix: /var/lib/postgresql/).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include_any": [
+                    "/var/lib/postgresql",
+                    "pgdata"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final response contains the text of drostangreen's comment: the docs' postgres path is incorrect and the docker compose line should change from 'pgdata:/var/lib/postgresql/data' to 'pgdata:/var/lib/postgresql/'."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "get comment from drostangreen in a database error discussion",
+    "login_username": "admin@admin.com",
+    "require_login": true,
+    "sites": [
+      "peppermint"
+    ],
+    "task_id": "219",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Clicked the 'send feedback' element (opens the GitHub discussions).",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "url_regex": "(?i)github\\.com/Peppermint-Lab/peppermint/discussions"
+                      },
+                      {
+                        "action_regex": "(?i)send feedback"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent clicked the 'send feedback' element."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Opened the discussion titled 'I keep Getting a database error. Pls. help'.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "url_regex": "(?i)discussions/500"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent opened the discussion titled 'I keep Getting a database error. Pls. help'."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The answer contains drostangreen's comment (the docker-compose pgdata mount fix: /var/lib/postgresql/).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include_any": [
+                    "/var/lib/postgresql",
+                    "pgdata"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final response contains the text of drostangreen's comment: the docs' postgres path is incorrect and the docker compose line should change from 'pgdata:/var/lib/postgresql/data' to 'pgdata:/var/lib/postgresql/'."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "How many issues have workflow status Done, including both open and closed issues?",
+    "login_username": "james@peppermint.local",
+    "require_login": true,
+    "sites": [
+      "peppermint"
+    ],
+    "task_id": "220",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Filtered/grouped by status = Done (not keyword search).",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent applied a filter or grouping specifically for the status field equaling 'Done', rather than searching for the keyword 'done' in titles."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The answer gives the environment's Done count (549 total done-status tickets; 31 of them still open).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include_any": [
+                    "549",
+                    "31"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer states the number of Done issues. In this environment there are 549 tickets with status Done (31 of them not yet closed); accept either figure with a consistent explanation, and fail any other number."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Close every open issue whose workflow status is Done.",
+    "login_username": "james@peppermint.local",
+    "require_login": true,
+    "sites": [
+      "peppermint"
+    ],
+    "task_id": "221",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Identified issues via the structured status field (Done).",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent identified issues using the structured status field set to 'Done', not by matching the word 'done' in issue titles."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Every done-status ticket is closed and nothing else was closed.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "tickets_all",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_not_regex",
+                      "pattern": "\"isComplete\":false[^{}]*\"status\":\"done\""
+                    },
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"status\":\"done\"",
+                      "operator": "eq",
+                      "value": 549
+                    },
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"isComplete\":true",
+                      "operator": "eq",
+                      "value": 549
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "All issues with status Done are closed, and issues without status Done were not closed."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "How many issues assigned to James are in progress?",
+    "login_username": "priya@peppermint.local",
+    "require_login": true,
+    "sites": [
+      "peppermint"
+    ],
+    "task_id": "222",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Filtered by assignee James and status In Progress via structured filters.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent filtered by assignee 'James' and status 'In Progress' using structured fields/filters, not keyword searches in titles."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The answer states 17.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "17"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer states that 17 issues assigned to James are in progress."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a Nextcloud note that includes the VPN drops ticket title and names its assigned owner.",
+    "login_username": "admin@admin.com",
+    "login_usernames": {
+      "nextcloud": "maya.patel",
+      "peppermint": "admin@admin.com"
+    },
+    "previous_task_intent": "Save a Nextcloud note naming the owner of the VPN drops ticket",
+    "require_login": true,
+    "sites": [
+      "peppermint",
+      "nextcloud"
+    ],
+    "task_id": "223",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A Nextcloud note contains the VPN drops ticket title.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "url": "__NEXTCLOUD__/index.php/apps/notes/api/v1/notes",
+                  "method": "GET",
+                  "auth_user": "maya.patel",
+                  "headers": {
+                    "Accept": "application/json"
+                  },
+                  "site": "nextcloud",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)VPN drops every 10 minutes during client calls"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A Nextcloud note exists whose text contains the ticket title 'VPN drops every 10 minutes during client calls'."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The note names the ticket owner as James Carter.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "url": "__NEXTCLOUD__/index.php/apps/notes/api/v1/notes",
+                  "method": "GET",
+                  "auth_user": "maya.patel",
+                  "headers": {
+                    "Accept": "application/json"
+                  },
+                  "site": "nextcloud",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)james carter"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The Nextcloud note names the ticket's assigned owner as James Carter."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The note includes james@peppermint.local.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "url": "__NEXTCLOUD__/index.php/apps/notes/api/v1/notes",
+                  "method": "GET",
+                  "auth_user": "maya.patel",
+                  "headers": {
+                    "Accept": "application/json"
+                  },
+                  "site": "nextcloud",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "james@peppermint\\.local"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The Nextcloud note includes the email address james@peppermint.local."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Save a Nextcloud note naming the owner of the VPN drops ticket",
+    "login_username": "admin@admin.com",
+    "login_usernames": {
+      "nextcloud": "maya.patel",
+      "peppermint": "admin@admin.com"
+    },
+    "require_login": true,
+    "sites": [
+      "peppermint",
+      "nextcloud"
+    ],
+    "task_id": "224",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A Nextcloud note contains the VPN drops ticket title.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "url": "__NEXTCLOUD__/index.php/apps/notes/api/v1/notes",
+                  "method": "GET",
+                  "auth_user": "maya.patel",
+                  "headers": {
+                    "Accept": "application/json"
+                  },
+                  "site": "nextcloud",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)VPN drops every 10 minutes during client calls"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A Nextcloud note exists whose text contains the ticket title 'VPN drops every 10 minutes during client calls'."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The note names the ticket owner as James Carter.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "url": "__NEXTCLOUD__/index.php/apps/notes/api/v1/notes",
+                  "method": "GET",
+                  "auth_user": "maya.patel",
+                  "headers": {
+                    "Accept": "application/json"
+                  },
+                  "site": "nextcloud",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)james carter"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The Nextcloud note names the ticket's assigned owner as James Carter."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The note includes james@peppermint.local.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "url": "__NEXTCLOUD__/index.php/apps/notes/api/v1/notes",
+                  "method": "GET",
+                  "auth_user": "maya.patel",
+                  "headers": {
+                    "Accept": "application/json"
+                  },
+                  "site": "nextcloud",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "james@peppermint\\.local"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The Nextcloud note includes the email address james@peppermint.local."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a Notion page summarizing the VPN drops ticket and naming its assigned owner.",
+    "login_username": "admin@admin.com",
+    "login_usernames": {
+      "notion": "demo@webarena.local",
+      "peppermint": "admin@admin.com"
+    },
+    "require_login": true,
+    "sites": [
+      "peppermint",
+      "notion"
+    ],
+    "task_id": "225",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A Notion page mentions the VPN drops ticket 'VPN drops every 10 minutes during client calls'.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)VPN drops every 10 minutes during client calls"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A Notion page exists that mentions the Peppermint ticket 'VPN drops every 10 minutes during client calls'."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The Notion page names the assigned owner as James Carter.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"text\":\"[^\"]*(?i:james carter)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The Notion page names the ticket's assigned owner as James Carter."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The Notion page includes james@peppermint.local.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"text\":\"[^\"]*james@peppermint\\.local"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The Notion page includes the email address james@peppermint.local."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Add an internal note to ticket #108, titled \"Bug: duplicate comments after page refresh\", saying exactly: Reproduced duplicate comments after refreshing the page.",
+    "login_username": "admin@admin.com",
+    "login_usernames": {
+      "peppermint": "admin@admin.com"
+    },
+    "require_login": true,
+    "sites": [
+      "peppermint"
+    ],
+    "task_id": "226",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Ticket #108 has a new INTERNAL note with the exact text.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "ticket",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"text\":\"Reproduced duplicate comments after refreshing the page\\.?\",\"public\":false"
+                    }
+                  ],
+                  "resolve": [
+                    {
+                      "api": "tickets_all",
+                      "extract": "tickets.Number=108.id",
+                      "bind": "ticket_id"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Ticket #108 ('Bug: duplicate comments after page refresh') contains a newly submitted internal (non-public) note with the exact text: 'Reproduced duplicate comments after refreshing the page.'"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sites": [
+      "peppermint",
+      "metabase"
+    ],
+    "task_id": "420",
+    "require_login": true,
+    "intent": "Identify the three referral-acquired customers with the highest total qualifying order value during 2024. Include only paid, shipped, and completed orders. Add those three customers to Peppermint using their names and emails, avoiding duplicates by email. Create a linked “Referral onboarding — [full name]” ticket for each, assigned to Priya Sharma. Include their rank, qualifying order count, and total order value. Set the first-ranked customer’s ticket to High priority and the other two to Medium.",
+    "login_username": "admin@admin.com",
+    "login_usernames": {
+      "peppermint": "admin@admin.com",
+      "metabase": "admin@admin.com"
+    },
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Client Rachel Young exists with email rachel.young@example.com.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Peppermint, a saved client record exists with the name Rachel Young and email rachel.young@example.com on the same record. Reusing an existing client with this email is explicitly allowed; creating a new client is needed only if none exists. Do not credit creating a duplicate client for this email. Verify the actual saved client identity, not a Metabase query result, a different email, an unsaved form or a final-answer claim. This client is assessed independently of the other two clients and their tickets."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Client Xander Carter exists with email xander.carter@example.com.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Peppermint, a saved client record exists with the name Xander Carter and email xander.carter@example.com on the same record. Reusing an existing client with this email is explicitly allowed; creating a new client is needed only if none exists. Do not credit creating a duplicate client for this email. Verify the actual saved client identity, not a Metabase query result, a different email, an unsaved form or a final-answer claim. This client is assessed independently of the other two clients and their tickets."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Client Mia Clark exists with email mia.clark@example.com.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Peppermint, a saved client record exists with the name Mia Clark and email mia.clark@example.com on the same record. Reusing an existing client with this email is explicitly allowed; creating a new client is needed only if none exists. Do not credit creating a duplicate client for this email. Verify the actual saved client identity, not a Metabase query result, a different email, an unsaved form or a final-answer claim. This client is assessed independently of the other two clients and their tickets."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "'Referral onboarding — Rachel Young' is linked to Rachel's client, assigned to Priya Sharma, High priority, and includes rank 1, 3 orders, total 1114.59.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Peppermint, the agent creates and saves a ticket titled Referral onboarding — Rachel Young, linked through the client relationship to Rachel Young with email rachel.young@example.com, assigned to Priya Sharma, with High priority. That same ticket description must include rank 1, 3 qualifying orders and total order value 1114.59, based on the 2024 referral orders whose statuses are paid, shipped or completed. Accept equivalent unambiguous numeric/currency formatting. Verify title, client link, assignee, priority and all three metrics together on the actual new saved ticket. Merely mentioning the client name without the relationship, splitting fields across different tickets, a draft, unrelated existing ticket or final-answer claim is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "'Referral onboarding — Xander Carter' is linked to Xander's client, assigned to Priya Sharma, Medium priority, and includes rank 2, 3 orders, total 917.96.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Peppermint, the agent creates and saves a ticket titled Referral onboarding — Xander Carter, linked through the client relationship to Xander Carter with email xander.carter@example.com, assigned to Priya Sharma, with Medium priority. That same ticket description must include rank 2, 3 qualifying orders and total order value 917.96, based on the 2024 referral orders whose statuses are paid, shipped or completed. Accept equivalent unambiguous numeric/currency formatting. Verify title, client link, assignee, priority and all three metrics together on the actual new saved ticket. Merely mentioning the client name without the relationship, splitting fields across different tickets, a draft, unrelated existing ticket or final-answer claim is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r6",
+          "type": "tiered",
+          "depends_on": [
+            "r3"
+          ],
+          "eval_config": {
+            "rubric": "'Referral onboarding — Mia Clark' is linked to Mia's client, assigned to Priya Sharma, Medium priority, and includes rank 3, 2 orders, total 522.27.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Peppermint, the agent creates and saves a ticket titled Referral onboarding — Mia Clark, linked through the client relationship to Mia Clark with email mia.clark@example.com, assigned to Priya Sharma, with Medium priority. That same ticket description must include rank 3, 2 qualifying orders and total order value 522.27, based on the 2024 referral orders whose statuses are paid, shipped or completed. Accept equivalent unambiguous numeric/currency formatting. Verify title, client link, assignee, priority and all three metrics together on the actual new saved ticket. Merely mentioning the client name without the relationship, splitting fields across different tickets, a draft, unrelated existing ticket or final-answer claim is insufficient."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

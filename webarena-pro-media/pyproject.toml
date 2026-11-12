@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "webarena-pro-media"
+version = "0.1.0"
+description = "Sync and async browser audio and video tools"
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.12"
+dependencies = ["playwright>=1.44.0", "requests>=2.32.0", "static-ffmpeg>=3.0"]
+
+[dependency-groups]
+dev = ["pytest>=9", "pytest-asyncio>=1"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.optional-dependencies]
+transcription = ["openai>=1.109.1"]
+local = ["openai-whisper>=20250625"]

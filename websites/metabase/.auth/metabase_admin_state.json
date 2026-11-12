@@ -1,0 +1,14 @@
+{
+  "cookies": [
+    {
+      "name": "metabase.SESSION",
+      "value": "b6a840d1-e303-4108-ac37-890144070d01",
+      "domain": "localhost",
+      "path": "/",
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": []
+}

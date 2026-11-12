@@ -1,0 +1,1726 @@
+[
+  {
+    "intent": "Delete all users who are not using any storage space.",
+    "login_username": "admin@immich.local",
+    "require_login": true,
+    "sites": [
+      "immich"
+    ],
+    "task_id": "081",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "No users with 0 storage usage remain in the system (vacuously true in this seed; grade the agent's verification behavior).",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "No users with 0 storage usage remain in the system; if no view confirms this for ALL users (filter view / exhaustive scroll / explicit count), mark fail. Note: in this environment every user has nonzero storage, so the correct outcome is that no user is deleted and the agent verified this."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Users with nonzero storage usage remain in the system (all six seed users).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "admin_users",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"email\":",
+                      "operator": "eq",
+                      "value": 6
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"email\":\\s*\"admin@immich.local\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"email\":\\s*\"agent1@immich.local\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"email\":\\s*\"agent5@immich.local\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Users with nonzero storage usage remain in the system."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "There is a photo of a book page with the heading “Requires Less Power to Operate.” Find out the date when this photo was taken.",
+    "login_username": "admin@immich.local",
+    "require_login": true,
+    "sites": [
+      "immich"
+    ],
+    "task_id": "082",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The final answer states the date the book-page photo was taken (the photo does not exist in this seed; a correct agent should report it cannot be found).",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The task's target photo (book page headed 'Requires Less Power to Operate') does not exist in this library. Pass only if the agent's final answer truthfully reports that no such photo could be found after a thorough search; any specific date is a fabrication and must fail."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find photos from January 1, 2013 to January 31, 2013, set their location to New York, and tell me how many photos in total were taken in New York.",
+    "login_username": "admin@immich.local",
+    "require_login": true,
+    "sites": [
+      "immich"
+    ],
+    "task_id": "083",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Both photos dated 2013-01-01..2013-01-31 (exactly 2 in this seed) have their location set to New York.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "search_metadata",
+                  "params": {
+                    "body": "{\"size\": 1000, \"withExif\": true, \"takenAfter\": \"2013-01-01T00:00:00.000Z\", \"takenBefore\": \"2013-01-31T23:59:59.999Z\"}"
+                  },
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"checksum\"",
+                      "operator": "eq",
+                      "value": 2
+                    },
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"city\":\"New York",
+                      "operator": "eq",
+                      "value": 2
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "All photos dated between January 1, 2013 and January 31, 2013 have their location set to New York."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "No photos outside the range were changed: the library has exactly 3 New-York photos in total (2 changed + 1 pre-existing New York City photo).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "search_metadata",
+                  "params": {
+                    "body": "{\"size\": 1000, \"withExif\": true}"
+                  },
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"city\":\"New York",
+                      "operator": "eq",
+                      "value": 3
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Photos outside January 1-31, 2013 were not changed to New York; including one pre-existing New York City photo, exactly 3 photos in the library are located in New York."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The final answer reports 3 total photos located in New York.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer states that there are 3 photos in total located in New York (2 newly-changed plus 1 pre-existing)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Set the locked folder so that it contains all photos taken before December 31, 2006, after unlocking the photos currently in the locked folder. The password is 111111.",
+    "login_username": "admin@immich.local",
+    "previous_task_intent": "Unlock all photos in the locked folder, then move all photos taken before December 31, 2006, into the locked folder. The password is 111111.",
+    "require_login": true,
+    "sites": [
+      "immich"
+    ],
+    "task_id": "084",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The locked folder PIN is 111111 and the locked folder contains exactly the 24 photos taken before December 31, 2006.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "search_metadata",
+                  "params": {
+                    "body": "{\"size\": 1000, \"visibility\": \"locked\"}"
+                  },
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"checksum\"",
+                      "operator": "eq",
+                      "value": 24
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2007"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2008"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2009"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2010"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2011"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2012"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2013"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2014"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2015"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2016"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2017"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2018"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2019"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2020"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2021"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2022"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2023"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2024"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2025"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2026"
+                    }
+                  ],
+                  "resolve": [
+                    {
+                      "api": "session_unlock",
+                      "params": {
+                        "pin": "111111"
+                      }
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "All photos taken before December 31, 2006 are in the locked folder, and no later photos are."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "Photos initially in the locked folder that don't meet the date condition were removed (vacuous: the locked folder starts empty in this seed).",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The locked folder started empty in this environment, so this condition is satisfied as long as the locked folder ends up containing only pre-2006-12-31 photos."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create separate albums for photos from April 26, 2026 and April 27, 2026 named “260426” and “260427,” respectively, and share both albums with agent2 and agent3 with viewer access.",
+    "login_username": "admin@immich.local",
+    "previous_task_intent": "Save the photos from April 26–27, 2026 into albums named 260426 and 260427, and share them with agent2 and agent3 with viewer access.",
+    "require_login": true,
+    "sites": [
+      "immich"
+    ],
+    "task_id": "085",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The album “260427” contains exactly the 67 photos dated 2026-04-27.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "album_info",
+                  "params": {},
+                  "resolve": [
+                    {
+                      "api": "albums",
+                      "extract": "albumName=260427.id",
+                      "bind": "album_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"checksum\"",
+                      "operator": "eq",
+                      "value": 67
+                    },
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"localDateTime\":\"2026-04-27",
+                      "operator": "eq",
+                      "value": 67
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The album 260427 contains all photos dated 2026-04-27 and none from other dates."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The album “260427” is shared with agent2 and agent3 with viewer access.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "album_info",
+                  "params": {},
+                  "resolve": [
+                    {
+                      "api": "albums",
+                      "extract": "albumName=260427.id",
+                      "bind": "album_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"email\":\\s*\"agent2@immich.local\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"email\":\\s*\"agent3@immich.local\""
+                    },
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"role\":\"viewer\"",
+                      "operator": "eq",
+                      "value": 2
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The album 260427 is shared with agent2 and agent3 with viewer access."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The album “260426” exists, is empty (its target date has no photos in this seed), and is shared with agent2 and agent3 with viewer access.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "album_info",
+                  "params": {},
+                  "resolve": [
+                    {
+                      "api": "albums",
+                      "extract": "albumName=260426.id",
+                      "bind": "album_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"checksum\"",
+                      "operator": "eq",
+                      "value": 0
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"email\":\\s*\"agent2@immich.local\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"email\":\\s*\"agent3@immich.local\""
+                    },
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"role\":\"viewer\"",
+                      "operator": "eq",
+                      "value": 2
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The album 260426 exists, contains no photos outside its target date (there are none on that date in this library), and is shared with agent2 and agent3 with viewer access."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Set the locked folder password to 111111, then move all photos taken before December 31, 2006, into the locked folder.",
+    "login_username": "admin@immich.local",
+    "login_usernames": {
+      "immich": "admin@immich.local"
+    },
+    "require_login": true,
+    "sites": [
+      "immich"
+    ],
+    "task_id": "086",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The locked folder PIN is set to 111111 (the unlock call with 111111 elevates the session).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "auth_status",
+                  "params": {},
+                  "resolve": [
+                    {
+                      "api": "session_unlock",
+                      "params": {
+                        "pin": "111111"
+                      }
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "json_path",
+                      "path": "isElevated",
+                      "operator": "equals",
+                      "value": true
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "pinCode",
+                      "operator": "equals",
+                      "value": true
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The locked folder password was set to 111111."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The locked folder contains exactly the 24 photos taken before December 31, 2006 and nothing later.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "search_metadata",
+                  "params": {
+                    "body": "{\"size\": 1000, \"visibility\": \"locked\"}"
+                  },
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"checksum\"",
+                      "operator": "eq",
+                      "value": 24
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2007"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2008"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2009"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2010"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2011"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2012"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2013"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2014"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2015"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2016"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2017"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2018"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2019"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2020"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2021"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2022"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2023"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2024"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2025"
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"localDateTime\":\"2026"
+                    }
+                  ],
+                  "resolve": [
+                    {
+                      "api": "session_unlock",
+                      "params": {
+                        "pin": "111111"
+                      }
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "All photos taken before December 31, 2006 are in the locked folder, and no photos taken on or after that date are."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create separate albums to save photos from April 5, 2015 and April 27, 2026 named “250405” and “260427,” respectively, and share both albums with agent2 and agent3 with viewer access.",
+    "login_username": "admin@immich.local",
+    "login_usernames": {
+      "immich": "admin@immich.local"
+    },
+    "previous_task_intent": "Save the photos from April 5, 2015 and April 27, 2026 into albums named 250405 and 260427, and share both albums with agent2 and agent3 with viewer access.",
+    "require_login": true,
+    "sites": [
+      "immich"
+    ],
+    "task_id": "087",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The album “260427” contains exactly the 67 photos dated 2026-04-27.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "album_info",
+                  "params": {},
+                  "resolve": [
+                    {
+                      "api": "albums",
+                      "extract": "albumName=260427.id",
+                      "bind": "album_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"checksum\"",
+                      "operator": "eq",
+                      "value": 67
+                    },
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"localDateTime\":\"2026-04-27",
+                      "operator": "eq",
+                      "value": 67
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The album 260427 contains all photos dated 2026-04-27 and none from other dates."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The album “260427” is shared with agent2 and agent3 with viewer access.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "album_info",
+                  "params": {},
+                  "resolve": [
+                    {
+                      "api": "albums",
+                      "extract": "albumName=260427.id",
+                      "bind": "album_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"email\":\\s*\"agent2@immich.local\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"email\":\\s*\"agent3@immich.local\""
+                    },
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"role\":\"viewer\"",
+                      "operator": "eq",
+                      "value": 2
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The album 260427 is shared with agent2 and agent3 with viewer access."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The album “250405” exists, is empty (its target date has no photos in this seed), and is shared with agent2 and agent3 with viewer access.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "album_info",
+                  "params": {},
+                  "resolve": [
+                    {
+                      "api": "albums",
+                      "extract": "albumName=250405.id",
+                      "bind": "album_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"checksum\"",
+                      "operator": "eq",
+                      "value": 0
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"email\":\\s*\"agent2@immich.local\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"email\":\\s*\"agent3@immich.local\""
+                    },
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"role\":\"viewer\"",
+                      "operator": "eq",
+                      "value": 2
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The album 250405 exists, contains no photos outside its target date (there are none on that date in this library), and is shared with agent2 and agent3 with viewer access."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Add a “Daniel” person tag to the person on the right in the photo named oi7_312091.jpg.",
+    "login_username": "admin@immich.local",
+    "login_usernames": {
+      "immich": "admin@immich.local"
+    },
+    "require_login": true,
+    "sites": [
+      "immich"
+    ],
+    "task_id": "088",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A person tag named Daniel is assigned to a face in oi7_312091.jpg.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "faces",
+                  "params": {},
+                  "resolve": [
+                    {
+                      "api": "search_metadata",
+                      "params": {
+                        "body": "{\"originalFileName\": \"oi7_312091.jpg\"}"
+                      },
+                      "extract": "assets.items.0.id",
+                      "bind": "asset_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"Daniel\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the photo oi7_312091.jpg, a person tag named Daniel was added."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The Daniel face is on the right half of the 640px-wide photo (the boy in the dark puffer jacket), not the left person.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "faces",
+                  "params": {},
+                  "resolve": [
+                    {
+                      "api": "search_metadata",
+                      "params": {
+                        "body": "{\"originalFileName\": \"oi7_312091.jpg\"}"
+                      },
+                      "extract": "assets.items.0.id",
+                      "bind": "asset_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"boundingBoxX1\"",
+                      "operator": "eq",
+                      "value": 1
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"boundingBoxX1\":\\s*(2[6-9][0-9]|[3-5][0-9][0-9])[^{]*\"person\":\\s*\\{[^}]*\"name\":\\s*\"Daniel\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The Daniel tag is on the person on the right side of the image (not the left person)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "I saved photos of the cars I drove in 2015. Please find all the license plate numbers from those photos.",
+    "login_username": "admin@immich.local",
+    "login_usernames": {
+      "immich": "admin@immich.local"
+    },
+    "require_login": true,
+    "sites": [
+      "immich"
+    ],
+    "task_id": "089",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The answer includes the plate '1 BAD 41' (blue Ford pickup, 2015-07-05).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include_any": [
+                    "1 BAD 41",
+                    "1BAD41",
+                    "1 BAD41",
+                    "1BAD 41"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer includes the license plate '1 BAD 41'."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The answer includes the plate 'AX 7104' (black-and-white 1958 Chevrolet, 2015-02-22).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include_any": [
+                    "AX 7104",
+                    "AX7104"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer includes the license plate 'AX 7104'."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The answer contains exactly two plate numbers and none from photos outside 2015.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer includes exactly two license plate numbers and no plates from photos outside 2015."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Flip the earliest photo taken in 2010 horizontally, add the description “Flipped horizontally,” and save it to the “Edited” album.",
+    "login_username": "admin@immich.local",
+    "login_usernames": {
+      "immich": "admin@immich.local"
+    },
+    "require_login": true,
+    "sites": [
+      "immich"
+    ],
+    "task_id": "090",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The earliest 2010 photo (oi7_389165.jpg, 2010-01-10) was flipped horizontally in the editor.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_regex": "(?i)flip"
+                      },
+                      {
+                        "action_regex": "(?i)mirror"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The earliest photo taken in 2010 was flipped horizontally using the photo editor."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A photo now carries the description 'Flipped horizontally'.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "search_metadata",
+                  "params": {
+                    "body": "{\"size\": 1000, \"withExif\": true}"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"description\":\\s*\"Flipped horizontally\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The photo's description was set to 'Flipped horizontally'."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "The 'Edited' album contains the edited photo (the one described 'Flipped horizontally').",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "album_info",
+                  "params": {},
+                  "resolve": [
+                    {
+                      "api": "albums",
+                      "extract": "albumName=Edited.id",
+                      "bind": "album_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"checksum\"",
+                      "operator": "gte",
+                      "value": 1
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"description\":\\s*\"Flipped horizontally\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The 'Edited' album contains the edited (flipped) photo."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Set the location of all photos taken from January 1, 2013 through January 31, 2013 to New York, then report the total number of photos located in New York.",
+    "login_username": "admin@immich.local",
+    "login_usernames": {
+      "immich": "admin@immich.local"
+    },
+    "previous_task_intent": "Find photos from January 1, 2013 to January 31, 2013, set their location to New York, and tell me how many photos in total were taken in New York.",
+    "require_login": true,
+    "sites": [
+      "immich"
+    ],
+    "task_id": "091",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Both photos dated 2013-01-01..2013-01-31 (exactly 2 in this seed) have their location set to New York.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "search_metadata",
+                  "params": {
+                    "body": "{\"size\": 1000, \"withExif\": true, \"takenAfter\": \"2013-01-01T00:00:00.000Z\", \"takenBefore\": \"2013-01-31T23:59:59.999Z\"}"
+                  },
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"checksum\"",
+                      "operator": "eq",
+                      "value": 2
+                    },
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"city\":\"New York",
+                      "operator": "eq",
+                      "value": 2
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "All photos dated between January 1, 2013 and January 31, 2013 have their location set to New York."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "No photos outside the range were changed: the library has exactly 3 New-York photos in total (2 changed + 1 pre-existing New York City photo).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "search_metadata",
+                  "params": {
+                    "body": "{\"size\": 1000, \"withExif\": true}"
+                  },
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"city\":\"New York",
+                      "operator": "eq",
+                      "value": 3
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Photos outside January 1-31, 2013 were not changed to New York; including one pre-existing New York City photo, exactly 3 photos in the library are located in New York."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The final answer reports 3 total photos located in New York.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer states that there are 3 photos in total located in New York (2 newly-changed plus 1 pre-existing)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Permanently delete all photos from 2015.",
+    "login_username": "admin@immich.local",
+    "login_usernames": {
+      "immich": "admin@immich.local"
+    },
+    "require_login": true,
+    "sites": [
+      "immich"
+    ],
+    "task_id": "092",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Identified or selected the photos from 2015 for deletion, using the timeline, date search, or another valid UI route. Successful deletion of the 2015 photos also demonstrates this criterion; a date-filter search is not required.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Identified or selected the photos from 2015 for deletion, using the timeline, date search, or another valid UI route. Successful deletion of the 2015 photos also demonstrates this criterion; a date-filter search is not required."
+                },
+                "trust": "terminal"
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "No photos dated in 2015 remain in the photo library.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "search_metadata",
+                  "params": {
+                    "body": "{\"size\":1000,\"takenAfter\":\"2015-01-01T00:00:00.000Z\",\"takenBefore\":\"2015-12-31T23:59:59.999Z\"}"
+                  },
+                  "checks": [
+                    {
+                      "type": "json_path",
+                      "path": "assets.items",
+                      "operator": "equals",
+                      "value": []
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "assets.count",
+                      "operator": "equals",
+                      "value": 0
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "assets.total",
+                      "operator": "equals",
+                      "value": 0
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "assets.nextPage",
+                      "operator": "not_exists"
+                    }
+                  ]
+                },
+                "trust": "both"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "No photos dated from January 1, 2015 through December 31, 2015 remain in the photo library."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "No photos dated in 2015 remain in Trash (guards against soft-delete without emptying; trash starts empty so this is gated on r2).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "search_metadata",
+                  "params": {
+                    "body": "{\"size\":1000,\"trashedAfter\":\"1970-01-01T00:00:00.000Z\",\"takenAfter\":\"2015-01-01T00:00:00.000Z\",\"takenBefore\":\"2015-12-31T23:59:59.999Z\"}"
+                  },
+                  "checks": [
+                    {
+                      "type": "json_path",
+                      "path": "assets.items",
+                      "operator": "equals",
+                      "value": []
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "assets.count",
+                      "operator": "equals",
+                      "value": 0
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "assets.total",
+                      "operator": "equals",
+                      "value": 0
+                    },
+                    {
+                      "type": "json_path",
+                      "path": "assets.nextPage",
+                      "operator": "not_exists"
+                    }
+                  ]
+                },
+                "trust": "both"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "No photos dated in 2015 remain in Trash."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "All original photos taken outside 2015 remain undeleted in the active library (369 photos in the seed). Replacing a deleted photo with a different asset does not satisfy preservation.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "baseline_ref": "other_photos",
+                  "checks": [
+                    {
+                      "type": "snapshot_diff_count",
+                      "dimension": "removed",
+                      "operator": "eq",
+                      "value": 0
+                    }
+                  ]
+                },
+                "trust": "both"
+              }
+            ]
+          }
+        }
+      ],
+      "baseline": [
+        {
+          "name": "other_photos",
+          "provider": "immich_assets",
+          "params": {
+            "exclude_year": 2015
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Book a flight to the city I was in on August 16th 2012 on the same date this year leaving from YUL",
+    "login_username": "agent1@immich.local",
+    "login_usernames": {
+      "immich": "agent1@immich.local",
+      "password-manager": "agent1"
+    },
+    "require_login": true,
+    "sites": [
+      "immich",
+      "flight-search",
+      "password-manager"
+    ],
+    "task_id": "301",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Find out that I was in New York on August 16th 2012",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent identifies New York as the city shown in the user’s Immich photos from August 16, 2012. This may be evidenced in the trajectory or by using New York as the booking destination; no separate final-answer format is required."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Book any flight leaving august 16th 2026 to New York from Montreal",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "site": "flight-search",
+                  "api": "bookings",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"outbound_flight\":\\s*\\{[^{}]*\"origin\":\\s*\"YUL\"[^{}]*\"destination\":\\s*\"(?:JFK|LGA|EWR)\"[^{}]*\"departure\":\\s*\"2026-08-16"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A confirmed flight-search booking has an outbound flight from Montreal (YUL) to New York (JFK, LGA or EWR), departing August 16, 2026. Searching or selecting an itinerary without booking is insufficient. The benchmark clock is fixed in 2026."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Please create a new album named Moto cycles and add all photos of motor cycles to it.",
+    "login_username": "agent1@immich.local",
+    "login_usernames": {
+      "immich": "agent1@immich.local"
+    },
+    "previous_task_intent": "Please create a new album named Moto cycles and add all photos of motor cycles to it",
+    "require_login": true,
+    "sites": [
+      "immich"
+    ],
+    "task_id": "417",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "Photo from April 27th added with text that says Melbourne on it",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Immich, the photo dated April 27 with visible Melbourne text is added to the same newly created album named Moto cycles requested by the task. Verify the actual photo identity from its date and visual content and its membership in that album. A similar unrelated photo, a photo only in the library or another album, an unsaved selection or a final claim is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Album of motorcycles  created",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The task account agent1@immich.local creates and saves a new Immich album named Moto cycles, the exact requested name in the task intent. Verify actual saved album creation; an unrelated pre-existing album, search result, draft name or final claim is insufficient. The four required photos are assessed in separate nodes."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "Photo from September 8th 2012 added",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The motorcycle photo dated September 8, 2012 is added to the same newly created Immich album named Moto cycles. Verify the source photo identity through its date and visual content, and its saved membership in the requested album. A different photo, library presence alone, a different album, an unsaved selection or a final claim is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "Photo from august 12th 2013 added",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The motorcycle photo dated August 12, 2013 is added to the same newly created Immich album named Moto cycles. Verify the source photo identity through its date and visual content, and its saved membership in the requested album. A different photo, library presence alone, a different album, an unsaved selection or a final claim is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "Photo from march 9th 2009 added",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The motorcycle photo dated March 9, 2009 is added to the same newly created Immich album named Moto cycles. Verify the source photo identity through its date and visual content, and its saved membership in the requested album. A different photo, library presence alone, a different album, an unsaved selection or a final claim is insufficient."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,1384 @@
+[
+  {
+    "intent": "If any unread emails were accidentally moved to the trash, recover them and summarize the information in each recovered email.",
+    "login_username": "alice@techcorp.local",
+    "login_usernames": {
+      "thunderbird": "alice@techcorp.local"
+    },
+    "require_login": true,
+    "sites": [
+      "thunderbird"
+    ],
+    "task_id": "234",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent navigated to the trash tab.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "url_contains": "Trash"
+                      },
+                      {
+                        "action_contains": "Trash"
+                      },
+                      {
+                        "action_contains": "trash"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent navigated to the trash tab."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Unread emails were opened and moved back into the inbox.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_contains": "move"
+                      },
+                      {
+                        "action_contains": "Inbox"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Unread emails were opened and moved back into the inbox."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "'TechCrunch Daily: AI dominates Q1 fundraising' is in the inbox and the Q1 fundraising info is summarized.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "api": "eval_state",
+                  "params": {
+                    "user": "alice@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_contains",
+                      "value": "TechCrunch Daily: AI dominates Q1 fundraising"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "'TechCrunch Daily: AI dominates Q1 fundraising' is in the inbox and the Q1 fundraising info is summarized."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Mark all emails from Bob and Alice as flagged, and move to work folder. Move all emails from David to a new folder named \"David\", mark all emails from David to be unread.",
+    "login_username": "carol@techcorp.local",
+    "login_usernames": {
+      "thunderbird": "carol@techcorp.local"
+    },
+    "require_login": true,
+    "sites": [
+      "thunderbird"
+    ],
+    "task_id": "235",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Emails from Bob or Alice were flagged and moved to the Work folder.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_contains": "flag"
+                      },
+                      {
+                        "action_contains": "Work"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Emails from Bob or Alice were flagged and moved to the Work folder."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A 'David' folder was created and David's emails moved into it.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "api": "eval_state",
+                  "params": {
+                    "user": "carol@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_contains",
+                      "value": "David"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A 'David' folder was created and David's emails moved into it."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Work-folder emails are flagged and only from Bob/Alice; David's emails are unread in the David folder.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Work, the emails are flagged and only from Bob or Alice; David's emails are in the David folder and unread."
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Work-folder emails are flagged and only from Bob/Alice; David's emails are unread in the David folder."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "If any unread emails were accidentally moved to the Trash, recover them and summarize the information in each recovered email. Then, send an apology email to each sender for missing their message.",
+    "login_username": "alice@techcorp.local",
+    "login_usernames": {
+      "thunderbird": "alice@techcorp.local"
+    },
+    "require_login": true,
+    "sites": [
+      "thunderbird"
+    ],
+    "task_id": "236",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent navigated to the trash tab.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "url_contains": "Trash"
+                      },
+                      {
+                        "action_contains": "trash"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent navigated to the trash tab."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Unread emails were moved back into the inbox.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_contains": "move"
+                      },
+                      {
+                        "action_contains": "Inbox"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Unread emails were moved back into the inbox."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A reply apologizing for missing the email was sent.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "api": "eval_state",
+                  "params": {
+                    "user": "alice@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)apolog"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A reply apologizing for missing the email was sent."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "'TechCrunch Daily: AI dominates Q1 fundraising' is in the inbox.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "api": "eval_state",
+                  "params": {
+                    "user": "alice@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_contains",
+                      "value": "TechCrunch Daily: AI dominates Q1 fundraising"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "'TechCrunch Daily: AI dominates Q1 fundraising' is in the inbox."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "For all unread emails, send an email to notify them that I am on vacation, and will respond to them as soon as possible. For read emails received after Jan 15, send an email to notify them of vacation.",
+    "login_username": "david@techcorp.local",
+    "login_usernames": {
+      "thunderbird": "david@techcorp.local"
+    },
+    "require_login": true,
+    "sites": [
+      "thunderbird"
+    ],
+    "task_id": "237",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Vacation replies were composed for the unread threads (Sprint review, team lunch, UI testing).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "api": "eval_state",
+                  "params": {
+                    "user": "david@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)vacation"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Vacation replies were composed for the unread threads (Sprint review, team lunch, UI testing)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Replies note the user will respond as soon as possible.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "api": "eval_state",
+                  "params": {
+                    "user": "david@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)as soon as possible"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Replies note the user will respond as soon as possible."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Read emails after Jan 15 (e.g. 'Re: Critical Bug') were also notified.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Read post-Jan-15 threads such as 'Re: Critical Bug' received a vacation notification."
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Read emails after Jan 15 (e.g. 'Re: Critical Bug') were also notified."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "For each unread email, send a reply informing the sender that I am on vacation and will respond as soon as possible. For each read email received after February 20, send a reply informing the sender only that I am on vacation.",
+    "login_username": "bob@techcorp.local",
+    "login_usernames": {
+      "thunderbird": "bob@techcorp.local"
+    },
+    "require_login": true,
+    "sites": [
+      "thunderbird"
+    ],
+    "task_id": "238",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Vacation replies were sent to the senders.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "api": "eval_state",
+                  "params": {
+                    "user": "bob@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)vacation"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Vacation drafts were written and saved."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Replies to unread emails say the user will respond as soon as possible.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "api": "eval_state",
+                  "params": {
+                    "user": "bob@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)as soon as possible"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Drafts say the user will respond as soon as possible."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "For each unread email, draft and save a reply informing the sender that I am on vacation and will respond as soon as possible. For each read email received after January 15, draft and save a reply informing the sender that I am on vacation. Do not send the drafts.",
+    "login_username": "david@techcorp.local",
+    "login_usernames": {
+      "thunderbird": "david@techcorp.local"
+    },
+    "require_login": true,
+    "sites": [
+      "thunderbird"
+    ],
+    "task_id": "239",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Vacation drafts were written and saved.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "api": "eval_state",
+                  "params": {
+                    "user": "david@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)vacation"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Vacation drafts were written and saved."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Drafts say the user will respond as soon as possible.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "api": "eval_state",
+                  "params": {
+                    "user": "david@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)as soon as possible"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Drafts say the user will respond as soon as possible."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Set up a Penpot team after our team lunch plans, invite everyone involved in the lunch, and name the project after the menu we decided on.",
+    "login_username": "alice@techcorp.local",
+    "login_usernames": {
+      "penpot": "admin@penpot.local",
+      "thunderbird": "alice@techcorp.local"
+    },
+    "previous_task_intent": "Set up a Penpot team for planning our team lunch, invite everyone involved in the lunch, and name the project after the menu we decided on.",
+    "require_login": true,
+    "sites": [
+      "thunderbird",
+      "penpot"
+    ],
+    "task_id": "240",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Emailed the team-lunch members (Carol, Bob, David) about the Penpot team.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "thunderbird",
+                  "params": {
+                    "user": "carol@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"INBOX\":\\[(?:(?!\"[A-Za-z]+\":\\[)[\\s\\S])*?\"body\":\"[^\"]*[^\"]*(?i:penpot|pizza)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Carol, Bob and David (carol@, bob@, david@techcorp.local) each received an email from alice notifying them about the Penpot team."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A Penpot team named 'Pizza' exists.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "rpc",
+                  "site": "penpot",
+                  "params": {
+                    "command": "get-teams",
+                    "body": "{}"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"Pizza\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A Penpot team/space named 'Pizza' was created."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Carol, Bob and David (carol@, bob@, david@techcorp.local) were invited to / are members of the Pizza team.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "rpc",
+                  "site": "penpot",
+                  "params": {
+                    "command": "get-team-invitations",
+                    "body": "{\"team-id\": \"{team_id}\"}"
+                  },
+                  "resolve": [
+                    {
+                      "api": "rpc",
+                      "params": {
+                        "command": "get-teams",
+                        "body": "{}"
+                      },
+                      "extract": "/name=Pizza/id",
+                      "bind": "team_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "carol@techcorp\\.local"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "bob@techcorp\\.local"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "david@techcorp\\.local"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The Pizza team includes carol@techcorp.local, bob@techcorp.local and david@techcorp.local as invited members."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Add Bob (bob@techcorp.local) and Carol (carol@techcorp.local) as contacts. Then, compose and send an email whose body mentions the upcoming \"one-on-one meeting\", selecting Bob and Carol from the saved contacts as Bcc recipients.",
+    "login_username": "alice@techcorp.local",
+    "login_usernames": {
+      "thunderbird": "alice@techcorp.local"
+    },
+    "require_login": true,
+    "sites": [
+      "thunderbird"
+    ],
+    "task_id": "241",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent navigated to contacts.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "url_contains": "addressbook"
+                      },
+                      {
+                        "action_contains": "contact"
+                      },
+                      {
+                        "action_contains": "Contacts"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent navigated to contacts."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Bob and Carol were added as contacts.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Contacts for Bob (bob@techcorp.local) and Carol (carol@techcorp.local) were created."
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Bob and Carol were added as contacts."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "An email body about a one-on-one meeting was composed.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "api": "eval_state",
+                  "params": {
+                    "user": "alice@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)one[- ]on[- ]one"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "An email body about a one-on-one meeting was composed."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A Bcc email about the one-on-one was sent to bob@techcorp.local and carol@techcorp.local.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "api": "eval_state",
+                  "params": {
+                    "user": "alice@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_contains",
+                      "value": "carol@techcorp.local"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A Bcc email about the one-on-one was sent to bob@techcorp.local and carol@techcorp.local."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Add Bob and Carol as contacts using the email addresses bob@techcorp.local and carol@techcorp.local. Then, compose and send an email about the upcoming one-on-one meeting, adding Bob and Carol from the saved contacts as Bcc recipients.",
+    "login_username": "alice@techcorp.local",
+    "login_usernames": {
+      "thunderbird": "alice@techcorp.local"
+    },
+    "require_login": true,
+    "sites": [
+      "thunderbird"
+    ],
+    "task_id": "242",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent navigated to contacts.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "url_contains": "addressbook"
+                      },
+                      {
+                        "action_contains": "contact"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent navigated to contacts."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Bob and Carol were added as contacts.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Contacts Bob and Carol with the right emails were created."
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Bob and Carol were added as contacts."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "An email body about a one-on-one meeting was composed.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "api": "eval_state",
+                  "params": {
+                    "user": "alice@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)one[- ]on[- ]one"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "An email body about a one-on-one meeting was composed."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A Bcc email was sent to bob@techcorp.local and carol@techcorp.local.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "api": "eval_state",
+                  "params": {
+                    "user": "alice@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_contains",
+                      "value": "carol@techcorp.local"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A Bcc email was sent to bob@techcorp.local and carol@techcorp.local."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Draft and save vacation-reply emails for the relevant threads. For every unread email, create a draft telling the sender that I am on vacation and will respond as soon as possible. For every read email received after Jan 20 that has not already been notified, create a draft telling the sender that I am on vacation. Do not send any of the drafts.",
+    "login_username": "david@techcorp.local",
+    "login_usernames": {
+      "thunderbird": "david@techcorp.local"
+    },
+    "require_login": true,
+    "sites": [
+      "thunderbird"
+    ],
+    "task_id": "243",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Saved drafts exist for Sprint review, Team lunch, and UI testing request.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "api": "eval_state",
+                  "params": {
+                    "user": "david@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)vacation"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Saved drafts exist for Sprint review, Team lunch, and UI testing request."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Each unread draft says on vacation, will respond as soon as possible.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "api": "eval_state",
+                  "params": {
+                    "user": "david@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)as soon as possible"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Each unread draft says on vacation, will respond as soon as possible."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A saved draft exists for the read 'Re: Critical Bug' thread from Alice.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "trust": "pass_only",
+                "config": {
+                  "api": "eval_state",
+                  "params": {
+                    "user": "david@techcorp.local"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_contains",
+                      "value": "Critical Bug"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A saved draft exists for the read 'Re: Critical Bug' thread from Alice."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The 'Re: Critical Bug' draft notifies Alice the user is on vacation.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A draft replying to 'Re: Critical Bug' notifies Alice the user is on vacation."
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The 'Re: Critical Bug' draft notifies Alice the user is on vacation."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "No newly created drafts were sent as emails.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "None of the newly created vacation drafts were actually sent."
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "No newly created drafts were sent as emails."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Email all my Nextcloud contacts across both platforms about my meetings on Tuesday, September 22, 2026.",
+    "login_username": "alice@techcorp.local",
+    "login_usernames": {
+      "nextcloud": "maya.patel",
+      "thunderbird": "alice@techcorp.local"
+    },
+    "previous_task_intent": "email alll my next cloud contacts across both platforms about my meetings tuesday",
+    "require_login": true,
+    "sites": [
+      "thunderbird",
+      "nextcloud"
+    ],
+    "task_id": "306",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "should email Alex Johnson   Maria Garcia   James Smith   Linda Martinez   Robert Brown   Patricia Davis   Michael Miller   Jennifer Wilson   William Moore   Elizabeth Taylor   David Anderson   Barbara Thomas   Richard Jackson   Susan White   Joseph Harris   Jessica Martin   Thomas Thompson   Sarah Garcia   Charles Martinez   Karen Robinson   Christopher Clark   Nancy Rodriguez   Daniel Lewis   Lisa Lee   Matthew Walker   Betty Hall   Anthony Allen   Margaret Young   Mark Hernandez   Sandra King",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "should email Alex Johnson   Maria Garcia   James Smith   Linda Martinez   Robert Brown   Patricia Davis   Michael Miller   Jennifer Wilson   William Moore   Elizabeth Taylor   David Anderson   Barbara Thomas   Richard Jackson   Susan White   Joseph Harris   Jessica Martin   Thomas Thompson   Sarah Garcia   Charles Martinez   Karen Robinson   Christopher Clark   Nancy Rodriguez   Daniel Lewis   Lisa Lee   Matthew Walker   Betty Hall   Anthony Allen   Margaret Young   Mark Hernandez   Sandra King. Each listed Nextcloud contact must be a recipient of sent mail from the task account; drafts and merely viewing contacts do not satisfy this criterion."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The sent emails describe the two meetings on Tuesday, September 22, 2026: 09:00–09:30 and 15:30–16:15.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The emails sent to the required Nextcloud contacts describe both meetings on Tuesday, September 22, 2026: 09:00–09:30 and 15:30–16:15 in the calendar's local time (America/Toronto). The reference meetings are Retrospective and Marketing Overview, respectively. Both time ranges must occur in the sent message content, not just in a calendar observation or final answer. Use September 22, 2026 as the fixed reference date regardless of the task execution or grading date; do not substitute the upcoming Tuesday."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Send a grouped email to all of the operations managers. Tell them there is a meeting next Wednesday at 2 pm.",
+    "login_username": "alice@techcorp.local",
+    "login_usernames": {
+      "pipedrive": "admin@local.host",
+      "thunderbird": "alice@techcorp.local"
+    },
+    "previous_task_intent": "Send a grouped email to all of the operations managers. telling them there is a meeting next Wednesday at 2pm",
+    "require_login": true,
+    "sites": [
+      "thunderbird",
+      "pipedrive"
+    ],
+    "task_id": "407",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Found Barbra Martinez, Sandra Ramirez, Deborah Rivera's Contact Information on PipeCRM",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The trajectory shows that the agent obtained the PipeCRM/Pipedrive contact information for all three operations managers: Barbara Martinez (spelled Barbra in the approved rubric), Sandra Ramirez and Deborah Rivera. The matching emails are barbara.martinez@cascadelogistics.net, sandra.ramirez@falconaero.com and deborah.rivera@stratafintech.com. A complete relevant contact list, search results or their individual contact records are acceptable. Finding only one or two, looking at unrelated contacts or asserting the names without source evidence is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "An email is sent to: barbara.martinez@cascadelogistics.net, sandra.ramirez@falconaero.com, deborah.rivera@stratafintech.com telling them about the meeting next Wednesday at 2:00pm",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The task account alice@techcorp.local sends one grouped Thunderbird email to all three addresses barbara.martinez@cascadelogistics.net, sandra.ramirez@falconaero.com and deborah.rivera@stratafintech.com announcing a meeting next Wednesday at 2:00 pm. Verify the sent message, recipients and content together. The literal phrase next Wednesday at 2 pm is sufficient; if a calendar date is used, interpret it relative to the task execution context, not the evaluator current date. A draft, three unrelated messages, wrong or missing recipients, a wrong time, unrelated existing mail or only a final claim is insufficient."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

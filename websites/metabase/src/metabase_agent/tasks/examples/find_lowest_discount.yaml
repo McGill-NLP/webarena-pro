@@ -1,0 +1,18 @@
+id: find_lowest_discount
+name: Find the order with the lowest discount
+instruction: >
+  What is the Order ID of the order item with the lowest discount in the Order Items table from sample-db?
+  Note: The table has hundreds of rows - you must sort the data to find the true minimum.
+start_url: http://localhost:3000/browse/databases
+max_steps: 25
+timeout_seconds: 300
+success_criteria:
+  - response_contains: "113"
+tags:
+  - intermediate
+  - browse
+  - sort
+notes: >
+  Agent needs to query the Order Items table and find the item with the minimum
+  discount value, then report its Order ID. The correct answer is 113.
+  The agent must sort by Discount column to find the true minimum.

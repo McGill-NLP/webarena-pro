@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>YT-Lite</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+    <a href="/" class="logo">YT-Lite</a>
+
+    <form method="GET" action="/" class="search-bar">
+        <input type="text" name="q" placeholder="Search videos" value="{{ q or request.args.get('q', '') }}">
+        <button type="submit" aria-label="Search">Search</button>
+    </form>
+
+    <div class="topbar-right">
+        {% if session.get("username") and session.get("username") != "guest" %}
+        <div class="account-menu">
+            <button type="button" class="account-trigger">
+                <span class="avatar">{{ session["username"][0]|upper }}</span>
+                <span class="account-copy">
+                    <span class="account-label">Account</span>
+                    <span class="account-name">{{ session["username"] }}</span>
+                </span>
+                <span class="account-caret">v</span>
+            </button>
+            <div class="account-dropdown">
+                <span class="account-dropdown-name">{{ session["username"] }}</span>
+                <a href="/logout" class="account-action">Logout</a>
+            </div>
+        </div>
+        {% else %}
+        <a href="/login" class="btn-small">Login</a>
+        {% endif %}
+    </div>
+</header>
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="sidebar-group">
+            <a href="/" class="sidebar-item {% if request.path == '/' and not request.args.get('category') %}is-active{% endif %}">Home</a>
+            <a href="/?category=Music" class="sidebar-item {% if request.args.get('category') == 'Music' %}is-active{% endif %}">Music</a>
+            <a href="/?category=Gaming" class="sidebar-item {% if request.args.get('category') == 'Gaming' %}is-active{% endif %}">Gaming</a>
+            <a href="/?category=Learning" class="sidebar-item {% if request.args.get('category') == 'Learning' %}is-active{% endif %}">Learning</a>
+            <a href="/?category=Travel" class="sidebar-item {% if request.args.get('category') == 'Travel' %}is-active{% endif %}">Travel</a>
+            <a href="/?category=News" class="sidebar-item {% if request.args.get('category') == 'News' %}is-active{% endif %}">News</a>
+        </div>
+
+        <div class="sidebar-group">
+            <a href="/library/watch-later" class="sidebar-item {% if request.path == '/library/watch-later' %}is-active{% endif %}">Watch Later</a>
+            <a href="/library/history" class="sidebar-item {% if request.path == '/library/history' %}is-active{% endif %}">History</a>
+            <a href="/playlists" class="sidebar-item {% if request.path.startswith('/playlists') %}is-active{% endif %}">Playlists</a>
+            <a href="/upload" class="sidebar-item {% if request.path == '/upload' %}is-active{% endif %}">Upload</a>
+        </div>
+
+        <div class="sidebar-group sidebar-group-bottom">
+            <a href="/status" class="sidebar-item {% if request.path == '/status' %}is-active{% endif %}">Status</a>
+        </div>
+    </aside>
+
+    <main class="main">
+        {% block content %}{% endblock %}
+    </main>
+</div>
+
+<script>
+  const openBtn = document.getElementById("openFilter");
+  const closeBtn = document.getElementById("closeFilter");
+  const modal = document.getElementById("filterModal");
+
+  if (openBtn && modal) {
+    openBtn.onclick = () => modal.classList.remove("hidden");
+  }
+  if (closeBtn && modal) {
+    closeBtn.onclick = () => modal.classList.add("hidden");
+  }
+</script>
+
+</body>
+</html>

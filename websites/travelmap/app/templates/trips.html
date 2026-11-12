@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <section class="section-header">
+    <div>
+      <p class="eyebrow">Guest Dashboard</p>
+      <h1>Your trips</h1>
+    </div>
+    <span class="helper-copy">A simple timeline of confirmed and past stays, with quick access to each booking.</span>
+  </section>
+
+  <section class="trip-list">
+    {% for booking in bookings %}
+      <article class="trip-item">
+        <a class="trip-thumb" href="{{ request.app.url_path_for('listing_detail', slug=booking.listing.slug) }}">
+          <img src="{{ booking.listing.primary_image }}" alt="{{ booking.listing.title }}" />
+        </a>
+        <div class="trip-main">
+          <div class="trip-status-row">
+            <div>
+              <p class="eyebrow compact">Booking</p>
+              <h2><a href="{{ request.app.url_path_for('listing_detail', slug=booking.listing.slug) }}">{{ booking.listing.title }}</a></h2>
+            </div>
+            <span class="status-pill {{ booking.status }}">{{ booking.status }}</span>
+          </div>
+          <p class="trip-location">{{ booking.listing.city }} · Hosted by {{ booking.listing.host.name }}</p>
+          <div class="trip-detail-grid">
+            <div class="trip-detail-card">
+              <strong>Dates</strong>
+              <span>{{ booking.check_in.isoformat() }} to {{ booking.check_out.isoformat() }}</span>
+            </div>
+            <div class="trip-detail-card">
+              <strong>Stay details</strong>
+              <span>{{ booking.nights }} nights · {{ booking.guests }} guests</span>
+            </div>
+            <div class="trip-detail-card">
+              <strong>Booking</strong>
+              <span>{{ booking.confirmation_code }} · Total ${{ "%.0f"|format(booking.total_price) }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="trip-actions">
+          <a class="secondary-button wide-button" href="{{ request.app.url_path_for('listing_detail', slug=booking.listing.slug) }}">View stay</a>
+          {% if booking.status == "confirmed" %}
+            <form method="post" action="/bookings/{{ booking.id }}/cancel">
+              <button class="ghost-button wide-button" type="submit">Cancel booking</button>
+            </form>
+          {% endif %}
+        </div>
+      </article>
+    {% endfor %}
+  </section>
+
+  {% if not bookings %}
+    <section class="empty-state">
+      <h3>No trips yet.</h3>
+      <p>Book a listing from the Explore page to create a deterministic booking record.</p>
+    </section>
+  {% endif %}
+{% endblock %}

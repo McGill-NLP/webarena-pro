@@ -1,0 +1,204 @@
+[
+  {
+    "intent": "I previously watched a breakfast recipe video and recreated the recipes from it. For the channel that mentioned Korean fried chicken, please suggest a cuisine I’ve tried before and include a link to its recipe.",
+    "login_username": "john.doe",
+    "login_usernames": {
+      "mattermost": "john.doe",
+      "yt-lite": "seed_user"
+    },
+    "require_login": true,
+    "sites": [
+      "mattermost",
+      "yt-lite"
+    ],
+    "task_id": "112",
+    "eval": {
+      "operator": "AND",
+      "scoring": "weighted",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "weight": 1.0,
+          "eval_config": {
+            "rubric": "Posted the three breakfast dishes (Blueberry Smoothie Bowl, Homemade Cereal, Chocolate PB Overnight Oats) in the Water Cooler channel.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "channel_posts",
+                  "site": "mattermost",
+                  "params": {
+                    "user": "john.doe"
+                  },
+                  "resolve": [
+                    {
+                      "api": "channel_by_name",
+                      "params": {
+                        "user": "john.doe",
+                        "team_name": "general",
+                        "channel_name": "watercooler"
+                      },
+                      "extract": "id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*(?i:blueberry smoothie bowl))"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*(?i:homemade cereal))"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\":\"[^\"]*(?:[^\"]*(?i:chocolate pb overnight oats))"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A message in the Water Cooler channel (where Korean fried chicken was mentioned) names the three recipes from the breakfast video: Blueberry Smoothie Bowl, Homemade Cereal and Chocolate PB Overnight Oats."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "weight": 1.0,
+          "eval_config": {
+            "rubric": "The message links the video '3 EASY VEGAN BREAKFAST IDEAS ( w/ rawincollege! )' (fv238 / fv337).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "channel_posts",
+                  "site": "mattermost",
+                  "params": {
+                    "user": "john.doe"
+                  },
+                  "resolve": [
+                    {
+                      "api": "channel_by_name",
+                      "params": {
+                        "user": "john.doe",
+                        "team_name": "general",
+                        "channel_name": "watercooler"
+                      },
+                      "extract": "id",
+                      "bind": "channel_id"
+                    }
+                  ],
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"message\"\\s*:\\s*\"(?:[^\"\\\\]|\\\\.)*?(?<![A-Za-z0-9:/?&=._%+\\-])__YT-LITE__/watch/(?:fv238|fv337)(?=[?#\\s)<>\"“”]|\\\\[nrt])"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The Water Cooler message includes a link to the yt-lite video '3 EASY VEGAN BREAKFAST IDEAS ( w/ rawincollege! )'."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "In Flight Search, find a city reachable from Montreal (YUL) by a nonstop flight with a displayed duration between 3 and 4 hours, inclusive. Then book a one-way flight from that city to Boston (BOS), using any available departure date and fare. Montreal is only the reference point for choosing the origin city; book only the chosen city-to-Boston leg.",
+    "login_username": "flyingagents",
+    "login_usernames": {
+      "flight-search": "flyingagents"
+    },
+    "previous_task_intent": "Book a flight starting between 3 and 4  hours from Montreal and arriving in Boston",
+    "require_login": true,
+    "sites": [
+      "flight-search"
+    ],
+    "task_id": "344",
+    "eval": {
+      "operator": "AND",
+      "scoring": "weighted",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "weight": 1.0,
+          "eval_config": {
+            "rubric": "Must find a city that is a 3-4 hour flight away from Montreal",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In Flight Search, the agent identifies an origin city using a nonstop flight FROM Montreal (YUL) whose displayed duration is between 180 and 240 minutes inclusive. Use the actual search results or flight details in the trajectory to establish eligibility. A driving time, distance, a connecting journey duration, a flight in the reverse direction, an unsupported claim, or a duration outside that inclusive range is insufficient. Any available date and fare are allowed. The Montreal-to-city leg is research only and need not be booked."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "weight": 1.0,
+          "eval_config": {
+            "rubric": "Must pick one of these cities  1. Atlanta (ATL) — 3h 02m   2. Winnipeg (YWG) — 3h 04m   3. Orlando (MCO) — 3h 28m   4. New Orleans (MSY) — 3h 28m   5. Tampa (TPA) — 3h 31m   6. Freeport (FPO) — 3h 35m   7. Regina (YQR) — 3h 42m   8. Miami (MIA) — 3h 46m   9. Fort Lauderdale (FLL) — 3h 48m   10. Nassau (NAS) — 3h 50m   11. West Palm Beach (PBI) — 3h 50m   12. Saskatoon (YXE) — 3h 54m   13. Fort Myers (RSW) — 3h 55m   14. San Salvador, Bahamas (ZSA) — 3h 55m   15. Cayo Coco (CCC) — 4h   16. Cienfuegos (CFG) — 4h   17. Santa Clara (SNU) — 4h   18. Varadero (VRA) — 4h",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The city selected as the origin of the requested Boston flight is one of the reviewed eligible cities: Atlanta (ATL), Winnipeg (YWG), Orlando (MCO), New Orleans (MSY), Tampa (TPA), Freeport (FPO), Regina (YQR), Miami (MIA), Fort Lauderdale (FLL), Nassau (NAS), West Palm Beach (PBI), Saskatoon (YXE), Fort Myers (RSW), San Salvador in the Bahamas (ZSA), Cayo Coco (CCC), Cienfuegos (CFG), Santa Clara (SNU), or Varadero (VRA). It must be the same city whose nonstop Montreal departure established eligibility in the preceding criterion. Merely listing every eligible city without choosing one, confusing San Salvador in the Bahamas with another city, or using an unrelated qualifying city elsewhere in the trajectory is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r1",
+            "r2"
+          ],
+          "weight": 1.0,
+          "eval_config": {
+            "rubric": "A book trip from the chosen city to Boston is booked",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent completes and saves a confirmed one-way Flight Search booking from that same chosen eligible city TO Boston (BOS) in the task account. Verify the booking origin, destination, confirmation status, and correspondence to the city selected and researched in the preceding criteria. Any available departure date and fare are acceptable; the booked leg itself has no 3-4-hour duration requirement and need not be nonstop. Search results, an unconfirmed checkout, a cancelled booking, a booking from another city, a Boston-to-city booking, or only booking Montreal-to-city does not count. A chat claim of booking is insufficient; the task requests booking only the chosen city-to-Boston leg."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

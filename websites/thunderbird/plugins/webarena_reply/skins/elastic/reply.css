@@ -1,0 +1,285 @@
+.webarena-reply-actions {
+  display: none;
+}
+
+html.layout-small .webarena-reply-actions {
+  align-items: center;
+  border-top: 1px solid #e1e5e7;
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.65rem 1rem;
+}
+
+html.layout-small .webarena-reply-actions a {
+  background: #0878b9;
+  border: 1px solid #0878b9;
+  border-radius: 0.3rem;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.2;
+  padding: 0.5rem 0.9rem;
+  text-decoration: none;
+}
+
+html.layout-small .webarena-reply-actions a:hover,
+html.layout-small .webarena-reply-actions a:focus {
+  background: #065f93;
+  border-color: #065f93;
+  color: #fff;
+  outline: 2px solid #9bd8fa;
+  outline-offset: 1px;
+}
+
+.frame-content.webarena-conversation-active > #message-header,
+.frame-content.webarena-conversation-active > #message-content {
+  display: none;
+}
+
+.webarena-conversation {
+  background: #fff;
+  color: #263238;
+  min-height: 100%;
+  width: 100%;
+}
+
+.webarena-conversation-heading {
+  align-items: center;
+  background: #fff;
+  border-bottom: 1px solid #dfe5e8;
+  display: flex;
+  justify-content: space-between;
+  padding: 1.1rem 1.35rem;
+  position: sticky;
+  top: 0;
+  z-index: 4;
+}
+
+.webarena-conversation-heading h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.webarena-conversation-count {
+  color: #667781;
+  font-size: 0.9rem;
+  margin-top: 0.2rem;
+}
+
+.webarena-thread-list {
+  margin: 0 auto;
+  max-width: 980px;
+  padding: 0 1.25rem 2rem;
+}
+
+.webarena-thread-message {
+  --thread-depth: 0;
+  background: #fff;
+  border-bottom: 1px solid #e3e8eb;
+  margin-left: calc(var(--thread-depth) * 1.35rem);
+  padding: 1.15rem 0.9rem;
+  position: relative;
+}
+
+.webarena-thread-message.root {
+  border-bottom-color: #cdd7dc;
+  margin-left: 0;
+  padding-top: 1.35rem;
+}
+
+.webarena-thread-message.reply::before {
+  border-bottom: 2px solid #b8c8d0;
+  border-left: 2px solid #b8c8d0;
+  border-bottom-left-radius: 0.65rem;
+  content: "";
+  height: 2.25rem;
+  left: -0.72rem;
+  position: absolute;
+  top: -0.55rem;
+  width: 0.62rem;
+}
+
+.webarena-thread-message.current {
+  background: #f3faff;
+  box-shadow: inset 3px 0 0 #149fe6;
+}
+
+.webarena-reply-context {
+  color: #61737d;
+  font-size: 0.82rem;
+  margin: 0 0 0.45rem 3.25rem;
+}
+
+.webarena-reply-arrow {
+  color: #118ac7;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.webarena-thread-row {
+  display: flex;
+  gap: 0.85rem;
+}
+
+.webarena-thread-avatar {
+  align-items: center;
+  background: #dceffa;
+  border-radius: 50%;
+  color: #0878b9;
+  display: flex;
+  flex: 0 0 2.45rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  height: 2.45rem;
+  justify-content: center;
+  width: 2.45rem;
+}
+
+.webarena-thread-content {
+  min-width: 0;
+  width: 100%;
+}
+
+.webarena-thread-meta {
+  align-items: flex-start;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.webarena-thread-author {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.webarena-thread-author strong {
+  font-size: 1rem;
+}
+
+.webarena-thread-email,
+.webarena-thread-meta time,
+.webarena-thread-recipients {
+  color: #667781;
+  font-size: 0.82rem;
+}
+
+.webarena-thread-email {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.webarena-thread-meta-right {
+  align-items: center;
+  display: flex;
+  flex: 0 0 auto;
+  gap: 0.5rem;
+}
+
+.webarena-folder-badge {
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.16rem 0.5rem;
+}
+
+.webarena-folder-badge.inbox {
+  background: #e7f5fd;
+  color: #0878b9;
+}
+
+.webarena-folder-badge.sent {
+  background: #eaf7ee;
+  color: #287d43;
+}
+
+.webarena-thread-recipients {
+  margin-top: 0.22rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.webarena-thread-subject {
+  color: #44545c;
+  font-size: 0.86rem;
+  font-weight: 600;
+  margin-top: 0.55rem;
+}
+
+.webarena-thread-body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 0.98rem;
+  line-height: 1.5;
+  margin-top: 0.8rem;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.webarena-thread-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.85rem;
+}
+
+.webarena-thread-actions a {
+  border: 1px solid #b9c7ce;
+  border-radius: 999px;
+  color: #0878b9;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.3rem 0.72rem;
+  text-decoration: none;
+}
+
+.webarena-thread-actions a:hover,
+.webarena-thread-actions a:focus {
+  background: #e9f6fd;
+  border-color: #58afe0;
+  color: #065f93;
+}
+
+.webarena-missing-message {
+  color: #8a969c;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 620px) {
+  .webarena-conversation-heading {
+    padding: 0.85rem 1rem;
+  }
+
+  .webarena-conversation-heading h2 {
+    font-size: 1.1rem;
+  }
+
+  .webarena-thread-list {
+    padding: 0 0.5rem 1.5rem;
+  }
+
+  .webarena-thread-message {
+    margin-left: calc(min(var(--thread-depth), 2) * 0.7rem);
+    padding-left: 0.55rem;
+    padding-right: 0.55rem;
+  }
+
+  .webarena-thread-meta {
+    display: block;
+  }
+
+  .webarena-thread-meta-right {
+    margin-top: 0.25rem;
+  }
+
+  .webarena-thread-email {
+    display: none;
+  }
+}

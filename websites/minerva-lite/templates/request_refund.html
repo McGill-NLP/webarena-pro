@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-heading">
+  <h1 class="page-title">Request Refund</h1>
+  {% include "_term_selector.html" %}
+</section>
+
+<section class="content-panel refund-panel" data-test="request-refund">
+  <div class="account-totals">
+    <div><span>Account balance</span><strong data-test="refund-balance">{{ summary.balance|money }}</strong></div>
+    <div><span>Full amount paid</span><strong>{{ summary.paid|money }}</strong></div>
+    <div><span>Term</span><strong>{{ summary.term }}</strong></div>
+  </div>
+
+  {% if summary.balance <= 0 %}
+  <p>You cannot request a refund if your balance is at or below $0.00.</p>
+  {% else %}
+  <form method="post" class="records-form">
+    <label>
+      Refund option
+      <select name="refund_type" data-test="refund-type">
+        <option value="full">Full refund</option>
+        <option value="partial">Partial refund</option>
+      </select>
+    </label>
+    <label>
+      Partial refund amount
+      <input type="text" name="amount" value="100.00" data-test="refund-amount">
+    </label>
+    <button class="btn btn-primary" type="submit" data-test="refund-submit">Submit Refund Request</button>
+  </form>
+  {% endif %}
+</section>
+{% endblock %}

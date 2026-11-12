@@ -1,0 +1,6 @@
+services:
+  flight-search:
+    build: .
+    ports:
+      - "2210:2210"
+    restart: unless-stopped

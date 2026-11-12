@@ -1,0 +1,288 @@
+scope,task_key,source_config,source_position,mattermost_position,sites,intent,hint,evidence_id,post_id,team,channel,author,create_at_ms,original_newest_rank,original_synthetic,sha256,exact_message,state_or_destination_note
+canonical,20260501095702013727,jobportal.raw.json,4,,"jobportal,mattermost","Announce to Jane that we have recruited a Data analyst, give her their name and email.",Message should contain: Henry Okonkwo and email: henry@example.com,STATE,,,,,,,,,,No source post: Mattermost is the destination. DM Jane Smith with the externally found recruit Henry Okonkwo (henry@example.com).
+canonical,20260501161040287155,mattermost.raw.json,1,1,"mattermost,notion,yt-lite","I’m planning to write a short report about addiction using a YouTube video as reference material, and I want to share it with jane.smith. Find a YouTube video that discusses weed addiction and how to overcome addiction. Then, in the Research Lab workspace in Notion, create a new page titled “Addiction.”
+
+On the page, include what the video describes as the opposite of addiction, and summarize in one sentence what the professor suggests doing to overcome addiction. After completing the page, share the published link with jane.smith.","Navigate to youtube and find the youtube video with search query ""weed"". Create a page with the correct content, publish the page, and share the link with Jane.smith (through Direct Message in mattermost).",STATE,,,,,,,,,,No source post: create a DM to jane.smith and send the externally created Notion publication link.
+canonical,20260501164621147802,yt-lite.raw.json,2,,"yt-lite,mattermost","Emma and Frank are huge fans of Henry. Earlier, you watched a YouTube video of Henry playing “Dance Monkey” on the radio. Find that video again, then send its link to Emma and Frank through Team Slack. In the message, also tell them which instrument Henry played in the video.","Create a new Team Slack group chat or direct message that includes only me, Emma, and Frank. Search YouTube using the query “Henry” and find the relevant video of Henry. Then send the video link to the group chat, along with the answer: violin.",STATE,,,,,,,,,,"No source post: create a group DM containing admin, Emma Davis, and Frank Miller; the YouTube-derived answer is violin."
+canonical,20260502082525279373,nextcloud.raw.json,14,,"nextcloud,mattermost",Send the Engineering Q3 budget from the Q3 budget report to Jane,"The agent should open Q3_Budget.csv in Nextcloud's work folder, find the Engineering row and the Q3 column, then send Jane a Mattermost message with the value 180000.",STATE,,,,,,,,,,No source post: Jane Smith is the Mattermost destination; the external Q3 Engineering value is 180000.
+canonical,20260502132211002201,nextcloud.raw.json,15,,"nextcloud,mattermost","""Send the total Q3 budget value from the Q3 budget report to Jane."",","The agent should open Q3_Budget.csv in Nextcloud's work folder, add the Q3 values for Marketing, Sales, and Engineering, then send Jane the total in Mattermost. The Q3 values are 60000, 120000, and 180000.",STATE,,,,,,,,,,No source post: Jane Smith is the Mattermost destination; the external total Q3 budget is 360000.
+canonical,20260503184339354488,mattermost.raw.json,2,2,mattermost,"According to the weekly deployment schedule for March 10-14, what service is scheduled for Tuesday and who owns it?","Open Engineering > Deployments and find the Weekly Deployment Schedule post, or search for Payment Gateway.",E01,zs7apgtgpfn3bnxr9cxznwjpry,engineering,deployments,bob.wilson,1773126778323,4,True,5356ce5d4a394172d6b24a965bcbc68902d281411f38f2246efa998dc46482ce,"**Weekly Deployment Schedule (March 10-14):**
+
+| Day | Service | Version | Owner |
+|---|---|---|---|
+| Mon | Auth Service | v1.8.0 | Jane |
+| Tue | Payment Gateway | v3.2.1 | Charlie |
+| Wed | No deployments (Change Freeze) | - | - |
+| Thu | Frontend Bundle | v5.1.0 | Alice |
+| Fri | No deployments (End of week) | - | - |
+
+All deployments require at least 1 approval from @john.doe or @jane.smith.",Exact supporting post(s) are protected below; other required values come from the listed external sites.
+canonical,20260503185315769328,mattermost.raw.json,3,3,mattermost,Find the latest deadline mentioned for getting Project Alpha authentication working end-to-end.,"Use Mattermost search for ""March 25 auth flow"" or ""customer demo"", then open the matching result in Engineering > Project Alpha. The target is Kevin Martinez's reply mentioning the March 28 customer demo and the March 25 auth-flow deadline.",E02,suwnzum7ppn5tbeag1ga6k1r7w,engineering,project-alpha,kevin.martinez,1773126776742,17,True,86a72196b6ad434453b58e4b0c24fec3c0491cca75bb9d7012fd0dd0ea59ffd3,Just a heads up - the customer demo is scheduled for March 28. We need the auth flow working end-to-end by March 25 at the latest.,Exact supporting post(s) are protected below; other required values come from the listed external sites.
+canonical,20260503190213766807,mattermost.raw.json,4,4,mattermost,"In the weekly marketing analytics report, what was the demo page conversion rate from views to demo requests?","Open Marketing , then click  Analytics and read the thread under Ivy Chen's weekly analytics report.",E03,i9a9qqzfginezb1o6b8a3siuoh,marketing,analytics,ivy.chen,1773126780759,4,True,82898c315106b89a508f592d9f47f53346e1383db79e2da84fc68f64cad786ca,"**Weekly Marketing Analytics Report - March 3-9**
+
+**Website:**
+- Sessions: 45,230 (+12% WoW)
+- Unique visitors: 32,100 (+8% WoW)
+- Bounce rate: 38% (improved from 42%)
+- Avg session duration: 3:42
+
+**Top Pages:**
+1. /features - 8,200 views
+2. /pricing - 6,100 views
+3. /blog/workflow-tips - 4,800 views
+4. /demo - 3,200 views
+
+**Conversion Funnel:**
+- Landing page → Sign-up page: 15%
+- Sign-up page → Registration: 42%
+- Registration → First action: 68%
+
+**Recommendation:** The pricing page has high traffic but we're not tracking scroll depth. I'll add heatmap tracking this week.",Exact supporting post(s) are protected below; other required values come from the listed external sites.
+canonical,20260503190213766807,mattermost.raw.json,4,4,mattermost,"In the weekly marketing analytics report, what was the demo page conversion rate from views to demo requests?","Open Marketing , then click  Analytics and read the thread under Ivy Chen's weekly analytics report.",E04,hhigzptwetywzb3g7hhhhjdw8e,marketing,analytics,ivy.chen,1773126780837,1,True,5b63763ab6983ce6bb8b94987d030d731bbeae531833047f52c2e773cf8f865e,"Good question Kevin. 312 demo requests from 3,200 views = 9.75% conversion. That's above our 8% benchmark. The new demo page design is working well.",Exact supporting post(s) are protected below; other required values come from the listed external sites.
+canonical,20260503190832065620,mattermost.raw.json,5,5,mattermost,"In the PR #287 code review thread, what retry behavior did Charlie describe?","Open Engineering ,then click Code Reviews and inspect the PR #287 thread.",E05,rtdewtn5ein8uqwxqjq71jkiqh,engineering,code-reviews,charlie.brown,1773126778453,9,True,17134c7516bfbf2af411abc81732592621c13ed55bcde4c69f0e9a080fea22e5,"Need a review on PR #287: Refactored the order processing pipeline to use async/await instead of callbacks. Also added retry logic with exponential backoff for payment API calls.
+
+https://github.com/techcorp/api/pull/287
+
+Key changes:
+- `OrderService.processOrder()` is now async
+- Added `RetryHelper` utility class
+- Updated 12 test files",Exact supporting post(s) are protected below; other required values come from the listed external sites.
+canonical,20260503190832065620,mattermost.raw.json,5,5,mattermost,"In the PR #287 code review thread, what retry behavior did Charlie describe?","Open Engineering ,then click Code Reviews and inspect the PR #287 thread.",E06,rrdusfgbf3gf7qrahwjai64wuw,engineering,code-reviews,charlie.brown,1773126778880,7,True,919a683acb96f8a90565c7792a5ed405caa11f9b57b76a1faec7747d0d7e2a93,"Max 3 retries, starting at 1s, ceiling at 8s. So: 1s, 2s, 4s then fail.",Exact supporting post(s) are protected below; other required values come from the listed external sites.
+canonical,20260504052746189076,mattermost.raw.json,6,6,mattermost,"Create the HR team and share the invite link with Alice, Bob, John, and Ivy from the TechCorp General Team.","Create a team named “HR team” and copy its invite link. Then, create a direct message with Alice, Bob, John, and Ivy from the TechCorp General Team, and share the invite link with them.",STATE,,,,,,,,,,"State only: TechCorp General supplies Alice, Bob, John, and Ivy; create HR team and share its invite in a group DM."
+canonical,20260504052844732934,mattermost.raw.json,7,7,mattermost,Create a “Project Alpha & Beta” channel in the Engineering team and invite all members from the existing Project Alpha and Project Beta channels.,"Create a channel named “Project Alpha & Beta” within the Engineering team, and invite all 11 members who were in the existing Project Alpha and Project Beta channels.",STATE,,,,,,,,,,State only: Project Alpha and Project Beta currently have 11 unique members including admin; preserve their memberships for the union invite.
+canonical,20260504052919118470,mattermost.raw.json,8,8,mattermost,"Mark all unread messages as read across all teams, channels, and direct messages, and add an eyes reaction to the last message in each.","Go through all teams, and in every channel and direct message, mark all unread messages as read. Then, add an :eyes: reaction to the last message in each conversation that previously had unread messages.",STATE,,,,,,,,,,"State only: final seed deliberately has 8 unread messages across 8 joined conversations, so the count is below 20."
+canonical,20260504052950707272,mattermost.raw.json,9,9,mattermost,"In the Engineering team, post that the projects are completed in the Project Alpha and Project Beta channels and leave both channels. Then, create a Project Charlie channel and invite Kevin, Bob, Jane, Lisa, and Mike.","In the Engineering team workspace, post a message in both the Project Alpha and Project Beta channels stating that the projects have been completed, and then leave both channels. After that, create a new channel called Project Charlie and invite Kevin, Bob, Jane, Lisa, and Mike.",STATE,,,,,,,,,,"State only: Project Alpha and Project Beta are existing destinations; Project Charlie invitees are Kevin, Bob, Jane, Lisa, and Mike."
+canonical,20260504054529893474,mattermost.raw.json,23,23,mattermost,"Post a message in the Engineering Team’s Project Beta channel (tagging the channel) to schedule the May 5, 2026 meeting, asking members to choose from 2 PM, 4 PM, or 6 PM by reacting to the message. Then, add :one:, :two:, and :three: reactions to the message.","In the Engineering Team’s Project Beta channel, coordinate the schedule for the May 5, 2026 meeting. Post a message tagging the channel and ask team members to choose their available time from the following options: 1) 2 PM, 2) 4 PM, 3) 6 PM. Ask them to react to the message with the corresponding option. After posting the message, add the reactions :one:, :two:, and :three: to it.",STATE,,,,,,,,,,"No source post. The unstable word 'tomorrow' is fixed to May 5, 2026 from the May 4 task timestamp; options remain 2 PM, 4 PM, and 6 PM."
+canonical,20260504072531188863,mattermost.raw.json,10,10,mattermost,"Add a “Project Charlie” channel to the Engineering team and group “Project Alpha,” “Project Beta,” and “Project Charlie” under a “project” category. Then, group “devops,” “code reviews,” “bugs and issues,” and “deployments” under a “developments” category.","Create a channel named “Project Charlie” in the Engineering team. Then, create a channel category called “project” and move the channels “Project Alpha,” “Project Beta,” and “Project Charlie” into this category. After that, create another channel category named “developments” and move the channels “devops,” “code reviews,” “bugs and issues,” and “deployments” into this category.",STATE,,,,,,,,,,"State only: Project Alpha, Project Beta, devops, code-reviews, bugs-and-issues, and deployments exist. Admin is kept in 14 team channels (17 conversations including DM/GMs), below 20."
+canonical,20260504072600984958,mattermost.raw.json,11,11,mattermost,"Remove Emma and Grace from the Marketing team, promote the remaining members to team admins, and send each of them a direct message informing them of their new role.","Remove Emma and Grace from the Marketing team. Then, promote all remaining members to team admins. After that, create direct messages with each of the remaining members and inform them that they have been granted team admin privileges.",STATE,,,,,,,,,,"State only: Marketing members are admin, Emma, Frank, Grace, Ivy, and Kevin; remove Emma and Grace, then promote/message the remaining non-admin members."
+canonical,20260504074404058060,mattermost.raw.json,12,12,mattermost,"Call Emma and Bob. If no one joins within 30 seconds, end the call and send them a direct message asking them to call back when they’re available.","Open separate direct messages with Emma Davis and Bob Wilson. Call each person individually. For each call, wait at least 30 seconds without the other person joining, then leave the call and send that person a direct message asking them to call back when available.",STATE,,,,,,,,,,No source post: Emma Davis and Bob Wilson are call/DM destinations.
+canonical,20260504075257262372,mattermost.raw.json,13,13,mattermost,"Find the message where Kevin outlined the key metrics for the new internal dashboard. Pin the message, copy its link, and share it with Diana, Natalie, and Alice.","Search within the Engineering team channel to find the message mentioning key metrics for the new internal dashboard. Locate the message written by Kevin, jump to it, and pin it in the channel. Then, copy the link to that message. Afterward, create a direct message with Diana, Natalie, and Alice, and share the message link with them.",E07,u9b7ehb3kbnz5dkohhn3s6rt9y,engineering,project-beta,kevin.martinez,1773126777967,3,True,9489a0383e0aecf482abfd0238759fde105b8d239226b6604f2c076d5c54fa05,"Here are the key metrics we need to display on the new internal dashboard:
+
+1. **Sales Metrics:** Revenue, orders, avg order value, conversion rate
+2. **User Metrics:** DAU, MAU, retention, churn rate
+3. **System Health:** API latency, error rate, uptime
+4. **Support Metrics:** Open tickets, avg response time, CSAT score
+
+Each section should be a separate dashboard page with drill-down capabilities.",Exact supporting post(s) are protected below; other required values come from the listed external sites.
+canonical,20260504183129492900,minerva-lite.raw.json,10,,"minerva-lite,mattermost,nextcloud",46 contacts no,"Count Mattermost contacts as the 16 seeded Mattermost users, including   the admin. Count Nextcloud contacts from the logged-in Nextcloud account’s   address book, which has 30 contacts. Total contacts = 46. In Minerva-lite,   PHYS 230 in the default term, Fall 2026, has 100 total seats and 62 taken, so   only 38 open seats. Since 46 people need seats, the expected answer is 46   contacts no.",STATE,,,,,,,,,,Profile state: Mattermost has exactly 16 seeded users including admin; external combined answer is 46 contacts no.
+canonical,20260504185849691654,minerva-lite.raw.json,5,,"minerva-lite,mattermost,nextcloud",Between the contacts in mattermost and next cloud how many contacts are there total and is there enough space PHYS 230 for everyone to take it together answer in the form: n contacts yes or n contacts no,"Count Mattermost contacts as the 16 seeded Mattermost users, including   the admin. Count Nextcloud contacts from the logged-in Nextcloud account’s   address book, which has 30 contacts. Total contacts = 46. In Minerva-lite,   PHYS 230 in the default term, Fall 2026, has 100 total seats and 62 taken, so   only 38 open seats. Since 46 people need seats, the expected answer is 46   contacts no.",STATE,,,,,,,,,,Profile state: Mattermost has exactly 16 seeded users including admin; external combined answer is 46 contacts no.
+canonical,20260505042726105357,mattermost.raw.json,14,14,"mattermost,firefly,flight-search,x-lite","Find the Tuesday item in the Engineering , Deployments weekly deployment schedule for March 10-14. Then, find how many Home Internet payments appear in the first four months of 2026 and their total. Finally, find how many one-way economy flights from Denver (DEN) to Las Vegas (LAS) on 2026-06-15 are non-stop only. Post about these informations then.","Use Engineering > Deployments for the schedule thread. In Firefly, search Home Internet or Videotron for Jan-Apr 2026. In flight-search, search DEN to LAS on 2026-06-15 in economy and apply Nonstop only.Then post them in X",E01,zs7apgtgpfn3bnxr9cxznwjpry,engineering,deployments,bob.wilson,1773126778323,4,True,5356ce5d4a394172d6b24a965bcbc68902d281411f38f2246efa998dc46482ce,"**Weekly Deployment Schedule (March 10-14):**
+
+| Day | Service | Version | Owner |
+|---|---|---|---|
+| Mon | Auth Service | v1.8.0 | Jane |
+| Tue | Payment Gateway | v3.2.1 | Charlie |
+| Wed | No deployments (Change Freeze) | - | - |
+| Thu | Frontend Bundle | v5.1.0 | Alice |
+| Fri | No deployments (End of week) | - | - |
+
+All deployments require at least 1 approval from @john.doe or @jane.smith.",Exact supporting post(s) are protected below; other required values come from the listed external sites.
+canonical,20260505064034296257,notion.raw.json,8,,"notion,thunderbird,mattermost",Find the most recent lab meeting page and share it through a published link. Share it with the person I most recently interacted with on each communication platform.,"Publish the Research Lab meeting page in Notion, copy the published link, then send it to David via email and to Emma Davis via a direct message on Mattermost.",E19,props:task_evidence_key=recent-emma-interaction,,DM admin + emma.davis,emma.davis,1777636804000,1,False,4067fbf567d0ca93f70ae5dd20e04b6810076a3958eb84befd319fd9c00681df,"welcome, please see <https://github.com/elm/projects>","E19 is the newest fixed admin DM interaction, authored by Emma Davis; send her the Notion publication link."
+canonical,20260505065327650216,notion.raw.json,9,,"notion,mattermost,thunderbird,x-lite",Find the most recent lab meeting page and share the page with published link. Share it with the person I most recently interacted with on each communication platform. Then publish a short post summarizing the page content instead of individually sending a message.,"Find a notion page with title ""Lab Meeting – 2026-05-01"". Publish and share it through individual communication platform, send a mail to David, send a DM to emma.davis, and post the summarized content on x-lite.",E19,props:task_evidence_key=recent-emma-interaction,,DM admin + emma.davis,emma.davis,1777636804000,1,False,4067fbf567d0ca93f70ae5dd20e04b6810076a3958eb84befd319fd9c00681df,"welcome, please see <https://github.com/elm/projects>","E19 is the newest fixed admin DM interaction, authored by Emma Davis; send her the Notion publication link."
+canonical,20260505074859037077,notion.raw.json,13,,"notion,mattermost","I’m planning a domestic flight trip with the two people I most recently interacted with across the connected communication platforms. In the Travel Budget database,  assign one person to the accommodation-related items and the other to the activity-related items using the email property. Then share in the group message how much each person should pay.","Navigate to the Travel Budget database and identify the domestic flight trip. Check the relevant email context for the two most recent people I interacted with (in mattermost), Emma Davis and John Doe, to determine which person should be assigned to accommodation-related items and which should be assigned to activity-related items. Then create a group Mattermost channel or DM with Emma and John, and share how much each person should pay.",E19,props:task_evidence_key=recent-emma-interaction,,DM admin + emma.davis,emma.davis,1777636804000,1,False,4067fbf567d0ca93f70ae5dd20e04b6810076a3958eb84befd319fd9c00681df,"welcome, please see <https://github.com/elm/projects>",E19 establishes Emma Davis as the Mattermost recent contact. Required profiles: emma.davis@techcorp.com and john.doe@techcorp.com.
+canonical,20260505082541044452,minerva-lite.raw.json,6,,"minerva-lite,flight-search,mattermost,notion,x-lite","Find the cheapest 4-day round-trip flight from ICN to KIX during the first week of October 2026 that minimizes missed classes based on my current schedule. Then ask whether Emma is available. Also, post the itinerary and ask who else can join the trip (in case). Finally, add this as a new trip in the Travel Budget database, making sure to distinguish it from the existing trip.","First, check my class schedule in Minerva-lite, then search for the flight ticket that best fits my current schedule and travel constraints. Next, post the ticket information on X-Lite and share it with Emma through Mattermost. Finally, update the Travel Budget database in the Personal Travel workspace.",STATE,,,,,,,,,,No source post: Emma Davis is the Mattermost availability/itinerary destination.
+canonical,20260505144604025951,mattermost.raw.json,24,24,"mattermost,thunderbird","Send “Let’s have an in-person meeting tomorrow” to the group message, then send a reminder email to each member.","First, send the message to the group DM that includes admin, jane.smith, and kevin. Then copy each member’s email address using right-click, and send a reminder email through Thunderbird, include all of them as recipients.",STATE,,,,,,,,,,"State only: use the existing group DM containing admin, jane.smith, john.doe, and kevin.martinez; email admin@techcorp.com, jane.smith@techcorp.com, and kevin.martinez@techcorp.com."
+canonical,20260505145825226718,mattermost.raw.json,15,15,"mattermost,yt-lite","I previously watched a breakfast recipe video and recreated the recipes from it. For the channel that mentioned Korean fried chicken, please also suggest a cuisine I’ve tried before and include a link to its recipe.",Search YouTube for “breakfast” and watch the relevant video to identify the three recipes mentioned. Then go to the Water Cooler channel in Mattermost and post the names of the three dishes along with the video link.,E08,dmpbf4epffrkmd9biy83m5qitw,general,watercooler,grace.lee,1773126782132,5,True,cd24233b5851207c3587fb1837cc2926c4c575b2d6b54deb9e58b442a240aba1,I tried a new recipe this weekend - Korean fried chicken with gochujang glaze. It turned out amazing! I'll bring some for the team lunch on Wednesday if anyone's interested :yum:,Exact supporting post(s) are protected below; other required values come from the listed external sites.
+canonical,20260505153151050026,notion.raw.json,15,,"notion,mattermost,thunderbird","Email the Hiring and Recruiting content to Henry, Mike, John, and Ivy, and send them a direct message asking them to check their email.","Find and review the “Hiring and Recruiting” page in Notion. Then, in Mattermost, look up the email addresses of Henry, Mike, John, and Ivy. Using Thunderbird, send them an email containing the Hiring and Recruiting content. After sending the email, go back to Mattermost and send each of them a direct message asking them to check the email.",STATE,,,,,,,,,,"Profile state: henry.taylor@techcorp.com, mike.ross@techcorp.com, john.doe@techcorp.com, and ivy.chen@techcorp.com; DM each after emailing."
+canonical,20260505154727372812,mattermost.raw.json,16,16,"mattermost,pipedrive,firefly,flight-search","Find the demo page conversion rate from the weekly marketing analytics report. Then, find the highest-value open deal in the Proposal stage. Next, check April 2026 Restaurants spending against a C$250.00 target. Finally, find how many one-way economy flights from San Francisco (SFO) to Seattle (SEA) on 2026-06-15 are non-stop only. Post the combined summary in the analytics discussion.","Use the analytics report, the Proposal deal list, the April Restaurants spending, and the SFO-SEA non-stop count, then post the summary.""",E03,i9a9qqzfginezb1o6b8a3siuoh,marketing,analytics,ivy.chen,1773126780759,4,True,82898c315106b89a508f592d9f47f53346e1383db79e2da84fc68f64cad786ca,"**Weekly Marketing Analytics Report - March 3-9**
+
+**Website:**
+- Sessions: 45,230 (+12% WoW)
+- Unique visitors: 32,100 (+8% WoW)
+- Bounce rate: 38% (improved from 42%)
+- Avg session duration: 3:42
+
+**Top Pages:**
+1. /features - 8,200 views
+2. /pricing - 6,100 views
+3. /blog/workflow-tips - 4,800 views
+4. /demo - 3,200 views
+
+**Conversion Funnel:**
+- Landing page → Sign-up page: 15%
+- Sign-up page → Registration: 42%
+- Registration → First action: 68%
+
+**Recommendation:** The pricing page has high traffic but we're not tracking scroll depth. I'll add heatmap tracking this week.",Exact supporting post(s) are protected below; other required values come from the listed external sites.
+canonical,20260505154727372812,mattermost.raw.json,16,16,"mattermost,pipedrive,firefly,flight-search","Find the demo page conversion rate from the weekly marketing analytics report. Then, find the highest-value open deal in the Proposal stage. Next, check April 2026 Restaurants spending against a C$250.00 target. Finally, find how many one-way economy flights from San Francisco (SFO) to Seattle (SEA) on 2026-06-15 are non-stop only. Post the combined summary in the analytics discussion.","Use the analytics report, the Proposal deal list, the April Restaurants spending, and the SFO-SEA non-stop count, then post the summary.""",E04,hhigzptwetywzb3g7hhhhjdw8e,marketing,analytics,ivy.chen,1773126780837,1,True,5b63763ab6983ce6bb8b94987d030d731bbeae531833047f52c2e773cf8f865e,"Good question Kevin. 312 demo requests from 3,200 views = 9.75% conversion. That's above our 8% benchmark. The new demo page design is working well.",Exact supporting post(s) are protected below; other required values come from the listed external sites.
+canonical,20260505154917503199,mattermost.raw.json,17,17,"mattermost,firefly,flight-search,pipedrive","Find the Volunteer Day at City Food Bank spots and signup count. Then, find how many Vacation-tagged expenses there are from 2025-06-01 through 2025-08-31 and their total. Next, find the fastest one-way economy flight from Los Angeles (LAX) to Tokyo Narita (NRT) on 2026-06-15. Finally, find the status and expected close date of Radiant Solar - Custom Development Agreement. Reply in the Upcoming Events thread with a combined summary.","Collect the event signup details, Vacation-tagged expense count and total, the fastest LAX-NRT flight, and the Radiant Solar deal details, then reply in the event thread",E09,8p613yhn3tr5zjiuy8ebxazfih,general,events,henry.taylor,1773126782274,7,True,221a8c3e991271f8e779a1f9914a93eb49e1ea7bac7d0811601f6b0bf3887e9c,":calendar: **Upcoming Events:**
+
+**March 14** - Engineering All-Hands (10:00 AM, Virtual)
+**March 15** - Team Trivia Night (6:00 PM, Slack #trivia-night)
+**March 20** - Team Lunch at Bella Italia (12:30 PM)
+**March 22** - Volunteer Day at City Food Bank (9:00 AM - 1:00 PM)
+**March 28** - Project Alpha Customer Demo (2:00 PM, Conference Room A)
+**March 31** - Q1 Company Town Hall (3:00 PM, Virtual)
+
+RSVP in the thread below! :point_down:",Exact supporting post(s) are protected below; other required values come from the listed external sites.
+canonical,20260505154917503199,mattermost.raw.json,17,17,"mattermost,firefly,flight-search,pipedrive","Find the Volunteer Day at City Food Bank spots and signup count. Then, find how many Vacation-tagged expenses there are from 2025-06-01 through 2025-08-31 and their total. Next, find the fastest one-way economy flight from Los Angeles (LAX) to Tokyo Narita (NRT) on 2026-06-15. Finally, find the status and expected close date of Radiant Solar - Custom Development Agreement. Reply in the Upcoming Events thread with a combined summary.","Collect the event signup details, Vacation-tagged expense count and total, the fastest LAX-NRT flight, and the Radiant Solar deal details, then reply in the event thread",E10,7c9cox7rttg4bb1jx4fmrrmz8h,general,events,henry.taylor,1773126782472,1,True,0c37da069510cfc95d2e25dbb5c8947bfc0368b5996ff81ddf28dce8496dcef1,"We have 20 spots for the food bank. First come, first served. 12 signed up so far.",Exact supporting post(s) are protected below; other required values come from the listed external sites.
+canonical,20260505155054845830,mattermost.raw.json,18,18,"mattermost,nextcloud,thunderbird,notion","Share the safari folder with Agent2 so they can access it. Then, send the “Customer Interview Digest - Q2 2026” content to Henry via email and leave him a direct message.","In Mattermost, find the email addresses of Diana, Emma, and Jane, then share the safari folder in Nextcloud with them so they have access. Next, locate the content titled “Customer Interview Digest - Q2 2026” in Notion. After that, find Henry’s email address in Mattermost and send him the content via email. Finally, send Henry a direct message in Mattermost.",STATE,,,,,,,,,,"Profile state: diana.prince@techcorp.com, emma.davis@techcorp.com, jane.smith@techcorp.com, and henry.taylor@techcorp.com; Henry is also the DM destination."
+canonical,20260505155117644963,mattermost.raw.json,19,19,"mattermost,pipedrive,firefly,flight-search","Find Natalie Kim's onboarding buddy. Then, find all deals linked to Rebecca Roberts. Next, compare Groceries spending in January 2026 and March 2026. Finally, find the cheapest non-stop one-way economy flight from Toronto (YYZ) to Vancouver (YVR) on 2026-06-15. Post the combined summary in the new-hire announcement area","Find the onboarding buddy assignment, Rebecca Roberts's linked deals, the Groceries comparison, and the cheapest non-stop YYZ-YVR flight, then post the summary.""",E11,zj5n1igz83g7bnoujg81u9c9kh,general,announcements,henry.taylor,1773126781324,11,True,019271b85d0363398dfb1f0537cb650c3147946a63dc075fba42acc21d50bf23,":wave: **New Hire Announcement**
+
+Please join me in welcoming our newest team members joining this month:
+
+- **Mike Ross** - Junior Developer (Engineering)
+- **Natalie Kim** - Technical Writer (Engineering)
+
+Both will be going through onboarding this week. Please make them feel welcome and don't hesitate to reach out if you see them in the channels!
+
+Onboarding buddy assignments:
+- Mike → Jane Smith
+- Natalie → Frank Miller",Exact supporting post(s) are protected below; other required values come from the listed external sites.
+canonical,20260505155400345653,mattermost.raw.json,20,20,"mattermost,pipedrive,flight-search,firefly","Find the retry behavior Charlie described in the PR #287 code review thread. Then, find the pending activity shown for Lynx Cybersecurity - Data Analytics Solution. Next, find the fastest one-way economy flight from London Heathrow (LHR) to New York (JFK) on 2026-06-15. Finally, find the latest Netflix monthly subscription payment from 2026-01-01 through 2026-04-30. Reply in the PR #287 thread with a combined summary.","Gather the retry behavior, Lynx pending activity, fastest LHR-JFK flight, and latest Netflix payment, then reply in the PR thread.",E05,rtdewtn5ein8uqwxqjq71jkiqh,engineering,code-reviews,charlie.brown,1773126778453,9,True,17134c7516bfbf2af411abc81732592621c13ed55bcde4c69f0e9a080fea22e5,"Need a review on PR #287: Refactored the order processing pipeline to use async/await instead of callbacks. Also added retry logic with exponential backoff for payment API calls.
+
+https://github.com/techcorp/api/pull/287
+
+Key changes:
+- `OrderService.processOrder()` is now async
+- Added `RetryHelper` utility class
+- Updated 12 test files",Exact supporting post(s) are protected below; other required values come from the listed external sites.
+canonical,20260505155400345653,mattermost.raw.json,20,20,"mattermost,pipedrive,flight-search,firefly","Find the retry behavior Charlie described in the PR #287 code review thread. Then, find the pending activity shown for Lynx Cybersecurity - Data Analytics Solution. Next, find the fastest one-way economy flight from London Heathrow (LHR) to New York (JFK) on 2026-06-15. Finally, find the latest Netflix monthly subscription payment from 2026-01-01 through 2026-04-30. Reply in the PR #287 thread with a combined summary.","Gather the retry behavior, Lynx pending activity, fastest LHR-JFK flight, and latest Netflix payment, then reply in the PR thread.",E06,rrdusfgbf3gf7qrahwjai64wuw,engineering,code-reviews,charlie.brown,1773126778880,7,True,919a683acb96f8a90565c7792a5ed405caa11f9b57b76a1faec7747d0d7e2a93,"Max 3 retries, starting at 1s, ceiling at 8s. So: 1s, 2s, 4s then fail.",Exact supporting post(s) are protected below; other required values come from the listed external sites.
+canonical,20260505155812814340,mattermost.raw.json,21,21,"mattermost,pipedrive,firefly,flight-search","Find the two action items in Bob's infrastructure status report for the week of March 10. Then, count the open deals currently shown in the Lead stage. Next, find how many Groceries expenses there are from 2026-01-01 through 2026-03-31 and their total. Finally, find how many one-way economy flights from Denver (DEN) to Las Vegas (LAS) on 2026-06-15 include United Airlines. Post the combined summary in the infrastructure status discussion.","Find the infrastructure action items, Lead stage count, Groceries count and total, and United Airlines DEN-LAS count, then post the summary.",E12,bfyx5zu8k7b45mkmhe4ex4srwc,engineering,devops,bob.wilson,1773126780069,5,True,76c4a79eb3101f4fb6fb3e34ed7b5bc69a3188d660474346619f47ed0821d0e5,"**Infrastructure Status Report - Week of March 10**
+
+**Production:**
+- Uptime: 99.97% (1 brief outage on Wed, 3 min)
+- Avg API Latency: 45ms (p99: 180ms)
+- Error Rate: 0.02%
+- CPU Utilization: 35% avg, 62% peak
+
+**Kubernetes:**
+- Cluster nodes: 8 (3 spot instances)
+- Pod restarts this week: 2 (payment-service OOM, fixed)
+- HPA events: 4 scale-ups during peak hours
+
+**Action Items:**
+- Increase payment-service memory limit from 512MB to 768MB
+- Investigate p99 latency spike on Wednesday",Exact supporting post(s) are protected below; other required values come from the listed external sites.
+canonical,20260505173610008785,mattermost.raw.json,22,22,mattermost,"Pin Kevin’s message in the Engineering team channel outlining the key metrics for the new internal dashboard, and share its link in a direct message with Diana, Natalie, and Alice.","Search within the Engineering team channel to find the message mentioning key metrics for the new internal dashboard. Locate the message written by Kevin, jump to it, and pin it in the channel. Then, copy the link to that message. Afterward, create a direct message with Diana, Natalie, and Alice, and share the message link with them.",E07,u9b7ehb3kbnz5dkohhn3s6rt9y,engineering,project-beta,kevin.martinez,1773126777967,3,True,9489a0383e0aecf482abfd0238759fde105b8d239226b6604f2c076d5c54fa05,"Here are the key metrics we need to display on the new internal dashboard:
+
+1. **Sales Metrics:** Revenue, orders, avg order value, conversion rate
+2. **User Metrics:** DAU, MAU, retention, churn rate
+3. **System Health:** API latency, error rate, uptime
+4. **Support Metrics:** Open tickets, avg response time, CSAT score
+
+Each section should be a separate dashboard page with drill-down capabilities.",Exact supporting post(s) are protected below; other required values come from the listed external sites.
+canonical,20260505195624631109,acidwave.raw.json,24,,"acidwave,mattermost",Send Mike a direct message recommending a rock song suitable for someone going through a breakup.,The agent should transcribe as many songs as it takes for it to understand that Lighthouse is,STATE,,,,,,,,,,No source post: Mike Ross is the DM destination; the external Acidwave answer is Lighthouse.
+canonical,20260505214616690665,pipedrive.raw.json,5,,"pipedrive,thunderbird,mattermost,nextcloud",Shoot leon green an email asking him about his weekend,The agent should find that leon green's email is found only in next cloud then should send an email to leon@example.com,STATE,,,,,,,,,,"No source post is required; Mattermost is only one of the sites searched for Leon Green's contact, which is found in Nextcloud."
+canonical,20260506000534325746,acidwave.raw.json,29,,"acidwave,mattermost","I can't believe wikipedia is banning us congress members. Some of the longest ""songs"" are actually podcasts and mislabeled as songs.  Shoot Mike a dm with the name of the podcast that mentions this.",The agent should get a transcription of the longest songs until it gets to the song trailer static which is actually a podcast and the agent should then dm mike on matttermost the name of this podcast on mattermost,STATE,,,,,,,,,,No source post: Mike Ross is the DM destination; the external Acidwave answer is Trailer Static.
+legacy,0.json,tasks/0.json,0,,mattermost,Who is the onboarding buddy assigned to Mike Ross?,The new hire announcement in General > Announcements states 'Mike → Jane Smith',E11,zj5n1igz83g7bnoujg81u9c9kh,general,announcements,henry.taylor,1773126781324,11,True,019271b85d0363398dfb1f0537cb650c3147946a63dc075fba42acc21d50bf23,":wave: **New Hire Announcement**
+
+Please join me in welcoming our newest team members joining this month:
+
+- **Mike Ross** - Junior Developer (Engineering)
+- **Natalie Kim** - Technical Writer (Engineering)
+
+Both will be going through onboarding this week. Please make them feel welcome and don't hesitate to reach out if you see them in the channels!
+
+Onboarding buddy assignments:
+- Mike → Jane Smith
+- Natalie → Frank Miller",Legacy read-only task; exact supporting post(s) are protected below.
+legacy,1.json,tasks/1.json,1,,mattermost,"According to the weekly deployment schedule for March 10-14, what service is scheduled for deployment on Tuesday, and who is the owner?","Found in Engineering > Deployments channel, Bob's weekly schedule post shows Tuesday: Payment Gateway v3.2.1, Owner: Charlie",E01,zs7apgtgpfn3bnxr9cxznwjpry,engineering,deployments,bob.wilson,1773126778323,4,True,5356ce5d4a394172d6b24a965bcbc68902d281411f38f2246efa998dc46482ce,"**Weekly Deployment Schedule (March 10-14):**
+
+| Day | Service | Version | Owner |
+|---|---|---|---|
+| Mon | Auth Service | v1.8.0 | Jane |
+| Tue | Payment Gateway | v3.2.1 | Charlie |
+| Wed | No deployments (Change Freeze) | - | - |
+| Thu | Frontend Bundle | v5.1.0 | Alice |
+| Fri | No deployments (End of week) | - | - |
+
+All deployments require at least 1 approval from @john.doe or @jane.smith.",Legacy read-only task; exact supporting post(s) are protected below.
+legacy,2.json,tasks/2.json,2,,mattermost,How many test cases passed and how many failed in the Sprint 11 QA report for Project Alpha?,"Diana's QA report in Engineering > project-alpha: Passed 45/52, Failed 7",E14,cm7g4nhuyjbq9fr1furyz7emph,engineering,project-alpha,diana.prince,1773126777636,5,True,33bf6750b984b48f0e68c17e211d805218c9332ede16fb7cf0cb8c81a891f192,"QA Report for Sprint 11:
+
+**Passed:** 45/52 test cases
+**Failed:** 7 test cases
+**Blockers:**
+- Login page crashes on Safari 16 when using autofill
+- Payment form validation not triggered on mobile keyboards
+- API returns 500 on concurrent cart updates
+
+**Notes:** Overall good quality. The Safari issue is the most critical since 15% of our users are on Safari.",Legacy read-only task; exact supporting post(s) are protected below.
+legacy,3.json,tasks/3.json,3,,mattermost,What tech stack was proposed for Project Beta and who proposed it?,Jane Smith posted the architecture proposal in Engineering > project-beta with the full tech stack,E15,oq4um7bawtd48fr4tfchj6zkce,engineering,project-beta,jane.smith,1773126777779,9,True,eaaeb54ae4738c3fdce8b773664429c9bf0433c16f568b30b5f7ef8b1a52cbb1,"Starting the architecture planning for Project Beta (Internal Dashboard Redesign). Here's my proposal:
+
+**Tech Stack:**
+- Frontend: Next.js 14 with App Router
+- State Management: Zustand
+- UI: Tailwind CSS + Radix UI
+- Charts: D3.js for custom visualizations
+- API: tRPC for type-safe API calls
+
+Thoughts?",Legacy read-only task; exact supporting post(s) are protected below.
+legacy,4.json,tasks/4.json,4,,mattermost,What were the critical and high severity vulnerabilities found in the quarterly dependency audit? List the affected packages and their severity.,"Lisa's security update in Engineering > tech-discussions: Critical - 2 vulnerabilities in lodash (prototype pollution), High - 1 vulnerability in jsonwebtoken < 9.0.0",E16,zgcemj5typgct8zb5mh4a7kxue,engineering,tech-discussions,lisa.wang,1773126779959,4,True,583bf09bb6c244e087f1633236843aaffefcf588be26ffc625d7f28c0321209f,"**Security Update:** I've completed the quarterly dependency audit. Here are the findings:
+
+:red_circle: **Critical:** 2 vulnerabilities in `lodash` (prototype pollution) - PR #301 ready
+:orange_circle: **High:** 1 vulnerability in `jsonwebtoken` < 9.0.0 - PR #302 ready
+:yellow_circle: **Medium:** 3 vulnerabilities in dev dependencies - tracking in JIRA
+
+PRs #301 and #302 should be merged and deployed this week.",Legacy read-only task; exact supporting post(s) are protected below.
+legacy,5.json,tasks/5.json,5,,mattermost,"Based on the Q1 marketing campaign results, by how much did the website traffic exceed the target, and what was the cost per acquisition compared to the target?","Emma's Q1 results in Marketing > campaigns: Traffic +42% (target +25%), CPA $12.40 (target $15). Traffic exceeded by 17 percentage points, CPA was $2.60 under target.",E17,duk3c7xk9bnemr57t3kda66zwh,marketing,campaigns,emma.davis,1773126780499,5,True,9c2a6918500afb569f1f405402e38fbeb822d1adebef4b175cdd540950da60fb,"**Q1 Campaign Results: 'Build Better'**
+
+:chart_with_upwards_trend: **Results:**
+- Website traffic: +42% (target was +25%)
+- New sign-ups: 3,847 (target was 3,000)
+- Email open rate: 28.3% (industry avg: 21%)
+- Social engagement: +65% across all platforms
+- Cost per acquisition: $12.40 (target was $15)
+
+:tada: Great work everyone! The content series by Frank and Grace's social graphics were the top performers.",Legacy read-only task; exact supporting post(s) are protected below.
+legacy,6.json,tasks/6.json,6,,mattermost,"In the security incident report from March 8 in the security-alerts channel, what was the severity, the type of attack, and what recommendation did Lisa Wang make?","Lisa's security incident report in Engineering > security-alerts: Severity Medium, Type: Unauthorized API access attempt, 500+ failed auth attempts. Recommendation: Implement IP-based progressive lockout for failed auth attempts.",E18,4hnjptbpmpnmzgdqdth51qxt3y,engineering,security-alerts,lisa.wang,1773126780203,5,True,e24f5e497fdc5874bbe25fc42b98d81dc9d9c068f140475389b13189421f7833,":rotating_light: **Security Incident Report - March 8**
+
+**Severity:** Medium
+**Type:** Unauthorized API access attempt
+**Details:** Detected 500+ failed authentication attempts from IP range 203.0.113.0/24 targeting `/api/v1/admin/users` endpoint over a 2-hour period.
+
+**Actions Taken:**
+1. IP range blocked at WAF level
+2. Rate limiting tightened on admin endpoints (10 req/min)
+3. All admin accounts verified - no breach detected
+4. Enhanced logging enabled for admin endpoints
+
+**Recommendation:** Implement IP-based progressive lockout for failed auth attempts.",Legacy read-only task; exact supporting post(s) are protected below.
+legacy,7.json,tasks/7.json,7,,mattermost,"In the Infrastructure Status Report for the week of March 10 posted in the devops channel, what was the production uptime percentage, and what caused the p99 latency spike? How was it resolved?","Bob's infra status report in Engineering > devops: Uptime 99.97%, p99 spike caused by PostgreSQL connection pool exhaustion, fixed by increasing pool size from 20 to 50 connections and adding connection timeout handling.",E12,bfyx5zu8k7b45mkmhe4ex4srwc,engineering,devops,bob.wilson,1773126780069,5,True,76c4a79eb3101f4fb6fb3e34ed7b5bc69a3188d660474346619f47ed0821d0e5,"**Infrastructure Status Report - Week of March 10**
+
+**Production:**
+- Uptime: 99.97% (1 brief outage on Wed, 3 min)
+- Avg API Latency: 45ms (p99: 180ms)
+- Error Rate: 0.02%
+- CPU Utilization: 35% avg, 62% peak
+
+**Kubernetes:**
+- Cluster nodes: 8 (3 spot instances)
+- Pod restarts this week: 2 (payment-service OOM, fixed)
+- HPA events: 4 scale-ups during peak hours
+
+**Action Items:**
+- Increase payment-service memory limit from 512MB to 768MB
+- Investigate p99 latency spike on Wednesday",Legacy read-only task; exact supporting post(s) are protected below.
+legacy,7.json,tasks/7.json,7,,mattermost,"In the Infrastructure Status Report for the week of March 10 posted in the devops channel, what was the production uptime percentage, and what caused the p99 latency spike? How was it resolved?","Bob's infra status report in Engineering > devops: Uptime 99.97%, p99 spike caused by PostgreSQL connection pool exhaustion, fixed by increasing pool size from 20 to 50 connections and adding connection timeout handling.",E13,czed4ajgb7byjbpg854mikegzy,engineering,devops,bob.wilson,1773126780117,3,True,d9faca2adddb1167e090fb1d39d10ba90cc40bd51f6532eb66d1d2343db6ff14,"Yes, it was caused by a PostgreSQL connection pool exhaustion. I've increased the pool size from 20 to 50 connections and added connection timeout handling.",Legacy read-only task; exact supporting post(s) are protected below.
+legacy,8.json,tasks/8.json,8,,mattermost,"According to the events post by Henry Taylor in the events channel, what company events are scheduled between March 20 and March 31? List each event with its date and time.","Henry's events post in General > events lists: March 20 - Team Lunch at Bella Italia (12:30 PM), March 22 - Volunteer Day at City Food Bank (9:00 AM - 1:00 PM), March 28 - Project Alpha Customer Demo (2:00 PM), March 31 - Q1 Company Town Hall (3:00 PM).",E09,8p613yhn3tr5zjiuy8ebxazfih,general,events,henry.taylor,1773126782274,7,True,221a8c3e991271f8e779a1f9914a93eb49e1ea7bac7d0811601f6b0bf3887e9c,":calendar: **Upcoming Events:**
+
+**March 14** - Engineering All-Hands (10:00 AM, Virtual)
+**March 15** - Team Trivia Night (6:00 PM, Slack #trivia-night)
+**March 20** - Team Lunch at Bella Italia (12:30 PM)
+**March 22** - Volunteer Day at City Food Bank (9:00 AM - 1:00 PM)
+**March 28** - Project Alpha Customer Demo (2:00 PM, Conference Room A)
+**March 31** - Q1 Company Town Hall (3:00 PM, Virtual)
+
+RSVP in the thread below! :point_down:",Legacy read-only task; exact supporting post(s) are protected below.
+legacy,9.json,tasks/9.json,9,,mattermost,"In the weekly marketing analytics report for March 3-9 in the analytics channel, what was the demo page conversion rate (demo requests out of demo page views), and how does it compare to the benchmark?","Ivy's analytics report in Marketing > analytics: 312 demo requests from 3,200 demo page views = 9.75% conversion rate. The benchmark is 8%, so it's above benchmark.",E03,i9a9qqzfginezb1o6b8a3siuoh,marketing,analytics,ivy.chen,1773126780759,4,True,82898c315106b89a508f592d9f47f53346e1383db79e2da84fc68f64cad786ca,"**Weekly Marketing Analytics Report - March 3-9**
+
+**Website:**
+- Sessions: 45,230 (+12% WoW)
+- Unique visitors: 32,100 (+8% WoW)
+- Bounce rate: 38% (improved from 42%)
+- Avg session duration: 3:42
+
+**Top Pages:**
+1. /features - 8,200 views
+2. /pricing - 6,100 views
+3. /blog/workflow-tips - 4,800 views
+4. /demo - 3,200 views
+
+**Conversion Funnel:**
+- Landing page → Sign-up page: 15%
+- Sign-up page → Registration: 42%
+- Registration → First action: 68%
+
+**Recommendation:** The pricing page has high traffic but we're not tracking scroll depth. I'll add heatmap tracking this week.",Legacy read-only task; exact supporting post(s) are protected below.
+legacy,9.json,tasks/9.json,9,,mattermost,"In the weekly marketing analytics report for March 3-9 in the analytics channel, what was the demo page conversion rate (demo requests out of demo page views), and how does it compare to the benchmark?","Ivy's analytics report in Marketing > analytics: 312 demo requests from 3,200 demo page views = 9.75% conversion rate. The benchmark is 8%, so it's above benchmark.",E04,hhigzptwetywzb3g7hhhhjdw8e,marketing,analytics,ivy.chen,1773126780837,1,True,5b63763ab6983ce6bb8b94987d030d731bbeae531833047f52c2e773cf8f865e,"Good question Kevin. 312 demo requests from 3,200 views = 9.75% conversion. That's above our 8% benchmark. The new demo page design is working well.",Legacy read-only task; exact supporting post(s) are protected below.

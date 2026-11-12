@@ -1,0 +1,1008 @@
+[
+  {
+    "intent": "Create a private coordination chat for the Saturday annotation session and include the confirmed attendees.",
+    "login_username": "techvalueinvestor",
+    "require_login": true,
+    "sites": [
+      "x-lite"
+    ],
+    "task_id": "256",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Every user who confirmed availability for the Saturday annotation session is included in the created private group chat; if no view confirms this for ALL qualifying items (filter view / exhaustive scroll through the relevant scope / explicit count), the rubric must be marked fail.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In X-lite, the agent created a private coordination group chat for the Saturday annotation session, and every user who confirmed availability is a member of that same new chat. Establish the full qualifying set from the session discussion and complete membership evidence (a filter view, exhaustive scroll through the relevant scope or explicit count). The seeded confirmed attendees are Dana Lee (u78), Rafael Ortiz (u79), and Priya Shah (u80). A partial list or counts of those users across unrelated chats cannot establish complete membership. Invites without confirmed membership, drafts, separate individual DMs, an unrelated pre-existing group or a final claim are insufficient. This node grades the approved all-confirmed-attendees criterion; there is no separate rubric for excluding other attendees."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "A message was sent to the created private group chat containing the meeting purpose, date, and location of the Saturday annotation session.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The task account sent a new message in the same private group chat created for the Saturday annotation session, containing all three requested details: the annotation meeting purpose, its date, and its location. Establish the correct date and location from the session discussion in the task environment, not the evaluator wall clock. Verify the actual sent message and group identity. A draft, an unrelated or pre-existing message, a message to another group or a single attendee, a final chat claim, or text containing only one of the three details is insufficient."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Clean up my follow list so it focuses on AI, benchmark, and course-planning accounts.",
+    "login_username": "techvalueinvestor",
+    "require_login": true,
+    "sites": [
+      "x-lite"
+    ],
+    "task_id": "257",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent viewed profiles or recent posts of followed accounts.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "url_regex": "(?i)/(user|profile)/"
+                      },
+                      {
+                        "action_regex": "(?i)profile"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent viewed profiles or recent posts of followed accounts."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent unfollowed accounts it judged unrelated, inactive, or entertainment-only.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "action_regex": "(?i)unfollow"
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent unfollowed accounts it judged unrelated, inactive, or entertainment-only."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Every account remaining on the following list is topically relevant (AI, benchmarking, coding, course planning).",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Every account remaining on the following list is topically relevant (AI, benchmarking, coding, course planning)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Collect the most actionable local transit updates and tell City Desk what I saved.",
+    "login_username": "techvalueinvestor",
+    "require_login": true,
+    "sites": [
+      "x-lite"
+    ],
+    "task_id": "258",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent bookmarked at least three distinct transit-related posts.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state_table",
+                  "params": {
+                    "table": "bookmarks"
+                  },
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"user_id\":\"u41\"",
+                      "operator": "gte",
+                      "value": 42
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent bookmarked at least three distinct transit-related posts."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The profile for 'City Desk' shows a followed status.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state_table",
+                  "params": {
+                    "table": "follows"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(\"follower_id\":\\s*\"u41\"[^}]*\"followed_id\":\\s*\"u76\"|\"followed_id\":\\s*\"u76\"[^}]*\"follower_id\":\\s*\"u41\")"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The profile for 'City Desk' shows a followed status."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent sent a direct message to 'City Desk'.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state_table",
+                  "params": {
+                    "table": "messages"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(\"sender_id\":\\s*\"u41\"[^}]*\"receiver_id\":\\s*\"u76\"|\"receiver_id\":\\s*\"u76\"[^}]*\"sender_id\":\\s*\"u41\")"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent sent a direct message to 'City Desk'."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [
+            "r3"
+          ],
+          "eval_config": {
+            "rubric": "The direct message explicitly lists the transit topics of the bookmarked posts.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state_table",
+                  "params": {
+                    "table": "messages"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)transit|train|bus|bike|corridor"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The direct message explicitly lists the transit topics of the bookmarked posts."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Use Explore to save one strong example from each major content area.",
+    "login_username": "techvalueinvestor",
+    "require_login": true,
+    "sites": [
+      "x-lite"
+    ],
+    "task_id": "259",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent navigated Explore tabs or searched to cover the six content areas.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "url_regex": "(?i)(explore|search)"
+                      },
+                      {
+                        "action_regex": "(?i)(explore|search)"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent navigated Explore tabs or searched to cover the six content areas."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent bookmarked exactly one post for each of the six areas (six new bookmarks).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state_table",
+                  "params": {
+                    "table": "bookmarks"
+                  },
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"user_id\":\"u41\"",
+                      "operator": "eq",
+                      "value": 45
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent bookmarked exactly one post for each of the six areas (six new bookmarks)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A published post describes the saved set as a cross-topic collection.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state_table",
+                  "params": {
+                    "table": "tweets"
+                  },
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"user_id\":\"u41\"",
+                      "operator": "gte",
+                      "value": 25
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A published post describes the saved set as a cross-topic collection."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Save two AI-related posts and send AI Product Pulse a short message about them.",
+    "login_username": "techvalueinvestor",
+    "require_login": true,
+    "sites": [
+      "x-lite"
+    ],
+    "task_id": "260",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent bookmarked exactly two AI-related posts.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state_table",
+                  "params": {
+                    "table": "bookmarks"
+                  },
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"user_id\":\"u41\"",
+                      "operator": "eq",
+                      "value": 41
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent bookmarked exactly two AI-related posts."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent sent a direct message to 'AI Product Pulse'.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state_table",
+                  "params": {
+                    "table": "messages"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(\"sender_id\":\\s*\"u41\"[^}]*\"receiver_id\":\\s*\"u18\"|\"receiver_id\":\\s*\"u18\"[^}]*\"sender_id\":\\s*\"u41\")"
+                    }
+                  ]
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent sent a direct message to 'AI Product Pulse'."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "The message explicitly states that two AI posts were saved.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state_table",
+                  "params": {
+                    "table": "messages"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)(two|2)[^\\\"]{0,80}(saved|bookmark|AI)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The message explicitly states that two AI posts were saved."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Collect three useful AI agent evaluation posts and follow up with AI Product Pulse",
+    "login_username": "techvalueinvestor",
+    "require_login": true,
+    "sites": [
+      "x-lite"
+    ],
+    "task_id": "261",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent bookmarked exactly three distinct AI-agent-evaluation posts.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state_table",
+                  "params": {
+                    "table": "bookmarks"
+                  },
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"user_id\":\"u41\"",
+                      "operator": "eq",
+                      "value": 42
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent bookmarked exactly three distinct AI-agent-evaluation posts."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent liked or reposted exactly one of the bookmarked posts.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state_table",
+                  "params": {
+                    "table": "likes"
+                  },
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"user_id\":\"u41\"",
+                      "operator": "gte",
+                      "value": 183
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state_table",
+                  "params": {
+                    "table": "retweets"
+                  },
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"user_id\":\"u41\"",
+                      "operator": "gte",
+                      "value": 51
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent liked or reposted exactly one of the bookmarked posts."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A message to AI Product Pulse explains which AI evaluation topic looked most useful.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state_table",
+                  "params": {
+                    "table": "messages"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(\"sender_id\":\\s*\"u41\"[^}]*\"receiver_id\":\\s*\"u18\"|\"receiver_id\":\\s*\"u18\"[^}]*\"sender_id\":\\s*\"u41\")"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A sent message explains which AI evaluation topic looked most useful."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a Notion note summarizing three useful AI agent evaluation posts",
+    "login_username": "techvalueinvestor",
+    "login_usernames": {
+      "notion": "demo@webarena.local",
+      "x-lite": "techvalueinvestor"
+    },
+    "require_login": true,
+    "sites": [
+      "x-lite",
+      "notion"
+    ],
+    "task_id": "262",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Found three X-lite posts about AI agent evaluation / benchmarks.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "url_regex": "(?i)q=|explore|search"
+                      },
+                      {
+                        "action_regex": "(?i)evaluat|benchmark|agent"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent used X-lite search, Explore or the home feed to find three posts about AI agent evaluation, benchmarks, recovery quality or failed intermediate actions."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A Notion page summarizes three X-lite posts about AI agent evaluation or benchmarks.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new Notion page exists that summarizes three X-lite posts about AI agent evaluation or benchmarks (three distinct post summaries)."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "I’m preparing for air travel and want to learn how to avoid losing luggage. Please find a relevant video guide, create a document (page) that summarizes all the tips for preventing luggage loss, and then share the document (page) in a public post. Mention the speaker's name inside of the post.",
+    "login_username": "techvalueinvestor",
+    "login_usernames": {
+      "notion": "demo@webarena.local",
+      "x-lite": "techvalueinvestor",
+      "yt-lite": "seed_user"
+    },
+    "require_login": true,
+    "sites": [
+      "x-lite",
+      "yt-lite",
+      "notion"
+    ],
+    "task_id": "263",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The Notion page lists the 10 tips from '10 Ways to Prevent Lost Luggage' (name/itinerary, photo, customize bags, arrive early, avoid tight connections, don't check essentials, packed-items list, luggage tags, carry-on change of clothes, travel insurance).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "yt-lite",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"username\":\\s*\"seed_user\",\\s*\"video_id\":\\s*\"(fv1009)\",\\s*\"watched_at\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"text\":\"[^\"]*(?i:name|itinerary)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"text\":\"[^\"]*(?i:photo)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"text\":\"[^\"]*(?i:customi[sz]e)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"text\":\"[^\"]*(?i:early)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"text\":\"[^\"]*(?i:tight connection|connections?)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"text\":\"[^\"]*(?i:essential)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"text\":\"[^\"]*(?i:list)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"text\":\"[^\"]*(?i:tags?)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"text\":\"[^\"]*(?i:carry-?on|change of clothes)"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"text\":\"[^\"]*(?i:insurance)"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A Notion page created during the task lists all 10 tips from the luggage video: include your name/number/itinerary; take a photo of your luggage; customize your bags; arrive at the airport early; avoid tight connections; don't check essential items; make a list of packed items and their value; double-check luggage tags; pack a change of clothes in your carry-on; invest in travel insurance."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The Notion page was created and published.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "site": "notion",
+                  "checks": [
+                    {
+                      "type": "count_occurrences",
+                      "pattern": "\"published\":true",
+                      "operator": "gte",
+                      "value": 8
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The luggage-tips Notion page was published (an active share link exists)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The published link was posted on X-lite.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state_table",
+                  "site": "x-lite",
+                  "params": {
+                    "table": "tweets"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"content\":\"[^\"]*(?:/share/)[^\"]*\"[^}]*\"user_id\":\"u41\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new X-lite post by techvalueinvestor contains the published Notion page link."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The X-lite post mentions the speaker, Patricia Magana.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state_table",
+                  "site": "x-lite",
+                  "params": {
+                    "table": "tweets"
+                  },
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"content\":\"[^\"]*(?:(?i:patricia magana))[^\"]*\"[^}]*\"user_id\":\"u41\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The X-lite post names the video's speaker, Patricia Magana."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Save two AI-related posts and send AI Daily a short message about them.",
+    "login_username": "techvalueinvestor",
+    "require_login": true,
+    "sites": [
+      "x-lite"
+    ],
+    "task_id": "345",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Exactly two AI-related posts were saved or bookmarked.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the task account techvalueinvestor on X-lite, exactly two distinct AI-related posts were saved or bookmarked for this task. Use the actual saved/bookmarked state and trajectory evidence to establish both post identities, AI relevance and the exact count. Any two AI-related posts are acceptable; posts from aidaily or about agent benchmarks/evaluation are suggestions, not additional requirements. Likes, reposts, opening posts, duplicate views of one post, drafts or only a final claim are insufficient. Do not count unrelated pre-existing bookmarks as new task actions."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "A sent message stating that two AI posts were saved for later review is visible in the direct message conversation with \"AI Daily\".",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The task account techvalueinvestor sent a new direct message to AI Daily (aidaily, user u83), stating that two AI posts were saved for later review. Equivalent natural wording is acceptable. Verify the actual sent message, sender and recipient in the AI Daily DM conversation, and that it refers to the two posts saved for this task. A draft, received message, public post, group message, old unrelated message or final chat claim is insufficient. AI Product Pulse (aiproductpulse, u18) is a different recipient and does not satisfy this criterion. Linking the two posts is not required."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

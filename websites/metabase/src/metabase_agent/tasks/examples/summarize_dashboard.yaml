@@ -1,0 +1,23 @@
+id: summarize_dashboard
+name: Summarize dashboard insights
+instruction: >
+  Open the Sales Overview dashboard, analyze the data shown in each visualization,
+  and provide a written summary of the key insights. The summary should include:
+  1. Total revenue and order volume
+  2. Top performing states (TX, CA, NY have most customers)
+  3. Any notable trends in order timing or status distribution
+  Provide the summary in your response.
+start_url: http://localhost:3000
+max_steps: 20
+timeout_seconds: 600
+success_criteria:
+  - url_contains: dashboard
+  - response_contains: order
+tags:
+  - intermediate
+  - dashboard
+  - analysis
+  - summarization
+notes: >
+  Tests the agent's ability to interpret visualizations and provide insights.
+  Requires the Sales Overview dashboard with order data visualizations.

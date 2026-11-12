@@ -1,0 +1,20 @@
+id: export_data_csv
+name: Filter and export data to CSV
+instruction: >
+  Open the order_summary view or create a question from it, apply a filter to
+  show only orders with status "completed", and export the filtered results
+  as a CSV file.
+start_url: http://localhost:3000
+max_steps: 25
+timeout_seconds: 300
+success_criteria:
+  - file_downloaded
+  - file_extension: csv
+tags:
+  - beginner
+  - export
+  - filter
+notes: >
+  Tests filtering and exporting data in CSV format.
+  Uses order_summary view which has status column.
+  Valid statuses: pending, paid, shipped, completed, returned.

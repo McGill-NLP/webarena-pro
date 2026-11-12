@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-heading">
+  <h1>Add or Drop Course Sections</h1>
+  {% include "_term_selector.html" %}
+</div>
+
+<form method="POST" action="/add" class="form-grid" style="margin-bottom:1rem">
+  <label>CRN
+    <input data-test="add-crn-input" type="text" name="crn" placeholder="e.g., 12345" />
+  </label>
+  <button class="btn btn-primary" data-test="add-submit" type="submit">Add</button>
+</form>
+
+<h2>Registered Sections</h2>
+<table>
+  <thead>
+    <tr>
+      <th>CRN</th><th>Subject</th><th>Number</th><th>Title</th><th>Professor</th><th>Type</th><th>Schedule</th><th>Campus</th><th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for c in regs %}
+    <tr data-test="schedule-row">
+      <td>{{ c['crn'] }}</td>
+      <td>{{ c['subject'] }}</td>
+      <td>{{ c['number'] }}</td>
+      <td>{{ c['title'] }}</td>
+      <td>{{ c['professor'] }}</td>
+      <td>{{ c['section_type'] }}</td>
+      <td>{{ c['days'] }} {{ c['time'] }}</td>
+      <td>{{ c['campus'] }}</td>
+      <td>
+        <form method="POST" action="/drop">
+          <input type="hidden" name="crn" value="{{ c['crn'] }}" />
+          <button class="btn btn-danger" data-test="drop-button" type="submit">Drop</button>
+        </form>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="9">No registered sections.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% if waitlisted %}
+<h2>Waitlisted Sections</h2>
+<table>
+  <thead>
+    <tr>
+      <th>CRN</th><th>Subject</th><th>Number</th><th>Title</th><th>Professor</th><th>Type</th><th>Schedule</th><th>Campus</th><th>Position</th><th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for c in waitlisted %}
+    <tr data-test="waitlist-row" class="waitlist-row">
+      <td>{{ c['crn'] }}</td>
+      <td>{{ c['subject'] }}</td>
+      <td>{{ c['number'] }}</td>
+      <td>{{ c['title'] }}</td>
+      <td>{{ c['professor'] }}</td>
+      <td>{{ c['section_type'] }}</td>
+      <td>{{ c['days'] }} {{ c['time'] }}</td>
+      <td>{{ c['campus'] }}</td>
+      <td>
+        <span class="seat-pill waitlist">#{{ c['position'] }}</span>
+      </td>
+      <td>
+        <form method="POST" action="/drop-waitlist">
+          <input type="hidden" name="crn" value="{{ c['crn'] }}" />
+          <button class="btn btn-danger" data-test="drop-waitlist-button" type="submit">Leave Waitlist</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% endblock %}

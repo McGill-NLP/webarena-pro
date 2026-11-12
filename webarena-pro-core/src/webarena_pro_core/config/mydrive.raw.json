@@ -1,0 +1,2024 @@
+[
+  {
+    "intent": "Create a folder for each file type and then sort the entire drive by file type",
+    "login_username": "agent1@test.com",
+    "previous_task_intent": "create a folder for each file type and then sort the entire drive by file type",
+    "require_login": true,
+    "sites": [
+      "mydrive"
+    ],
+    "task_id": "145",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent created a distinct folder for each of the file types jpeg, java, c, bash, mp4.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"jpe?g\",\\s*\"owner\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"java\",\\s*\"owner\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"c\",\\s*\"owner\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"(bash|sh)\",\\s*\"owner\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"mp4\",\\s*\"owner\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent created a distinct folder for each of the file types jpeg, java, c, bash, mp4."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent moved every file observed inside existing subfolders into the main drive.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent moved every file observed inside existing subfolders into the main drive."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent moved every file observed in the main drive into the folder matching its file type.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"jpe?g/zebra_baby_zebra_africa\\.jpg\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"jpe?g/male_lion_african_lion\\.jpg\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"jpe?g/giraffe_reticulated_giraffe_neck\\.jpg\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"jpe?g/gazelle_africa_safari_serengeti_0\\.jpg\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"jpe?g/elephant_tanzania_africa_serengeti\\.jpg\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"jpe?g/elephant_africa_safari_serengeti_0\\.jpg\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"mp4/GiraffeVideo\\.mp4\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"mp4/Elephantvideo\\.mp4\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"java/A1\\.java\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"java/A2\\.java\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"java/A3\\.java\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"c/LogAnalyzer\\.c\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"(bash|sh)/LearnBashAssignment\\.sh\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent moved every file observed in the main drive into the folder matching its file type."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Every file is located inside the folder corresponding to its file type; if no view confirms this for ALL qualifying items (filter view / exhaustive scroll through the relevant scope / explicit count), the rubric must be marked fail.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"jpe?g/zebra_baby_zebra_africa\\.jpg\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"jpe?g/male_lion_african_lion\\.jpg\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"jpe?g/giraffe_reticulated_giraffe_neck\\.jpg\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"jpe?g/gazelle_africa_safari_serengeti_0\\.jpg\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"jpe?g/elephant_tanzania_africa_serengeti\\.jpg\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"jpe?g/elephant_africa_safari_serengeti_0\\.jpg\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"mp4/GiraffeVideo\\.mp4\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"mp4/Elephantvideo\\.mp4\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"java/A1\\.java\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"java/A2\\.java\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"java/A3\\.java\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"c/LogAnalyzer\\.c\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"(bash|sh)/LearnBashAssignment\\.sh\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Every file is located inside the folder corresponding to its file type; if no view confirms this for ALL qualifying items (filter view / exhaustive scroll through the relevant scope / explicit count), the rubric must be marked fail."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "create loganalyzer.py and translate loganalyser.c to python inside loganalyzer.py",
+    "require_login": true,
+    "sites": [
+      "mydrive"
+    ],
+    "task_id": "146",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent created a file named \"loganalyzer.py\" inside the \"comp 313\" folder.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"comp\\s+313/loganalyzer\\.py\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent created a file named \"loganalyzer.py\" inside the \"comp 313\" folder."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent viewed the contents of the \"loganalyser.c\" file.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_regex": "(?i)loganaly"
+                      },
+                      {
+                        "url_regex": "(?i)loganaly"
+                      }
+                    ]
+                  }
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent viewed the contents of the \"loganalyser.c\" file."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent saved the \"loganalyzer.py\" file.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"comp\\s+313/loganalyzer\\.py\",\\s*\"name\":\\s*\"loganalyzer\\.py\",\\s*\"size\":\\s*[1-9]"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent saved the \"loganalyzer.py\" file."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The \"loganalyzer.py\" file contains a Python translation of the \"loganalyser.c\" source code.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The \"loganalyzer.py\" file contains a Python translation of the \"loganalyser.c\" source code."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "\"Create an algorithm folder with Q1 and Q2 subfolders. In each folder, write the given algorithm in Python, Java, and JavaScript, using filenames in the {question}_{language} format, such as Q1_python.py and Q1_java.java.\n\nQ1: Write a function that returns the nth value of the Fibonacci sequence.\nQ2: Given two n x n binary matrices mat and target, return true if mat can be made equal to target by rotating mat in 90-degree increments; otherwise, return false. (n == mat.length == target.length, n == mat[i].length == target[i].length)\"",
+    "login_username": "agent1@test.com",
+    "login_usernames": {
+      "mydrive": "agent1@test.com"
+    },
+    "require_login": true,
+    "sites": [
+      "mydrive"
+    ],
+    "task_id": "147",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Created the Q1 folder and created Q1_python.py, Q1_java.java, and Q1_javascript.js inside it.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"(algorithm/)?q1/q1_python\\.py\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"(algorithm/)?q1/q1_java\\.java\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"(algorithm/)?q1/q1_javascript\\.js\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Created the Q1 folder and created Q1_python.py, Q1_java.java, and Q1_javascript.js inside it."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Wrote the Q1 algorithm in each of Q1_python.py, Q1_java.java, and Q1_javascript.js.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Wrote the Q1 algorithm in each of Q1_python.py, Q1_java.java, and Q1_javascript.js."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Created the Q2 folder and created Q2_python.py, Q2_java.java, and Q2_javascript.js inside it.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"(algorithm/)?q2/q2_python\\.py\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"(algorithm/)?q2/q2_java\\.java\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"(algorithm/)?q2/q2_javascript\\.js\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Created the Q2 folder and created Q2_python.py, Q2_java.java, and Q2_javascript.js inside it."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Wrote the Q2 algorithm in each of Q2_python.py, Q2_java.java, and Q2_javascript.js.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Wrote the Q2 algorithm in each of Q2_python.py, Q2_java.java, and Q2_javascript.js."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create safari_trip_assets.csv and organize the items in the safari trip pictures folder by filename, media type (image/video), and video duration in seconds. Use the columns: filename, media type (image/video), and video duration (seconds). For images, set the duration to 0.",
+    "login_username": "agent1@test.com",
+    "login_usernames": {
+      "mydrive": "agent1@test.com"
+    },
+    "require_login": true,
+    "sites": [
+      "mydrive"
+    ],
+    "task_id": "148",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Created the safari_trip_assets.csv file.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"safari_trip_assets\\.csv\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Created the safari_trip_assets.csv file."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Correctly wrote the column headers: filename, media type (image/video), and video duration (seconds).",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"safari_trip_assets\\.csv\",[^}]*\"content\":\\s*\"(?:[^\"\\\\]|\\\\.)*filename"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"safari_trip_assets\\.csv\",[^}]*\"content\":\\s*\"(?:[^\"\\\\]|\\\\.)*media.?type"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"safari_trip_assets\\.csv\",[^}]*\"content\":\\s*\"(?:[^\"\\\\]|\\\\.)*duration"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Correctly wrote the column headers: filename, media type (image/video), and video duration (seconds)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Added one row for each image and video file in the safari trip pictures folder.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"safari_trip_assets\\.csv\",[^}]*\"content\":\\s*\"(?:[^\"\\\\]|\\\\.)*zebra_baby_zebra_africa\\.jpg"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"safari_trip_assets\\.csv\",[^}]*\"content\":\\s*\"(?:[^\"\\\\]|\\\\.)*male_lion_african_lion\\.jpg"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"safari_trip_assets\\.csv\",[^}]*\"content\":\\s*\"(?:[^\"\\\\]|\\\\.)*giraffe_reticulated_giraffe_neck\\.jpg"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"safari_trip_assets\\.csv\",[^}]*\"content\":\\s*\"(?:[^\"\\\\]|\\\\.)*gazelle_africa_safari_serengeti_0\\.jpg"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"safari_trip_assets\\.csv\",[^}]*\"content\":\\s*\"(?:[^\"\\\\]|\\\\.)*elephant_tanzania_africa_serengeti\\.jpg"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"safari_trip_assets\\.csv\",[^}]*\"content\":\\s*\"(?:[^\"\\\\]|\\\\.)*elephant_africa_safari_serengeti_0\\.jpg"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"safari_trip_assets\\.csv\",[^}]*\"content\":\\s*\"(?:[^\"\\\\]|\\\\.)*GiraffeVideo\\.mp4"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"safari_trip_assets\\.csv\",[^}]*\"content\":\\s*\"(?:[^\"\\\\]|\\\\.)*Elephantvideo\\.mp4"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Added one row for each image and video file in the safari trip pictures folder."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Set video duration (seconds) to 0 for all image files.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Set video duration (seconds) to 0 for all image files."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Move all media files (images and videos) that contain elephants into the \"elephant\" folder.",
+    "login_username": "agent1@test.com",
+    "login_usernames": {
+      "mydrive": "agent1@test.com"
+    },
+    "require_login": true,
+    "sites": [
+      "mydrive"
+    ],
+    "task_id": "149",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Created a folder named “elephant.”",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"elephants?\",\\s*\"owner\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Created a folder named “elephant.”"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Moved three files containing “elephant” into the “elephant” folder.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"elephants?/elephant_tanzania_africa_serengeti\\.jpg\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"elephants?/elephant_africa_safari_serengeti_0\\.jpg\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"elephants?/elephantvideo\\.mp4\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Moved three files containing “elephant” into the “elephant” folder."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Remove all comments from all Java files.",
+    "login_username": "agent1@test.com",
+    "login_usernames": {
+      "mydrive": "agent1@test.com"
+    },
+    "require_login": true,
+    "sites": [
+      "mydrive"
+    ],
+    "task_id": "150",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Removed all comments from A1.java in the COMP 222 folder.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"comp 222/a1\\.java\",[^}]*\"content\":\\s*\"(?:(?!/\\*|//)(?:[^\"\\\\]|\\\\.))*\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Removed all comments from A1.java in the COMP 222 folder."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Removed all comments from A2.java in the COMP 222 folder.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"comp 222/a2\\.java\",[^}]*\"content\":\\s*\"(?:(?!/\\*|//)(?:[^\"\\\\]|\\\\.))*\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Removed all comments from A2.java in the COMP 222 folder."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Removed all comments from A3.java in the COMP 222 folder.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"comp 222/a3\\.java\",[^}]*\"content\":\\s*\"(?:(?!/\\*|//)(?:[^\"\\\\]|\\\\.))*\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Removed all comments from A3.java in the COMP 222 folder."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Group all files into folders based on their extensions and delete the original folders.",
+    "login_username": "agent1@test.com",
+    "login_usernames": {
+      "mydrive": "agent1@test.com"
+    },
+    "require_login": true,
+    "sites": [
+      "mydrive"
+    ],
+    "task_id": "151",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Created folders named “jpg,” “mp4,” “java,” “c,” and “sh.”",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"jpg\",\\s*\"owner\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"mp4\",\\s*\"owner\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"java\",\\s*\"owner\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"c\",\\s*\"owner\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"sh\",\\s*\"owner\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Created folders named “jpg,” “mp4,” “java,” “c,” and “sh.”"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Moved all files into the appropriate folders based on their extensions.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"jpg/zebra_baby_zebra_africa\\.jpg\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"jpg/male_lion_african_lion\\.jpg\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"jpg/giraffe_reticulated_giraffe_neck\\.jpg\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"jpg/gazelle_africa_safari_serengeti_0\\.jpg\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"jpg/elephant_tanzania_africa_serengeti\\.jpg\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"jpg/elephant_africa_safari_serengeti_0\\.jpg\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"mp4/GiraffeVideo\\.mp4\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"mp4/Elephantvideo\\.mp4\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"java/A1\\.java\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"java/A2\\.java\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"java/A3\\.java\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"c/LogAnalyzer\\.c\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"sh/LearnBashAssignment\\.sh\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Moved all files into the appropriate folders based on their extensions."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Deleted the folders “safari trip pictures,” “COMP 222,” and “COMP 313.”",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"name\":\"COMP 222\",\"owner\""
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"name\":\"COMP  313\",\"owner\""
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"name\":\"safari trip pictures\",\"owner\""
+                    },
+                    {
+                      "type": "body_contains",
+                      "value": "\"email\":\"agent1@test.com\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"COMP 222\"[^}]*\"inTrash\":\\s*true"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"COMP  313\"[^}]*\"inTrash\":\\s*true"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"safari trip pictures\"[^}]*\"inTrash\":\\s*true"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Deleted the folders “safari trip pictures,” “COMP 222,” and “COMP 313.”"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Move all Java code in the \"COMP 222\" folder into A1.java, and delete all files except A1.java.",
+    "login_username": "agent1@test.com",
+    "login_usernames": {
+      "mydrive": "agent1@test.com"
+    },
+    "require_login": true,
+    "sites": [
+      "mydrive"
+    ],
+    "task_id": "152",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Appended the code from A2.java below the existing code in A1.java.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"path\":\\s*\"COMP 222/A1\\.java\",[^}]*\"content\":\\s*\"(?:[^\"\\\\]|\\\\.)*class SubwaySystem"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Appended the code from A2.java below the existing code in A1.java."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Appended the code from A3.java below the existing code in A1.java.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"path\":\\s*\"COMP 222/A1\\.java\",[^}]*\"content\":\\s*\"(?:[^\"\\\\]|\\\\.)*class WeightedIntervalScheduling"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Appended the code from A3.java below the existing code in A1.java."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Deleted the A2.java and A3.java files.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"name\":\"A2.java\""
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"name\":\"A3.java\""
+                    },
+                    {
+                      "type": "body_contains",
+                      "value": "\"name\":\"A1.java\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"A2\\.java\"[^}]*\"inTrash\":\\s*true"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"A3\\.java\"[^}]*\"inTrash\":\\s*true"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Deleted the A2.java and A3.java files."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a folder named animals with subfolders elephants, lions, etc. Move each image or video containing the corresponding animal into the correct subfolder.",
+    "login_username": "agent1@test.com",
+    "login_usernames": {
+      "mydrive": "agent1@test.com"
+    },
+    "require_login": true,
+    "sites": [
+      "mydrive"
+    ],
+    "task_id": "153",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Created a folder named “animals.”",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"animals\",\\s*\"owner\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Created a folder named “animals.”"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Created subfolders inside “animals” for zebra, lion, giraffe, gazelle, and elephant.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"animals/zebras?\",\\s*\"name\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"animals/lions?\",\\s*\"name\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"animals/giraffes?\",\\s*\"name\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"animals/gazelles?\",\\s*\"name\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"animals/elephants?\",\\s*\"name\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Created subfolders inside “animals” for zebra, lion, giraffe, gazelle, and elephant."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Moved all animal images and videos from the safari trip pictures folder into the corresponding subfolders.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"animals/zebras?/zebra_baby_zebra_africa\\.jpg\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"animals/lions?/male_lion_african_lion\\.jpg\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"animals/giraffes?/giraffe_reticulated_giraffe_neck\\.jpg\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"animals/giraffes?/GiraffeVideo\\.mp4\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"animals/gazelles?/gazelle_africa_safari_serengeti_0\\.jpg\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"animals/elephants?/elephant_tanzania_africa_serengeti\\.jpg\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"animals/elephants?/elephant_africa_safari_serengeti_0\\.jpg\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"animals/elephants?/Elephantvideo\\.mp4\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Moved all animal images and videos from the safari trip pictures folder into the corresponding subfolders."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Find all videos longer than 8 seconds, move them into a new folder named long_videos, and share that folder with agent2@test.com as a viewer.",
+    "login_username": "agent1@test.com",
+    "login_usernames": {
+      "mydrive": "agent1@test.com"
+    },
+    "require_login": true,
+    "sites": [
+      "mydrive"
+    ],
+    "task_id": "154",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Created a folder named \"long_videos.\"",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"name\":\\s*\"long_videos\",\\s*\"owner\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Created a folder named \"long_videos.\""
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Moved “GiraffeVideo.mp4” and “Elephantvideo.mp4” into the long_videos folder.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"long_videos/giraffevideo\\.mp4\""
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"path\":\\s*\"long_videos/elephantvideo\\.mp4\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Moved “GiraffeVideo.mp4” and “Elephantvideo.mp4” into the long_videos folder."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Shared the long_videos folder with agent2@test.com with viewer access.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"type\":\\s*\"folder\",\\s*\"target\":\\s*\"long_videos\",\\s*\"sharedWith\":\\s*\"agent2[^\"]*\",\\s*\"permission\":\\s*\"READ\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Shared the long_videos folder with agent2@test.com with viewer access."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Download the elephant videos and images from the \"safari trip pictures\" folder and share them with agent2 with viewer access.",
+    "login_username": "agent1@test.com",
+    "login_usernames": {
+      "mydrive": "agent1@test.com"
+    },
+    "require_login": true,
+    "sites": [
+      "mydrive"
+    ],
+    "task_id": "155",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Shared the file \"elephant_tanzania_africa_serengeti.jpg\" in the \"safari trip pictures\" folder with agent2 with viewer access.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"type\":\\s*\"file\",\\s*\"target\":\\s*\"[^\"]*elephant_tanzania_africa_serengeti\\.jpg\",\\s*\"sharedWith\":\\s*\"agent2[^\"]*\",\\s*\"permission\":\\s*\"READ\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Shared the file \"elephant_tanzania_africa_serengeti.jpg\" in the \"safari trip pictures\" folder with agent2 with viewer access."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Shared the file \"elephant_africa_safari_serengeti_0.jpg\" in the \"safari trip pictures\" folder with agent2 with viewer access.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"type\":\\s*\"file\",\\s*\"target\":\\s*\"[^\"]*elephant_africa_safari_serengeti_0\\.jpg\",\\s*\"sharedWith\":\\s*\"agent2[^\"]*\",\\s*\"permission\":\\s*\"READ\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Shared the file \"elephant_africa_safari_serengeti_0.jpg\" in the \"safari trip pictures\" folder with agent2 with viewer access."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Shared the file \"Elephantvideo.mp4\" in the \"safari trip pictures\" folder with agent2 with viewer access.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "(?i)\"type\":\\s*\"file\",\\s*\"target\":\\s*\"[^\"]*elephantvideo\\.mp4\",\\s*\"sharedWith\":\\s*\"agent2[^\"]*\",\\s*\"permission\":\\s*\"READ\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Shared the file \"Elephantvideo.mp4\" in the \"safari trip pictures\" folder with agent2 with viewer access."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Delete image files larger than 20KB, video files larger than 1MB, and text files larger than 5KB.",
+    "login_username": "agent1@test.com",
+    "login_usernames": {
+      "mydrive": "agent1@test.com"
+    },
+    "require_login": true,
+    "sites": [
+      "mydrive"
+    ],
+    "task_id": "156",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Deleted all image files larger than 20KB.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"name\":\"elephant_africa_safari_serengeti_0.jpg\""
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"name\":\"gazelle_africa_safari_serengeti_0.jpg\""
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"name\":\"male_lion_african_lion.jpg\""
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"name\":\"elephant_tanzania_africa_serengeti.jpg\""
+                    },
+                    {
+                      "type": "body_contains",
+                      "value": "\"name\":\"giraffe_reticulated_giraffe_neck.jpg\""
+                    },
+                    {
+                      "type": "body_contains",
+                      "value": "\"name\":\"zebra_baby_zebra_africa.jpg\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"elephant_africa_safari_serengeti_0\\.jpg\"[^}]*\"inTrash\":\\s*true"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"gazelle_africa_safari_serengeti_0\\.jpg\"[^}]*\"inTrash\":\\s*true"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"male_lion_african_lion\\.jpg\"[^}]*\"inTrash\":\\s*true"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"elephant_tanzania_africa_serengeti\\.jpg\"[^}]*\"inTrash\":\\s*true"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Deleted all image files larger than 20KB."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Deleted all video files larger than 1MB.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"name\":\"Elephantvideo.mp4\""
+                    },
+                    {
+                      "type": "body_contains",
+                      "value": "\"name\":\"GiraffeVideo.mp4\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"Elephantvideo\\.mp4\"[^}]*\"inTrash\":\\s*true"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Deleted all video files larger than 1MB."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Deleted all text files larger than 5KB.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"name\":\"A2.java\""
+                    },
+                    {
+                      "type": "body_contains",
+                      "value": "\"name\":\"A1.java\""
+                    },
+                    {
+                      "type": "body_contains",
+                      "value": "\"name\":\"A3.java\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"name\":\\s*\"A2\\.java\"[^}]*\"inTrash\":\\s*true"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Deleted all text files larger than 5KB."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Permanently deleted all removed files.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "checks": [
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"name\":\"elephant_africa_safari_serengeti_0.jpg\""
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"name\":\"gazelle_africa_safari_serengeti_0.jpg\""
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"name\":\"male_lion_african_lion.jpg\""
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"name\":\"elephant_tanzania_africa_serengeti.jpg\""
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"name\":\"Elephantvideo.mp4\""
+                    },
+                    {
+                      "type": "body_not_contains",
+                      "value": "\"name\":\"A2.java\""
+                    },
+                    {
+                      "type": "body_contains",
+                      "value": "\"name\":\"giraffe_reticulated_giraffe_neck.jpg\""
+                    },
+                    {
+                      "type": "body_contains",
+                      "value": "\"name\":\"zebra_baby_zebra_africa.jpg\""
+                    },
+                    {
+                      "type": "body_contains",
+                      "value": "\"name\":\"GiraffeVideo.mp4\""
+                    },
+                    {
+                      "type": "body_contains",
+                      "value": "\"name\":\"A1.java\""
+                    },
+                    {
+                      "type": "body_contains",
+                      "value": "\"name\":\"A3.java\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Permanently deleted all removed files."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Create a spreadsheet with all the classes you've taken and the grades in  it",
+    "login_username": "agent1@test.com",
+    "login_usernames": {
+      "minerva-lite": "260123456",
+      "mydrive": "agent1@test.com"
+    },
+    "require_login": true,
+    "sites": [
+      "mydrive",
+      "minerva-lite"
+    ],
+    "task_id": "324",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A spreadsheet is created",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "A new spreadsheet was created in the task account's MyDrive for the courses and grades from the user's Minerva transcript. Merely opening an existing spreadsheet or writing a chat answer does not satisfy this criterion."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "The spreadsheet contains: 1. COMP 202 — A   2. MATH 140 — A-   3. MATH 141 — B+   4. COMP 250 — A-   5. COMP 251 — B+   6. COMP 273 — B   7. COMP 302 — A   8. COMP 303 — A-   9. COMP 310 — B+   10. COMP 360 — A",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The newly created MyDrive spreadsheet pairs each of these ten courses with its correct Minerva grade: COMP 202: A; MATH 140: A-; MATH 141: B+; COMP 250: A-; COMP 251: B+; COMP 273: B; COMP 302: A; COMP 303: A-; COMP 310: B+; COMP 360: A. Both course codes and grades must be present in the spreadsheet, correctly paired; their order and formatting may vary."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Apply to all the software engineering jobs in Merrimack, New Hampshire with a customized cover letter. Both cover letters should first be drafted in separate documents, which should then be found in a separate cover letters folder.",
+    "login_username": "agent1@test.com",
+    "login_usernames": {
+      "jobportal": "alice_seeker",
+      "mydrive": "agent1@test.com"
+    },
+    "previous_task_intent": "apply to all the software engineering jobs in Merrimack, New Hampshir with a customized cover letter. Both cover letters should first be drafted in a separate documents which should then be found in a separate cover letters folder",
+    "require_login": true,
+    "sites": [
+      "mydrive",
+      "jobportal"
+    ],
+    "task_id": "415",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A document is created for - Senior Software Engineer, Python/Data Analytics — Fidelity Investments job  in mydrive",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The task account agent1@test.com creates and saves a separate MyDrive document containing a customized cover letter for the Senior Software Engineer, Python/Data Analytics job at Fidelity Investments in Merrimack, New Hampshire. Verify the saved document content and that it addresses this specific job/company. An empty file, a generic unchanged template, one shared document for both jobs, unrelated pre-existing content or a final claim is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A document is created for - Principal Software Engineer — BAE Systems job in mydrive",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The task account agent1@test.com creates and saves a separate MyDrive document containing a customized cover letter for the Principal Software Engineer job at BAE Systems in Merrimack, New Hampshire. Verify the saved document content and that it addresses this specific job/company. An empty file, a generic unchanged template, one shared document for both jobs, unrelated pre-existing content or a final claim is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "Senior Software Engineer, Python/Data Analytics — Fidelity Investments is applied to in job search with cover letter",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The job-seeker account alice_seeker submits a new application on JobPortal for Senior Software Engineer, Python/Data Analytics at Fidelity Investments in Merrimack, New Hampshire, including the customized cover letter previously drafted for that job in MyDrive. Verify the actual submitted application and its associated cover-letter text. A draft, saved job, message to an employer, application to another posting, missing or mismatched cover letter, unrelated pre-existing application or a final claim is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "Principal Software Engineer — BAE Systems is applied to  in job search with cover letter",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The job-seeker account alice_seeker submits a new application on JobPortal for Principal Software Engineer at BAE Systems in Merrimack, New Hampshire, including the customized cover letter previously drafted for that job in MyDrive. Verify the actual submitted application and its associated cover-letter text. A draft, saved job, message to an employer, application to another posting, missing or mismatched cover letter, unrelated pre-existing application or a final claim is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [
+            "r1",
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "Both the document for - Senior Software Engineer, Python/Data Analytics — Fidelity Investments and the one for - Principal Software Engineer — BAE Systems are put into a new folder named cover letters",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Both separate MyDrive cover-letter documents created for the Fidelity Investments Senior Software Engineer, Python/Data Analytics job and the BAE Systems Principal Software Engineer job are saved in the same newly created folder named cover letters in the task account. Verify both file identities and destination folder membership. A folder alone, only one document, unrelated same-named files, a folder elsewhere or a final claim is insufficient."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,17 @@
+id: find_order_price
+name: Find the unit price of the first order item
+instruction: >
+  Navigate to the Order Items table in sample-db. Look at the first row of data (the row with Order ID 1).
+  What is the Unit Price value for this order item? Report only the numeric value using answer().
+start_url: http://localhost:3000/browse/databases
+max_steps: 20
+timeout_seconds: 180
+success_criteria:
+  - agent_answered: 39.99
+tags:
+  - beginner
+  - browse
+  - view
+notes: >
+  Simple browse task - navigate to Order Items table and read the unit price from the first row.
+  The first row should have Order ID 1. Agent just needs to view the data and call answer() with the value.

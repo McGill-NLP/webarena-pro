@@ -1,0 +1,72 @@
+<!doctype html>
+<title>Canvas editor fixture</title>
+<style>body { margin: 0; } svg { display: block; background: #eee; }</style>
+<svg id="canvas" tabindex="0" width="640" height="400">
+  <rect id="shape" x="40" y="40" width="120" height="80" fill="blue" />
+  <circle id="handle" cx="320" cy="80" r="12" fill="red" />
+  <path id="stroke" stroke="black" fill="none" />
+</svg>
+<p id="status"></p>
+<p id="clipboard-status">Clipboard not used</p>
+<label>Copy source <input id="source" value="canvas clipboard text"></label>
+<label>Paste destination <input id="destination"></label>
+<script>
+const canvas = document.querySelector('#canvas');
+const shape = document.querySelector('#shape');
+const handle = document.querySelector('#handle');
+const stroke = document.querySelector('#stroke');
+const status = document.querySelector('#status');
+const state = { clicks: 0, shapeX: 40, shapeY: 40, handleX: 320, handleY: 80, points: 0, groups: 0 };
+let gesture;
+const render = () => { status.textContent = JSON.stringify(state); };
+canvas.addEventListener('pointerdown', event => {
+  canvas.focus();
+  gesture = { target: event.target.id, x: event.clientX, y: event.clientY,
+    shapeX: state.shapeX, shapeY: state.shapeY };
+  if (event.target === canvas) {
+    stroke.setAttribute('d', `M ${event.clientX} ${event.clientY}`);
+    state.points = 1;
+  }
+});
+canvas.addEventListener('pointermove', event => {
+  if (!gesture || !event.buttons) return;
+  if (gesture.target === 'shape') {
+    state.shapeX = gesture.shapeX + event.clientX - gesture.x;
+    state.shapeY = gesture.shapeY + event.clientY - gesture.y;
+    shape.setAttribute('x', state.shapeX);
+    shape.setAttribute('y', state.shapeY);
+  } else if (gesture.target === 'handle') {
+    state.handleX = event.clientX; state.handleY = event.clientY;
+    handle.setAttribute('cx', state.handleX); handle.setAttribute('cy', state.handleY);
+  } else {
+    stroke.setAttribute('d', stroke.getAttribute('d') + ` L ${event.clientX} ${event.clientY}`);
+    state.points++;
+  }
+  render();
+});
+canvas.addEventListener('pointerup', () => { gesture = null; render(); });
+canvas.addEventListener('click', () => { state.clicks++; render(); });
+canvas.addEventListener('keydown', async event => {
+  if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'g') {
+    event.preventDefault(); state.groups++; render();
+  }
+  if ((event.ctrlKey || event.metaKey) && ['c', 'v'].includes(event.key.toLowerCase())) {
+    event.preventDefault();
+    const result = document.querySelector('#clipboard-status');
+    try {
+      if (event.key.toLowerCase() === 'c') {
+        await navigator.clipboard.write([new ClipboardItem({
+          'text/plain': new Blob(['copied canvas shape'], {type: 'text/plain'})
+        })]);
+        result.textContent = 'Canvas copied through Clipboard API';
+      } else {
+        const [item] = await navigator.clipboard.read();
+        result.textContent = 'Canvas pasted: ' + await (await item.getType('text/plain')).text();
+      }
+    } catch (error) {
+      result.textContent = 'Clipboard API failed: ' + error;
+    }
+  }
+});
+render();
+</script>

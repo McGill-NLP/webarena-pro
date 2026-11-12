@@ -1,0 +1,6 @@
+{
+  "name": "webarena-pro-mcp-runtime",
+  "private": true,
+  "version": "0.1.0",
+  "dependencies": { "@playwright/mcp": "0.0.84" }
+}

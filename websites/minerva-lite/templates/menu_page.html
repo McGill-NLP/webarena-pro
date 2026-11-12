@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-heading">
+  <h1 class="page-title">{{ page_title }}</h1>
+  {% include "_term_selector.html" %}
+</section>
+
+<section class="step-grid">
+  {% for item in items %}
+  <article class="step-card">
+    <header>
+      <h2>{{ item.title }}</h2>
+    </header>
+    <p>{{ item.description }}</p>
+    <a class="step-link" href="{{ item.url }}" data-test="{{ item.data_test }}">Open {{ item.title }}</a>
+  </article>
+  {% endfor %}
+</section>
+{% endblock %}

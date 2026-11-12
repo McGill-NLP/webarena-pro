@@ -1,0 +1,17 @@
+id: count_tables_in_sample_db
+name: Count tables in sample database
+instruction: >
+  "How many tables are in the sample database (sample-db)?"
+start_url: http://localhost:3000/browse/databases
+max_steps: 10
+timeout_seconds: 300
+expected_answer: "6"
+success_criteria:
+  - response_contains: "6"
+tags:
+  - beginner
+  - browse
+  - count
+notes: >
+  Very simple task - navigate to sample-db and count the number of tables.
+  The answer is 6.

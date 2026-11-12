@@ -1,0 +1,24 @@
+id: setup_subscription
+name: Set up a dashboard subscription
+instruction: >
+  Open the Sales Overview dashboard and set up a subscription that sends
+  the dashboard as a PDF attachment to agent@example.com every Monday at
+  9:00 AM. Save the subscription when complete.
+start_url: http://localhost:3000
+max_steps: 35
+timeout_seconds: 600
+requires:
+  - type: dashboard
+    name: Sales Overview
+    setup_task_id: create_dashboard
+success_criteria:
+  - subscription_exists
+  - url_contains: dashboard
+tags:
+  - intermediate
+  - dashboard
+  - subscription
+notes: >
+  Tests dashboard subscription setup.
+  Requires email configuration in Metabase and the Sales Overview dashboard.
+  Note: Email delivery may not actually work in local dev environment.

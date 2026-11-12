@@ -1,0 +1,22 @@
+id: find_recent_orders
+name: Find most recent orders
+instruction: >
+  Find the most recent orders by date.
+  1. Click "New" button, then click "Question"
+  2. Select "sample-db" database, then select "Orders" table
+  3. Sort by "Created At" descending (most recent first)
+  4. Click "Visualize" to see the results
+  The most recent orders should appear at the top.
+start_url: http://localhost:3000
+max_steps: 15
+timeout_seconds: 300
+success_criteria:
+  - url_contains: question
+  - query_result_has_rows
+tags:
+  - beginner
+  - question
+  - sort
+notes: >
+  Simple sorting task on Orders table by date.
+  No filtering or saving required.

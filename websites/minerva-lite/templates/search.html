@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-heading">
+  <h1>Search Class</h1>
+  {% include "_term_selector.html" %}
+</div>
+
+<form method="GET" action="/search" class="form-grid">
+  <label>Subject
+    <input data-test="search-subject" type="text" name="subject" value="{{ request.args.get('subject','') }}" placeholder="e.g., COMP" />
+  </label>
+  <label>Number
+    <input data-test="search-number" type="text" name="number" value="{{ request.args.get('number','') }}" placeholder="e.g., 250" />
+  </label>
+  <label>Title contains
+    <input data-test="search-title" type="text" name="title" value="{{ request.args.get('title','') }}" placeholder="e.g., data" />
+  </label>
+  <label>Campus
+    <input data-test="search-campus" type="text" name="campus" value="{{ request.args.get('campus','') }}" placeholder="e.g., Downtown" />
+  </label>
+  <button class="btn btn-primary" data-test="search-button" type="submit">Search</button>
+</form>
+
+<table>
+  <thead>
+    <tr>
+      <th>CRN</th>
+      <th>Subject</th>
+      <th>Number</th>
+      <th>Title</th>
+      <th>Professor</th>
+      <th>Type</th>
+      <th>Days/Time</th>
+      <th>Campus</th>
+      <th>Seats</th>
+      <th>Waitlist</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for c in results %}
+    {% set is_full = c['seats_taken'] >= c['seats_total'] %}
+    <tr data-test="course-row">
+      <td data-test="course-crn">{{ c['crn'] }}</td>
+      <td>{{ c['subject'] }}</td>
+      <td>{{ c['number'] }}</td>
+      <td>{{ c['title'] }}</td>
+      <td>{{ c['professor'] }}</td>
+      <td>{{ c['section_type'] }}</td>
+      <td>{{ c['days'] }} {{ c['time'] }}</td>
+      <td>{{ c['campus'] }}</td>
+      <td>
+        <span class="seat-pill {{ 'full' if is_full else 'open' }}">
+          {{ c['seats_taken'] }}/{{ c['seats_total'] }} {{ 'Full' if is_full else 'Open' }}
+        </span>
+      </td>
+      <td>
+        {% if is_full and c['waitlist_total'] > 0 %}
+        <span class="seat-pill {{ 'waitlist-full' if c['waitlist_taken'] >= c['waitlist_total'] else 'waitlist' }}">
+          {{ c['waitlist_taken'] }}/{{ c['waitlist_total'] }} WL
+        </span>
+        {% elif is_full %}
+        <span class="seat-pill full">No WL</span>
+        {% else %}
+        <span class="muted">—</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% for component in components_by_parent.get(c['crn'], []) %}
+    {% set component_full = component['seats_taken'] >= component['seats_total'] %}
+    <tr data-test="component-row" class="component-row">
+      <td data-test="course-crn">{{ component['crn'] }}</td>
+      <td>{{ component['subject'] }}</td>
+      <td>{{ component['number'] }}</td>
+      <td>{{ component['title'] }}</td>
+      <td>{{ component['professor'] }}</td>
+      <td>{{ component['section_type'] }}</td>
+      <td>{{ component['days'] }} {{ component['time'] }}</td>
+      <td>{{ component['campus'] }}</td>
+      <td>
+        <span class="seat-pill {{ 'full' if component_full else 'open' }}">
+          {{ component['seats_taken'] }}/{{ component['seats_total'] }} {{ 'Full' if component_full else 'Open' }}
+        </span>
+      </td>
+      <td><span class="muted">Use CRN</span></td>
+    </tr>
+    {% endfor %}
+    {% else %}
+    <tr><td colspan="10">No sections match your search.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<nav class="pagination" aria-label="Class search pages">
+  <span>Showing up to {{ per_page }} per page. {{ total_results }} lecture sections found.</span>
+  <div>
+    {% set args = request.args.to_dict() %}
+    {% if page > 1 %}
+      {% set _ = args.update({'page': page - 1}) %}
+      <a class="btn" href="/search?{{ args|urlencode }}">Previous</a>
+    {% endif %}
+    <strong>Page {{ page }} of {{ total_pages }}</strong>
+    {% if page < total_pages %}
+      {% set _ = args.update({'page': page + 1}) %}
+      <a class="btn" href="/search?{{ args|urlencode }}">Next</a>
+    {% endif %}
+  </div>
+</nav>
+{% endblock %}

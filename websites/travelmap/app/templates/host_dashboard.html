@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <section class="section-header">
+    <div>
+      <p class="eyebrow">Hosting Console</p>
+      <h1>Manage listings and reservations</h1>
+    </div>
+    <span class="helper-copy">Review availability, add calendar blocks, and keep upcoming guest details visible at every screen size.</span>
+  </section>
+
+  <section class="stats-row">
+    <article class="stat-card">
+      <span>Listings</span>
+      <strong>{{ listings|length }}</strong>
+    </article>
+    <article class="stat-card">
+      <span>Reservations</span>
+      <strong>{{ reservations|length }}</strong>
+    </article>
+    <article class="stat-card">
+      <span>Confirmed</span>
+      <strong>{{ confirmed_reservation_count }}</strong>
+    </article>
+    <article class="stat-card">
+      <span>Blocked windows</span>
+      <strong>{{ blocked_window_count }}</strong>
+    </article>
+  </section>
+
+  <section class="host-listings-grid">
+    {% for card in host_cards %}
+      <article class="panel host-card">
+        <a class="trip-thumb host-card-media" href="{{ request.app.url_path_for('listing_detail', slug=card.listing.slug) }}">
+          <img src="{{ card.listing.primary_image }}" alt="{{ card.listing.title }}" />
+        </a>
+        <div class="host-card-body">
+          <div class="panel-heading host-card-heading">
+            <div>
+              <p class="eyebrow compact">{{ card.listing.city }}</p>
+              <h2>{{ card.listing.title }}</h2>
+              <p>{{ card.listing.neighborhood }} · ${{ "%.0f"|format(card.listing.price_per_night) }} / night · {{ card.listing.max_guests }} guests max</p>
+            </div>
+            <a class="inline-link" href="{{ request.app.url_path_for('listing_detail', slug=card.listing.slug) }}">Open listing</a>
+          </div>
+
+          <div class="host-metric-row">
+            <article class="host-metric">
+              <strong>{{ card.confirmed_count }}</strong>
+              <span>Confirmed reservations</span>
+            </article>
+            <article class="host-metric">
+              <strong>{{ card.upcoming_count }}</strong>
+              <span>Upcoming arrivals</span>
+            </article>
+            <article class="host-metric">
+              <strong>{{ card.blocked_windows|length }}</strong>
+              <span>Calendar blocks</span>
+            </article>
+          </div>
+
+          <div class="host-card-sections">
+            <section class="host-subpanel">
+              <h3>Block dates</h3>
+              <form class="stacked-form" method="post" action="/host/listings/{{ card.listing.id }}/block">
+                <div class="host-form-row">
+                  <label>
+                    Block start
+                    <input type="date" name="start_date" min="{{ calendar_start.isoformat() }}" required />
+                  </label>
+                  <label>
+                    Block end
+                    <input type="date" name="end_date" min="{{ calendar_start.isoformat() }}" required />
+                  </label>
+                </div>
+                <button class="secondary-button wide-button" type="submit">Save block</button>
+              </form>
+            </section>
+
+            <section class="host-subpanel">
+              <h3>Existing blocks</h3>
+              {% if card.blocked_windows %}
+                <div class="host-chip-list">
+                  {% for blocked_window in card.blocked_windows %}
+                    <span class="chip muted">{{ blocked_window.start }} to {{ blocked_window.end }}</span>
+                  {% endfor %}
+                </div>
+              {% else %}
+                <p class="helper-copy">No blocked dates yet for this listing.</p>
+              {% endif %}
+              {% if card.next_arrival %}
+                <p class="host-inline-note">Next arrival: {{ card.next_arrival.isoformat() }}</p>
+              {% endif %}
+            </section>
+          </div>
+        </div>
+      </article>
+    {% endfor %}
+  </section>
+
+  <section class="panel">
+    <div class="panel-heading">
+      <div>
+        <h2>Upcoming reservations</h2>
+        <p class="helper-copy">Guest details stay readable without relying on a horizontal scroll table.</p>
+      </div>
+      <span class="helper-copy">{{ upcoming_reservations|length }} upcoming stay{{ "" if upcoming_reservations|length == 1 else "s" }}</span>
+    </div>
+
+    {% if upcoming_reservations %}
+      <div class="host-reservation-list">
+        {% for booking in upcoming_reservations %}
+          <article class="host-reservation-card">
+            <div class="host-reservation-header">
+              <div>
+                <p class="eyebrow compact">Reservation {{ booking.confirmation_code }}</p>
+                <h3>{{ booking.listing.title }}</h3>
+                <p>{{ booking.guest.name }} · {{ booking.guest.hometown }}</p>
+              </div>
+              <span class="status-pill {{ booking.status }}">{{ booking.status }}</span>
+            </div>
+            <div class="host-reservation-meta">
+              <div class="trip-detail-card">
+                <strong>Dates</strong>
+                <span>{{ booking.check_in.isoformat() }} to {{ booking.check_out.isoformat() }}</span>
+              </div>
+              <div class="trip-detail-card">
+                <strong>Stay details</strong>
+                <span>{{ booking.nights }} nights · {{ booking.guests }} guests</span>
+              </div>
+              <div class="trip-detail-card">
+                <strong>Total</strong>
+                <span>${{ "%.0f"|format(booking.total_price) }}</span>
+              </div>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <h3>No upcoming reservations.</h3>
+        <p>New guest bookings will appear here with dates, totals, and stay details.</p>
+      </div>
+    {% endif %}
+  </section>
+
+  {% if not host_cards %}
+    <section class="empty-state">
+      <h3>No listings yet.</h3>
+      <p>Host listings will appear here once you sign in with a host profile that has active homes.</p>
+    </section>
+  {% endif %}
+{% endblock %}

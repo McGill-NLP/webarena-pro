@@ -1,0 +1,31 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "grade_rubric",
+      "description": "Apply a verdict and a rationale to exactly one rubric. Call this once per rubric whose status you want to update on the current step. Do not call it for rubrics whose status is unchanged.",
+      "parameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "rubric_id": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "The integer id of the rubric being graded, taken from the 'Current rubric state' block in the user message."
+          },
+          "verdict": {
+            "type": "string",
+            "enum": ["pass", "fail"],
+            "description": "The new verdict for this rubric. 'pass' = criterion satisfied by the trajectory so far; 'fail' = criterion violated or impossible to recover. You cannot set a rubric to 'pending' via this tool — pending is the initial state, and the only way to keep a rubric pending is to not call grade_rubric on it. Verdicts are not sticky: flipping pass↔fail is allowed when new evidence contradicts a prior call."
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1,
+            "description": "One short sentence (<= 30 words) citing the specific evidence from this step that justifies the label. Read by humans; be terse and concrete."
+          }
+        },
+        "required": ["rubric_id", "verdict", "rationale"]
+      }
+    }
+  }
+]

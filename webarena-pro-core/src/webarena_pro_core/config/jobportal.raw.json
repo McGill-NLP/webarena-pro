@@ -1,0 +1,600 @@
+[
+  {
+    "intent": "How many jobs did Helix AI post, and which ones have the highest salaries?",
+    "login_username": "alice_seeker",
+    "require_login": true,
+    "sites": [
+      "jobportal"
+    ],
+    "task_id": "094",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent searched or filtered for the company 'Helix AI'.",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_regex": "(?i)helix"
+                      },
+                      {
+                        "url_regex": "(?i)helix"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent searched or filtered for the company 'Helix AI'."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The agent sorted job postings by salary (or viewed an equivalent ordered listing).",
+            "strategies": [
+              {
+                "tier": 1,
+                "type": "browser_event",
+                "config": {
+                  "match": {
+                    "any": [
+                      {
+                        "action_regex": "(?i)salary"
+                      },
+                      {
+                        "url_regex": "(?i)sort"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent sorted job postings by salary (or viewed an equivalent ordered listing)."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The final answer states that Helix AI posted 20 jobs.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "20"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer states that Helix AI posted 20 jobs."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The final answer identifies Staff Software Engineer, Engineering Manager, and VP of Operations as the highest-paying roles.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "answer_match",
+                "config": {
+                  "must_include": [
+                    "Staff Software Engineer",
+                    "Engineering Manager",
+                    "VP of Operations"
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The final answer identifies Staff Software Engineer, Engineering Manager, and VP of Operations as the highest-paying roles."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Review the job I previously applied to, then find similar jobs and apply to the one with the highest yearly income.",
+    "login_username": "alice_seeker",
+    "login_usernames": {
+      "jobportal": "alice_seeker"
+    },
+    "require_login": true,
+    "sites": [
+      "jobportal"
+    ],
+    "task_id": "095",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "An application by alice_seeker for 'Backend Engineer (Go)' (CloudBase Systems) exists.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"job_title\":\\s*\"Backend Engineer \\(Go\\)\"[^}]*\"applicant\":\\s*\"alice_seeker\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "An application by alice_seeker for 'Backend Engineer (Go)' (CloudBase Systems) exists."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Close the two intern job postings with the earliest application deadlines. Then create new part-time versions of those roles that require at least 1 year of experience, with the income increased by 25% compared to the original postings. Set the application deadline for the new postings to two months from now.",
+    "login_username": "employer_acme",
+    "login_usernames": {
+      "jobportal": "employer_acme"
+    },
+    "previous_task_intent": "Close the two intern job postings with the earliest application deadlines. Then create new part-time versions of those roles that require at least 1 year of experience, with the income increased by 25% compared to the original postings. Set the application deadline for the new postings to the end of July 2026.",
+    "require_login": true,
+    "sites": [
+      "jobportal"
+    ],
+    "task_id": "096",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The original 'Product Design Intern' posting is no longer active or present, and a new active posting titled 'Product Design' exists.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_not_regex",
+                      "pattern": "\"title\":\\s*\"(?i:product design intern)\"[^}]*\"employer\":\\s*\"Acme Analytics\"[^}]*\"is_active\":\\s*true"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\\s*\"(?i:product design)\"[^}]*\"employer\":\\s*\"Acme Analytics\"[^}]*\"is_active\":\\s*true"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The original 'Product Design Intern' posting is no longer active or present, and a new active posting titled 'Product Design' exists."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The original 'Data Science Intern' posting is no longer active or present, and a new active posting titled 'Data Science' exists.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_not_regex",
+                      "pattern": "\"title\":\\s*\"(?i:data science intern)\"[^}]*\"employer\":\\s*\"Acme Analytics\"[^}]*\"is_active\":\\s*true"
+                    },
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\\s*\"(?i:data science)\"[^}]*\"employer\":\\s*\"Acme Analytics\"[^}]*\"is_active\":\\s*true"
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The original 'Data Science Intern' posting is no longer active or present, and a new active posting titled 'Data Science' exists."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The new 'Product Design' posting is part-time, pays $27.50 per hour, and requires at least 1 year of experience.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\\s*\"(?i:product design)\"[^}]*\"employer\":\\s*\"Acme Analytics\"[^}]*\"salary\":\\s*\"[^\"]*(?<![0-9])27\\.50?(?![0-9])[^\"]*\"[^}]*\"job_type\":\\s*\"part_time\"[^}]*\"requirements\":\\s*\"[^\"]*(?i:(?:1\\+?\\s*|at least\\s+(?:1|one)\\s+)years?)[^\"]*\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The new 'Product Design' posting is part-time, pays $27.50 per hour, and requires at least 1 year of experience."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The new 'Data Science' posting is part-time, pays $35 per hour, and requires at least 1 year of experience.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "body_regex",
+                      "pattern": "\"title\":\\s*\"(?i:data science)\"[^}]*\"employer\":\\s*\"Acme Analytics\"[^}]*\"salary\":\\s*\"[^\"]*(?<![0-9])35(?:\\.0+)?(?![0-9])[^\"]*\"[^}]*\"job_type\":\\s*\"part_time\"[^}]*\"requirements\":\\s*\"[^\"]*(?i:(?:1\\+?\\s*|at least\\s+(?:1|one)\\s+)years?)[^\"]*\""
+                    }
+                  ]
+                },
+                "trust": "pass_only"
+              },
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The new 'Data Science' posting is part-time, pays $35 per hour, and requires at least 1 year of experience."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The new 'Product Design' posting's application deadline is two calendar months from the task date.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "json_array_date_relative",
+                      "path": "jobs",
+                      "match": {
+                        "title": {
+                          "regex": "(?i)^product design$"
+                        },
+                        "employer": "Acme Analytics",
+                        "is_active": true
+                      },
+                      "date_field": "deadline",
+                      "months": 2
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r6",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "The new 'Data Science' posting's application deadline is two calendar months from the task date.",
+            "strategies": [
+              {
+                "tier": 0,
+                "type": "backend_state",
+                "config": {
+                  "api": "eval_state",
+                  "params": {},
+                  "checks": [
+                    {
+                      "type": "json_array_date_relative",
+                      "path": "jobs",
+                      "match": {
+                        "title": {
+                          "regex": "(?i)^data science$"
+                        },
+                        "employer": "Acme Analytics",
+                        "is_active": true
+                      },
+                      "date_field": "deadline",
+                      "months": 2
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Apply to 6 jobs in my field, including a cover letter for each, talking about which one class would help with the necessities of the job the most",
+    "login_username": "alice_seeker",
+    "login_usernames": {
+      "jobportal": "alice_seeker",
+      "minerva-lite": "260123456"
+    },
+    "previous_task_intent": "apply to 6 jobs in my field including a cover letter for each talking about which one class class would help with the necesities of the job the most",
+    "require_login": true,
+    "sites": [
+      "jobportal",
+      "minerva-lite"
+    ],
+    "task_id": "305",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "Applied to 6 jobs, so dahsboard shows 6 job applications",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The agent submitted six new applications to distinct jobs during this task. Existing seeded applications do not count; a total dashboard count alone is insufficient."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "All 6 applications included a cover letter",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "All 6 applications included a cover letter"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "All cover letters must describe at least one course",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Each of the six new applications includes a cover letter explaining which one course from the user’s Minerva record best supports the requirements of that particular job."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r4",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "Jobs must be engineering roles or data science roles",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Jobs must be engineering roles or data science roles"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r5",
+          "type": "tiered",
+          "depends_on": [
+            "r1"
+          ],
+          "eval_config": {
+            "rubric": "Jobs must be junior or internship level",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "Jobs must be junior or internship level"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "intent": "Tweet the exact description of one of your least applied-to job postings and tag 10 of the people you follow.",
+    "login_username": "employer_acme",
+    "login_usernames": {
+      "jobportal": "employer_acme",
+      "x-lite": "techvalueinvestor"
+    },
+    "previous_task_intent": "Tweet the exact description of one of your least applied-to job postings and tag 10 of the people you follow",
+    "require_login": true,
+    "sites": [
+      "jobportal",
+      "x-lite"
+    ],
+    "task_id": "405",
+    "eval": {
+      "operator": "AND",
+      "scoring": "partial",
+      "nodes": [
+        {
+          "id": "r1",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "Must tag 10 of @neurosignalhub, @ecologyindex, @labnotebookdaily, @chipsetchronicle, @aiproductpulse, @roboticsdispatch, @devtoolsradar, @codelatency, @datacenterdigest, @makerstack, @uxengineers, @policyledger, @electiondesk, @cityhallpulse, @globaldiplomonitor, @campaignfinancewatch, @regulatoryreview, @policyfactcheck, @sidelinewire, @frontofficedesk, @weekendcurator, @concertqueue, @indiescreenroom, @climatefinancedesk, @fluwatchdaily, @cloudregionbrief, @openmodeldaily, @agentworkflowlab",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "In the same new X-lite tweet containing the requested job description, the task account techvalueinvestor tags ten distinct accounts from the approved list of followed handles in this rubric. Verify actual @mentions in the published tweet, not ten mentions of one account, a following-list screenshot, tags spread across unrelated tweets, a draft or a final claim. Each of the ten qualifying handles must be on the approved list: Must tag 10 of @neurosignalhub, @ecologyindex, @labnotebookdaily, @chipsetchronicle, @aiproductpulse, @roboticsdispatch, @devtoolsradar, @codelatency, @datacenterdigest, @makerstack, @uxengineers, @policyledger, @electiondesk, @cityhallpulse, @globaldiplomonitor, @campaignfinancewatch, @regulatoryreview, @policyfactcheck, @sidelinewire, @frontofficedesk, @weekendcurator, @concertqueue, @indiescreenroom, @climatefinancedesk, @fluwatchdaily, @cloudregionbrief, @openmodeldaily, @agentworkflowlab"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r2",
+          "type": "tiered",
+          "depends_on": [],
+          "eval_config": {
+            "rubric": "A tweet is posted",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "The task account techvalueinvestor publishes a new X-lite tweet for this job-advertising task. Verify the submitted post and its author; drafts, received posts, private messages, an unrelated old tweet or a final claim do not count. The content and ten tagged followers are assessed by the other nodes."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "r3",
+          "type": "tiered",
+          "depends_on": [
+            "r2"
+          ],
+          "eval_config": {
+            "rubric": "Tweet must contain the description of: Director of Product which is: Job Description  About Acme Analytics: Data platform company focused on observability and analytics. About the role: Own the product strategy for Acme's analytics suite, managing a team of PMs and working with the CEO. What you'll do: - Own discovery, roadmap tradeoffs, launch planning, and success metrics for a well-defined product area. - Use customer feedback, analytics, and technical input to prioritize work with clear rationale. - Write crisp requirements and coordinate delivery across engineering, design, marketing, sales, and support. Work model: This role is based in Remote and is listed as full time. Requirements  Minimum qualifications: 6+ years product management with 2+ years leading PMs; B2B SaaS analytics experience preferred. Role-specific requirements: - Own discovery, roadmap tradeoffs, launch planning, and success metrics for a well-defined product area. - Use customer feedback, analytics, and technical input to prioritize work with clear rationale. - Write crisp requirements and coordinate delivery across engineering, design, marketing, sales, and support. Tools and platforms: - Jira, Productboard or Aha!, SQL, Microsoft Excel, Microsoft PowerPoint, and board-level narrative writing. - Experience coaching PMs on discovery, prioritization, and launch measurement. Experience expectations: Senior candidates should show technical or functional leadership, mentoring, cross-team influence, and experience setting direction in ambiguous environments. Preferred signals: clear written communication, ownership of outcomes, comfort receiving feedback, and examples of working across functions.",
+            "strategies": [
+              {
+                "tier": 2,
+                "type": "llm_judge",
+                "config": {
+                  "rubric": "That same newly published X-lite tweet contains the complete approved Director of Product job description from Acme Analytics, including About Acme Analytics, About the role, responsibilities, work model, minimum qualifications, role-specific requirements, tools/platforms, experience expectations and preferred signals. Compare against the full text in the approved rubric below; display whitespace, line wrapping and bullet rendering may differ, but substantive words and details must be preserved. The tagged handles may accompany the description. A summary, link alone, omitted sections, another job description, a draft or text in a different post is insufficient. Approved description: Tweet must contain the description of: Director of Product which is: Job Description  About Acme Analytics: Data platform company focused on observability and analytics. About the role: Own the product strategy for Acme's analytics suite, managing a team of PMs and working with the CEO. What you'll do: - Own discovery, roadmap tradeoffs, launch planning, and success metrics for a well-defined product area. - Use customer feedback, analytics, and technical input to prioritize work with clear rationale. - Write crisp requirements and coordinate delivery across engineering, design, marketing, sales, and support. Work model: This role is based in Remote and is listed as full time. Requirements  Minimum qualifications: 6+ years product management with 2+ years leading PMs; B2B SaaS analytics experience preferred. Role-specific requirements: - Own discovery, roadmap tradeoffs, launch planning, and success metrics for a well-defined product area. - Use customer feedback, analytics, and technical input to prioritize work with clear rationale. - Write crisp requirements and coordinate delivery across engineering, design, marketing, sales, and support. Tools and platforms: - Jira, Productboard or Aha!, SQL, Microsoft Excel, Microsoft PowerPoint, and board-level narrative writing. - Experience coaching PMs on discovery, prioritization, and launch measurement. Experience expectations: Senior candidates should show technical or functional leadership, mentoring, cross-team influence, and experience setting direction in ambiguous environments. Preferred signals: clear written communication, ownership of outcomes, comfort receiving feedback, and examples of working across functions."
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

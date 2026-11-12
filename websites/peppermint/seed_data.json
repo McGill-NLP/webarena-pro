@@ -1,0 +1,1532 @@
+{
+  "admin": {
+    "email": "admin@admin.com",
+    "password": "1234"
+  },
+  "users": [
+    {
+      "name": "James Carter",
+      "email": "james@peppermint.local",
+      "password": "Password1!",
+      "admin": false
+    },
+    {
+      "name": "Priya Sharma",
+      "email": "priya@peppermint.local",
+      "password": "Password1!",
+      "admin": false
+    },
+    {
+      "name": "Marcus Lee",
+      "email": "marcus@peppermint.local",
+      "password": "Password1!",
+      "admin": false
+    }
+  ],
+  "tickets": [
+    {
+      "title": "VPN drops every 10 minutes during client calls",
+      "detail": "I work remotely from Austin and the VPN disconnects repeatedly while I am in Zoom calls with clients. It reconnects after 20-30 seconds but drops again shortly after. This has happened since Tuesday morning and affects both wired and Wi-Fi connections.",
+      "priority": "high",
+      "type": "support",
+      "assignedTo": "james@peppermint.local",
+      "status": "in_progress",
+      "comments": [
+        {
+          "userEmail": "james@peppermint.local",
+          "text": "I can see frequent tunnel renegotiation failures in the gateway logs for your user profile. Please update your VPN client to 5.4.2 and test again after reboot.",
+          "public": true
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Network team asked us to gather logs from 3 affected users before changing idle timeout policy.",
+          "public": false
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Sales shared drive folder permissions missing",
+      "detail": "New sales reps cannot open the Q2 pricing folder in the shared drive. They can see the folder name but access is denied. Manager confirmed they should have read access.",
+      "priority": "medium",
+      "type": "support",
+      "assignedTo": "priya@peppermint.local",
+      "status": "in_progress",
+      "comments": [
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Outlook mobile app stuck on syncing",
+      "detail": "Outlook on iOS has been showing syncing spinner for two days and no new emails are coming through. Webmail works fine and desktop Outlook is up to date.",
+      "priority": "medium",
+      "type": "support",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "in_progress",
+      "comments": [
+        {
+          "userEmail": "marcus@peppermint.local",
+          "text": "Please remove the account profile from the app, then re-add it with modern auth enabled. We are seeing stale auth tokens on several iOS devices.",
+          "public": true
+        }
+      ]
+    },
+    {
+      "title": "Meeting room B tablet not showing calendar",
+      "detail": "The room booking tablet outside meeting room B shows a blank schedule and cannot reserve slots. Restarting the device did not help.",
+      "priority": "low",
+      "type": "support",
+      "assignedTo": "james@peppermint.local",
+      "status": "in_progress",
+      "comments": []
+    },
+    {
+      "title": "New hire laptop cannot complete initial login",
+      "detail": "A new engineer starting today cannot sign into their company laptop with the temporary credentials provided in onboarding email. Error says account cannot be verified.",
+      "priority": "high",
+      "type": "support",
+      "assignedTo": "priya@peppermint.local",
+      "status": "in_progress",
+      "comments": []
+    },
+    {
+      "title": "Finance floor printer queue processing too slowly",
+      "detail": "Print jobs sent to FIN-PRN-02 take 8-12 minutes before printing. This started after yesterday's patch window and is delaying invoice runs.",
+      "priority": "medium",
+      "type": "feature",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "in_progress",
+      "comments": [
+        {
+          "userEmail": "marcus@peppermint.local",
+          "text": "Spooler service is running but queue backlog is high due to one malformed PDF. I paused the offending job and throughput has improved.",
+          "public": true
+        }
+      ]
+    },
+    {
+      "title": "SSO login loops back to sign-in page",
+      "detail": "When trying to access the HR portal through SSO, users are redirected back to the sign-in page repeatedly without an error message.",
+      "priority": "high",
+      "type": "support",
+      "assignedTo": "james@peppermint.local",
+      "status": "in_progress",
+      "comments": [
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "MFA reset needed after phone replacement",
+      "detail": "Employee changed phones and cannot generate valid MFA codes. Backup codes are unavailable and they are locked out of key systems.",
+      "priority": "high",
+      "type": "support",
+      "assignedTo": "priya@peppermint.local",
+      "status": "in_progress",
+      "comments": [
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Quarterly report export role missing",
+      "detail": "Operations analyst can open dashboard but export button is disabled. Role should include report export permission based on team policy.",
+      "priority": "medium",
+      "type": "support",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "in_progress",
+      "comments": []
+    },
+    {
+      "title": "Warehouse scanner loses Wi-Fi near loading dock",
+      "detail": "Handheld scanners disconnect from Wi-Fi in zone D near loading dock 4, causing inventory updates to fail intermittently.",
+      "priority": "high",
+      "type": "support",
+      "assignedTo": "james@peppermint.local",
+      "status": "in_progress",
+      "comments": [
+        {
+          "userEmail": "james@peppermint.local",
+          "text": "I escalated to network ops; AP-17 reports low signal and high retries. Temporary workaround is to use AP-15 channel profile until replacement arrives.",
+          "public": true
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Core switch admin page unreachable",
+      "detail": "Cannot reach management UI for core switch SW-CORE-01 from the network team jump host. Ping succeeds but HTTPS connection times out.",
+      "priority": "high",
+      "type": "support",
+      "assignedTo": "priya@peppermint.local",
+      "status": "in_progress",
+      "comments": []
+    },
+    {
+      "title": "CRM dashboard widget request for regional leads",
+      "detail": "Sales leadership requested a new widget showing regional lead conversion by week on the CRM home dashboard.",
+      "priority": "low",
+      "type": "feature",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "in_progress",
+      "comments": []
+    },
+    {
+      "title": "Nightly backup workflow missed 2 AM run",
+      "detail": "Database backup workflow did not start at 2 AM and no archive was generated. Monitoring alert triggered at 2:45 AM.",
+      "priority": "high",
+      "type": "support",
+      "assignedTo": "james@peppermint.local",
+      "status": "in_progress",
+      "comments": [
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Webhook setup for ticket updates to Slack",
+      "detail": "Support team wants ticket status change notifications posted to #it-helpdesk in Slack with ticket ID and assignee.",
+      "priority": "low",
+      "type": "feature",
+      "assignedTo": "priya@peppermint.local",
+      "status": "in_progress",
+      "comments": [
+        {
+          "userEmail": "priya@peppermint.local",
+          "text": "Webhook endpoint validated in staging. I still need security approval for production token rotation policy.",
+          "public": true
+        }
+      ]
+    },
+    {
+      "title": "Asset registry shows duplicate entries for MacBooks",
+      "detail": "Asset inventory has duplicate records for at least 14 MacBook Pro devices after last import, confusing warranty and assignment data.",
+      "priority": "medium",
+      "type": "support",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "in_progress",
+      "comments": []
+    },
+    {
+      "title": "Headset replacement request for call center agent",
+      "detail": "Agent reports static noise and intermittent mic cutout on Logitech H390 headset during customer calls.",
+      "priority": "low",
+      "type": "support",
+      "assignedTo": "james@peppermint.local",
+      "status": "in_progress",
+      "comments": []
+    },
+    {
+      "title": "Calendar integration fails for recurring events",
+      "detail": "Recurring events created in Google Calendar are not syncing into the internal scheduling tool after last integration update.",
+      "priority": "medium",
+      "type": "support",
+      "assignedTo": "priya@peppermint.local",
+      "status": "in_progress",
+      "comments": []
+    },
+    {
+      "title": "Mobile device policy not applying to Android 14",
+      "detail": "New Android 14 devices are enrolled in MDM but passcode and encryption policies are not being enforced.",
+      "priority": "high",
+      "type": "support",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "in_progress",
+      "comments": []
+    },
+    {
+      "title": "Remote desktop permission granted and verified",
+      "detail": "Ticket for remote desktop access to accounting VM was completed after manager approval and MFA verification.",
+      "priority": "low",
+      "type": "support",
+      "assignedTo": "james@peppermint.local",
+      "status": "done",
+      "comments": [
+        {
+          "userEmail": "james@peppermint.local",
+          "text": "Access has been provisioned and user confirmed successful login from corporate network.",
+          "public": true
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Knowledge base search timeout resolved",
+      "detail": "Search queries in knowledge base were timing out for terms longer than 3 words. Index rebuild completed and performance normalized.",
+      "priority": "medium",
+      "type": "support",
+      "assignedTo": "priya@peppermint.local",
+      "status": "done",
+      "comments": []
+    },
+    {
+      "title": "VPN profile deployment for marketing team",
+      "detail": "Created and distributed new VPN profile package for the marketing team contractors with restricted subnet access.",
+      "priority": "low",
+      "type": "support",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "done",
+      "comments": [
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Shared drive access for legal archive completed",
+      "detail": "Legal archive folder permissions were updated for three approved staff members and validated by department lead.",
+      "priority": "low",
+      "type": "support",
+      "assignedTo": "james@peppermint.local",
+      "status": "done",
+      "comments": [
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Email forwarding rule conflict fixed",
+      "detail": "User reported missing emails due to overlapping forwarding and archive rules. Conflicting rule removed and mail flow restored.",
+      "priority": "medium",
+      "type": "support",
+      "assignedTo": "priya@peppermint.local",
+      "status": "done",
+      "comments": [
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Meeting room tablet replaced and re-enrolled",
+      "detail": "Faulty room tablet battery issue resolved by replacement unit; device re-enrolled in kiosk mode and tested.",
+      "priority": "low",
+      "type": "support",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "done",
+      "comments": []
+    },
+    {
+      "title": "New hire laptop image corruption resolved",
+      "detail": "Provisioning image had outdated driver package causing setup failure. Device reimaged with latest baseline and delivered.",
+      "priority": "high",
+      "type": "support",
+      "assignedTo": "james@peppermint.local",
+      "status": "done",
+      "comments": [
+        {
+          "userEmail": "james@peppermint.local",
+          "text": "Confirmed successful domain join and first login with the hiring manager present.",
+          "public": true
+        }
+      ]
+    },
+    {
+      "title": "Printer queue optimization deployed",
+      "detail": "Queue processing delays were traced to duplex rendering setting on old driver. Updated driver policy reduced average print start time.",
+      "priority": "medium",
+      "type": "feature",
+      "assignedTo": "priya@peppermint.local",
+      "status": "done",
+      "comments": []
+    },
+    {
+      "title": "SSO metadata refresh completed",
+      "detail": "Identity provider metadata was stale and caused intermittent login loops. Metadata refreshed and propagation verified.",
+      "priority": "high",
+      "type": "support",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "done",
+      "comments": [
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "MFA enrollment assistance closed",
+      "detail": "Account recovery completed and MFA re-enrollment confirmed for locked user after identity verification.",
+      "priority": "high",
+      "type": "support",
+      "assignedTo": "james@peppermint.local",
+      "status": "done",
+      "comments": [
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Report export permission corrected",
+      "detail": "Role mapping error prevented export access in BI portal. Permission set updated and user validated CSV export.",
+      "priority": "medium",
+      "type": "support",
+      "assignedTo": "priya@peppermint.local",
+      "status": "done",
+      "comments": []
+    },
+    {
+      "title": "Scanner firmware update completed",
+      "detail": "Inventory scanner disconnects were reduced after firmware update and roaming threshold adjustment.",
+      "priority": "medium",
+      "type": "support",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "done",
+      "comments": [
+        {
+          "userEmail": "marcus@peppermint.local",
+          "text": "Monitoring in place for 48 hours; no further dropouts reported.",
+          "public": true
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Switch management ACL restored",
+      "detail": "Jump host subnet was missing from management ACL after template rollback. ACL corrected and access restored.",
+      "priority": "high",
+      "type": "support",
+      "assignedTo": "james@peppermint.local",
+      "status": "done",
+      "comments": []
+    },
+    {
+      "title": "CRM regional lead widget delivered",
+      "detail": "Requested dashboard widget shipped to production with weekly breakdown and export option for sales ops.",
+      "priority": "low",
+      "type": "feature",
+      "assignedTo": "priya@peppermint.local",
+      "status": "done",
+      "comments": []
+    },
+    {
+      "title": "Backup alert tuning request",
+      "detail": "Too many low-value backup warning alerts are being sent overnight. Team requests better thresholds and routing.",
+      "priority": "low",
+      "type": "feature",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "done",
+      "comments": [
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Pending triage: quarterly access review for contractors",
+      "detail": "Security team uploaded a list of 37 contractor accounts requiring access recertification this week.",
+      "priority": "high",
+      "type": "support",
+      "assignedTo": "james@peppermint.local",
+      "status": "in_progress",
+      "comments": [
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Waiting on HR roster confirmation before assigning owner for revocation actions.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Pending triage: stale DNS records cleanup",
+      "detail": "Post-migration cleanup list includes stale DNS records that may point to decommissioned hosts.",
+      "priority": "medium",
+      "type": "support",
+      "assignedTo": "priya@peppermint.local",
+      "status": "in_progress",
+      "comments": []
+    },
+    {
+      "title": "Pending triage: secure print rollout planning",
+      "detail": "Office operations requested secure-print badge release workflow for two additional floors.",
+      "priority": "low",
+      "type": "feature",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Pending triage: automate laptop return checklist",
+      "detail": "People ops wants an automated checklist and reminders for departing employees returning hardware.",
+      "priority": "medium",
+      "type": "feature",
+      "assignedTo": "james@peppermint.local",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Unassigned: intermittent packet loss in branch office",
+      "detail": "Branch office users report choppy calls and RDP lag between 3 PM and 5 PM local time. Needs network triage and owner assignment.",
+      "priority": "high",
+      "type": "support",
+      "status": "needs_support",
+      "comments": [
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Marked unassigned pending confirmation from ISP ticket queue.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Pending triage: onboarding checklist update for interns",
+      "detail": "Current onboarding checklist does not include intern-specific app access and temporary entitlement expiry.",
+      "priority": "low",
+      "type": "feature",
+      "assignedTo": "priya@peppermint.local",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Unassigned: suspicious mailbox forwarding rules",
+      "detail": "Security monitoring flagged external forwarding rules created in three mailboxes overnight. Needs immediate investigation.",
+      "priority": "high",
+      "type": "support",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Pending triage: ticket SLA dashboard refresh",
+      "detail": "Support leads requested a new view with first response, resolution time, and breach trend by queue.",
+      "priority": "medium",
+      "type": "feature",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "in_progress",
+      "comments": []
+    },
+    {
+      "title": "Unassigned: domain certificate renewal playbook",
+      "detail": "Current certificate renewal runbook is outdated and references retired tooling. Requires documentation ownership.",
+      "priority": "medium",
+      "type": "support",
+      "status": "needs_support",
+      "comments": [
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Keep this unassigned until platform team confirms preferred ACME client.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Pending triage: kiosk browser lockdown policy",
+      "detail": "Retail kiosk devices need stricter browser lockdown to prevent navigation outside approved internal pages.",
+      "priority": "high",
+      "type": "support",
+      "assignedTo": "james@peppermint.local",
+      "status": "in_progress",
+      "comments": []
+    },
+    {
+      "title": "Unassigned: API rate limit exceptions for vendor sync",
+      "detail": "Integration team requested temporary API rate-limit increases for end-of-quarter vendor reconciliation jobs.",
+      "priority": "medium",
+      "type": "feature",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Pending triage: cloud storage lifecycle policy tuning",
+      "detail": "Storage spend increased 18% month-over-month. Request to review and tune archive/retention lifecycle policies.",
+      "priority": "medium",
+      "type": "support",
+      "assignedTo": "priya@peppermint.local",
+      "status": "in_progress",
+      "comments": []
+    },
+    {
+      "title": "Unassigned: endpoint patch compliance below target",
+      "detail": "Compliance dashboard shows 84% patch compliance, below 95% target. Needs ownership for remediation campaign.",
+      "priority": "high",
+      "type": "support",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Pending triage: improve self-service password reset UX",
+      "detail": "User feedback indicates password reset flow is confusing and generates too many support contacts.",
+      "priority": "low",
+      "type": "feature",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "needs_support",
+      "comments": [
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Unassigned: legacy NAS migration planning",
+      "detail": "Infrastructure is planning migration from legacy NAS to cloud file share. Request includes discovery and cutover checklist.",
+      "priority": "medium",
+      "type": "support",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Pending triage: automate software license reclamation",
+      "detail": "Finance requested automated reclamation of unused SaaS licenses after 45 days of inactivity.",
+      "priority": "medium",
+      "type": "feature",
+      "assignedTo": "james@peppermint.local",
+      "status": "in_progress",
+      "comments": [
+        {
+          "userEmail": "james@peppermint.local",
+          "text": "Scoping complete for Google Workspace and Slack first; waiting on Okta API scope approval.",
+          "public": true
+        }
+      ]
+    },
+    {
+      "title": "Unassigned: investigate failed SFTP uploads from vendor",
+      "detail": "External vendor reports nightly SFTP uploads failing with permission denied from 01:00 onward.",
+      "priority": "high",
+      "type": "support",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "VPN authentication timeout for field team #51",
+      "detail": "Multiple field agents report authentication timeout after entering correct credentials. Issue started after latest VPN gateway update.",
+      "priority": "low",
+      "type": "feature",
+      "status": "done",
+      "comments": [
+        {
+          "userEmail": "james@peppermint.local",
+          "text": "Work completed and validated with requester. Monitoring for recurrence over the next business day.",
+          "public": true
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Request access to finance reporting workspace #52",
+      "detail": "Finance analyst requires read-only access to workbook models before quarter close. Manager approval attached in ticket notes.",
+      "priority": "medium",
+      "type": "support",
+      "assignedTo": "priya@peppermint.local",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Intermittent packet loss on warehouse Wi-Fi #53",
+      "detail": "Warehouse users report high latency and packet loss near aisle C. Scanners and laptops both affected during peak hours.",
+      "priority": "high",
+      "type": "support",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "in_progress",
+      "comments": []
+    },
+    {
+      "title": "Onboarding account missing in HR system #54",
+      "detail": "New hire profile was created in IAM but not provisioned into HR application. Start date is tomorrow morning.",
+      "priority": "low",
+      "type": "support",
+      "assignedTo": "james@peppermint.local",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Printer jam alerts without actual jams #55",
+      "detail": "Printer status panel shows repeated jam alerts while output remains clear. Alerts interrupt batch print jobs.",
+      "priority": "medium",
+      "type": "support",
+      "assignedTo": "priya@peppermint.local",
+      "status": "in_progress",
+      "comments": [
+        {
+          "userEmail": "priya@peppermint.local",
+          "text": "Initial triage complete. Waiting on logs from the user to confirm root cause.",
+          "public": true
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Track this under weekly reliability review if unresolved by Friday.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "SSO callback mismatch in procurement app #56",
+      "detail": "Procurement app fails SSO login with callback mismatch message. Appears isolated to production tenant only.",
+      "priority": "high",
+      "type": "feature",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "done",
+      "comments": [
+        {
+          "userEmail": "james@peppermint.local",
+          "text": "Work completed and validated with requester. Monitoring for recurrence over the next business day.",
+          "public": true
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "MFA prompt loop on mobile devices #57",
+      "detail": "Users complete MFA but are prompted again on next page. Happens mostly on Android devices with work profile.",
+      "priority": "low",
+      "type": "support",
+      "assignedTo": "james@peppermint.local",
+      "status": "in_progress",
+      "comments": [
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Permission denied on monthly export folder #58",
+      "detail": "Team can open reports but cannot write into monthly export folder. Access appears removed after policy sync.",
+      "priority": "medium",
+      "type": "support",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Remote desktop disconnect after idle #59",
+      "detail": "RDP session drops after about 7 minutes idle even when keepalive is enabled in client settings.",
+      "priority": "high",
+      "type": "support",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "in_progress",
+      "comments": [
+        {
+          "userEmail": "priya@peppermint.local",
+          "text": "Initial triage complete. Waiting on logs from the user to confirm root cause.",
+          "public": true
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Track this under weekly reliability review if unresolved by Friday.",
+          "public": false
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Knowledge base article images not loading #60",
+      "detail": "Embedded images in knowledge base articles fail to render for users outside HQ network.",
+      "priority": "low",
+      "type": "support",
+      "assignedTo": "james@peppermint.local",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Email quarantine release delay #61",
+      "detail": "Approved emails in quarantine take over 20 minutes to appear in inbox, impacting customer response time.",
+      "priority": "medium",
+      "type": "feature",
+      "assignedTo": "priya@peppermint.local",
+      "status": "done",
+      "comments": [
+        {
+          "userEmail": "james@peppermint.local",
+          "text": "Work completed and validated with requester. Monitoring for recurrence over the next business day.",
+          "public": true
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Ticket webhook retries causing duplicates #62",
+      "detail": "Webhook endpoint processes retries as new events, creating duplicate comments in downstream tooling.",
+      "priority": "high",
+      "type": "support",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Asset assignment mismatch in inventory #63",
+      "detail": "Several laptops show outdated owner in asset tool after reallocation during office move.",
+      "priority": "low",
+      "type": "support",
+      "assignedTo": "james@peppermint.local",
+      "status": "in_progress",
+      "comments": [
+        {
+          "userEmail": "priya@peppermint.local",
+          "text": "Initial triage complete. Waiting on logs from the user to confirm root cause.",
+          "public": true
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Track this under weekly reliability review if unresolved by Friday.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Headset echo during support calls #64",
+      "detail": "Support team reports persistent echo on headset model H390 during outbound calls.",
+      "priority": "medium",
+      "type": "support",
+      "assignedTo": "priya@peppermint.local",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Calendar room booking conflict #65",
+      "detail": "Meeting rooms occasionally get double booked when recurring invites overlap with ad-hoc bookings.",
+      "priority": "high",
+      "type": "support",
+      "status": "in_progress",
+      "comments": []
+    },
+    {
+      "title": "Endpoint patch job failed overnight #66",
+      "detail": "Scheduled endpoint patch campaign failed on 31 devices with generic task timeout error.",
+      "priority": "low",
+      "type": "feature",
+      "assignedTo": "james@peppermint.local",
+      "status": "done",
+      "comments": [
+        {
+          "userEmail": "james@peppermint.local",
+          "text": "Work completed and validated with requester. Monitoring for recurrence over the next business day.",
+          "public": true
+        }
+      ]
+    },
+    {
+      "title": "Shared drive sync conflict #67",
+      "detail": "Users editing same files in shared drive trigger frequent sync conflicts and duplicate filenames.",
+      "priority": "medium",
+      "type": "support",
+      "assignedTo": "priya@peppermint.local",
+      "status": "in_progress",
+      "comments": [
+        {
+          "userEmail": "priya@peppermint.local",
+          "text": "Initial triage complete. Waiting on logs from the user to confirm root cause.",
+          "public": true
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Track this under weekly reliability review if unresolved by Friday.",
+          "public": false
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Password reset email not delivered #68",
+      "detail": "Password reset emails are not reaching external contractors using personal domains.",
+      "priority": "high",
+      "type": "support",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "needs_support",
+      "comments": [
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Scanner barcode parsing error #69",
+      "detail": "Barcode scanner interprets some QR payloads with extra characters causing downstream validation failure.",
+      "priority": "low",
+      "type": "support",
+      "assignedTo": "james@peppermint.local",
+      "status": "in_progress",
+      "comments": [
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Backup retention rule exception request #70",
+      "detail": "Compliance requested temporary extension to backup retention for legal discovery hold datasets.",
+      "priority": "medium",
+      "type": "support",
+      "assignedTo": "priya@peppermint.local",
+      "status": "needs_support",
+      "comments": [
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "VPN authentication timeout for field team #71",
+      "detail": "Multiple field agents report authentication timeout after entering correct credentials. Issue started after latest VPN gateway update.",
+      "priority": "high",
+      "type": "feature",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "done",
+      "comments": [
+        {
+          "userEmail": "james@peppermint.local",
+          "text": "Work completed and validated with requester. Monitoring for recurrence over the next business day.",
+          "public": true
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Request access to finance reporting workspace #72",
+      "detail": "Finance analyst requires read-only access to workbook models before quarter close. Manager approval attached in ticket notes.",
+      "priority": "low",
+      "type": "support",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Intermittent packet loss on warehouse Wi-Fi #73",
+      "detail": "Warehouse users report high latency and packet loss near aisle C. Scanners and laptops both affected during peak hours.",
+      "priority": "medium",
+      "type": "support",
+      "assignedTo": "priya@peppermint.local",
+      "status": "in_progress",
+      "comments": []
+    },
+    {
+      "title": "Onboarding account missing in HR system #74",
+      "detail": "New hire profile was created in IAM but not provisioned into HR application. Start date is tomorrow morning.",
+      "priority": "high",
+      "type": "support",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Printer jam alerts without actual jams #75",
+      "detail": "Printer status panel shows repeated jam alerts while output remains clear. Alerts interrupt batch print jobs.",
+      "priority": "low",
+      "type": "support",
+      "assignedTo": "james@peppermint.local",
+      "status": "in_progress",
+      "comments": [
+        {
+          "userEmail": "priya@peppermint.local",
+          "text": "Initial triage complete. Waiting on logs from the user to confirm root cause.",
+          "public": true
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Track this under weekly reliability review if unresolved by Friday.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "SSO callback mismatch in procurement app #76",
+      "detail": "Procurement app fails SSO login with callback mismatch message. Appears isolated to production tenant only.",
+      "priority": "medium",
+      "type": "feature",
+      "assignedTo": "priya@peppermint.local",
+      "status": "done",
+      "comments": [
+        {
+          "userEmail": "james@peppermint.local",
+          "text": "Work completed and validated with requester. Monitoring for recurrence over the next business day.",
+          "public": true
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "MFA prompt loop on mobile devices #77",
+      "detail": "Users complete MFA but are prompted again on next page. Happens mostly on Android devices with work profile.",
+      "priority": "high",
+      "type": "support",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "in_progress",
+      "comments": [
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Permission denied on monthly export folder #78",
+      "detail": "Team can open reports but cannot write into monthly export folder. Access appears removed after policy sync.",
+      "priority": "low",
+      "type": "support",
+      "assignedTo": "james@peppermint.local",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Remote desktop disconnect after idle #79",
+      "detail": "RDP session drops after about 7 minutes idle even when keepalive is enabled in client settings.",
+      "priority": "medium",
+      "type": "support",
+      "status": "in_progress",
+      "comments": [
+        {
+          "userEmail": "priya@peppermint.local",
+          "text": "Initial triage complete. Waiting on logs from the user to confirm root cause.",
+          "public": true
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Track this under weekly reliability review if unresolved by Friday.",
+          "public": false
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Knowledge base article images not loading #80",
+      "detail": "Embedded images in knowledge base articles fail to render for users outside HQ network.",
+      "priority": "high",
+      "type": "support",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Email quarantine release delay #81",
+      "detail": "Approved emails in quarantine take over 20 minutes to appear in inbox, impacting customer response time.",
+      "priority": "low",
+      "type": "feature",
+      "assignedTo": "james@peppermint.local",
+      "status": "done",
+      "comments": [
+        {
+          "userEmail": "james@peppermint.local",
+          "text": "Work completed and validated with requester. Monitoring for recurrence over the next business day.",
+          "public": true
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Ticket webhook retries causing duplicates #82",
+      "detail": "Webhook endpoint processes retries as new events, creating duplicate comments in downstream tooling.",
+      "priority": "medium",
+      "type": "support",
+      "assignedTo": "priya@peppermint.local",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Asset assignment mismatch in inventory #83",
+      "detail": "Several laptops show outdated owner in asset tool after reallocation during office move.",
+      "priority": "high",
+      "type": "support",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "in_progress",
+      "comments": [
+        {
+          "userEmail": "priya@peppermint.local",
+          "text": "Initial triage complete. Waiting on logs from the user to confirm root cause.",
+          "public": true
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Track this under weekly reliability review if unresolved by Friday.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Headset echo during support calls #84",
+      "detail": "Support team reports persistent echo on headset model H390 during outbound calls.",
+      "priority": "low",
+      "type": "support",
+      "assignedTo": "james@peppermint.local",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Calendar room booking conflict #85",
+      "detail": "Meeting rooms occasionally get double booked when recurring invites overlap with ad-hoc bookings.",
+      "priority": "medium",
+      "type": "support",
+      "assignedTo": "priya@peppermint.local",
+      "status": "in_progress",
+      "comments": []
+    },
+    {
+      "title": "Endpoint patch job failed overnight #86",
+      "detail": "Scheduled endpoint patch campaign failed on 31 devices with generic task timeout error.",
+      "priority": "high",
+      "type": "feature",
+      "status": "done",
+      "comments": [
+        {
+          "userEmail": "james@peppermint.local",
+          "text": "Work completed and validated with requester. Monitoring for recurrence over the next business day.",
+          "public": true
+        }
+      ]
+    },
+    {
+      "title": "Shared drive sync conflict #87",
+      "detail": "Users editing same files in shared drive trigger frequent sync conflicts and duplicate filenames.",
+      "priority": "low",
+      "type": "support",
+      "assignedTo": "james@peppermint.local",
+      "status": "in_progress",
+      "comments": [
+        {
+          "userEmail": "priya@peppermint.local",
+          "text": "Initial triage complete. Waiting on logs from the user to confirm root cause.",
+          "public": true
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Track this under weekly reliability review if unresolved by Friday.",
+          "public": false
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Password reset email not delivered #88",
+      "detail": "Password reset emails are not reaching external contractors using personal domains.",
+      "priority": "medium",
+      "type": "support",
+      "assignedTo": "priya@peppermint.local",
+      "status": "needs_support",
+      "comments": [
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Scanner barcode parsing error #89",
+      "detail": "Barcode scanner interprets some QR payloads with extra characters causing downstream validation failure.",
+      "priority": "high",
+      "type": "support",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "in_progress",
+      "comments": [
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Backup retention rule exception request #90",
+      "detail": "Compliance requested temporary extension to backup retention for legal discovery hold datasets.",
+      "priority": "low",
+      "type": "support",
+      "assignedTo": "james@peppermint.local",
+      "status": "needs_support",
+      "comments": [
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "VPN authentication timeout for field team #91",
+      "detail": "Multiple field agents report authentication timeout after entering correct credentials. Issue started after latest VPN gateway update.",
+      "priority": "medium",
+      "type": "feature",
+      "assignedTo": "priya@peppermint.local",
+      "status": "done",
+      "comments": [
+        {
+          "userEmail": "james@peppermint.local",
+          "text": "Work completed and validated with requester. Monitoring for recurrence over the next business day.",
+          "public": true
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Request access to finance reporting workspace #92",
+      "detail": "Finance analyst requires read-only access to workbook models before quarter close. Manager approval attached in ticket notes.",
+      "priority": "high",
+      "type": "support",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Intermittent packet loss on warehouse Wi-Fi #93",
+      "detail": "Warehouse users report high latency and packet loss near aisle C. Scanners and laptops both affected during peak hours.",
+      "priority": "low",
+      "type": "support",
+      "status": "in_progress",
+      "comments": []
+    },
+    {
+      "title": "Onboarding account missing in HR system #94",
+      "detail": "New hire profile was created in IAM but not provisioned into HR application. Start date is tomorrow morning.",
+      "priority": "medium",
+      "type": "support",
+      "assignedTo": "priya@peppermint.local",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Printer jam alerts without actual jams #95",
+      "detail": "Printer status panel shows repeated jam alerts while output remains clear. Alerts interrupt batch print jobs.",
+      "priority": "high",
+      "type": "support",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "in_progress",
+      "comments": [
+        {
+          "userEmail": "priya@peppermint.local",
+          "text": "Initial triage complete. Waiting on logs from the user to confirm root cause.",
+          "public": true
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Track this under weekly reliability review if unresolved by Friday.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "SSO callback mismatch in procurement app #96",
+      "detail": "Procurement app fails SSO login with callback mismatch message. Appears isolated to production tenant only.",
+      "priority": "low",
+      "type": "feature",
+      "assignedTo": "james@peppermint.local",
+      "status": "done",
+      "comments": [
+        {
+          "userEmail": "james@peppermint.local",
+          "text": "Work completed and validated with requester. Monitoring for recurrence over the next business day.",
+          "public": true
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "MFA prompt loop on mobile devices #97",
+      "detail": "Users complete MFA but are prompted again on next page. Happens mostly on Android devices with work profile.",
+      "priority": "medium",
+      "type": "support",
+      "assignedTo": "priya@peppermint.local",
+      "status": "in_progress",
+      "comments": [
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Permission denied on monthly export folder #98",
+      "detail": "Team can open reports but cannot write into monthly export folder. Access appears removed after policy sync.",
+      "priority": "high",
+      "type": "support",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Remote desktop disconnect after idle #99",
+      "detail": "RDP session drops after about 7 minutes idle even when keepalive is enabled in client settings.",
+      "priority": "low",
+      "type": "support",
+      "assignedTo": "james@peppermint.local",
+      "status": "in_progress",
+      "comments": [
+        {
+          "userEmail": "priya@peppermint.local",
+          "text": "Initial triage complete. Waiting on logs from the user to confirm root cause.",
+          "public": true
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Track this under weekly reliability review if unresolved by Friday.",
+          "public": false
+        },
+        {
+          "userEmail": "admin@admin.com",
+          "text": "Reference playbook DOC-0001 and related troubleshooting docs before escalation. Capture findings in internal notes.",
+          "public": false
+        }
+      ]
+    },
+    {
+      "title": "Knowledge base article images not loading #100",
+      "detail": "Embedded images in knowledge base articles fail to render for users outside HQ network.",
+      "priority": "medium",
+      "type": "support",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Major incident: login outage on customer portal #101",
+      "detail": "Between 09:40 and 10:05 UTC, users could not authenticate into the customer portal. Monitoring showed elevated 500 responses on auth endpoints.",
+      "priority": "high",
+      "type": "incident",
+      "assignedTo": "james@peppermint.local",
+      "status": "done",
+      "comments": [
+        {
+          "userEmail": "james@peppermint.local",
+          "text": "Root cause was a bad config rollout in auth gateway. Rolled back and validated stable login success rates.",
+          "public": true
+        }
+      ]
+    },
+    {
+      "title": "Incident: elevated API latency in EU region #102",
+      "detail": "Support observed p95 latency spikes above 3s for ticket APIs in EU region during peak traffic window.",
+      "priority": "high",
+      "type": "incident",
+      "assignedTo": "priya@peppermint.local",
+      "status": "in_progress",
+      "comments": []
+    },
+    {
+      "title": "Incident: email notification backlog #103",
+      "detail": "Notification queue accumulated over 12k pending jobs and outbound user notifications were delayed by more than 40 minutes.",
+      "priority": "high",
+      "type": "incident",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "in_progress",
+      "comments": []
+    },
+    {
+      "title": "Service request: add shared mailbox for procurement #104",
+      "detail": "Procurement team requested a dedicated shared mailbox with three editors and audit logging enabled.",
+      "priority": "medium",
+      "type": "service",
+      "assignedTo": "priya@peppermint.local",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Service request: onboarding package for contractor cohort #105",
+      "detail": "Create accounts, group assignments, and baseline software setup for 8 short-term contractors starting Monday.",
+      "priority": "medium",
+      "type": "service",
+      "assignedTo": "james@peppermint.local",
+      "status": "in_progress",
+      "comments": []
+    },
+    {
+      "title": "Service request: decommission legacy conference tablet #106",
+      "detail": "Facilities requested retirement of old conference tablet and migration to the new scheduling panel.",
+      "priority": "low",
+      "type": "service",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "done",
+      "comments": []
+    },
+    {
+      "title": "Bug: ticket status filter ignores saved view #107",
+      "detail": "When loading a saved view with status filters, the UI resets to default and shows all statuses.",
+      "priority": "medium",
+      "type": "bug",
+      "assignedTo": "james@peppermint.local",
+      "status": "in_progress",
+      "comments": []
+    },
+    {
+      "title": "Bug: duplicate comments after page refresh #108",
+      "detail": "Users report duplicate comment entries after posting and refreshing ticket detail page.",
+      "priority": "medium",
+      "type": "bug",
+      "assignedTo": "priya@peppermint.local",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Bug: attachment preview fails for PDF over 10MB #109",
+      "detail": "Attachment preview panel fails silently for larger PDF files while download still works.",
+      "priority": "low",
+      "type": "bug",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "done",
+      "comments": []
+    },
+    {
+      "title": "Maintenance: quarterly database index optimization #110",
+      "detail": "Run scheduled index maintenance and analyze query plans for high-volume ticket and comment tables.",
+      "priority": "medium",
+      "type": "maintenance",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "in_progress",
+      "comments": []
+    },
+    {
+      "title": "Maintenance: rotate API service credentials #111",
+      "detail": "Security policy requires rotating integration service credentials and validating all dependent jobs.",
+      "priority": "high",
+      "type": "maintenance",
+      "assignedTo": "james@peppermint.local",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Maintenance: archive closed tickets older than 18 months #112",
+      "detail": "Data governance requested archival of historical closed tickets with retention-safe export.",
+      "priority": "low",
+      "type": "maintenance",
+      "assignedTo": "priya@peppermint.local",
+      "status": "done",
+      "comments": []
+    },
+    {
+      "title": "Access request: temporary admin role for audit week #113",
+      "detail": "Internal auditor needs temporary admin privileges for review period from Monday to Friday.",
+      "priority": "high",
+      "type": "access",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Access request: BI read-only access for new analyst #114",
+      "detail": "New analyst in operations team requires read-only access to BI dashboards and export permissions.",
+      "priority": "medium",
+      "type": "access",
+      "assignedTo": "priya@peppermint.local",
+      "status": "in_progress",
+      "comments": []
+    },
+    {
+      "title": "Access request: revoke contractor access after offboarding #115",
+      "detail": "Offboarding checklist indicates 4 contractor accounts still active in two systems.",
+      "priority": "high",
+      "type": "access",
+      "assignedTo": "james@peppermint.local",
+      "status": "done",
+      "comments": []
+    },
+    {
+      "title": "Feedback: simplify ticket creation form labels #116",
+      "detail": "Users reported confusion around priority wording and requested clearer helper text for ticket type and impact.",
+      "priority": "low",
+      "type": "feedback",
+      "assignedTo": "marcus@peppermint.local",
+      "status": "needs_support",
+      "comments": []
+    },
+    {
+      "title": "Feedback: dark mode contrast improvements #117",
+      "detail": "Multiple agents noted that secondary text in dark mode is hard to read during long shifts.",
+      "priority": "low",
+      "type": "feedback",
+      "assignedTo": "priya@peppermint.local",
+      "status": "in_progress",
+      "comments": []
+    },
+    {
+      "title": "Feedback: add keyboard shortcuts for queue actions #118",
+      "detail": "Power users requested keyboard shortcuts for assign, status change, and adding internal notes.",
+      "priority": "medium",
+      "type": "feedback",
+      "assignedTo": "james@peppermint.local",
+      "status": "done",
+      "comments": []
+    }
+  ]
+}

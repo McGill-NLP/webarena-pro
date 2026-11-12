@@ -1,0 +1,19 @@
+{% macro pagination(navigation, label, previous_label='Previous', next_label='Next') %}
+{% if navigation.previous or navigation.next %}
+<nav aria-label="{{ label }}" class="flex items-center justify-between gap-3 p-3 text-sm">
+    {% if navigation.previous %}<a href="{{ navigation.previous }}" class="text-blue-500 underline">{{ previous_label }}</a>{% endif %}
+    <span>Page {{ navigation.page }}</span>
+    {% if navigation.next %}<a href="{{ navigation.next }}" class="text-blue-500 underline">{{ next_label }}</a>{% endif %}
+</nav>
+{% endif %}
+{% endmacro %}
+
+{% macro member_option(member, checked=false) %}
+<label class="flex items-center gap-3 px-3 py-2 hover:bg-gray-50" data-testid="group-member-option-{{ member.id }}">
+    <input type="checkbox" name="member_ids" value="{{ member.id }}" {% if checked %}checked{% endif %} data-testid="group-member-checkbox-{{ member.id }}">
+    <span>
+        <span class="font-bold">{{ member.display_name }}</span>
+        <span class="text-gray-500 text-sm">@{{ member.username }}</span>
+    </span>
+</label>
+{% endmacro %}

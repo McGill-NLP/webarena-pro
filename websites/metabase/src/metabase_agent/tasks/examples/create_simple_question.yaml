@@ -1,0 +1,20 @@
+id: create_simple_question
+name: Create a simple question
+instruction: >
+  Create a new question that shows all Order Items from the sample-db databasewhere the unit price is
+  greater than $100. Save it as "Orders over 100$".
+start_url: http://localhost:3000
+max_steps: 30
+timeout_seconds: 600
+success_criteria:
+  - saved_question_exists
+  - question_name_contains: Orders over 100$
+tags:
+  - beginner
+  - question
+  - create
+notes: >
+  Tests basic question creation using the GUI query builder.
+  Uses the Order Items table from sample-db.
+  Agent should filter by Unit Price > 100.
+  The question should be saved with the exact name "Orders over 100$".

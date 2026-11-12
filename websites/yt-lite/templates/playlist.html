@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Your Playlists</h2>
+
+<form method="POST" class="form-box">
+    <input type="text" name="name" placeholder="Playlist name">
+    <button class="btn">Create</button>
+</form>
+
+<div class="playlist-list">
+    {% for p in playlists %}
+    <a href="/playlists/{{ p.id }}" class="playlist-item">
+        📂 {{ p.name }}
+    </a>
+    {% endfor %}
+</div>
+
+{% endblock %}

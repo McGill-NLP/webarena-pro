@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="term-gate">
+  <h1>Select Term</h1>
+  <p>
+    Before continuing to <strong>{{ destination_label }}</strong>, confirm the academic term you wish to work with.
+  </p>
+  <form method="POST" action="/set-term" class="term-gate-form">
+    <input type="hidden" name="next" value="{{ next_key }}" />
+    <label>
+      Select a Term:
+      <select name="term" required data-test="term-select">
+        {% for t in terms %}
+        <option value="{{ t }}" {% if t==current_term %}selected{% endif %}>{{ t }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <button class="btn btn-primary" type="submit" data-test="term-submit">Continue</button>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Watch Later</h2>
+
+{% if videos %}
+<div class="video-grid">
+    {% for v in videos %}
+    <div class="video-card">
+        <a href="/watch/{{ v.id }}" class="card-link">
+            <div class="thumb-wrap">
+                <img src="{{ v.thumbnail }}" class="thumb">
+                <span class="duration-badge">{{ v.duration or '0:00' }}</span>
+            </div>
+            <div class="video-info">
+                <div class="video-title">{{ v.title }}</div>
+                <div class="video-meta">{{ v.channel }}</div>
+            </div>
+        </a>
+        <div class="card-actions">
+            <a href="/watch-later/remove/{{ v.id }}" class="btn-small btn-danger">Remove</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p class="empty-state">No videos saved.</p>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,17 @@
+id: find_most_recent_order_date
+name: Find most recent order date
+instruction: >
+  "What is the most recent order date in the Orders table from the sample database (sample-db)?"
+start_url: http://localhost:3000/browse/databases
+max_steps: 10
+timeout_seconds: 300
+expected_answer: "March 18, 2026, 9:36 PM"
+success_criteria:
+  - response_contains: "March 18, 2026"
+tags:
+  - beginner
+  - browse
+  - date
+notes: >
+  Simple task - navigate to the Orders table and find the most recent order date.
+  May require sorting by date. The answer is March 18, 2026, 9:36 PM.

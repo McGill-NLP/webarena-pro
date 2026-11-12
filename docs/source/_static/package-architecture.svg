@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="840" viewBox="0 0 1440 840" role="img" aria-labelledby="title description">
+  <title id="title">WebArena-Pro packages after Core consolidation</title>
+  <desc id="description">Solid arrows point from a package to a required dependency. BrowserGym depends on Core and Media. Harbor depends on MCP, which depends on Core and Media. Core and Media are independent packages with no dependency on each other. MCP uses Core's bundled async APIs. Harbor uses the agent-independent MCP service for its browser sidecar. Core contains Autologin and UI Evidence modules, each with sync and async APIs, plus data-only evaluators. A dotted arrow shows captured facts flowing from UI collection to the evaluators. Playwright and evaluator libraries are required Core dependencies.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#53627a"/>
+    </marker>
+    <style>
+      text { font-family: Arial, Helvetica, sans-serif; fill: #17263c; }
+      .title { font-size: 34px; font-weight: 700; }
+      .heading { font-size: 27px; font-weight: 700; }
+      .adapter-heading { font-size: 22px; font-weight: 700; }
+      .package { font-family: 'Courier New', monospace; font-size: 23px; font-weight: 700; }
+      .body { font-size: 23px; }
+      .detail { font-size: 22px; fill: #526078; }
+      .api { font-family: 'Courier New', monospace; font-size: 22px; }
+      .label { font-size: 20px; font-weight: 700; letter-spacing: 1px; fill: #526078; }
+      .edge { fill: none; stroke: #53627a; stroke-width: 2.5; stroke-linejoin: round; marker-end: url(#arrow); }
+      .facts { fill: none; stroke: #53627a; stroke-width: 2; stroke-dasharray: 2 5; stroke-linecap: round; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <rect width="1440" height="840" rx="16" fill="#ffffff"/>
+  <text x="60" y="52" class="title">WebArena-Pro package architecture</text>
+  <text x="60" y="86" class="detail">Autologin and UI Evidence are bundled inside Core</text>
+
+  <!-- Required package dependencies. Harbor inherits Core and Media through MCP. -->
+  <path class="edge" d="M 370 210 H 430"/>
+  <path class="edge" d="M 215 160 V 120 H 1100 V 160"/>
+  <path class="edge" d="M 370 440 H 430"/>
+  <path class="edge" d="M 585 380 V 300"/>
+  <path class="edge" d="M 740 440 H 820"/>
+
+  <rect x="60" y="160" width="310" height="130" rx="12" fill="#edf4ff" stroke="#bdcde5" stroke-width="1.5"/>
+  <text x="82" y="200" class="adapter-heading">BrowserGym / AgentLab</text>
+  <text x="82" y="237" class="package">webarena-pro-bgym</text>
+  <text x="82" y="270" class="detail">Uses synchronous APIs</text>
+
+  <rect x="60" y="380" width="310" height="130" rx="12" fill="#edf4ff" stroke="#bdcde5" stroke-width="1.5"/>
+  <text x="82" y="420" class="heading">Harbor</text>
+  <text x="82" y="457" class="package">webarena-pro-harbor</text>
+  <text x="82" y="490" class="detail">Companion PR #168</text>
+
+  <rect x="430" y="380" width="310" height="130" rx="12" fill="#edf4ff" stroke="#bdcde5" stroke-width="1.5"/>
+  <text x="452" y="420" class="heading">MCP</text>
+  <text x="452" y="457" class="package">webarena-pro-mcp</text>
+  <text x="452" y="490" class="detail">Browser / media service</text>
+
+  <rect x="430" y="160" width="310" height="140" rx="12" fill="#eef9f8" stroke="#a3cfcb" stroke-width="1.5"/>
+  <text x="452" y="200" class="package">webarena-pro-media</text>
+  <text x="452" y="237" class="api">sync_api · async_api</text>
+  <text x="452" y="274" class="detail">No Core dependency</text>
+
+  <rect x="820" y="160" width="560" height="620" rx="12" fill="#f3f1ff" stroke="#c4bce1" stroke-width="1.5"/>
+  <text x="850" y="205" class="package">webarena-pro-core</text>
+  <text x="850" y="244" class="detail">Tasks · credentials · lifecycle · resets · CLI</text>
+
+  <text x="850" y="283" class="label">BUNDLED MODULES</text>
+  <rect x="850" y="300" width="500" height="105" rx="9" fill="#ffffff" stroke="#c4bce1"/>
+  <text x="873" y="337" class="heading">Autologin</text>
+  <text x="873" y="375" class="api">autologin.sync_api · .async_api</text>
+
+  <rect x="850" y="430" width="500" height="105" rx="9" fill="#ffffff" stroke="#c4bce1"/>
+  <text x="873" y="467" class="heading">UI Evidence collection</text>
+  <text x="873" y="505" class="api">ui_evidence.sync_api · .async_api</text>
+
+  <!-- Internal data flow, not a dependency on another distribution. -->
+  <path class="facts" d="M 1100 535 V 585"/>
+  <text x="1120" y="570" class="detail">Captured facts</text>
+
+  <rect x="850" y="585" width="500" height="105" rx="9" fill="#ffffff" stroke="#c4bce1"/>
+  <text x="873" y="622" class="heading">Evaluation</text>
+  <text x="873" y="660" class="detail">Schemas · predicates · DAG scoring</text>
+
+  <text x="850" y="731" class="detail">Includes browser and evaluator dependencies.</text>
+  <text x="850" y="762" class="detail">Grading rules consume captured facts.</text>
+
+  <path class="edge" d="M 60 615 H 110"/>
+  <text x="126" y="622" class="detail">Required dependency</text>
+  <path class="facts" d="M 430 615 H 480"/>
+  <text x="496" y="622" class="detail">Internal evidence flow</text>
+  <text x="60" y="688" class="detail">Harbor owns agents, scheduling, and retries.</text>
+  <text x="60" y="720" class="detail">MCP owns browser sessions and tool serving.</text>
+  <text x="60" y="814" class="detail">Core and Media are independent packages. Adapters declare the packages and features they need.</text>
+</svg>

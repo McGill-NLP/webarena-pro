@@ -1,0 +1,6 @@
+services:
+  password-manager:
+    build: .
+    ports:
+      - "4580:8000"
+    restart: unless-stopped

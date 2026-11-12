@@ -1,0 +1,43 @@
+{
+  "domain": "techcorp.local",
+  "users": [
+    {
+      "email": "alice@techcorp.local",
+      "name": "Alice Chen",
+      "password": "User@Secure123",
+      "role": "Legal Counsel"
+    },
+    {
+      "email": "bob@techcorp.local",
+      "name": "Bob Martin",
+      "password": "User@Secure123",
+      "role": "Project Manager"
+    },
+    {
+      "email": "carol@techcorp.local",
+      "name": "Carol White",
+      "password": "User@Secure123",
+      "role": "UX Designer"
+    },
+    {
+      "email": "david@techcorp.local",
+      "name": "David Kim",
+      "password": "User@Secure123",
+      "role": "QA Engineer"
+    }
+  ],
+  "primary_user": "alice@techcorp.local",
+  "source": {
+    "dataset": "CMU CALO Enron Email Dataset",
+    "documentation": "http://enrondata.org/en/latest/data/calo-enron-email-dataset/",
+    "custodian_id": "shackleton-s",
+    "custodian_name": "Sara Shackleton",
+    "anonymized_as": "Alice Chen",
+    "canonical_custodian_count": 148
+  },
+  "corpus_message_count": 5000,
+  "contact_count": 4510,
+  "recent_through": "2026-07-10T17:00:00+00:00",
+  "threaded_reply_count": 1525,
+  "stripped_reply_history_count": 1311
+}

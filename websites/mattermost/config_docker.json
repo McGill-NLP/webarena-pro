@@ -1,0 +1,41 @@
+{
+    "ServiceSettings": {
+        "EnableOAuthServiceProvider": true,
+        "EnableDeveloper": false,
+        "EnableGifPicker": true
+    },
+    "SqlSettings": {
+        "DriverName": "postgres",
+        "DataSource": "postgres://mmuser:mostest@localhost/mattermost_test?sslmode=disable&connect_timeout=10&binary_parameters=yes",
+        "AtRestEncryptKey": ""
+    },
+    "FileSettings": {
+        "DriverName": "local",
+        "Directory": "/mm/mattermost-data",
+        "PublicLinkSalt": ""
+    },
+    "EmailSettings": {
+        "SMTPServer": "",
+        "SMTPPort": "",
+        "PushNotificationContents": "generic"
+    },
+    "ElasticsearchSettings": {
+        "ConnectionUrl": ""
+    },
+    "PluginSettings": {
+        "EnableUploads": true,
+        "PluginStates": {
+            "com.mattermost.calls": {
+                "Enable": true
+            }
+        },
+        "Enable": true,
+        "Plugins": {
+            "com.mattermost.calls": {
+                "defaultenabled": true,
+                "enableringing": true,
+                "iceserversconfigs": "[]"
+            }
+        }
+    }
+}

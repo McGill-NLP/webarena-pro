@@ -1,0 +1,294 @@
+{
+  "admin": {
+    "email": "admin@penpot.local",
+    "password": "Admin@Secure123",
+    "fullname": "Penpot Admin",
+    "username": "admin",
+    "personal_projects": [
+      {
+        "name": "Admin Workspace",
+        "files": [
+          {"name": "Onboarding Templates", "is_shared": false},
+          {"name": "Internal Style Guide", "is_shared": true}
+        ]
+      }
+    ]
+  },
+  "users": [
+    {
+      "email": "alice@designstudio.io",
+      "password": "User@Secure123",
+      "fullname": "Alice Chen",
+      "username": "alice.chen",
+      "role": "Lead UI/UX Designer",
+      "personal_projects": [
+        {
+          "name": "Portfolio",
+          "files": [
+            {"name": "Case Study - Mobile App", "is_shared": false},
+            {"name": "Case Study - Dashboard", "is_shared": false}
+          ]
+        },
+        {
+          "name": "Freelance",
+          "files": [
+            {"name": "Client A - Rebrand", "is_shared": false},
+            {"name": "Client B - App Redesign", "is_shared": false}
+          ]
+        }
+      ]
+    },
+    {
+      "email": "bob@designstudio.io",
+      "password": "User@Secure123",
+      "fullname": "Bob Martin",
+      "username": "bob.martin",
+      "role": "Product Designer",
+      "personal_projects": [
+        {
+          "name": "Experiments",
+          "files": [
+            {"name": "Design Explorations", "is_shared": false},
+            {"name": "Component Playground", "is_shared": false}
+          ]
+        },
+        {
+          "name": "Side Projects",
+          "files": [
+            {"name": "Personal App Concept", "is_shared": false}
+          ]
+        }
+      ]
+    },
+    {
+      "email": "carol@designstudio.io",
+      "password": "User@Secure123",
+      "fullname": "Carol Jones",
+      "username": "carol.jones",
+      "role": "Brand Designer",
+      "personal_projects": [
+        {
+          "name": "Client Work",
+          "files": [
+            {"name": "Startup X - Brand Identity", "is_shared": false},
+            {"name": "Startup Y - Logo Suite", "is_shared": false}
+          ]
+        },
+        {
+          "name": "Brand Concepts",
+          "files": [
+            {"name": "Color System Research", "is_shared": false},
+            {"name": "Typography Explorations", "is_shared": false}
+          ]
+        }
+      ]
+    },
+    {
+      "email": "david@designstudio.io",
+      "password": "User@Secure123",
+      "fullname": "David Kim",
+      "username": "david.kim",
+      "role": "Product Manager",
+      "personal_projects": [
+        {
+          "name": "Product Research",
+          "files": [
+            {"name": "Competitor Analysis", "is_shared": false},
+            {"name": "Feature Prioritization", "is_shared": false}
+          ]
+        },
+        {
+          "name": "Roadmap Visuals",
+          "files": [
+            {"name": "Q3 Roadmap", "is_shared": false},
+            {"name": "Q4 Roadmap Draft", "is_shared": false}
+          ]
+        }
+      ]
+    },
+    {
+      "email": "emma@designstudio.io",
+      "password": "User@Secure123",
+      "fullname": "Emma Wilson",
+      "username": "emma.wilson",
+      "role": "Frontend Developer",
+      "personal_projects": [
+        {
+          "name": "UI Components",
+          "files": [
+            {"name": "Button States", "is_shared": false},
+            {"name": "Form Patterns", "is_shared": false}
+          ]
+        },
+        {
+          "name": "Dev Handoffs",
+          "files": [
+            {"name": "Sprint 12 Specs", "is_shared": false},
+            {"name": "Sprint 13 Specs", "is_shared": false}
+          ]
+        }
+      ]
+    },
+    {
+      "email": "frank@designstudio.io",
+      "password": "User@Secure123",
+      "fullname": "Frank Oz",
+      "username": "frank.oz",
+      "role": "Motion Designer",
+      "personal_projects": [
+        {
+          "name": "Animation Projects",
+          "files": [
+            {"name": "Micro-interactions Library", "is_shared": false},
+            {"name": "Loading States", "is_shared": false}
+          ]
+        },
+        {
+          "name": "Motion Studies",
+          "files": [
+            {"name": "Easing Experiments", "is_shared": false}
+          ]
+        }
+      ]
+    },
+    {
+      "email": "grace@designstudio.io",
+      "password": "User@Secure123",
+      "fullname": "Grace Lee",
+      "username": "grace.lee",
+      "role": "UX Researcher",
+      "personal_projects": [
+        {
+          "name": "Research Projects",
+          "files": [
+            {"name": "Interview Synthesis", "is_shared": false},
+            {"name": "Survey Results", "is_shared": false}
+          ]
+        },
+        {
+          "name": "User Testing",
+          "files": [
+            {"name": "Usability Test Plan", "is_shared": false},
+            {"name": "Test Session Notes", "is_shared": false}
+          ]
+        }
+      ]
+    },
+    {
+      "email": "henry@designstudio.io",
+      "password": "User@Secure123",
+      "fullname": "Henry Park",
+      "username": "henry.park",
+      "role": "Graphic Designer",
+      "personal_projects": [
+        {
+          "name": "Illustration Work",
+          "files": [
+            {"name": "Icon Set v1", "is_shared": false},
+            {"name": "Editorial Illustrations", "is_shared": false}
+          ]
+        },
+        {
+          "name": "Print Designs",
+          "files": [
+            {"name": "Poster Series", "is_shared": false},
+            {"name": "Brochure Templates", "is_shared": false}
+          ]
+        }
+      ]
+    }
+  ],
+  "teams": [
+    {
+      "name": "Design Studio",
+      "owner": "admin",
+      "members": [
+        {"username": "alice.chen", "role": "editor"},
+        {"username": "bob.martin", "role": "editor"},
+        {"username": "carol.jones", "role": "editor"},
+        {"username": "frank.oz", "role": "editor"},
+        {"username": "henry.park", "role": "editor"},
+        {"username": "david.kim", "role": "viewer"},
+        {"username": "emma.wilson", "role": "viewer"},
+        {"username": "grace.lee", "role": "editor"}
+      ],
+      "projects": [
+        {
+          "name": "Design System",
+          "files": [
+            {"name": "Core Components", "is_shared": false},
+            {"name": "Typography & Color", "is_shared": false},
+            {"name": "Icon Library", "is_shared": true},
+            {"name": "Motion Guidelines", "is_shared": false},
+            {"name": "Spacing & Grid", "is_shared": false}
+          ]
+        },
+        {
+          "name": "Brand Identity",
+          "files": [
+            {"name": "Logo & Marks", "is_shared": false},
+            {"name": "Brand Guidelines v2", "is_shared": false},
+            {"name": "Social Media Kit", "is_shared": false},
+            {"name": "Print Templates", "is_shared": false}
+          ]
+        },
+        {
+          "name": "Marketing Assets",
+          "files": [
+            {"name": "Q2 Campaign Banners", "is_shared": false},
+            {"name": "Email Newsletter Templates", "is_shared": false},
+            {"name": "Conference Booth Design", "is_shared": false}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Product Squad",
+      "owner": "alice.chen",
+      "members": [
+        {"username": "admin", "role": "editor"},
+        {"username": "bob.martin", "role": "editor"},
+        {"username": "carol.jones", "role": "editor"},
+        {"username": "david.kim", "role": "editor"},
+        {"username": "emma.wilson", "role": "editor"},
+        {"username": "grace.lee", "role": "viewer"}
+      ],
+      "projects": [
+        {
+          "name": "Mobile App v2",
+          "files": [
+            {"name": "User Research Findings", "is_shared": false},
+            {"name": "Wireframes", "is_shared": false},
+            {"name": "UI Mockups", "is_shared": false},
+            {"name": "Prototype - Onboarding", "is_shared": false},
+            {"name": "Handoff Specs", "is_shared": false}
+          ]
+        },
+        {
+          "name": "Web Dashboard",
+          "files": [
+            {"name": "Information Architecture", "is_shared": false},
+            {"name": "Dashboard Redesign", "is_shared": false},
+            {"name": "Accessibility Review", "is_shared": false},
+            {"name": "Dark Mode", "is_shared": false}
+          ]
+        },
+        {
+          "name": "Marketing Site",
+          "files": [
+            {"name": "Landing Page", "is_shared": false},
+            {"name": "Pricing Page", "is_shared": false},
+            {"name": "Blog Templates", "is_shared": false}
+          ]
+        },
+        {
+          "name": "Archive",
+          "files": [
+            {"name": "Old Landing Page v1", "is_shared": false},
+            {"name": "Legacy Dashboard", "is_shared": false}
+          ]
+        }
+      ]
+    }
+  ]
+}

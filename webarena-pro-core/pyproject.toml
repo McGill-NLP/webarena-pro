@@ -1,0 +1,66 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "webarena-pro-core"
+version = "0.1.0"
+description = "Core CLI and container orchestration for WebArena-Pro local websites."
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.12"
+dependencies = [
+    "docker>=7.1.0",
+    "dotenv>=0.9.9",
+    "pydantic>=2.12,<3",
+    "playwright>=1.44.0",
+    "icalendar>=6.0.0",
+    "markdown-it-py>=4.0.0",
+    "openai>=1.109.1",
+    "requests>=2.32.0",
+    "vobject>=0.9.9",
+    "webdav4[fsspec]>=0.10.0",
+]
+
+[project.optional-dependencies]
+verifier = [
+    "jinja2>=3.1",
+    "numpy>=2.0",
+    "Pillow>=10.0",
+    "PyYAML>=6.0",
+]
+
+[project.scripts]
+webarena-pro = "webarena_pro_core.cli:main"
+
+[dependency-groups]
+dev = [
+    "pytest-asyncio>=1",
+    "jinja2>=3.1",
+    "numpy>=2.0",
+    "Pillow>=10.0",
+    "pytest>=9.0.2",
+    "PyYAML>=6.0",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+webarena_pro_core = [
+    "config/*.json",
+    "config/splits/*.json",
+    "config/splits/README.md",
+    "config/README.md",
+    "static/*.html",
+    "verifier/*.json",
+    "verifier/*.jinja2",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"

@@ -1,0 +1,820 @@
+{
+  "admin": {
+    "username": "admin",
+    "password": "Admin@Secure123",
+    "email": "admin@techcorp.com",
+    "first_name": "System",
+    "last_name": "Admin",
+    "position": "System Administrator"
+  },
+  "users": [
+    {
+      "username": "john.doe",
+      "password": "User@Secure123",
+      "email": "john.doe@techcorp.com",
+      "first_name": "John",
+      "last_name": "Doe",
+      "nickname": "JD",
+      "position": "Engineering Manager"
+    },
+    {
+      "username": "jane.smith",
+      "password": "User@Secure123",
+      "email": "jane.smith@techcorp.com",
+      "first_name": "Jane",
+      "last_name": "Smith",
+      "nickname": "jsmith",
+      "position": "Senior Developer"
+    },
+    {
+      "username": "bob.wilson",
+      "password": "User@Secure123",
+      "email": "bob.wilson@techcorp.com",
+      "first_name": "Bob",
+      "last_name": "Wilson",
+      "nickname": "bobw",
+      "position": "DevOps Engineer"
+    },
+    {
+      "username": "alice.johnson",
+      "password": "User@Secure123",
+      "email": "alice.johnson@techcorp.com",
+      "first_name": "Alice",
+      "last_name": "Johnson",
+      "nickname": "alicej",
+      "position": "Frontend Developer"
+    },
+    {
+      "username": "charlie.brown",
+      "password": "User@Secure123",
+      "email": "charlie.brown@techcorp.com",
+      "first_name": "Charlie",
+      "last_name": "Brown",
+      "nickname": "charlie",
+      "position": "Backend Developer"
+    },
+    {
+      "username": "diana.prince",
+      "password": "User@Secure123",
+      "email": "diana.prince@techcorp.com",
+      "first_name": "Diana",
+      "last_name": "Prince",
+      "nickname": "diana",
+      "position": "QA Engineer"
+    },
+    {
+      "username": "emma.davis",
+      "password": "User@Secure123",
+      "email": "emma.davis@techcorp.com",
+      "first_name": "Emma",
+      "last_name": "Davis",
+      "nickname": "emmad",
+      "position": "Marketing Manager"
+    },
+    {
+      "username": "frank.miller",
+      "password": "User@Secure123",
+      "email": "frank.miller@techcorp.com",
+      "first_name": "Frank",
+      "last_name": "Miller",
+      "nickname": "frankm",
+      "position": "Content Writer"
+    },
+    {
+      "username": "grace.lee",
+      "password": "User@Secure123",
+      "email": "grace.lee@techcorp.com",
+      "first_name": "Grace",
+      "last_name": "Lee",
+      "nickname": "gracel",
+      "position": "UI/UX Designer"
+    },
+    {
+      "username": "henry.taylor",
+      "password": "User@Secure123",
+      "email": "henry.taylor@techcorp.com",
+      "first_name": "Henry",
+      "last_name": "Taylor",
+      "nickname": "henryt",
+      "position": "HR Manager"
+    },
+    {
+      "username": "ivy.chen",
+      "password": "User@Secure123",
+      "email": "ivy.chen@techcorp.com",
+      "first_name": "Ivy",
+      "last_name": "Chen",
+      "nickname": "ivyc",
+      "position": "Data Analyst"
+    },
+    {
+      "username": "kevin.martinez",
+      "password": "User@Secure123",
+      "email": "kevin.martinez@techcorp.com",
+      "first_name": "Kevin",
+      "last_name": "Martinez",
+      "nickname": "kevinm",
+      "position": "Product Manager"
+    },
+    {
+      "username": "lisa.wang",
+      "password": "User@Secure123",
+      "email": "lisa.wang@techcorp.com",
+      "first_name": "Lisa",
+      "last_name": "Wang",
+      "nickname": "lisaw",
+      "position": "Security Engineer"
+    },
+    {
+      "username": "mike.ross",
+      "password": "User@Secure123",
+      "email": "mike.ross@techcorp.com",
+      "first_name": "Mike",
+      "last_name": "Ross",
+      "nickname": "miker",
+      "position": "Junior Developer"
+    },
+    {
+      "username": "natalie.kim",
+      "password": "User@Secure123",
+      "email": "natalie.kim@techcorp.com",
+      "first_name": "Natalie",
+      "last_name": "Kim",
+      "nickname": "nataliek",
+      "position": "Technical Writer"
+    }
+  ],
+  "teams": [
+    {
+      "name": "engineering",
+      "display_name": "Engineering",
+      "description": "Software Engineering team at TechCorp",
+      "type": "O",
+      "members": ["john.doe", "jane.smith", "bob.wilson", "alice.johnson", "charlie.brown", "diana.prince", "kevin.martinez", "lisa.wang", "mike.ross", "natalie.kim"]
+    },
+    {
+      "name": "marketing",
+      "display_name": "Marketing",
+      "description": "Marketing and Growth team",
+      "type": "O",
+      "members": ["emma.davis", "frank.miller", "grace.lee", "ivy.chen", "kevin.martinez"]
+    },
+    {
+      "name": "general",
+      "display_name": "TechCorp General",
+      "description": "Company-wide communication hub",
+      "type": "O",
+      "members": "__all__"
+    }
+  ],
+  "channels": {
+    "engineering": [
+      {
+        "name": "project-alpha",
+        "display_name": "Project Alpha",
+        "purpose": "Discussion and updates for Project Alpha - our new customer portal",
+        "header": "Project Alpha | Sprint 12 | Release: March 30",
+        "type": "O"
+      },
+      {
+        "name": "project-beta",
+        "display_name": "Project Beta",
+        "purpose": "Internal dashboard redesign project",
+        "header": "Project Beta | Planning Phase | Lead: Jane Smith",
+        "type": "O"
+      },
+      {
+        "name": "deployments",
+        "display_name": "Deployments",
+        "purpose": "Deployment coordination and status updates",
+        "header": "Check #runbooks before deploying | On-call: Bob Wilson",
+        "type": "O"
+      },
+      {
+        "name": "code-reviews",
+        "display_name": "Code Reviews",
+        "purpose": "Request and discuss code reviews",
+        "header": "Please include PR link and brief description when requesting reviews",
+        "type": "O"
+      },
+      {
+        "name": "bugs-and-issues",
+        "display_name": "Bugs and Issues",
+        "purpose": "Report and track bugs across all projects",
+        "header": "Use format: [PROJECT] Brief description | Priority: High/Med/Low",
+        "type": "O"
+      },
+      {
+        "name": "standup-notes",
+        "display_name": "Standup Notes",
+        "purpose": "Daily standup updates from the engineering team",
+        "header": "Format: Yesterday | Today | Blockers",
+        "type": "O"
+      },
+      {
+        "name": "tech-discussions",
+        "display_name": "Tech Discussions",
+        "purpose": "Technical discussions, architecture decisions, and knowledge sharing",
+        "header": "Share interesting articles, discuss tech trends, and propose RFCs",
+        "type": "O"
+      },
+      {
+        "name": "devops",
+        "display_name": "DevOps",
+        "purpose": "Infrastructure, CI/CD, and operations",
+        "header": "AWS Status: Green | K8s Cluster: Healthy",
+        "type": "O"
+      },
+      {
+        "name": "security-alerts",
+        "display_name": "Security Alerts",
+        "purpose": "Security vulnerabilities and incident reports",
+        "header": "CONFIDENTIAL - Do not share outside this channel",
+        "type": "P"
+      }
+    ],
+    "marketing": [
+      {
+        "name": "campaigns",
+        "display_name": "Campaigns",
+        "purpose": "Plan and track marketing campaigns",
+        "header": "Q1 Campaign: 'Innovate Together' | Budget: $50K",
+        "type": "O"
+      },
+      {
+        "name": "social-media",
+        "display_name": "Social Media",
+        "purpose": "Social media strategy and content planning",
+        "header": "Posting schedule: Mon/Wed/Fri | Tools: Hootsuite, Canva",
+        "type": "O"
+      },
+      {
+        "name": "analytics",
+        "display_name": "Analytics",
+        "purpose": "Marketing analytics and reporting",
+        "header": "Weekly report due every Friday by 3pm",
+        "type": "O"
+      },
+      {
+        "name": "content-calendar",
+        "display_name": "Content Calendar",
+        "purpose": "Blog posts, newsletters, and content scheduling",
+        "header": "Next blog post due: March 15 | Author: Frank Miller",
+        "type": "O"
+      },
+      {
+        "name": "design-requests",
+        "display_name": "Design Requests",
+        "purpose": "Submit and track design requests",
+        "header": "Use the pinned template for new requests | SLA: 3 business days",
+        "type": "O"
+      }
+    ],
+    "general": [
+      {
+        "name": "announcements",
+        "display_name": "Announcements",
+        "purpose": "Company-wide announcements and news",
+        "header": "Only managers and above can post here",
+        "type": "O"
+      },
+      {
+        "name": "random",
+        "display_name": "Random",
+        "purpose": "Non-work banter and fun stuff",
+        "header": "Keep it friendly and respectful!",
+        "type": "O"
+      },
+      {
+        "name": "watercooler",
+        "display_name": "Water Cooler",
+        "purpose": "Casual conversations and team bonding",
+        "header": "What's everyone watching this weekend?",
+        "type": "O"
+      },
+      {
+        "name": "events",
+        "display_name": "Events",
+        "purpose": "Company events, team outings, and celebrations",
+        "header": "Next event: Team Lunch - March 20 at Bella Italia",
+        "type": "O"
+      },
+      {
+        "name": "help-desk",
+        "display_name": "Help Desk",
+        "purpose": "IT support and general help requests",
+        "header": "For urgent issues, contact IT at ext. 5555",
+        "type": "O"
+      },
+      {
+        "name": "new-joiners",
+        "display_name": "New Joiners",
+        "purpose": "Welcome new team members and onboarding info",
+        "header": "Welcome to TechCorp! Check pinned posts for onboarding guide",
+        "type": "O"
+      }
+    ]
+  },
+  "conversations": {
+    "engineering": {
+      "project-alpha": [
+        {
+          "user": "john.doe",
+          "message": "Team, I want to kick off the Sprint 12 planning for Project Alpha. We need to finalize the customer portal authentication flow and the dashboard widgets. @jane.smith can you take the lead on the auth module?",
+          "replies": [
+            {"user": "jane.smith", "message": "Sure John! I've been looking into OAuth 2.0 with PKCE flow. I think we should support both Google and GitHub SSO along with email/password."},
+            {"user": "alice.johnson", "message": "I can handle the frontend components for the login/signup pages. Should I use the new design system components?"},
+            {"user": "john.doe", "message": "Yes, use the new design system. @grace.lee already finalized the auth page mockups."},
+            {"user": "charlie.brown", "message": "For the backend, should we use JWT or session-based auth? I'd recommend JWT with refresh tokens for the API."},
+            {"user": "jane.smith", "message": "JWT with refresh tokens sounds good. Let's set access token expiry to 15 minutes and refresh token to 7 days."},
+            {"user": "kevin.martinez", "message": "Just a heads up - the customer demo is scheduled for March 28. We need the auth flow working end-to-end by March 25 at the latest."}
+          ]
+        },
+        {
+          "user": "alice.johnson",
+          "message": "I've pushed the initial PR for the dashboard layout: https://github.com/techcorp/portal/pull/142. It includes the grid system and the widget container components. Would love some feedback!",
+          "replies": [
+            {"user": "jane.smith", "message": "Looks great! Left a few comments on the PR. Mainly about the responsive breakpoints - I think we should add a tablet view."},
+            {"user": "mike.ross", "message": "I can work on the chart widgets if you need help. I've been working with Recharts and it integrates nicely with our stack."},
+            {"user": "alice.johnson", "message": "That would be awesome Mike! Let me create tickets for the individual widgets. We need: line chart, bar chart, pie chart, and a KPI card widget."},
+            {"user": "diana.prince", "message": "I'll start writing test cases for the dashboard components. Should I use React Testing Library or Cypress for this?"},
+            {"user": "alice.johnson", "message": "RTL for unit tests, Cypress for the E2E flows. Let's discuss in standup tomorrow."}
+          ]
+        },
+        {
+          "user": "kevin.martinez",
+          "message": "Product update: Based on customer feedback, we're adding a notification center to the portal. Users want real-time alerts for order status changes, payment confirmations, and system alerts. Adding this to the Sprint 12 backlog.",
+          "replies": [
+            {"user": "charlie.brown", "message": "We'll need WebSocket support for real-time notifications. I can set up a Socket.io server alongside our REST API."},
+            {"user": "jane.smith", "message": "Let's also add a notification preferences page so users can choose which alerts they want. Email, in-app, or both."},
+            {"user": "john.doe", "message": "Good call. @bob.wilson can we use Redis pub/sub for the notification queue in our k8s setup?"},
+            {"user": "bob.wilson", "message": "Yes, we already have a Redis cluster running. I'll configure a dedicated channel for notifications. Should be straightforward."}
+          ]
+        },
+        {
+          "user": "diana.prince",
+          "message": "QA Report for Sprint 11:\n\n**Passed:** 45/52 test cases\n**Failed:** 7 test cases\n**Blockers:**\n- Login page crashes on Safari 16 when using autofill\n- Payment form validation not triggered on mobile keyboards\n- API returns 500 on concurrent cart updates\n\n**Notes:** Overall good quality. The Safari issue is the most critical since 15% of our users are on Safari.",
+          "replies": [
+            {"user": "john.doe", "message": "Thanks Diana. The Safari issue is P1. @alice.johnson can you look into this today?"},
+            {"user": "alice.johnson", "message": "On it. I think it's related to the autofill event handler. Safari handles it differently from Chrome/Firefox."},
+            {"user": "charlie.brown", "message": "I'll fix the concurrent cart update issue. Likely a race condition in the transaction handling. Should have a fix by EOD."},
+            {"user": "diana.prince", "message": "I'll re-run the failed tests once fixes are in. Also setting up automated Safari testing in our CI pipeline with BrowserStack."}
+          ]
+        }
+      ],
+      "project-beta": [
+        {
+          "user": "jane.smith",
+          "message": "Starting the architecture planning for Project Beta (Internal Dashboard Redesign). Here's my proposal:\n\n**Tech Stack:**\n- Frontend: Next.js 14 with App Router\n- State Management: Zustand\n- UI: Tailwind CSS + Radix UI\n- Charts: D3.js for custom visualizations\n- API: tRPC for type-safe API calls\n\nThoughts?",
+          "replies": [
+            {"user": "charlie.brown", "message": "I like the tRPC choice. It'll save us a lot of boilerplate compared to REST. Can we also use Prisma for the ORM?"},
+            {"user": "alice.johnson", "message": "Zustand over Redux? I'm in favor - much simpler API and less boilerplate. But we need to make sure the DevTools support is adequate."},
+            {"user": "jane.smith", "message": "Yes, Prisma is great with tRPC. And Zustand has excellent DevTools support now. I'll create the RFC document and share it by Thursday."},
+            {"user": "john.doe", "message": "Looks solid. Let's schedule an architecture review meeting for Friday. I want @lisa.wang to review the security aspects too."},
+            {"user": "lisa.wang", "message": "I'll be there. Main concerns will be around data access controls and API authentication for internal tools."}
+          ]
+        },
+        {
+          "user": "kevin.martinez",
+          "message": "Here are the key metrics we need to display on the new internal dashboard:\n\n1. **Sales Metrics:** Revenue, orders, avg order value, conversion rate\n2. **User Metrics:** DAU, MAU, retention, churn rate\n3. **System Health:** API latency, error rate, uptime\n4. **Support Metrics:** Open tickets, avg response time, CSAT score\n\nEach section should be a separate dashboard page with drill-down capabilities.",
+          "replies": [
+            {"user": "ivy.chen", "message": "I can help define the data models and write the SQL queries for these metrics. Most of the raw data is already in our data warehouse."},
+            {"user": "jane.smith", "message": "Perfect. Let's set up a meeting with Ivy to map out the data pipeline. We'll need real-time updates for system health and hourly updates for business metrics."},
+            {"user": "mike.ross", "message": "Should I start prototyping the chart components? I can create a Storybook with sample visualizations for each metric type."}
+          ]
+        }
+      ],
+      "deployments": [
+        {
+          "user": "bob.wilson",
+          "message": ":rocket: **Deployment Notice**\n\n**Service:** Customer API v2.4.1\n**Environment:** Production\n**Time:** Today, 2:00 PM EST\n**Changes:**\n- Fix for payment processing timeout\n- New rate limiting middleware\n- Updated error response format\n\n**Rollback Plan:** Revert to v2.4.0 via Helm chart\n**Monitoring:** Grafana dashboard #12\n\nPlease hold off on non-critical deploys until 3:00 PM.",
+          "replies": [
+            {"user": "jane.smith", "message": "Acknowledged. I'll monitor the error rates during the deployment."},
+            {"user": "charlie.brown", "message": "The rate limiting config is in the ConfigMap. Default is 100 req/min per API key. Should we adjust for the initial rollout?"},
+            {"user": "bob.wilson", "message": "Let's keep it at 100 for now and monitor. We can adjust without redeploying since it reads from the ConfigMap."},
+            {"user": "diana.prince", "message": "I'll run the smoke tests right after deployment. Estimated 15 min for the full suite."},
+            {"user": "bob.wilson", "message": ":white_check_mark: Deployment complete! All health checks passing. Monitoring for the next hour."}
+          ]
+        },
+        {
+          "user": "bob.wilson",
+          "message": ":warning: **Infrastructure Alert**\n\nOur staging environment database (PostgreSQL) is running low on disk space. Current usage: 87%. I'm scheduling a cleanup of old test data and will increase the volume size from 50GB to 100GB tonight.\n\nThis will require a brief downtime of the staging environment from 11 PM to 12 AM EST.",
+          "replies": [
+            {"user": "john.doe", "message": "Thanks for the heads up. Everyone please wrap up your staging testing before 11 PM."},
+            {"user": "lisa.wang", "message": "Bob, can we also enable automated log rotation while you're at it? The pg_log directory is growing unbounded."},
+            {"user": "bob.wilson", "message": "Good catch Lisa. I'll add log rotation config. Max 7 days retention, 100MB per file."}
+          ]
+        },
+        {
+          "user": "bob.wilson",
+          "message": "**Weekly Deployment Schedule (March 10-14):**\n\n| Day | Service | Version | Owner |\n|---|---|---|---|\n| Mon | Auth Service | v1.8.0 | Jane |\n| Tue | Payment Gateway | v3.2.1 | Charlie |\n| Wed | No deployments (Change Freeze) | - | - |\n| Thu | Frontend Bundle | v5.1.0 | Alice |\n| Fri | No deployments (End of week) | - | - |\n\nAll deployments require at least 1 approval from @john.doe or @jane.smith.",
+          "replies": [
+            {"user": "jane.smith", "message": "Auth Service v1.8.0 is ready. All tests passing. I'll do the deployment Monday morning."},
+            {"user": "charlie.brown", "message": "Payment Gateway v3.2.1 includes the Stripe API upgrade. @diana.prince can you run the payment flow tests on staging Monday evening?"},
+            {"user": "diana.prince", "message": "Will do. I'll have the test results ready by Tuesday morning before the deployment."}
+          ]
+        }
+      ],
+      "code-reviews": [
+        {
+          "user": "charlie.brown",
+          "message": "Need a review on PR #287: Refactored the order processing pipeline to use async/await instead of callbacks. Also added retry logic with exponential backoff for payment API calls.\n\nhttps://github.com/techcorp/api/pull/287\n\nKey changes:\n- `OrderService.processOrder()` is now async\n- Added `RetryHelper` utility class\n- Updated 12 test files",
+          "replies": [
+            {"user": "jane.smith", "message": "I'll review this afternoon. The retry logic sounds important - what's the max retry count and backoff ceiling?"},
+            {"user": "charlie.brown", "message": "Max 3 retries, starting at 1s, ceiling at 8s. So: 1s, 2s, 4s then fail."},
+            {"user": "lisa.wang", "message": "Security review note: Make sure the retry logic doesn't retry on 4xx errors, only 5xx and network timeouts. Otherwise we might duplicate payments."},
+            {"user": "charlie.brown", "message": "Great point Lisa! I've already handled that - only retrying on 502, 503, 504, and ECONNRESET. 4xx errors fail immediately."}
+          ]
+        },
+        {
+          "user": "mike.ross",
+          "message": "My first PR! :tada: Added the user activity heatmap component for the dashboard.\n\nhttps://github.com/techcorp/portal/pull/156\n\nUsed D3.js for the calendar heatmap visualization. Would appreciate thorough feedback since I'm still learning our codebase.",
+          "replies": [
+            {"user": "alice.johnson", "message": "Welcome to the review process Mike! I'll take a look. One thing I noticed quickly - you should use our `useTheme()` hook for the color palette instead of hardcoded values."},
+            {"user": "jane.smith", "message": "Nice work for a first PR! A few suggestions:\n1. Extract the D3 rendering into a custom hook\n2. Add error boundary around the chart\n3. Memoize the data transformation\n\nOverall structure is good though!"},
+            {"user": "mike.ross", "message": "Thanks for the feedback! I'll address all comments and push an update today."}
+          ]
+        }
+      ],
+      "bugs-and-issues": [
+        {
+          "user": "diana.prince",
+          "message": "[ALPHA] **Critical Bug** - Shopping cart total shows $0.00 when applying a percentage discount code.\n\n**Steps to Reproduce:**\n1. Add any product to cart\n2. Apply discount code 'SAVE20'\n3. Cart total shows $0.00 instead of the discounted price\n\n**Expected:** Total should show original price minus 20%\n**Actual:** Total shows $0.00\n**Browser:** Chrome 121, Firefox 122\n**Priority:** High",
+          "replies": [
+            {"user": "charlie.brown", "message": "Found it. There's a floating point issue in the discount calculation. `price * (1 - discount/100)` becomes `price * 0` when discount is stored as an integer. Fixing now."},
+            {"user": "diana.prince", "message": "Thanks Charlie. I have 5 related test cases ready. Let me know when the fix is pushed and I'll verify."},
+            {"user": "charlie.brown", "message": "Fix pushed in commit `a3f8d2e`. Changed the discount to use `BigDecimal` for price calculations. @diana.prince ready for verification."},
+            {"user": "diana.prince", "message": ":white_check_mark: Verified! All 5 test cases pass now. Marking as resolved."}
+          ]
+        },
+        {
+          "user": "alice.johnson",
+          "message": "[ALPHA] **UI Bug** - Product images not loading on slow connections (3G simulation).\n\nThe lazy loading implementation doesn't have a proper fallback. Users on slow connections see broken image icons for 10+ seconds before images load.\n\n**Suggested Fix:** Add skeleton placeholders and progressive image loading (blur-up technique).\n**Priority:** Medium",
+          "replies": [
+            {"user": "grace.lee", "message": "I can provide the skeleton placeholder designs. We should also add a subtle loading animation."},
+            {"user": "alice.johnson", "message": "That would be great Grace. I'll implement blur-up using next/image's `placeholder='blur'` prop which generates a base64 preview automatically."},
+            {"user": "mike.ross", "message": "I can help with this! I worked on a similar image loading solution at my previous job. Want me to pair on it?"},
+            {"user": "alice.johnson", "message": "Sure Mike, let's pair tomorrow morning. Grab the 10 AM slot on my calendar."}
+          ]
+        }
+      ],
+      "standup-notes": [
+        {
+          "user": "jane.smith",
+          "message": "**Standup - Monday March 10**\n\n**Yesterday:** Finalized OAuth 2.0 architecture design, reviewed 3 PRs\n**Today:** Start implementing the auth middleware, set up token refresh endpoint\n**Blockers:** Need AWS Cognito access from Bob"
+        },
+        {
+          "user": "alice.johnson",
+          "message": "**Standup - Monday March 10**\n\n**Yesterday:** Pushed dashboard grid layout PR, started on responsive fixes\n**Today:** Fix Safari autofill bug (P1), tablet responsive view\n**Blockers:** None"
+        },
+        {
+          "user": "charlie.brown",
+          "message": "**Standup - Monday March 10**\n\n**Yesterday:** Fixed cart discount calculation bug, started async refactor for order pipeline\n**Today:** Complete async refactor, add retry logic for payment API\n**Blockers:** Need staging environment access to test payment flow"
+        },
+        {
+          "user": "bob.wilson",
+          "message": "**Standup - Monday March 10**\n\n**Yesterday:** Completed staging DB disk expansion, set up log rotation\n**Today:** Deploy Auth Service v1.8.0, configure Redis notification channel\n**Blockers:** None"
+        },
+        {
+          "user": "diana.prince",
+          "message": "**Standup - Monday March 10**\n\n**Yesterday:** Wrote Sprint 11 QA report, set up BrowserStack for Safari CI\n**Today:** Verify cart bug fix, prepare payment flow test suite for Tuesday\n**Blockers:** None"
+        },
+        {
+          "user": "mike.ross",
+          "message": "**Standup - Monday March 10**\n\n**Yesterday:** Worked on activity heatmap component, addressed PR feedback\n**Today:** Pair with Alice on image loading fix, update heatmap PR\n**Blockers:** Still waiting for D3.js license clarification from legal"
+        }
+      ],
+      "tech-discussions": [
+        {
+          "user": "jane.smith",
+          "message": "I've been evaluating different approaches for our API versioning strategy. Here are the options:\n\n1. **URL Path Versioning:** `/api/v1/users`, `/api/v2/users`\n2. **Header Versioning:** `Accept: application/vnd.techcorp.v2+json`\n3. **Query Parameter:** `/api/users?version=2`\n\nI'm leaning towards option 1 (URL path) for simplicity. Thoughts?",
+          "replies": [
+            {"user": "charlie.brown", "message": "I agree with URL path versioning. It's the most explicit and easiest to debug. We can use a reverse proxy to route between versions."},
+            {"user": "lisa.wang", "message": "From a security perspective, URL path versioning also makes it easier to apply different rate limiting and auth policies per version."},
+            {"user": "john.doe", "message": "Let's go with URL path versioning. Please document this in our architecture decision records (ADR). I'll create ADR-015 for this."},
+            {"user": "natalie.kim", "message": "I'll update our API documentation template to include version information prominently. Should I also add a deprecation notice section?"},
+            {"user": "jane.smith", "message": "Yes please Natalie. We should have clear deprecation timelines: announce 6 months before, sunset 3 months after the new version is stable."}
+          ]
+        },
+        {
+          "user": "lisa.wang",
+          "message": "**Security Update:** I've completed the quarterly dependency audit. Here are the findings:\n\n:red_circle: **Critical:** 2 vulnerabilities in `lodash` (prototype pollution) - PR #301 ready\n:orange_circle: **High:** 1 vulnerability in `jsonwebtoken` < 9.0.0 - PR #302 ready\n:yellow_circle: **Medium:** 3 vulnerabilities in dev dependencies - tracking in JIRA\n\nPRs #301 and #302 should be merged and deployed this week.",
+          "replies": [
+            {"user": "john.doe", "message": "Thanks Lisa. PRs #301 and #302 are approved. @bob.wilson please prioritize deploying these patches."},
+            {"user": "bob.wilson", "message": "Will do. I'll add them to Monday's deployment. The lodash update might need some testing since we use it heavily."},
+            {"user": "charlie.brown", "message": "I'll run the full test suite against the lodash update today. We use `_.merge`, `_.cloneDeep`, and `_.debounce` extensively."}
+          ]
+        }
+      ],
+      "devops": [
+        {
+          "user": "bob.wilson",
+          "message": "**Infrastructure Status Report - Week of March 10**\n\n**Production:**\n- Uptime: 99.97% (1 brief outage on Wed, 3 min)\n- Avg API Latency: 45ms (p99: 180ms)\n- Error Rate: 0.02%\n- CPU Utilization: 35% avg, 62% peak\n\n**Kubernetes:**\n- Cluster nodes: 8 (3 spot instances)\n- Pod restarts this week: 2 (payment-service OOM, fixed)\n- HPA events: 4 scale-ups during peak hours\n\n**Action Items:**\n- Increase payment-service memory limit from 512MB to 768MB\n- Investigate p99 latency spike on Wednesday",
+          "replies": [
+            {"user": "john.doe", "message": "Good report. The p99 spike - was that related to the 3-min outage?"},
+            {"user": "bob.wilson", "message": "Yes, it was caused by a PostgreSQL connection pool exhaustion. I've increased the pool size from 20 to 50 connections and added connection timeout handling."},
+            {"user": "lisa.wang", "message": "Can we set up an alert for when the connection pool goes above 80% utilization? That way we catch it before it becomes an outage."},
+            {"user": "bob.wilson", "message": "Good idea. I'll add a Prometheus alert rule: `pg_stat_activity_count / pg_settings_max_connections > 0.8` triggers a warning."}
+          ]
+        }
+      ],
+      "security-alerts": [
+        {
+          "user": "lisa.wang",
+          "message": ":rotating_light: **Security Incident Report - March 8**\n\n**Severity:** Medium\n**Type:** Unauthorized API access attempt\n**Details:** Detected 500+ failed authentication attempts from IP range 203.0.113.0/24 targeting `/api/v1/admin/users` endpoint over a 2-hour period.\n\n**Actions Taken:**\n1. IP range blocked at WAF level\n2. Rate limiting tightened on admin endpoints (10 req/min)\n3. All admin accounts verified - no breach detected\n4. Enhanced logging enabled for admin endpoints\n\n**Recommendation:** Implement IP-based progressive lockout for failed auth attempts.",
+          "replies": [
+            {"user": "john.doe", "message": "Thanks for the quick response Lisa. Let's add the progressive lockout to Sprint 12."},
+            {"user": "bob.wilson", "message": "I've verified the WAF rules are in place. Also added the IP range to our permanent block list. The attack pattern looks like a credential stuffing attempt."},
+            {"user": "jane.smith", "message": "Should we also implement CAPTCHA after 3 failed login attempts on the admin portal? That would add another layer of defense."},
+            {"user": "lisa.wang", "message": "Yes, CAPTCHA is a good idea. I'll add it to the security backlog. Also scheduling a post-incident review for Tuesday at 2 PM."}
+          ]
+        }
+      ]
+    },
+    "marketing": {
+      "campaigns": [
+        {
+          "user": "emma.davis",
+          "message": "Team, let's kick off planning for our Q2 campaign: **'Innovate Together'**\n\n**Objective:** Increase brand awareness and drive 30% more sign-ups\n**Budget:** $50,000\n**Timeline:** April 1 - June 30\n**Channels:** Social media, email, content marketing, paid ads\n\nI've created the campaign brief in our shared drive. Let's discuss the strategy in our Thursday meeting.",
+          "replies": [
+            {"user": "frank.miller", "message": "I'll start drafting the blog series. Thinking 6 posts over 3 months: customer stories, product deep-dives, and thought leadership pieces."},
+            {"user": "grace.lee", "message": "I'll work on the visual identity for the campaign. Should I create a mood board first or go straight to mockups?"},
+            {"user": "emma.davis", "message": "Start with a mood board Grace. Let's align on the visual direction before investing in full mockups."},
+            {"user": "ivy.chen", "message": "I've set up tracking in Google Analytics for the campaign. UTM parameters are ready: `utm_campaign=innovate-together-q2`. I'll create a real-time dashboard for tracking."}
+          ]
+        },
+        {
+          "user": "emma.davis",
+          "message": "**Q1 Campaign Results: 'Build Better'**\n\n:chart_with_upwards_trend: **Results:**\n- Website traffic: +42% (target was +25%)\n- New sign-ups: 3,847 (target was 3,000)\n- Email open rate: 28.3% (industry avg: 21%)\n- Social engagement: +65% across all platforms\n- Cost per acquisition: $12.40 (target was $15)\n\n:tada: Great work everyone! The content series by Frank and Grace's social graphics were the top performers.",
+          "replies": [
+            {"user": "frank.miller", "message": "Amazing results! The 'Customer Success Stories' blog series got the most organic traffic. I think we should continue this format in Q2."},
+            {"user": "ivy.chen", "message": "The data shows that Tuesday and Thursday posts performed 2.3x better than other days. I recommend we focus our publishing schedule on those days."},
+            {"user": "grace.lee", "message": "The carousel posts on Instagram had 3x the engagement of single images. Let's make carousels our default format for Q2."},
+            {"user": "kevin.martinez", "message": "Excellent ROI on this campaign. I'll share these results with the leadership team. This should help with the Q2 budget approval."}
+          ]
+        }
+      ],
+      "social-media": [
+        {
+          "user": "frank.miller",
+          "message": "**Content Schedule - Week of March 10:**\n\n**Monday:** LinkedIn - Blog post share: '5 Ways to Streamline Your Workflow'\n**Tuesday:** Twitter/X - Product tip thread (5 tweets)\n**Wednesday:** Instagram - Behind-the-scenes team photo carousel\n**Thursday:** LinkedIn - Industry insights article\n**Friday:** All platforms - 'Feature Friday' spotlight\n\nAll drafts are in Hootsuite. @grace.lee the Instagram carousel images are pending.",
+          "replies": [
+            {"user": "grace.lee", "message": "Carousel images will be ready by tonight. I'm using the new brand photography from last week's photoshoot."},
+            {"user": "emma.davis", "message": "Let's also add a poll to the Friday post. Something like 'Which feature do you use most?' with 4 options. Polls boost engagement by ~40%."},
+            {"user": "ivy.chen", "message": "Last week's posts peaked at 2-3 PM EST. I'd recommend scheduling all posts for 2 PM."}
+          ]
+        }
+      ],
+      "analytics": [
+        {
+          "user": "ivy.chen",
+          "message": "**Weekly Marketing Analytics Report - March 3-9**\n\n**Website:**\n- Sessions: 45,230 (+12% WoW)\n- Unique visitors: 32,100 (+8% WoW)\n- Bounce rate: 38% (improved from 42%)\n- Avg session duration: 3:42\n\n**Top Pages:**\n1. /features - 8,200 views\n2. /pricing - 6,100 views\n3. /blog/workflow-tips - 4,800 views\n4. /demo - 3,200 views\n\n**Conversion Funnel:**\n- Landing page → Sign-up page: 15%\n- Sign-up page → Registration: 42%\n- Registration → First action: 68%\n\n**Recommendation:** The pricing page has high traffic but we're not tracking scroll depth. I'll add heatmap tracking this week.",
+          "replies": [
+            {"user": "emma.davis", "message": "Great report Ivy. The pricing page analytics are important - can we also A/B test two different pricing layouts?"},
+            {"user": "kevin.martinez", "message": "The demo page conversion looks good at 3,200 views. How many actually booked a demo?"},
+            {"user": "ivy.chen", "message": "Good question Kevin. 312 demo requests from 3,200 views = 9.75% conversion. That's above our 8% benchmark. The new demo page design is working well."}
+          ]
+        }
+      ],
+      "content-calendar": [
+        {
+          "user": "frank.miller",
+          "message": "**March Content Calendar:**\n\n| Date | Type | Title | Status |\n|---|---|---|---|\n| Mar 11 | Blog | 5 Ways to Streamline Your Workflow | Draft Ready |\n| Mar 15 | Case Study | How Acme Corp Saved 40% with TechCorp | In Progress |\n| Mar 18 | Newsletter | Monthly Product Update - March | Not Started |\n| Mar 22 | Blog | The Future of Enterprise Collaboration | Outline Done |\n| Mar 25 | Whitepaper | 2024 Industry Trends Report | In Progress |\n| Mar 29 | Blog | Customer Spotlight: DataFlow Inc | Not Started |\n\n@emma.davis I need interview quotes from the Acme Corp PM for the case study. Can you intro me?",
+          "replies": [
+            {"user": "emma.davis", "message": "I'll send the intro email today. Their PM is Sarah Chen - she's very responsive. CC me on the thread."},
+            {"user": "natalie.kim", "message": "I can help with the whitepaper. I have access to the industry survey data from last quarter. Want me to draft the data visualization section?"},
+            {"user": "frank.miller", "message": "That would be fantastic Natalie! Let's sync tomorrow to divide up the sections. I'll handle the narrative, you handle data & visuals."},
+            {"user": "grace.lee", "message": "I'll start on the whitepaper cover design and infographics. Frank, can you share the key stats I should highlight?"}
+          ]
+        }
+      ],
+      "design-requests": [
+        {
+          "user": "frank.miller",
+          "message": "**Design Request**\n\n**Type:** Blog header images\n**Quantity:** 4 images for March blog posts\n**Dimensions:** 1200x630px (OG image compatible)\n**Style:** Clean, modern, matching our brand guidelines\n**Deadline:** March 14\n\nBlog titles:\n1. '5 Ways to Streamline Your Workflow'\n2. 'The Future of Enterprise Collaboration'\n3. 'Customer Spotlight: DataFlow Inc'\n4. 'Q1 Product Roundup'\n\nBrand assets are in the shared Figma library.",
+          "replies": [
+            {"user": "grace.lee", "message": "Got it! I'll have the first two ready by Wednesday. For the 'Customer Spotlight' one - do we have DataFlow's logo and brand colors I can incorporate?"},
+            {"user": "frank.miller", "message": "Yes, their brand kit is in the `Partner Assets` folder on Google Drive. Primary color is #2563EB."},
+            {"user": "emma.davis", "message": "Grace, can you also create social media versions (1080x1080 for Instagram, 1200x628 for LinkedIn) while you're at it?"},
+            {"user": "grace.lee", "message": "Sure! I'll export all three sizes for each blog post. That makes it 12 images total. Will update the deadline to March 15."}
+          ]
+        }
+      ]
+    },
+    "general": {
+      "announcements": [
+        {
+          "user": "henry.taylor",
+          "message": ":mega: **Company Announcement**\n\nI'm thrilled to announce that TechCorp has been named one of the **Top 50 Places to Work in Tech** by TechReview Magazine! :trophy:\n\nThis achievement reflects our commitment to building an inclusive, innovative, and supportive workplace. Thank you all for making TechCorp a great place to work!\n\nWe'll be celebrating with a company-wide virtual happy hour this Friday at 4 PM. Details to follow.",
+          "pin": true,
+          "replies": [
+            {"user": "emma.davis", "message": "Congratulations everyone! I'll be sharing this on our social channels. So proud of this team!"},
+            {"user": "john.doe", "message": "Well deserved! The engineering team is the best I've ever worked with."},
+            {"user": "jane.smith", "message": "This is amazing news! Looking forward to the celebration!"},
+            {"user": "frank.miller", "message": "I'll draft a press release and blog post about this. Should be live by tomorrow."},
+            {"user": "kevin.martinez", "message": ":clap: Incredible! Our Glassdoor reviews and employee satisfaction scores made this possible. Keep the feedback coming!"}
+          ]
+        },
+        {
+          "user": "henry.taylor",
+          "message": ":wave: **New Hire Announcement**\n\nPlease join me in welcoming our newest team members joining this month:\n\n- **Mike Ross** - Junior Developer (Engineering)\n- **Natalie Kim** - Technical Writer (Engineering)\n\nBoth will be going through onboarding this week. Please make them feel welcome and don't hesitate to reach out if you see them in the channels!\n\nOnboarding buddy assignments:\n- Mike → Jane Smith\n- Natalie → Frank Miller",
+          "pin": true,
+          "replies": [
+            {"user": "jane.smith", "message": "Welcome Mike! I've already sent you a calendar invite for our first 1:1 on Monday. Looking forward to working with you!"},
+            {"user": "frank.miller", "message": "Welcome Natalie! I'll give you a tour of our content systems and documentation tools. See you Monday!"},
+            {"user": "mike.ross", "message": "Thanks everyone! Super excited to be here. Looking forward to contributing to the team!"},
+            {"user": "natalie.kim", "message": "Thank you for the warm welcome! I've already started reading through the existing docs. Really impressed with the codebase!"},
+            {"user": "alice.johnson", "message": "Welcome to the team! If you need any help navigating the codebase or our tools, don't hesitate to ask!"}
+          ]
+        },
+        {
+          "user": "john.doe",
+          "message": ":calendar: **Engineering All-Hands - March 14, 10:00 AM**\n\nAgenda:\n1. Q1 OKR Review\n2. Project Alpha demo and timeline\n3. Project Beta kickoff\n4. Infrastructure roadmap update\n5. Open Q&A\n\nPlease submit your questions in advance using the thread below. Recording will be available for those who can't attend.",
+          "replies": [
+            {"user": "charlie.brown", "message": "Question for the infra section: Are we still planning to migrate from AWS ECS to EKS in Q2?"},
+            {"user": "bob.wilson", "message": "Yes, the EKS migration is on track for Q2. I'll cover the timeline and migration plan in the all-hands."},
+            {"user": "diana.prince", "message": "Can we also discuss the testing infrastructure? I'd like to propose adding visual regression testing to our CI pipeline."},
+            {"user": "kevin.martinez", "message": "I'll present the updated Q2 product roadmap as well. Some exciting features coming up!"}
+          ]
+        }
+      ],
+      "random": [
+        {
+          "user": "alice.johnson",
+          "message": "Anyone else watching the new season of 'The Developer' on Netflix? The episode about the startup pivoting from B2B to B2C was SO relatable :joy:",
+          "replies": [
+            {"user": "charlie.brown", "message": "YES! And the scene where they deployed to production on a Friday night... I felt that in my soul :skull:"},
+            {"user": "mike.ross", "message": "Haven't started it yet but it's on my list! No spoilers please!"},
+            {"user": "jane.smith", "message": "The rubber duck debugging scene in episode 3 is peak comedy :duck:"},
+            {"user": "bob.wilson", "message": "The DevOps character is surprisingly accurate. They even got the 'everything is on fire but we're fine' energy right :fire:"}
+          ]
+        },
+        {
+          "user": "frank.miller",
+          "message": "Our office coffee machine has been upgraded! We now have a proper espresso machine in the kitchen. Who wants to learn latte art? I'm hosting an informal session this Thursday during lunch :coffee:",
+          "replies": [
+            {"user": "grace.lee", "message": "Count me in! I've been trying to learn the rosetta pour for months."},
+            {"user": "henry.taylor", "message": "The new machine was a popular request in our last employee survey. Enjoy!"},
+            {"user": "emma.davis", "message": "I'll bring some specialty beans from that local roaster I mentioned. They have an amazing Ethiopian single origin."},
+            {"user": "diana.prince", "message": "Can we do a virtual session too for the remote folks? I'd love to participate from home!"},
+            {"user": "frank.miller", "message": "Great idea Diana! I'll set up a camera at the coffee station and stream it on Zoom."}
+          ]
+        },
+        {
+          "user": "bob.wilson",
+          "message": "I found this amazing mechanical keyboard on sale - the Keychron Q1 Pro with Gateron Jupiter Banana switches. It types like a dream and the sound is so satisfying. Anyone else here a keyboard enthusiast?",
+          "replies": [
+            {"user": "charlie.brown", "message": "Fellow mech keyboard nerd here! I'm rocking a ZSA Moonlander with Kailh Box Whites. Split ergonomic is the way to go."},
+            {"user": "alice.johnson", "message": "I use a HHKB Professional Classic. The Topre switches are addictive once you get used to them."},
+            {"user": "jane.smith", "message": "You all are making me want to upgrade from my basic Apple keyboard... any recommendations for a first mechanical?"},
+            {"user": "bob.wilson", "message": "Jane, the Keychron K2 is a great starter. Wireless, hot-swappable, and works great with Mac. Around $80."}
+          ]
+        }
+      ],
+      "watercooler": [
+        {
+          "user": "grace.lee",
+          "message": "I tried a new recipe this weekend - Korean fried chicken with gochujang glaze. It turned out amazing! I'll bring some for the team lunch on Wednesday if anyone's interested :yum:",
+          "replies": [
+            {"user": "emma.davis", "message": "YES PLEASE! Your cooking is always incredible. Should I bring anything to complement it?"},
+            {"user": "charlie.brown", "message": "Grace's cooking is legendary. Last time she brought homemade ramen and I still think about it."},
+            {"user": "ivy.chen", "message": "Can you share the recipe? I've been trying to perfect my fried chicken game."},
+            {"user": "grace.lee", "message": "Of course! The secret is double-frying at different temperatures. I'll share the full recipe in a doc after lunch."}
+          ]
+        }
+      ],
+      "events": [
+        {
+          "user": "henry.taylor",
+          "message": ":calendar: **Upcoming Events:**\n\n**March 14** - Engineering All-Hands (10:00 AM, Virtual)\n**March 15** - Team Trivia Night (6:00 PM, Slack #trivia-night)\n**March 20** - Team Lunch at Bella Italia (12:30 PM)\n**March 22** - Volunteer Day at City Food Bank (9:00 AM - 1:00 PM)\n**March 28** - Project Alpha Customer Demo (2:00 PM, Conference Room A)\n**March 31** - Q1 Company Town Hall (3:00 PM, Virtual)\n\nRSVP in the thread below! :point_down:",
+          "pin": true,
+          "replies": [
+            {"user": "alice.johnson", "message": "I'll be at the team lunch and volunteer day! :raised_hand:"},
+            {"user": "jane.smith", "message": "Count me in for everything except trivia night - I have a prior commitment."},
+            {"user": "mike.ross", "message": "Excited for trivia night! Is it general knowledge or tech-themed?"},
+            {"user": "henry.taylor", "message": "Mix of both Mike! 5 rounds: General Knowledge, Tech & Science, Pop Culture, Geography, and a Mystery Round."},
+            {"user": "frank.miller", "message": "Volunteer day sounds great! How many spots are available?"},
+            {"user": "henry.taylor", "message": "We have 20 spots for the food bank. First come, first served. 12 signed up so far."}
+          ]
+        }
+      ],
+      "help-desk": [
+        {
+          "user": "mike.ross",
+          "message": "Hi! I'm having trouble connecting to the VPN from home. I installed GlobalProtect but it's giving me a 'Gateway Timeout' error. I'm on macOS Sonoma 14.3. Any help?",
+          "replies": [
+            {"user": "bob.wilson", "message": "Hi Mike, this is a known issue with the latest macOS update. Try this:\n1. Go to System Settings → Privacy & Security → Allow GlobalProtect\n2. Restart the GlobalProtect service\n3. Connect to gateway: `vpn.techcorp.com`\n\nIf that doesn't work, I'll remote in and take a look."},
+            {"user": "mike.ross", "message": "That fixed it! The security permission was the issue. Thanks Bob!"},
+            {"user": "bob.wilson", "message": "Glad it worked! I should add this to our IT FAQ. @natalie.kim could you add a troubleshooting section for VPN on the latest macOS?"},
+            {"user": "natalie.kim", "message": "On it! I'll add it to the IT Knowledge Base by end of day."}
+          ]
+        },
+        {
+          "user": "emma.davis",
+          "message": "Is anyone else having issues with Jira loading slowly today? It's taking 20+ seconds to load any page. Cleared cache and tried different browsers.",
+          "replies": [
+            {"user": "bob.wilson", "message": "Let me check the Jira server status... Yep, it's running at 95% memory utilization. I'm restarting the service now. Should be back to normal in 5 minutes."},
+            {"user": "bob.wilson", "message": "Update: Jira is back to normal. The issue was caused by a runaway automation rule that was processing 10K tickets in a loop. I've disabled it and will work with the Jira admins to fix it."},
+            {"user": "emma.davis", "message": "It's fast again now. Thanks for the quick fix Bob!"}
+          ]
+        }
+      ],
+      "new-joiners": [
+        {
+          "user": "henry.taylor",
+          "message": ":wave: **Welcome to TechCorp!**\n\nHere's your onboarding checklist:\n\n:white_check_mark: Set up your laptop and accounts (IT will help)\n:white_check_mark: Join all relevant Mattermost teams and channels\n:white_check_mark: Read the Employee Handbook (link in pinned posts)\n:white_check_mark: Meet your onboarding buddy\n:white_check_mark: Complete security training by end of Week 1\n:white_check_mark: Attend your first team standup\n:white_check_mark: Set up development environment (Engineering only)\n:white_check_mark: Schedule 1:1s with your manager and skip-level\n\nDon't hesitate to ask questions here or in #help-desk!",
+          "pin": true,
+          "replies": [
+            {"user": "mike.ross", "message": "Thanks Henry! I've completed most of the checklist. Just need to finish the security training. Where do I find the development environment setup guide?"},
+            {"user": "jane.smith", "message": "Mike, the dev setup guide is in our Engineering wiki: https://wiki.techcorp.com/dev-setup. I'll walk you through it in our 1:1 tomorrow."},
+            {"user": "natalie.kim", "message": "The Employee Handbook link doesn't seem to work. Can someone share the updated URL?"},
+            {"user": "henry.taylor", "message": "Sorry about that Natalie! Here's the correct link: https://handbook.techcorp.com. I'll update the pinned post."}
+          ]
+        }
+      ]
+    }
+  },
+  "direct_messages": [
+    {
+      "participants": ["john.doe", "jane.smith"],
+      "messages": [
+        {"user": "john.doe", "message": "Hey Jane, wanted to chat privately about the tech lead role. I'm recommending you for the promotion. Your work on Project Alpha has been outstanding."},
+        {"user": "jane.smith", "message": "Wow, thank you John! That means a lot. I've really enjoyed leading the technical direction for the project."},
+        {"user": "john.doe", "message": "You've earned it. The promotion committee meets next week. I'll submit my recommendation today. Keep up the great work!"},
+        {"user": "jane.smith", "message": "I really appreciate your support. I'll make sure Project Alpha is a success. Let me know if you need anything from me for the submission."}
+      ]
+    },
+    {
+      "participants": ["kevin.martinez", "emma.davis"],
+      "messages": [
+        {"user": "kevin.martinez", "message": "Emma, great results on the Q1 campaign! I showed the numbers to the CEO and she was very impressed."},
+        {"user": "emma.davis", "message": "That's wonderful to hear! The team really came together on this one. Frank's content strategy and Grace's design work were standout."},
+        {"user": "kevin.martinez", "message": "Absolutely. I want to increase the Q2 budget to $75K based on these results. Can you put together a revised plan by Friday?"},
+        {"user": "emma.davis", "message": "Definitely! I'll have the updated plan with projected ROI ready by Thursday EOD so you have time to review before presenting to leadership."}
+      ]
+    },
+    {
+      "participants": ["bob.wilson", "lisa.wang"],
+      "messages": [
+        {"user": "lisa.wang", "message": "Bob, I noticed some unusual outbound traffic patterns from the staging environment last night. Can you check the firewall logs?"},
+        {"user": "bob.wilson", "message": "Checking now... I see it. There's a container making requests to an external IP that's not in our allowlist. Let me isolate it."},
+        {"user": "lisa.wang", "message": "Good. Can you also check if it matches the IP range from the credential stuffing attempt we saw last week?"},
+        {"user": "bob.wilson", "message": "Different IP range. Looks like it was a misconfigured test container that was running a webhook to an external service. I've shut it down and added egress filtering for staging."},
+        {"user": "lisa.wang", "message": "Thanks for the quick response. I'll update the security report. Let's also add egress allowlisting to our deployment checklist."}
+      ]
+    },
+    {
+      "participants": ["alice.johnson", "mike.ross"],
+      "messages": [
+        {"user": "alice.johnson", "message": "Hey Mike! Ready for our pairing session tomorrow? We'll be working on the image loading optimization."},
+        {"user": "mike.ross", "message": "Yes! I've been reading up on progressive image loading techniques. I found a really cool approach using blurhash."},
+        {"user": "alice.johnson", "message": "Blurhash is great! We actually considered it but went with next/image's built-in blur placeholder since we're already using Next.js. But good research!"},
+        {"user": "mike.ross", "message": "Makes sense to use what's already in the framework. I'll prepare some test images and a benchmark script so we can measure the improvement."},
+        {"user": "alice.johnson", "message": "Perfect! Bring your laptop to the 3rd floor collaboration area. I'll book the space from 10-12."}
+      ]
+    },
+    {
+      "participants": ["henry.taylor", "john.doe"],
+      "messages": [
+        {"user": "henry.taylor", "message": "John, just a heads up - the annual employee satisfaction survey results are in. Engineering scored 4.5/5 overall, highest in the company!"},
+        {"user": "john.doe", "message": "That's great to hear! Any areas where we can improve?"},
+        {"user": "henry.taylor", "message": "Two areas flagged: work-life balance (some folks mentioned on-call stress) and career growth (junior devs want more mentorship). Overall though, the team is very happy."},
+        {"user": "john.doe", "message": "Valid feedback. I'll address the on-call rotation - maybe we can reduce it from weekly to bi-weekly. And I'll set up a formal mentorship program pairing seniors with juniors."},
+        {"user": "henry.taylor", "message": "Those sound like great initiatives. Let me know if HR can help facilitate the mentorship program. We have some templates and frameworks from other departments."}
+      ]
+    },
+    {
+      "participants": ["diana.prince", "charlie.brown"],
+      "messages": [
+        {"user": "diana.prince", "message": "Charlie, I found another edge case in the payment flow. When a user applies two discount codes simultaneously, the second one overwrites the first instead of stacking."},
+        {"user": "charlie.brown", "message": "That's actually by design - we only allow one discount code per order. But I agree the UX is confusing. The user should see a message saying 'Only one discount code allowed'."},
+        {"user": "diana.prince", "message": "Ah got it. Then it's a UX bug, not a logic bug. I'll update the ticket and reassign to Alice for the frontend fix."},
+        {"user": "charlie.brown", "message": "Good call. I'll also add a validation check on the backend to return a proper error message instead of silently overwriting. Belt and suspenders approach."}
+      ]
+    }
+  ],
+  "group_messages": [
+    {
+      "participants": ["john.doe", "jane.smith", "kevin.martinez"],
+      "messages": [
+        {"user": "john.doe", "message": "Quick sync about the Project Alpha demo on March 28. Kevin, what are the client's main expectations?"},
+        {"user": "kevin.martinez", "message": "They want to see: 1) The authentication flow with SSO, 2) The dashboard with real-time data, 3) The notification center. They're particularly excited about the real-time features."},
+        {"user": "jane.smith", "message": "Auth flow will be ready. For the dashboard, I suggest we use mock data that mirrors their actual use case. Mike's heatmap component would be a nice touch to show."},
+        {"user": "john.doe", "message": "Agreed. Let's do a dry run on March 26. I'll book the conference room. Jane, can you prepare the demo environment?"},
+        {"user": "jane.smith", "message": "Will do. I'll set up a separate staging instance with the demo data preloaded."},
+        {"user": "kevin.martinez", "message": "Perfect. I'll also prepare the slide deck with the product roadmap. The client wants to know about upcoming features for Q3-Q4."}
+      ]
+    },
+    {
+      "participants": ["emma.davis", "frank.miller", "grace.lee", "ivy.chen"],
+      "messages": [
+        {"user": "emma.davis", "message": "Marketing standup! Quick updates from everyone please."},
+        {"user": "frank.miller", "message": "Blog post 'Streamline Your Workflow' is published and performing well - 1,200 views in the first 24 hours. Working on the Acme Corp case study, interview scheduled for Wednesday."},
+        {"user": "grace.lee", "message": "Finished 3 of 4 blog header images. The DataFlow spotlight one is pending their logo approval. Also completed the Instagram carousel for tomorrow's post."},
+        {"user": "ivy.chen", "message": "Weekly analytics report is ready and shared in #analytics. Key highlight: organic search traffic is up 18% month-over-month. Our SEO efforts are paying off."},
+        {"user": "emma.davis", "message": "Great progress everyone! Grace, follow up with DataFlow today on the logo. Ivy, can you add a section on competitor analysis to next week's report?"},
+        {"user": "ivy.chen", "message": "Sure thing. I'll pull data from SEMrush and SimilarWeb for the competitive analysis."}
+      ]
+    }
+  ]
+}

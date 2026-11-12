@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="sticky-top p-4 border-b border-gray">
+    <h1 class="text-xl font-black">Bookmarks</h1>
+    <div class="text-gray-500 text-sm">@{{ user.username }}</div>
+</div>
+
+<div class="divide-y divide-gray" data-testid="bookmarks-list">
+    {% for tweet in tweets %}
+        {% include "_tweet.html" %}
+    {% endfor %}
+    {% if not tweets %}
+    <div class="p-8 text-center">
+        <div class="text-3xl font-black mb-2">Save posts for later</div>
+        <div class="text-gray-500">Bookmark posts to easily find them again in the future.</div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

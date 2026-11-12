@@ -1,0 +1,4 @@
+# Python cache
+__pycache__/
+*.pyc
+seed/__pycache__/

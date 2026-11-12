@@ -1,0 +1,14 @@
+{
+  "profile_ids": {
+    "admin": "~ud480a671-7255-80d5-8007-e62ea5265396",
+    "alice.chen": "~ud480a671-7255-80d5-8007-e62ea545dcd6",
+    "bob.martin": "~ud480a671-7255-80d5-8007-e62ea560817c",
+    "carol.jones": "~ud480a671-7255-80d5-8007-e62ea57c6f76",
+    "david.kim": "~ud480a671-7255-80d5-8007-e62ea5980177",
+    "emma.wilson": "~ud480a671-7255-80d5-8007-e62ea5bfccfd",
+    "frank.oz": "~ud480a671-7255-80d5-8007-e62ea5db0605",
+    "grace.lee": "~ud480a671-7255-80d5-8007-e62ea5f69826",
+    "henry.park": "~ud480a671-7255-80d5-8007-e62ea6147c7f"
+  },
+  "team_ids": {}
+}

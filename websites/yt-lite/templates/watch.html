@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="watch-container">
+
+    <!-- LEFT: Player + Info + Comments -->
+    <div class="player-box">
+
+        <!-- Video Player -->
+        <video width="100%" height="450" controls {% if video.thumbnail %}poster="{{ video.thumbnail|static_asset_url }}"{% endif %}>
+            <source src="{{ video.video_path|static_asset_url }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <h2>{{ video.title }}</h2>
+        <div class="meta">{{ video.channel }} • {{ video.views }}</div>
+
+        <div class="action-row">
+            <a href="/like/{{ video.id }}" class="btn">👍 {{ likes }}</a>
+            <a href="/dislike/{{ video.id }}" class="btn">👎 {{ dislikes }}</a>
+            <a href="/watch-later/add/{{ video.id }}" class="btn">⏱ Watch Later</a>
+        </div>
+
+        <p>{{ video.description }}</p>
+
+        <!-- COMMENTS (moved here) -->
+        <div class="comments-section">
+            <h3>Comments</h3>
+
+            <form method="POST" class="comment-form">
+                <textarea name="comment" placeholder="Add a comment" required></textarea>
+                <button class="btn">Comment</button>
+            </form>
+
+            {% for c in comments %}
+            <div class="comment-box">
+                <b>{{ c.username }}</b> {{ c.text }}
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+    <!-- RIGHT: Up Next -->
+    <div class="side-column">
+        <h3>Up Next</h3>
+        {% for u in upnext %}
+        <a href="/watch/{{ u.id }}" class="upnext-card">
+            <img src="{{ u.thumbnail }}" class="thumb-sm">
+            <div>{{ u.title }}</div>
+        </a>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="chip-row">
+  <a href="/" class="filter-chip {% if not request.args.get('category') and not q %}is-active{% endif %}">All</a>
+  <a href="/?category=Music{% if q %}&q={{ q }}{% endif %}" class="filter-chip {% if request.args.get('category') == 'Music' %}is-active{% endif %}">Music</a>
+  <a href="/?category=Gaming{% if q %}&q={{ q }}{% endif %}" class="filter-chip {% if request.args.get('category') == 'Gaming' %}is-active{% endif %}">Gaming</a>
+  <a href="/?category=Learning{% if q %}&q={{ q }}{% endif %}" class="filter-chip {% if request.args.get('category') == 'Learning' %}is-active{% endif %}">Learning</a>
+  <a href="/?category=Travel{% if q %}&q={{ q }}{% endif %}" class="filter-chip {% if request.args.get('category') == 'Travel' %}is-active{% endif %}">Travel</a>
+  <a href="/?category=News{% if q %}&q={{ q }}{% endif %}" class="filter-chip {% if request.args.get('category') == 'News' %}is-active{% endif %}">News</a>
+  {% if q %}
+  <span class="filter-chip chip-label is-static">Search: {{ q }}</span>
+  {% endif %}
+</div>
+
+{% if q %}
+<button id="openFilter" class="filter-btn">Filter</button>
+
+<div id="filterModal" class="filter-modal hidden">
+  <div class="filter-box">
+
+    <div class="filter-header">
+      <span>Search filters</span>
+      <button id="closeFilter" class="filter-close" type="button">Close</button>
+    </div>
+
+    <form method="GET" action="/" class="filter-grid">
+      <input type="hidden" name="q" value="{{ q }}">
+
+      <div class="filter-col">
+        <h4>Upload date</h4>
+        <label><input type="radio" name="upload" value="hour"> Past hour</label>
+        <label><input type="radio" name="upload" value="today"> Today</label>
+        <label><input type="radio" name="upload" value="week"> This week</label>
+        <label><input type="radio" name="upload" value="month"> This month</label>
+        <label><input type="radio" name="upload" value="year"> This year</label>
+      </div>
+
+      <div class="filter-col">
+        <h4>Type</h4>
+        <label><input type="radio" name="type" value="video"> Video</label>
+        <label><input type="radio" name="type" value="channel"> Channel</label>
+        <label><input type="radio" name="type" value="playlist"> Playlist</label>
+        <label><input type="radio" name="type" value="movie"> Movie</label>
+      </div>
+
+      <div class="filter-col">
+        <h4>Duration</h4>
+        <label><input type="radio" name="duration" value="short"> Under 4 minutes</label>
+        <label><input type="radio" name="duration" value="medium"> 4-20 minutes</label>
+        <label><input type="radio" name="duration" value="long"> Over 20 minutes</label>
+      </div>
+
+      <div class="filter-col">
+        <h4>Features</h4>
+        <label><input type="checkbox" name="hd"> HD</label>
+        <label><input type="checkbox" name="subtitles"> Subtitles</label>
+        <label><input type="checkbox" name="live"> Live</label>
+      </div>
+
+      <div class="filter-col">
+        <h4>Sort by</h4>
+        <label><input type="radio" name="sort" value="relevance"> Relevance</label>
+        <label><input type="radio" name="sort" value="date"> Upload date</label>
+        <label><input type="radio" name="sort" value="views"> View count</label>
+      </div>
+
+      <div class="filter-actions">
+        <button type="submit" class="btn">Apply</button>
+        <a href="/?q={{ q }}">Clear</a>
+      </div>
+    </form>
+
+  </div>
+</div>
+{% endif %}
+
+<div class="section-row">
+  <div>
+    <div class="section-kicker">Browse</div>
+    <h2 class="section-title">
+      {% if q %}
+        Results for {{ q }}
+      {% elif request.args.get('category') %}
+        {{ request.args.get('category') }}
+      {% else %}
+        Recommended
+      {% endif %}
+    </h2>
+  </div>
+  <div class="section-meta">
+    <span>{{ videos|length }} videos</span>
+    <span class="section-dot">.</span>
+    <span>
+      {% if request.args.get('sort') == 'views' %}
+        Sorted by views
+      {% else %}
+        Latest first
+      {% endif %}
+    </span>
+  </div>
+</div>
+
+<div class="video-grid">
+  {% for v in videos %}
+    <a href="/watch/{{ v.id }}" class="video-card">
+      <div class="thumb-wrap">
+        <img src="{{ v.thumbnail }}" class="thumb">
+        <span class="duration-badge">{{ v.duration or '0:00' }}</span>
+      </div>
+      <div class="video-info">
+        <div class="video-title">{{ v.title }}</div>
+        <div class="video-meta">{{ v.channel }} &bull; {{ v.views }}</div>
+      </div>
+    </a>
+  {% else %}
+    <p class="empty-state">No videos found.</p>
+  {% endfor %}
+</div>
+
+{% endblock %}

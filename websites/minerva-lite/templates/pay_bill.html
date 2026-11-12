@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-heading">
+  <h1 class="page-title">Pay Bill</h1>
+  {% include "_term_selector.html" %}
+</section>
+
+<section class="pay-flow" data-test="pay-bill">
+  <ol class="pay-steps">
+    <li class="{% if step == 'review' %}active{% endif %}">See what you are paying</li>
+    <li class="{% if step == 'payment' %}active{% endif %}">Pay bill</li>
+    <li class="{% if step == 'confirmation' %}active{% endif %}">Confirmation</li>
+  </ol>
+
+  {% if step == 'confirmation' %}
+  <div class="content-panel">
+    <h2>Payment accepted</h2>
+    <p>Your student account balance is now {{ summary.balance|money }}.</p>
+    <p><a class="step-link" href="/student-accounts/previous-payments">View Previous Payments</a></p>
+  </div>
+  {% elif step == 'payment' %}
+  <form method="post" class="payment-form" autocomplete="off" data-test="pay-bill-form">
+    <div class="account-totals">
+      <div><span>Student</span><strong>{{ student.display_name }}</strong></div>
+      <div><span>Current amount due</span><strong>{{ summary.balance|money }}</strong></div>
+      <div><span>Full payment due by</span><strong>{{ summary.full_payment_due_by }}</strong></div>
+    </div>
+
+    <label>
+      Payment amount
+      <input type="text" name="amount" data-test="pay-amount">
+    </label>
+    <label>
+      Payment method
+      <select name="method_type" data-test="pay-method-type">
+        <option>Visa Credit Card</option>
+        <option>Mastercard Credit Card</option>
+        <option>Interac Debit Card</option>
+        <option>Bank Debit Card</option>
+      </select>
+    </label>
+    <label>
+      Card number
+      <input type="text" name="card_number" inputmode="numeric" data-test="pay-card-number">
+    </label>
+    <div class="payment-grid">
+      <label>
+        Name on card
+        <input type="text" name="card_name" data-test="pay-card-name">
+      </label>
+      <label>
+        Expiry
+        <input type="text" name="expiry" placeholder="MM/YY" data-test="pay-expiry">
+      </label>
+      <label>
+        Security code
+        <input type="text" name="security_code" placeholder="3 or 4 digits" data-test="pay-cvv">
+      </label>
+      <label>
+        Postal code
+        <input type="text" name="postal_code" data-test="pay-postal">
+      </label>
+    </div>
+    <div class="payment-actions">
+      <a class="btn" href="/student-accounts/pay-bill">Back</a>
+      <button class="btn btn-primary" type="submit" data-test="pay-submit">Submit Payment</button>
+    </div>
+  </form>
+  {% else %}
+  <div class="content-panel">
+    <div class="account-totals">
+      <div><span>Term charges</span><strong>{{ summary.charges|money }}</strong></div>
+      <div><span>Payments and credits</span><strong>{{ summary.paid|money }}</strong></div>
+      <div><span>Amount due</span><strong data-test="pay-review-due">{{ summary.balance|money }}</strong></div>
+    </div>
+    <p>Payments may be made by credit card or debit card in this demo. The payment form requires complete card details and will decline unsupported cards.</p>
+    <p><a class="btn btn-primary" href="/student-accounts/pay-bill?step=payment" data-test="pay-continue">Continue to Pay Bill</a></p>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}
