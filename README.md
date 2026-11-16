@@ -5,7 +5,7 @@ with **100 dev / 300 test tasks**, multimodal interactions, and tiered DAG
 evaluation. Run agents through BrowserGym/AgentLab, Harbor, or an external
 agent connected to the browser/media MCP service.
 
-![WebArena-Pro benchmark websites](docs/source/_static/site-mosaic.png)
+https://github.com/user-attachments/assets/a66d1924-ad3e-4a31-a13c-7aad175b2549
 
 ## Choose an integration
 
