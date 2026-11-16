@@ -67,3 +67,25 @@ Package guides: [Core](webarena-pro-core/README.md) ·
 [Harbor](webarena-pro-harbor/README.md).
 See the [documentation index](docs/source/index.md) for all guides.
 [AGENTS.md](AGENTS.md) covers development setup and validation commands.
+
+## Citation
+
+If you use WebArena-Pro in your research, please cite our
+[paper](https://arxiv.org/abs/2611.17955):
+
+```bibtex
+@misc{kerboua2026webarenaproheterogeneousmultimodalreproducible,
+  title={WebArena-Pro: A Heterogeneous, Multimodal, Reproducible Benchmark for Web Agents},
+  author={Imene Kerboua and Fatemeh Pesaran Zadeh and Xing Han Lù and Weijian Qi
+          and Alexander Miller and Junyi Song and Yunjia Tian and Dongjin Kang
+          and Seyeon Choi and Marzia Nouri and Ewen Gueguen and Matteo Boglioni
+          and Fengyuan Liu and Zeyi Liao and Mengqi Yuan and Yue Li
+          and Alexandre Lacoste and Alexandre Drouin and Spandana Gella
+          and Huan Sun and Gunhee Kim and Siva Reddy},
+  year={2026},
+  eprint={2611.17955},
+  archivePrefix={arXiv},
+  primaryClass={cs.AI},
+  url={https://arxiv.org/abs/2611.17955},
+}
+```
