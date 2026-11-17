@@ -52,6 +52,28 @@ async def evaluation_page(endpoint, identity):
         await observer.stop()
 
 
+async def wait_for_devtools_endpoint(profile: str | Path, timeout: float = 30) -> str:
+    """Wait for Chromium's HTTP debugger, which starts independently of its pipe."""
+    port_file = Path(profile) / "DevToolsActivePort"
+    try:
+        async with asyncio.timeout(timeout):
+            while True:
+                try:
+                    port_line, separator, _ = port_file.read_text().partition("\n")
+                    port = int(port_line)
+                except (FileNotFoundError, ValueError):
+                    pass
+                else:
+                    # Require a complete port line, not a partially written number.
+                    if separator and 0 < port < 65536:
+                        return f"http://127.0.0.1:{port}"
+                await asyncio.sleep(0.05)
+    except TimeoutError as exc:
+        raise TimeoutError(
+            f"Chromium did not publish a valid DevToolsActivePort within {timeout:g} seconds"
+        ) from exc
+
+
 def browser_origins(urls):
     """Canonical task origins for Chromium's scoped permissions and flags."""
     urls = list(urls)
@@ -461,8 +483,7 @@ async def _serve_async(
         context.on("page", lambda opened: schedule(attach(opened)))
         await attach(page)
         await authenticate(task, page, urls)
-        port = int((Path(temp.name) / "DevToolsActivePort").read_text().splitlines()[0])
-        endpoint = f"http://127.0.0.1:{port}"
+        endpoint = await wait_for_devtools_endpoint(temp.name)
         evaluator = CoreEvaluator(task, start_date, start_time)
         plan = build_ui_evidence_plan(task.evaluation or {})
         baselines = await private_call(evaluator.capture_baselines)

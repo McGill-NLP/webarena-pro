@@ -125,6 +125,11 @@ same HTTP endpoint and lifecycle contract.
 The runtime does not implement an agent or decide which tool to call. External
 agents own provider-specific requests and media encoding for their model API.
 
+During browser setup, the supervisor waits up to 30 seconds for Chromium to
+publish a valid `DevToolsActivePort` file. Playwright's browser connection can
+be ready before this file exists. An unavailable endpoint produces an explicit
+startup timeout and follows the normal session cleanup path.
+
 Media discovery and evaluation verify the selected Chromium target, document
 loader and URL before and after capture. Navigation races trigger at most three
 recaptures within the existing operation timeout; an unavailable or persistently
