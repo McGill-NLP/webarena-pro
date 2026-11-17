@@ -245,20 +245,33 @@ async def test_multiple_task_origins_and_selected_tab_evaluation(tmp_path, websi
         setup = await supervisor.start(30)
         policy = ToolPolicy([url, other], blocked_paths=setup["blocked_paths"])
         async with connect(setup["endpoint"], tmp_path / "browser", policy, 30) as browser:
-            await browser.call("browser_navigate", {"url": url})
+            initial = await browser.call("browser_navigate", {"url": url})
+            saved = await browser.call("browser_click", {
+                "target": reference(text_content(initial), 'button "Save"'),
+            })
+            assert not saved["isError"], saved
+            saved_status = await browser.call("browser_wait_for", {"text": "Saved"})
+            assert not saved_status["isError"], saved_status
+            first_tab = await browser.identity()
             opened = await browser.call("browser_tabs", {"action": "new", "url": other})
             assert not opened["isError"], opened
+            assert (await browser.identity())["target_id"] != first_tab["target_id"]
             result, snapshot = await grade(browser, supervisor, [], "send_msg_to_user('42')", 30)
             assert result["score"] == 1
             assert other in text_content(snapshot)
-            assert result["ui_evidence"]["tab_id"] == "1"
+            # The fresh grading observer has its own page enumeration order.
+            # Verify the selected document and distinct UI state, not its index.
             assert result["ui_evidence"]["url"].rstrip("/") == other
+            assert any(probe["text"] == "Ready" for probe in result["ui_evidence"]["results"].values())
             await browser.call("browser_tabs", {"action": "select", "index": 0})
+            assert await browser.identity() == first_tab
             result, snapshot = await grade(browser, supervisor, [], "send_msg_to_user('42')", 30)
-            assert result["score"] == 1
+            assert result["score"] == 0  # Binary AND: this tab is Saved instead of Ready.
+            assert result["dag_results"]["answer"]["passed"]
+            assert not result["dag_results"]["ui"]["passed"]
             assert url in text_content(snapshot)
-            assert result["ui_evidence"]["tab_id"] == "0"
             assert result["ui_evidence"]["url"].rstrip("/") == url
+            assert any(probe["text"] == "Saved" for probe in result["ui_evidence"]["results"].values())
     finally:
         await supervisor.close()
 
