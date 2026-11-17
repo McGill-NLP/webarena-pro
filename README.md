@@ -1,7 +1,5 @@
 # WebArena-Pro 🌐
 
-[Project Page](https://webarena-pro.github.io/) · [Hugging Face Dataset](https://huggingface.co/datasets/WebArena-Pro/WebArena-Pro) · [Leaderboard](https://webarena-pro.github.io/#results)
-
 A self-hosted benchmark for browser agents: **400 tasks across 20 websites**,
 with **100 dev / 300 test tasks**, multimodal interactions, and tiered DAG
 evaluation. Run agents through BrowserGym/AgentLab, Harbor, or an external
