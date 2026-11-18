@@ -1,7 +1,11 @@
 # Getting started
 
-This guide installs and runs the BrowserGym/AgentLab integration. For other
-agent runners, start with [Harbor](harbor.md) or the [MCP runtime](mcp.md).
+This guide installs and runs the BrowserGym/AgentLab integration.
+For Harbor, follow [Run agents with Harbor](running-harbor-agents.md) to install
+Harbor, export a task, and run your first trial. The
+[Harbor package README](https://github.com/McGill-NLP/webarena-pro/blob/main/webarena-pro-harbor/README.md)
+includes launch commands for Codex, Claude Code, and Gemini CLI.
+For other external agents, start with the [MCP runtime](mcp.md).
 The [benchmark overview](benchmark.md#choose-an-integration) explains the
 package boundaries.
 
