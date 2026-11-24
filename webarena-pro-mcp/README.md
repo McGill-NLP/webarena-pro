@@ -220,6 +220,11 @@ overview can survey the whole source in one call, with up to 120 requested
 frames. Overview also applies a 131,072-token planning allowance and samples
 at most one frame per 30 seconds; sampling can miss intervening events.
 
+When either tool returns frames through the public MCP endpoint, read the
+metadata (including timestamps) from the first `content` block as JSON.
+The JPEGs follow as image blocks. These replies omit `structuredContent`
+so clients that prefer that field receive the images together with the metadata.
+
 Omit `end_seconds` (or pass `null`) for the full source in transcription,
 frame extraction, overview, or full watch mode. Native WAV listening and detail
 watch default to 30 seconds from the selected start. Listening is limited to

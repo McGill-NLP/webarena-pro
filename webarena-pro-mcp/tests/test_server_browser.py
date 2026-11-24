@@ -109,7 +109,16 @@ async def test_real_http_mcp_browser_and_private_core_grading(
                         frames = await client.call_tool(
                             "media_extract_frames", {**arguments, "n_frames": 2}
                         )
-                        assert not frames.is_error
+                        overview = await client.call_tool("media_watch", arguments)
+                        for result in (frames, overview):
+                            assert not result.is_error
+                            assert result.structured_content is None
+                            metadata, *images = result.content
+                            assert metadata.type == "text"
+                            assert len(json.loads(metadata.text)["timestamps"]) == len(images) > 0
+                            assert all(
+                                p.type == "image" and p.mime_type == "image/jpeg" for p in images
+                            )
                         assert len([p for p in frames.content if p.type == "image"]) == 2
                         if profile == "omni":
                             audio = await client.call_tool("media_listen", arguments)
@@ -123,6 +132,7 @@ async def test_real_http_mcp_browser_and_private_core_grading(
                                 {**arguments, "mode": "detail", "include_audio": True},
                             )
                             assert not video.is_error
+                            assert video.structured_content == json.loads(video.content[0].text)
                             assert any(
                                 p.type == "resource" and p.resource.mime_type == "video/mp4"
                                 for p in video.content
