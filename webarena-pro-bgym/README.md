@@ -273,6 +273,72 @@ AgentLab study directories contain artifacts such as:
 - `screenshot_step_<N>.png` for visual observations; and
 - `dag_trace.html` for dependency-aware evaluator evidence.
 
+### Agent model requests
+
+Each supported BrowserGym agent records its provider calls in the experiment
+directory beside the saved steps. A single browser decision can make several
+model calls, and a model call can make several HTTP attempts.
+
+| Artifact | Contents |
+|---|---|
+| `model_requests.jsonl` | One version 1 JSON object per observed HTTP attempt, in dispatch order. |
+| `completions/<call_id>-<attempt>.request.json` | Provider request body after credential redaction, including the messages or native media parts actually sent. |
+| `completions/<call_id>-<attempt>.response.json` | Redacted provider response body, including error responses. A transport failure can leave only the request. |
+| `model_usage.json` in the experiment directory | Episode counts and sums, plus the same accounting under `steps`, keyed by trajectory step. |
+| `model_usage.json` in the study directory | Totals across recorded episodes, including usage from failed attempts and fresh retries. |
+| `model_request.schema.json` in the study directory | Portable JSON Schema for validating each journal row. |
+
+**Request identity and outcome.** `episode_id` identifies a logical episode across
+checkpoint continuations. `step_id` is the zero-based BrowserGym trajectory step.
+Each model invocation gets a new `call_id`. HTTP retries keep that ID and
+increment the one-based `attempt`. For GenericAgent, `call_reason` is `action`
+for the initial call and `parser_retry` when its parser asks the model again.
+`provider`, `model_requested`, `model_served` and `route` identify the adapter,
+requested model, actual model and upstream route. `provider_request_id` comes
+from the request ID header and `completion_id` from the provider body.
+`status`, `http_status`, `error_type` and `finish_reason` describe the outcome
+of the request. An in-flight attempt is marked `unresolved` before dispatch so
+a stopped worker leaves its request and unknown usage visible. A successful response may still require an action parser retry.
+`started_at` is UTC and `latency_ms` measures the HTTP attempt through receipt
+of the response body. The built-in adapters request non-streamed completions,
+so `time_to_first_token_ms` is null. `raw_request_path` and `raw_response_path`
+are relative to the experiment directory.
+
+**Usage.** Every count below belongs to `usage`. A reported zero is `0`.
+An unavailable count is `null`.
+
+| Field | Meaning |
+|---|---|
+| `input_tokens.regular` | Input processed without a cache hit, including cache writes. |
+| `input_tokens.cached` | Input served from cache. |
+| `input_tokens.total` | Total input. Equals regular plus cached when both are known. |
+| `input_tokens.cache_write` | The separately metered portion of regular input written to cache, when reported. |
+| `input_tokens.by_modality.<modality>` | The same `regular`, `cached` and `total` counters for one modality. The map contains only modalities the provider identifies. |
+| `output_tokens` | Total output plus available `reasoning`, `text` and `tool_calls` counts. Unreported components stay null. |
+
+For example, Gemini can report 750 text and 250 image tokens, with 300 text
+and 100 image tokens served from cache. The text split is 450 regular and
+300 cached. The image split is 150 regular and 100 cached. The request has
+600 regular and 400 cached tokens. A provider that reports just the 400
+cached tokens across all modalities leaves the per-modality split unknown.
+
+**Totals and coverage.** `request_count` includes failed attempts. `failed_count`
+counts failed attempts, `unresolved_count` counts attempts with an unknown
+outcome and `retry_count` counts attempts after the first in a logical call. Each entry in `metrics` contains a `sum` of known values and
+`reported_requests`, the number of attempts contributing to it. A sum is
+partial when that count is smaller than `request_count`. A sum over no known
+values is null. Latency sums measure cumulative request time. Archived fresh
+retries contribute their own calls. Checkpoint continuations link to a shared
+journal and completions directory under `model_traces/<episode_id>/` beside
+the checkpoint. Run totals count each journal once. Historical studies and
+custom agents without an instrumented provider may have no request artifacts.
+
+The OpenAI-compatible, Anthropic Messages and native Gemini adapters capture
+provider JSON before the agent extracts its text. HTTP headers are omitted.
+Raw bodies can contain the task prompt, website content and media. Keep these
+private run artifacts together when copying a study. The portable schema is
+available as `webarena_pro_core.model_requests.ModelRequest.model_json_schema()`.
+
 ### Resume and relaunch
 
 Continue a queued study through the supported CLI:

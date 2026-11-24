@@ -350,3 +350,11 @@ uv run webarena-pro-agentlab-xray
 
 The WebArena-Pro XRay extension adds a **DAG Evaluator** tab for the selected
 step's evaluation evidence.
+
+### Per-request model artifacts
+
+BrowserGym writes `model_requests.jsonl` and redacted provider bodies under
+`completions/` beside the episode trajectory. Episode and study directories each
+contain a `model_usage.json` with token sums and field coverage. For request
+fields, modality and cache accounting, and checkpoint paths, see the
+[BrowserGym artifact reference](https://github.com/McGill-NLP/webarena-pro/blob/main/webarena-pro-bgym/README.md#agent-model-requests).

@@ -23,6 +23,8 @@ OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 
 
 class GeminiChatModel(ChatModel):
+    request_provider = "gemini"
+
     def __init__(
         self,
         model_name,
@@ -100,6 +102,8 @@ class GeminiChatModel(ChatModel):
 
 
 class OpenRouterChatModel(ChatModel):
+    request_provider = "openrouter"
+
     def __init__(
         self,
         model_name,
@@ -167,6 +171,8 @@ class OpenRouterChatModel(ChatModel):
 
 
 class VLLMEndpointChatModel(ChatModel):
+    request_provider = "vllm"
+
     def __init__(
         self,
         model_name,
@@ -238,6 +244,8 @@ class VLLMEndpointChatModel(ChatModel):
 
 
 class OpenAIReasoningChatModel(ChatModel):
+    request_provider = "openai"
+
     def __init__(
         self,
         model_name,
@@ -376,6 +384,8 @@ def _convert_openai_content_to_anthropic(content):
 
 
 class AnthropicThinkingChatModel(AnthropicChatModel):
+    request_provider = "anthropic"
+
     def __init__(
         self,
         model_name,

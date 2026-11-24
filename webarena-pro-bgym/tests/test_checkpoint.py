@@ -529,3 +529,93 @@ def test_real_task_configuration_identity_ignores_runtime_origin_but_preserves_s
     assert EpisodeCheckpoint.for_experiment(first).identity == EpisodeCheckpoint.for_experiment(second).identity
     second.env_args.task_config.start_url += "&semantic_change=1"
     assert EpisodeCheckpoint.for_experiment(first).identity != EpisodeCheckpoint.for_experiment(second).identity
+
+
+def test_saved_model_requests_cover_sdk_and_parser_retries(tmp_path, monkeypatch):
+    import httpx
+    from jsonschema import Draft202012Validator
+    from openai import OpenAI
+
+    from webarena_pro_bgym.llm_configs import GeminiChatModel
+    from webarena_pro_bgym.model_requests import write_run_usage
+    from webarena_pro_core.model_requests import ModelRequest
+
+    monkeypatch.setenv("GEMINI_API_KEY", "fixture-provider-secret")
+    attempts = 0
+
+    def serve(request):
+        nonlocal attempts
+        attempts += 1
+        if attempts == 1:
+            return httpx.Response(503, headers={"retry-after-ms": "1"}, json={
+                "error": {"message": "retry fixture-provider-secret", "api_key": "nested-secret"},
+            })
+        parsed = attempts == 3
+        action = "<action>send_msg_to_user('done')</action>" if parsed else "missing action tag"
+        return httpx.Response(200, headers={"x-request-id": f"req-{attempts}"}, json={
+            "id": f"completion-{attempts}", "model": "served-model", "provider": "route-a",
+            "choices": [{"index": 0, "finish_reason": "stop",
+                         "message": {"role": "assistant", "content": action}}],
+            "usage": {"prompt_tokens": 1000, "completion_tokens": 10,
+                      "prompt_tokens_details": {"cached_tokens": 400},
+                      "completion_tokens_details": {"reasoning_tokens": 4}},
+        })
+
+    def make_model(_):
+        model = GeminiChatModel("requested-model")
+        model.client.close()
+        model.client = OpenAI(api_key="fixture-provider-secret",
+                              http_client=httpx.Client(transport=httpx.MockTransport(serve)))
+        return model
+
+    monkeypatch.setattr(FakeModelArgs, "make_model", make_model)
+    exp = experiment(tmp_path)
+    exp.run()
+    assert exp.err_msg is None
+    directory = exp.exp_dir
+    assert json.loads((directory / "summary_info.json").read_text())["n_steps"] == 1
+    rows = [ModelRequest.model_validate_json(line)
+            for line in (directory / "model_requests.jsonl").read_text().splitlines()]
+    assert [(r.step_id, r.attempt, r.call_reason, r.http_status) for r in rows] == [
+        (0, 1, "action", 503), (0, 2, "action", 200), (0, 1, "parser_retry", 200),
+    ]
+    failed, retry, followup = rows
+    assert failed.call_id == retry.call_id != followup.call_id
+    assert failed.status == "failed" and failed.usage.input_tokens.total is None
+    assert followup.provider_request_id == "req-3"
+    assert (followup.model_requested, followup.model_served, followup.route) == (
+        "requested-model", "served-model", "route-a")
+    bodies = [json.loads((directory / r.raw_response_path).read_text()) for r in rows]
+    assert bodies[0]["error"] == {"message": "retry [REDACTED]", "api_key": "[REDACTED]"}
+    assert bodies[1]["choices"][0]["message"]["content"] == "missing action tag"
+    assert "send_msg_to_user" in bodies[2]["choices"][0]["message"]["content"]
+    requests = [json.loads((directory / r.raw_request_path).read_text()) for r in rows]
+    assert requests[0] == requests[1]
+    assert requests[2]["messages"][-2]["content"] == "missing action tag"
+    assert requests[2]["messages"][-1]["role"] == "user"
+
+    summary = json.loads((directory / "model_usage.json").read_text())
+    assert (summary["request_count"], summary["failed_count"], summary["retry_count"]) == (3, 1, 1)
+    assert summary["steps"]["0"]["metrics"] == summary["metrics"]
+    for field in ("regular", "cached", "total"):
+        reported = [getattr(row.usage.input_tokens, field) for row in rows
+                    if getattr(row.usage.input_tokens, field) is not None]
+        assert summary["metrics"][f"input_tokens.{field}"] == {
+            "sum": sum(reported), "reported_requests": len(reported),
+        }
+    assert summary["metrics"]["input_tokens.regular"]["sum"] == 1200
+    assert summary["metrics"]["input_tokens.cached"]["sum"] == 800
+    assert summary["metrics"]["output_tokens.total"]["sum"] == 20
+    assert summary["metrics"]["output_tokens.text"] == {"sum": None, "reported_requests": 0}
+
+    resumed = experiment(tmp_path, resume=True)
+    resumed.run()
+    assert (resumed.exp_dir / "model_requests.jsonl").read_bytes() == (directory / "model_requests.jsonl").read_bytes()
+    write_run_usage(tmp_path)
+    study = json.loads((tmp_path / "model_usage.json").read_text())
+    assert study["recorded_episodes"] == 1 and study["request_count"] == 3
+    assert study["metrics"] == summary["metrics"]
+    assert attempts == 3
+    validator = Draft202012Validator(json.loads((tmp_path / "model_request.schema.json").read_text()))
+    for row in rows:
+        validator.validate(row.model_dump(mode="json"))

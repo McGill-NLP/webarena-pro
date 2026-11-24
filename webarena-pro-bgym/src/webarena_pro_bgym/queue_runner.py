@@ -17,6 +17,7 @@ import subprocess
 import time
 import uuid
 
+from webarena_pro_bgym.model_requests import write_run_usage
 from webarena_pro_bgym.parallel import (
     _pid_is_running,
     build_worker_environment,
@@ -557,6 +558,7 @@ def run_queue_workers(
                         finally:
                             for slot in reversed(reservations):
                                 slot.release()
+                        write_run_usage(root_dir)
                     else:
                         logger.error("Some worker groups could not be stopped; retaining their roster and reservations")
                 finally:
