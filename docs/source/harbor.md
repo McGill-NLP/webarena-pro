@@ -41,7 +41,7 @@ Configure the private evaluator token and judge credentials, then use ordinary
 Harbor commands with an MCP-capable agent:
 
 ```bash
-harbor run -p ./exported/dev -a claude-code -m '<your-model>' -e docker -n 1
+harbor run --plugin webarena_pro_core.atif_usage:HarborRequestUsage -p ./exported/dev -a claude-code -m '<your-model>' -e docker -n 1
 ```
 
 The package README includes [Codex and Claude Code examples](https://github.com/McGill-NLP/webarena-pro/blob/main/webarena-pro-harbor/README.md#codex-and-claude-code-examples)

@@ -16,6 +16,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.prog = "webarena-pro run"
     parser.description = "Run WebArena-Pro tiered evals or open the local worker/study dashboard."
     parser.epilog = (
+        "Run artifact: <study>/model_requests.json (shared with Harbor)\n"
+        "  requests[] holds each attempt. usage.input_tokens.total includes cache hits.\n"
+        "  usage.output_tokens.total counts generated tokens. coverage_gaps describes missing sources.\n"
+        "  <study>/model_requests.schema.json validates the run file.\n\n"
         "Agent model artifacts (relative to each episode directory)\n"
         "  model_requests.jsonl   One row per HTTP attempt with a trajectory step_id.\n"
         "    call_id groups attempts numbered from 1. call_reason identifies parser retries.\n"

@@ -9,13 +9,14 @@ import logging
 import os
 from pathlib import Path
 import re
-from tempfile import NamedTemporaryFile
 import time
 from uuid import uuid4
 
 import httpx
 
-from webarena_pro_core.model_requests import ModelRequest, normalize_usage, summarize_requests
+from webarena_pro_core.model_requests import (
+    CoverageGap, ModelRequest, RunRequests, atomic_text, normalize_usage, summarize_requests,
+)
 
 
 INDEX = "model_requests.jsonl"
@@ -54,20 +55,8 @@ def _redact(value, secrets):
     return value
 
 
-@contextmanager
-def _atomic_text(path):
-    with NamedTemporaryFile("w", dir=path.parent, encoding="utf-8", delete=False) as out:
-        temporary = Path(out.name)
-        try:
-            yield out
-            out.flush()
-            temporary.replace(path)
-        finally:
-            temporary.unlink(missing_ok=True)
-
-
 def _json_file(path, data):
-    with _atomic_text(path) as out:
+    with atomic_text(path) as out:
         json.dump(data, out, ensure_ascii=False, allow_nan=False)
         out.write("\n")
 
@@ -112,12 +101,30 @@ def write_episode_usage(directory):
 def write_run_usage(directory):
     # A resumed episode can appear under multiple workers and its checkpoint.
     # Fresh retries incur additional usage and have distinct journals.
-    indexes = sorted({path.resolve() for path in directory.rglob(INDEX)})
-    if indexes:
-        summary = summarize_requests(record for path in indexes for record in _records(path))
+    directory = Path(directory).resolve()
+    journals = sorted(directory.rglob(INDEX))
+    seen = set()
+    rows = []
+    for journal in journals:
+        if journal.resolve() in seen:
+            continue
+        seen.add(journal.resolve())
+        for row in _records(journal):
+            for field in ("raw_request_path", "raw_response_path"):
+                if path := getattr(row, field):
+                    setattr(row, field, (journal.parent / path).relative_to(directory).as_posix())
+            rows.append(row)
+    gaps = [
+        CoverageGap(episode_id=summary.parent.name, reason="no_request_journal",
+                    source_path=summary.relative_to(directory).as_posix())
+        for summary in sorted(directory.rglob("summary_info.json"))
+        if not (summary.parent / INDEX).is_file()
+    ]
+    RunRequests(runner="browsergym", run_id=directory.name, requests=rows, coverage_gaps=gaps).save(directory)
+    if journals:
         _json_file(directory / "model_request.schema.json", ModelRequest.model_json_schema())
         _json_file(directory / "model_usage.json", {
-            "schema_version": 1, "recorded_episodes": len(indexes), **summary,
+            "schema_version": 1, "recorded_episodes": len(seen), **summarize_requests(rows),
         })
 
 
@@ -249,7 +256,7 @@ class _RecordingModel:
 
     @staticmethod
     def _publish(journal, prior, record):
-        with _atomic_text(journal) as out:
+        with atomic_text(journal) as out:
             out.write(prior)
             out.write(record.model_dump_json() + "\n")
 

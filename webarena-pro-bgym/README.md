@@ -275,6 +275,15 @@ AgentLab study directories contain artifacts such as:
 
 ### Agent model requests
 
+At study completion, open **`<study>/model_requests.json`**. Harbor jobs write
+the same file. Each object in `requests` identifies an episode, step, and call
+and holds `usage.input_tokens.total` and `usage.output_tokens.total`.
+For a request with 1,000 input tokens including 400 cache hits, read 1,000
+from `total`, 600 from `regular`, and 400 from `cached`. Sum the known
+totals by `episode_id` for episode usage. The top-level `coverage_gaps` lists
+episodes with saved summaries but no request journal. The adjacent
+`model_requests.schema.json` validates the complete file.
+
 Each supported BrowserGym agent records its provider calls in the experiment
 directory beside the saved steps. A single browser decision can make several
 model calls, and a model call can make several HTTP attempts.
@@ -302,7 +311,8 @@ a stopped worker leaves its request and unknown usage visible. A successful resp
 `started_at` is UTC and `latency_ms` measures the HTTP attempt through receipt
 of the response body. The built-in adapters request non-streamed completions,
 so `time_to_first_token_ms` is null. `raw_request_path` and `raw_response_path`
-are relative to the experiment directory.
+are relative to the experiment directory in the journal and to the study
+directory in the run file.
 
 **Usage.** Every count below belongs to `usage`. A reported zero is `0`.
 An unavailable count is `null`.

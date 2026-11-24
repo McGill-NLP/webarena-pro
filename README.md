@@ -17,6 +17,11 @@ https://github.com/user-attachments/assets/a66d1924-ad3e-4a31-a13c-7aad175b2549
 | Harbor | Export native Harbor tasks and run existing MCP-capable agents | [Harbor integration](docs/source/harbor.md) |
 | MCP | Connect your own agent/orchestrator to browser and media tools with Core grading | [MCP runtime](docs/source/mcp.md) |
 
+BrowserGym studies and Harbor jobs both save `model_requests.json` in the run
+directory. Each entry in `requests` gives the input and output tokens for one
+observed model request. See the [BrowserGym](webarena-pro-bgym/README.md#agent-model-requests)
+and [Harbor](webarena-pro-harbor/README.md#per-request-token-usage) field references.
+
 ## Quickstart
 
 This quickstart uses BrowserGym/AgentLab. You need **Python 3.12+**, **Docker**, and [uv](https://docs.astral.sh/uv/).

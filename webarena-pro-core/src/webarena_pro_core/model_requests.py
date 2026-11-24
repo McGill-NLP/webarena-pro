@@ -1,6 +1,10 @@
 """Portable v1 schema and accounting for observed agent model requests."""
 
+import json
+from contextlib import contextmanager
 from datetime import datetime
+from pathlib import Path
+from tempfile import NamedTemporaryFile
 from typing import Literal
 
 from pydantic import BaseModel, Field, NonNegativeInt, PositiveInt, model_validator
@@ -47,7 +51,7 @@ class ModelRequest(BaseModel):
     call_id: str
     attempt: PositiveInt | None
     call_reason: Literal["action", "parser_retry"] | None = None
-    provider: str
+    provider: str | None
     model_requested: str | None
     model_served: str | None = None
     route: str | None = None
@@ -56,7 +60,7 @@ class ModelRequest(BaseModel):
     started_at: datetime | None = None
     latency_ms: NonNegativeInt | None = None
     time_to_first_token_ms: NonNegativeInt | None = None
-    status: Literal["succeeded", "failed", "unresolved"]
+    status: Literal["succeeded", "failed", "unresolved"] | None
     http_status: int | None = None
     error_type: str | None = None
     finish_reason: str | None = None
@@ -149,3 +153,40 @@ def summarize_requests(records):
                 metric["sum"] = (metric["sum"] or 0) + value
                 metric["reported_requests"] += 1
     return summary
+
+
+class CoverageGap(BaseModel):
+    """Native data that cannot be attributed to individual requests."""
+    episode_id: str
+    source_path: str
+    reason: str
+    step_id: NonNegativeInt | None = None
+    llm_call_count: NonNegativeInt | None = None
+
+
+class RunRequests(BaseModel):
+    schema_version: Literal[1] = 1
+    runner: Literal["browsergym", "harbor"]
+    run_id: str
+    requests: list[ModelRequest]
+    coverage_gaps: list[CoverageGap] = Field(default_factory=list)
+
+    def save(self, directory: Path):
+        with atomic_text(directory / "model_requests.schema.json") as out:
+            json.dump(self.model_json_schema(), out, indent=2)
+            out.write("\n")
+        with atomic_text(directory / "model_requests.json") as out:
+            out.write(self.model_dump_json(indent=2) + "\n")
+
+
+@contextmanager
+def atomic_text(path):
+    """Publish a complete private artifact, including when rebuilding a run."""
+    with NamedTemporaryFile("w", dir=path.parent, encoding="utf-8", delete=False) as out:
+        temporary = Path(out.name)
+        try:
+            yield out
+            out.flush()
+            temporary.replace(path)
+        finally:
+            temporary.unlink(missing_ok=True)

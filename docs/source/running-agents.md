@@ -353,6 +353,11 @@ step's evaluation evidence.
 
 ### Per-request model artifacts
 
+Open `<study>/model_requests.json` for the whole run. Each row in `requests`
+contains `usage.input_tokens.total` (including cache hits) and
+`usage.output_tokens.total`. Unavailable counts are null.
+[Harbor jobs](running-harbor-agents.md) write the same file.
+
 BrowserGym writes `model_requests.jsonl` and redacted provider bodies under
 `completions/` beside the episode trajectory. Episode and study directories each
 contain a `model_usage.json` with token sums and field coverage. For request

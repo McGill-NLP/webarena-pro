@@ -56,21 +56,21 @@ jobs:
       - name: Build the runtime and install the reference Harbor revision
         run: |
           uv run --locked webarena-pro-harbor build-runtime --tag webarena-pro-harbor:issue167
-          uv tool install 'harbor @ git+https://github.com/harbor-framework/harbor.git@981a4b246aef3c68b3d1b5aa27cecb703692b1f9'
+          uv tool install --with ../webarena-pro-core 'harbor @ git+https://github.com/harbor-framework/harbor.git@981a4b246aef3c68b3d1b5aa27cecb703692b1f9'
       - name: Run two isolated native Harbor trials
         env:
           WP_HARBOR_EVAL_TOKEN: harbor-fixture-only-token
         run: |
           uv run --locked python tests/prepare_smoke.py ./exported/smoke
           uv run --locked webarena-pro-harbor preflight-networks --concurrency 2
-          harbor run -p ./exported/smoke -a oracle -e docker -n 2 -k 2 -o ./jobs --job-name smoke
+          harbor run --plugin webarena_pro_core.atif_usage:HarborRequestUsage -p ./exported/smoke -a oracle -e docker -n 2 -k 2 -o ./jobs --job-name smoke
           uv run --locked python tests/assert_smoke.py ./jobs/smoke
       - name: Retain failed setup diagnostics after native Harbor cleanup
         env:
           WP_HARBOR_EVAL_TOKEN: harbor-fixture-only-token
         run: |
           uv run --locked python tests/prepare_setup_failure.py ./exported/setup-failure
-          if ! harbor run -p ./exported/setup-failure -a oracle -e docker -n 1 -k 1 -o ./jobs --job-name setup-failure; then
+          if ! harbor run --plugin webarena_pro_core.atif_usage:HarborRequestUsage -p ./exported/setup-failure -a oracle -e docker -n 1 -k 1 -o ./jobs --job-name setup-failure; then
             echo "Harbor reported failure; checking for the specific expected setup error."
           fi
           uv run --locked python tests/assert_setup_failure.py ./jobs/setup-failure "$WP_HARBOR_EVAL_TOKEN"

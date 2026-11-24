@@ -20,7 +20,7 @@ In a shell on that host:
 git clone https://github.com/McGill-NLP/webarena-pro.git
 cd webarena-pro/webarena-pro-harbor
 uv sync --python 3.12 --locked --group dev
-uv tool install 'harbor @ git+https://github.com/harbor-framework/harbor.git@981a4b246aef3c68b3d1b5aa27cecb703692b1f9'
+uv tool install --with ../webarena-pro-core 'harbor @ git+https://github.com/harbor-framework/harbor.git@981a4b246aef3c68b3d1b5aa27cecb703692b1f9'
 harbor --version
 docker info
 docker compose version
@@ -106,7 +106,7 @@ adapter. Select a model enabled for your Anthropic account; keep the full model
 ID and agent version in the run record.
 
 ```bash
-harbor run -p ./exported/dev349-browser \
+harbor run --plugin webarena_pro_core.atif_usage:HarborRequestUsage -p ./exported/dev349-browser \
   -a claude-code -m anthropic/claude-sonnet-5-5 \
   --ak version=2.1.318 --ak reasoning_effort=low \
   --ak disable_web_search=true \
@@ -130,7 +130,7 @@ steps. Load `GEMINI_API_KEY` for the agent instead of `ANTHROPIC_API_KEY`, then 
 
 ```bash
 : "${GEMINI_API_KEY:?Load the Gemini agent API key first}"
-harbor run -p ./exported/dev349-browser \
+harbor run --plugin webarena_pro_core.atif_usage:HarborRequestUsage -p ./exported/dev349-browser \
   -a gemini-cli -m gemini/gemini-2.5-pro \
   --ak version=0.40.0 --ak disable_web_search=true \
   -e docker -n 1 -k 1 -o ./jobs --job-name gemini-dev349
@@ -150,7 +150,15 @@ same steps below, replacing the Claude job directory with the Gemini directory.
 
 ## 5. Inspect the outcome
 
-The job directory is `./jobs/claude-dev349/`. For each trial, inspect:
+Open `./jobs/claude-dev349/model_requests.json` for per-request input and
+output tokens across the job. The plugin exports native ATIF counters into
+the same schema as BrowserGym. Each row in `requests` contains
+`usage.input_tokens.total` (including cache hits) and `usage.output_tokens.total`.
+`coverage_gaps` identifies steps that cannot supply individual request rows.
+To export a saved job, run
+`uv run --locked webarena-pro-harbor export-usage ./jobs/claude-dev349`.
+
+For each trial, inspect:
 
 | Path relative to the trial directory | Contents |
 |---|---|
@@ -239,7 +247,7 @@ the websites network remains internal. Guard the launch with `&&`:
 
 ```bash
 uv run --locked webarena-pro-harbor preflight-networks --concurrency 6 && \
-  harbor run -p ./exported/dev-browser -a claude-code -m '<your-model>' \
+  harbor run --plugin webarena_pro_core.atif_usage:HarborRequestUsage -p ./exported/dev-browser -a claude-code -m '<your-model>' \
     -e docker -n 6 --job-name dev-network-checked
 ```
 

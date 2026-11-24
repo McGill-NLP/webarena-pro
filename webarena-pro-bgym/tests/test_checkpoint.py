@@ -615,6 +615,15 @@ def test_saved_model_requests_cover_sdk_and_parser_retries(tmp_path, monkeypatch
     study = json.loads((tmp_path / "model_usage.json").read_text())
     assert study["recorded_episodes"] == 1 and study["request_count"] == 3
     assert study["metrics"] == summary["metrics"]
+    saved = json.loads((tmp_path / "model_requests.json").read_text())
+    Draft202012Validator(json.loads((tmp_path / "model_requests.schema.json").read_text())).validate(saved)
+    assert saved["runner"] == "browsergym" and saved["coverage_gaps"] == []
+    run_rows = saved["requests"]
+    assert [(r["call_id"], r["attempt"]) for r in run_rows] == [(r.call_id, r.attempt) for r in rows]
+    assert [json.loads((tmp_path / r["raw_response_path"]).read_text()) for r in run_rows] == bodies
+    assert [json.loads((tmp_path / r["raw_request_path"]).read_text()) for r in run_rows] == requests
+    assert [r["usage"]["input_tokens"]["total"] for r in run_rows] == [None, 1000, 1000]
+    assert [r["usage"]["output_tokens"]["total"] for r in run_rows] == [None, 10, 10]
     assert attempts == 3
     validator = Draft202012Validator(json.loads((tmp_path / "model_request.schema.json").read_text()))
     for row in rows:
