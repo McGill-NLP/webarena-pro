@@ -21,9 +21,14 @@ def make_app(episode, *, host="127.0.0.1"):
         return ListToolsResult(tools=[Tool.model_validate(t) for t in episode.tools.values()])
 
     async def call_tool(_context, params):
-        return CallToolResult.model_validate(
-            await episode.call(params.name, params.arguments or {})
-        )
+        result = await episode.call(params.name, params.arguments or {})
+        if params.name in {"media_watch", "media_extract_frames"} and any(
+            block.get("type") == "image" for block in result.get("content", [])
+        ):
+            # Metadata is also the first text block. Codex 0.166 would otherwise
+            # serialize only structuredContent and omit every frame from its input.
+            result = {key: value for key, value in result.items() if key != "structuredContent"}
+        return CallToolResult.model_validate(result)
 
     async def health(_request):
         return JSONResponse({"ready": True})
