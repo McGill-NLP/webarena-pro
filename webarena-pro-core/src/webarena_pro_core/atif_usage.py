@@ -6,7 +6,14 @@ from pathlib import Path
 from uuid import UUID
 
 from .model_requests import (
-    CoverageGap, InputTokens, ModelRequest, OutputTokens, RunRequests, Usage, atomic_text, normalize_usage,
+    CoverageGap,
+    InputTokens,
+    ModelRequest,
+    OutputTokens,
+    RunRequests,
+    Usage,
+    atomic_text,
+    normalize_usage,
 )
 
 # Harbor removes trial directories when retrying, and directories without trial
@@ -17,113 +24,154 @@ _SNAPSHOT_PREFIX = ".request-usage-"
 def _usage(metrics):
     extra = metrics.get("extra") or {}
     outputs = extra.get("output_tokens_details") or {}
-    cache_write = extra.get("cache_creation_input_tokens",
-                            extra.get("cache_write_input_tokens", extra.get("cache_write_tokens")))
-    reasoning = outputs.get("thinking_tokens", extra.get("reasoning_output_tokens",
-                            extra.get("reasoning_tokens", extra.get("thoughts_tokens"))))
-    inputs = InputTokens.from_total(metrics.get("prompt_tokens"), metrics.get("cached_tokens"), cache_write=cache_write)
+    cache_write = extra.get("cache_creation_input_tokens")
+    if cache_write is None:
+        cache_write = extra.get("cache_write_input_tokens", extra.get("cache_write_tokens"))
+    reasoning = outputs.get("thinking_tokens")
+    if reasoning is None:
+        for field in ("reasoning_output_tokens", "reasoning_tokens", "thoughts_tokens"):
+            if extra.get(field) is not None:
+                reasoning = extra[field]
+                break
+    inputs = InputTokens.from_total(
+        metrics.get("prompt_tokens"), metrics.get("cached_tokens"), cache_write=cache_write
+    )
     # ATIF has no standard modality fields. Some producers retain native
     # provider fields in metrics.extra. Apply the same mapping as BrowserGym.
     if extra.get("promptTokensDetails") or extra.get("cacheTokensDetails"):
-        details = {**extra, "promptTokenCount": inputs.total, "cachedContentTokenCount": inputs.cached}
-        inputs.by_modality = normalize_usage("gemini", {"usageMetadata": details}).input_tokens.by_modality
+        details = {
+            **extra,
+            "promptTokenCount": inputs.total,
+            "cachedContentTokenCount": inputs.cached,
+        }
+        inputs.by_modality = normalize_usage(
+            "gemini", {"usageMetadata": details}
+        ).input_tokens.by_modality
     elif extra.get("prompt_tokens_details"):
         inputs.by_modality = normalize_usage("chat", {"usage": extra}).input_tokens.by_modality
     return Usage(
         input_tokens=inputs,
-        output_tokens=OutputTokens(total=metrics.get("completion_tokens"), reasoning=reasoning,
-                                   text=outputs.get("text_tokens"), tool_calls=outputs.get("tool_call_tokens")),
+        output_tokens=OutputTokens(
+            total=metrics.get("completion_tokens"),
+            reasoning=reasoning,
+            text=outputs.get("text_tokens"),
+            tool_calls=outputs.get("tool_call_tokens"),
+        ),
     )
 
 
-def trial_requests(job, trial, trial_id):
-    """Emit individual inferences where the native producer identifies them."""
-    result = RunRequests(runner="harbor", run_id=job.name, requests=[])
-    episode = f"{trial.name}/{trial_id}"
-    visited = set()
+def _subagent_refs(step):
+    observation = step.get("observation") or {}
+    for result in observation.get("results") or []:
+        yield from result.get("subagent_trajectory_ref") or []
 
-    def gap(source, reason, **fields):
-        result.coverage_gaps.append(CoverageGap(
-            episode_id=episode, source_path=source, reason=reason, **fields,
-        ))
 
-    def read(path, agent_root):
-        source = path.relative_to(job).as_posix()
+class _TrialReader:
+    """Collect one trial, including its inline and file-linked subagent trajectories."""
+
+    def __init__(self, job, trial, trial_id):
+        self.job = job
+        self.trial = trial
+        self.trial_id = trial_id
+        self.episode = f"{trial.name}/{trial_id}"
+        self.visited = set()
+        self.run = RunRequests(runner="harbor", run_id=job.name, requests=[])
+
+    def collect(self):
+        roots = sorted(self.trial.glob("steps/*/agent/trajectory.json"))
+        root = self.trial / "agent/trajectory.json"
+        if root.is_file() or not roots:
+            roots.append(root)
+        for path in roots:
+            self._read_file(path, path.parent.resolve())
+        return self.run
+
+    def _gap(self, source, reason, **fields):
+        gap = CoverageGap(episode_id=self.episode, source_path=source, reason=reason, **fields)
+        self.run.coverage_gaps.append(gap)
+
+    def _read_file(self, path, agent_root):
+        source = path.relative_to(self.job).as_posix()
         resolved = path.resolve()
-        if not resolved.is_relative_to(agent_root) or not resolved.is_relative_to(job):
-            gap(source, "external_trajectory")
+        if not resolved.is_relative_to(agent_root) or not resolved.is_relative_to(self.job):
+            self._gap(source, "external_trajectory")
             return
-        if resolved in visited:
+        if resolved in self.visited:
             return
-        visited.add(resolved)
+        self.visited.add(resolved)
         try:
             trajectory = json.loads(path.read_bytes())
         except (OSError, ValueError):
-            gap(source, "unreadable_trajectory")
+            self._gap(source, "unreadable_trajectory")
             return
-        visit(trajectory, path, source, agent_root)
+        self._read_document(trajectory, path, source, agent_root)
 
-    def visit(document, path, source, agent_root):
-        if not isinstance(document, dict) or not str(document.get("schema_version")).startswith("ATIF-v1."):
-            gap(source, "unsupported_trajectory")
+    def _read_document(self, document, path, source, agent_root):
+        if not isinstance(document, dict) or not str(document.get("schema_version")).startswith(
+            "ATIF-v1."
+        ):
+            self._gap(source, "unsupported_trajectory")
             return
         steps = document.get("steps")
         if not isinstance(steps, list):
-            gap(source, "invalid_trajectory")
+            self._gap(source, "invalid_trajectory")
             return
         children = document.get("subagent_trajectories") or []
-        child_ids = {child.get("trajectory_id") for child in children if isinstance(child, dict)}
+        child_ids = {
+            child["trajectory_id"]
+            for child in children
+            if isinstance(child, dict) and child.get("trajectory_id")
+        }
         references = []
+        model_name = (document.get("agent") or {}).get("model_name")
         for index, step in enumerate(steps):
             try:
                 if step.get("is_copied_context"):
                     continue
                 step_id = step["step_id"]
-                for obs in (step.get("observation") or {}).get("results") or []:
-                    for ref in obs.get("subagent_trajectory_ref") or []:
-                        if ref.get("trajectory_id") and ref["trajectory_id"] in child_ids:
-                            continue
-                        if ref.get("trajectory_path"):
-                            references.append(ref["trajectory_path"])
-                        else:
-                            gap(source, "missing_subagent_trajectory", step_id=step_id)
-                count = step.get("llm_call_count")
-                if step.get("source") != "agent" or count == 0:
-                    continue
-                if count != 1:
-                    gap(source, "unknown_call_count" if count is None else "aggregated_calls",
-                        step_id=step_id, llm_call_count=count)
-                    continue
-                try:
-                    usage = _usage(step.get("metrics") or {})
-                except (AttributeError, TypeError, ValueError):
-                    gap(source, "invalid_metrics", step_id=step_id)
-                    usage = Usage()
-                result.requests.append(ModelRequest(
-                    episode_id=episode, step_id=step_id, call_id=f"{trial_id}/{source}/steps/{index}",
-                    attempt=None, status=None, provider=None,
-                    model_requested=step.get("model_name") or (document.get("agent") or {}).get("model_name"),
-                    usage=usage,
-                ))
+                for ref in _subagent_refs(step):
+                    if ref.get("trajectory_id") in child_ids:
+                        continue
+                    if ref.get("trajectory_path"):
+                        references.append(ref["trajectory_path"])
+                    else:
+                        self._gap(source, "missing_subagent_trajectory", step_id=step_id)
+                self._record_step(step, source, index, model_name)
             except (AttributeError, KeyError, TypeError, ValueError):
-                gap(f"{source}/steps/{index}", "invalid_step")
+                self._gap(f"{source}/steps/{index}", "invalid_step")
         for index, child in enumerate(children):
-            visit(child, path, f"{source}/subagent_trajectories/{index}", agent_root)
+            self._read_document(child, path, f"{source}/subagent_trajectories/{index}", agent_root)
         if continuation := document.get("continued_trajectory_ref"):
             references.append(continuation)
         for ref in references:
             if not isinstance(ref, str) or "://" in ref or Path(ref).is_absolute():
-                gap(source, "external_trajectory")
+                self._gap(source, "external_trajectory")
             else:
-                read(path.parent / ref, agent_root)
+                self._read_file(path.parent / ref, agent_root)
 
-    roots = sorted(trial.glob("steps/*/agent/trajectory.json"))
-    root = trial / "agent/trajectory.json"
-    if root.is_file() or not roots:
-        roots.append(root)
-    for path in roots:
-        read(path, path.parent.resolve())
-    return result
+    def _record_step(self, step, source, index, model_name):
+        count = step.get("llm_call_count")
+        if step.get("source") != "agent" or count == 0:
+            return
+
+        step_id = step["step_id"]
+        if count != 1:
+            reason = "unknown_call_count" if count is None else "aggregated_calls"
+            self._gap(source, reason, step_id=step_id, llm_call_count=count)
+            return
+        try:
+            usage = _usage(step.get("metrics") or {})
+        except (AttributeError, TypeError, ValueError):
+            self._gap(source, "invalid_metrics", step_id=step_id)
+            usage = Usage()
+        record = ModelRequest(
+            episode_id=self.episode,
+            step_id=step_id,
+            call_id=f"{self.trial_id}/{source}/steps/{index}",
+            model_requested=step.get("model_name") or model_name,
+            usage=usage,
+        )
+        self.run.requests.append(record)
 
 
 def export_job(job):
@@ -132,12 +180,15 @@ def export_job(job):
     if not job.is_dir():
         raise ValueError(f"No Harbor job directory at {job}")
     run = RunRequests(runner="harbor", run_id=job.name, requests=[])
-    snapshots = {path.stem.removeprefix(_SNAPSHOT_PREFIX): path
-                 for path in job.glob(f"{_SNAPSHOT_PREFIX}*.json")}
-    trials = {path.parent for name in ("config.json", "result.json") for path in job.glob(f"*/{name}")}
-    trials.update(path.parents[1] for path in job.glob("*/agent/trajectory.json"))
-    trials.update(path.parents[3] for path in job.glob("*/steps/*/agent/trajectory.json"))
-    for trial in sorted(trials):
+    snapshots = {
+        path.stem.removeprefix(_SNAPSHOT_PREFIX): path
+        for path in job.glob(f"{_SNAPSHOT_PREFIX}*.json")
+    }
+    for trial in sorted(job.iterdir()):
+        if not trial.is_dir():
+            continue
+        if not any((trial / marker).exists() for marker in ("agent", "steps", "config.json", "result.json")):
+            continue
         trial_id = trial.name
         result_path = trial / "result.json"
         if result_path.exists():
@@ -147,11 +198,16 @@ def export_job(job):
                     raise ValueError("Invalid trial ID")
                 trial_id = value
             except (OSError, ValueError, KeyError, TypeError):
-                run.coverage_gaps.append(CoverageGap(episode_id=trial.name, reason="unreadable_trial_id",
-                                                     source_path=result_path.relative_to(job).as_posix()))
+                run.coverage_gaps.append(
+                    CoverageGap(
+                        episode_id=trial.name,
+                        reason="unreadable_trial_id",
+                        source_path=result_path.relative_to(job).as_posix(),
+                    )
+                )
         if trial_id in snapshots:
             continue
-        part = trial_requests(job, trial, trial_id)
+        part = _TrialReader(job, trial, trial_id).collect()
         run.requests.extend(part.requests)
         run.coverage_gaps.extend(part.coverage_gaps)
     for path in sorted(snapshots.values()):
@@ -178,7 +234,7 @@ class HarborRequestUsage:
 
     def _save_attempt(self, trial, trial_id):
         trial_id = str(UUID(str(trial_id)))
-        part = trial_requests(self.directory, trial, trial_id)
+        part = _TrialReader(self.directory, trial, trial_id).collect()
         with atomic_text(self.directory / f"{_SNAPSHOT_PREFIX}{trial_id}.json") as out:
             out.write(part.model_dump_json())
 

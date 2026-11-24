@@ -538,7 +538,7 @@ def test_saved_model_requests_cover_sdk_and_parser_retries(tmp_path, monkeypatch
 
     from webarena_pro_bgym.llm_configs import GeminiChatModel
     from webarena_pro_bgym.model_requests import write_run_usage
-    from webarena_pro_core.model_requests import ModelRequest
+    from webarena_pro_core.model_requests import RunRequests
 
     monkeypatch.setenv("GEMINI_API_KEY", "fixture-provider-secret")
     attempts = 0
@@ -574,57 +574,42 @@ def test_saved_model_requests_cover_sdk_and_parser_retries(tmp_path, monkeypatch
     assert exp.err_msg is None
     directory = exp.exp_dir
     assert json.loads((directory / "summary_info.json").read_text())["n_steps"] == 1
-    rows = [ModelRequest.model_validate_json(line)
-            for line in (directory / "model_requests.jsonl").read_text().splitlines()]
-    assert [(r.step_id, r.attempt, r.call_reason, r.http_status) for r in rows] == [
+    resumed = experiment(tmp_path, resume=True)
+    resumed.run()
+    write_run_usage(tmp_path)
+    assert attempts == 3
+
+    saved = json.loads((tmp_path / "model_requests.json").read_text())
+    Draft202012Validator(RunRequests.model_json_schema(mode="serialization")).validate(saved)
+    run = RunRequests.model_validate(saved)
+    failed, retry, followup = run.requests
+    assert [(r.step_id, r.attempt, r.call_reason, r.http_status) for r in run.requests] == [
         (0, 1, "action", 503), (0, 2, "action", 200), (0, 1, "parser_retry", 200),
     ]
-    failed, retry, followup = rows
     assert failed.call_id == retry.call_id != followup.call_id
     assert failed.status == "failed" and failed.usage.input_tokens.total is None
     assert followup.provider_request_id == "req-3"
     assert (followup.model_requested, followup.model_served, followup.route) == (
-        "requested-model", "served-model", "route-a")
-    bodies = [json.loads((directory / r.raw_response_path).read_text()) for r in rows]
-    assert bodies[0]["error"] == {"message": "retry [REDACTED]", "api_key": "[REDACTED]"}
-    assert bodies[1]["choices"][0]["message"]["content"] == "missing action tag"
-    assert "send_msg_to_user" in bodies[2]["choices"][0]["message"]["content"]
-    requests = [json.loads((directory / r.raw_request_path).read_text()) for r in rows]
-    assert requests[0] == requests[1]
-    assert requests[2]["messages"][-2]["content"] == "missing action tag"
-    assert requests[2]["messages"][-1]["role"] == "user"
+        "requested-model", "served-model", "route-a",
+    )
 
-    summary = json.loads((directory / "model_usage.json").read_text())
-    assert (summary["request_count"], summary["failed_count"], summary["retry_count"]) == (3, 1, 1)
-    assert summary["steps"]["0"]["metrics"] == summary["metrics"]
-    for field in ("regular", "cached", "total"):
-        reported = [getattr(row.usage.input_tokens, field) for row in rows
-                    if getattr(row.usage.input_tokens, field) is not None]
-        assert summary["metrics"][f"input_tokens.{field}"] == {
-            "sum": sum(reported), "reported_requests": len(reported),
-        }
-    assert summary["metrics"]["input_tokens.regular"]["sum"] == 1200
-    assert summary["metrics"]["input_tokens.cached"]["sum"] == 800
-    assert summary["metrics"]["output_tokens.total"]["sum"] == 20
-    assert summary["metrics"]["output_tokens.text"] == {"sum": None, "reported_requests": 0}
+    assert {r.transcript_path for r in run.requests} == {failed.transcript_path}
+    assert [r.transcript_line for r in run.requests] == [1, 2, 3]
+    transcript = tmp_path / failed.transcript_path
+    records = [json.loads(line) for line in transcript.read_text().splitlines()]
+    assert records[0]["response"]["error"] == {"message": "retry [REDACTED]", "api_key": "[REDACTED]"}
+    assert records[0]["request"] == records[1]["request"]
+    assert records[1]["response"]["choices"][0]["message"]["content"] == "missing action tag"
+    assert records[2]["request"]["messages"][-2]["content"] == "missing action tag"
+    assert "send_msg_to_user" in records[2]["response"]["choices"][0]["message"]["content"]
+    assert (resumed.exp_dir / "model_requests.jsonl").samefile(transcript)
 
-    resumed = experiment(tmp_path, resume=True)
-    resumed.run()
-    assert (resumed.exp_dir / "model_requests.jsonl").read_bytes() == (directory / "model_requests.jsonl").read_bytes()
-    write_run_usage(tmp_path)
-    study = json.loads((tmp_path / "model_usage.json").read_text())
-    assert study["recorded_episodes"] == 1 and study["request_count"] == 3
-    assert study["metrics"] == summary["metrics"]
-    saved = json.loads((tmp_path / "model_requests.json").read_text())
-    Draft202012Validator(json.loads((tmp_path / "model_requests.schema.json").read_text())).validate(saved)
-    assert saved["runner"] == "browsergym" and saved["coverage_gaps"] == []
-    run_rows = saved["requests"]
-    assert [(r["call_id"], r["attempt"]) for r in run_rows] == [(r.call_id, r.attempt) for r in rows]
-    assert [json.loads((tmp_path / r["raw_response_path"]).read_text()) for r in run_rows] == bodies
-    assert [json.loads((tmp_path / r["raw_request_path"]).read_text()) for r in run_rows] == requests
-    assert [r["usage"]["input_tokens"]["total"] for r in run_rows] == [None, 1000, 1000]
-    assert [r["usage"]["output_tokens"]["total"] for r in run_rows] == [None, 10, 10]
-    assert attempts == 3
-    validator = Draft202012Validator(json.loads((tmp_path / "model_request.schema.json").read_text()))
-    for row in rows:
-        validator.validate(row.model_dump(mode="json"))
+    totals = saved["totals"]
+    assert totals == saved["episode_totals"][failed.episode_id]
+    assert (totals["request_count"], totals["failed_count"], totals["retry_count"]) == (3, 1, 1)
+    for field, expected in (("regular", 1200), ("cached", 800), ("total", 2000)):
+        values = [getattr(row.usage.input_tokens, field) for row in run.requests]
+        assert sum(value for value in values if value is not None) == expected
+        assert totals["metrics"][f"input_tokens.{field}"] == {"sum": expected, "reported_requests": 2}
+    assert totals["metrics"]["output_tokens.total"] == {"sum": 20, "reported_requests": 2}
+    assert totals["metrics"]["output_tokens.text"] == {"sum": None, "reported_requests": 0}

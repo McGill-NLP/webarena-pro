@@ -439,48 +439,17 @@ trial merely because its score is low.
 
 ## Per-request token usage
 
-The launch scripts and the `harbor run --plugin` examples write
-**`<job>/model_requests.json`** at job completion. BrowserGym writes the same
-file at the study root. The adjacent `model_requests.schema.json` validates
-the whole document. Read one line per request with:
+The launchers write `<job>/model_requests.json` at job end. Harbor supplies the
+input, cached and output counts from each trial's native `agent/trajectory.json`.
+A step with `llm_call_count: 1` identifies one inference. Aggregated steps
+appear in `coverage_gaps`. HTTP retries absent from the native trajectory have
+no individual record. Inspect the native trajectory for the agent's completion.
+See the [shared token fields and totals](../README.md#model-request-files).
 
-```bash
-jq -c '.requests[] | {episode_id, step_id, input: .usage.input_tokens, output: .usage.output_tokens.total}' jobs/my-job/model_requests.json
-```
-
-The plugin reads each trial's native `agent/trajectory.json`. An agent step
-with `llm_call_count: 1` supplies one request. `episode_id` identifies the
-trial attempt, `step_id` is the native ATIF step, and `call_id` distinguishes
-individual inferences, including subagents. To reproduce a trial's totals,
-group rows by `episode_id` and sum the known `usage.input_tokens.total` and
-`usage.output_tokens.total` values independently.
-
-| Field under `usage` | Native meaning |
-|---|---|
-| `input_tokens.total` | ATIF `prompt_tokens`, including cache hits. |
-| `input_tokens.cached` | ATIF `cached_tokens`, the portion served from cache. |
-| `input_tokens.regular` | Total input minus cached input when both are known. |
-| `input_tokens.cache_write` | The portion of regular input written to cache, when reported. |
-| `input_tokens.by_modality` | Regular, cached, and total input for each reported modality. |
-| `output_tokens.total` | ATIF `completion_tokens`. Reasoning, text and tool-call details are separate fields when available. |
-
-Counts are `null` when unavailable. The top-level `coverage_gaps` lists
-missing trajectories and native steps with unknown or aggregated call counts.
-A missing provider HTTP attempt cannot be recovered from ATIF. HTTP outcome,
-retry ordinal and raw body paths remain null for these native inference rows.
-The agent's original completion is in the corresponding trajectory step.
-
-For an existing job, or after an interruption, rebuild the file from saved
-artifacts without running the agent again:
-
-```bash
-uv run --locked webarena-pro-harbor export-usage jobs/my-job
-```
-
-The plugin retains a hidden `.request-usage-<trial-uuid>.json` snapshot at
-the end of a failed trial so Harbor can replace its directory on retry. Keep these
-files when moving a job you intend to regenerate. Historical exports cover the
-trajectories still on disk.
+To rebuild a report from an existing job, run
+`uv run --locked webarena-pro-harbor export-usage jobs/my-job`.
+When moving a job, include the hidden `.request-usage-<trial-uuid>.json` files.
+They preserve the usage of failed trials whose directories Harbor replaces on retry.
 
 ## Verification and artifacts
 

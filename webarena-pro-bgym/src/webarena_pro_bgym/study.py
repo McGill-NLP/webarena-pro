@@ -47,7 +47,7 @@ from webarena_pro_bgym.agentlab_compat import (
 )
 from webarena_pro_bgym.step_verifier import dispatch_step
 from webarena_pro_bgym.checkpoint import EpisodeCheckpoint
-from webarena_pro_bgym.model_requests import EpisodeTrace, write_episode_usage, write_run_usage
+from webarena_pro_bgym.model_requests import EpisodeTrace, write_run_usage
 from webarena_pro_bgym.benchmark.actions import is_completion_action
 from webarena_pro_bgym.utils import has_ungraded_score
 from webarena_pro_core.verifier import drain_step_verifiers
@@ -513,10 +513,10 @@ class WebArenaProExpArgs(ExpArgs):
                     else:
                         if checkpoint is not None:
                             checkpoint.mark("model_pending")
-                        with _wall_clock_timeout(
-                            step_timeout, f"agent action for {self.env_args.task_name} step {step_info.step}"
-                        ):
-                            with trace.step(agent, step_info.step):
+                        with trace.step(agent, step_info.step):
+                            with _wall_clock_timeout(
+                                step_timeout, f"agent action for {self.env_args.task_name} step {step_info.step}"
+                            ):
                                 action = step_info.from_action(agent)
                         if checkpoint is not None:
                             checkpoint.save("action_ready", episode_info, agent, env)
@@ -784,7 +784,6 @@ class WebArenaProExpArgs(ExpArgs):
             with open(path, "w", encoding="utf-8", opener=lambda path, flags: os.open(path, flags, 0o600)) as output:
                 os.chmod(path, 0o600)
                 json.dump(audits, output, indent=2, ensure_ascii=False)
-        write_episode_usage(exp_dir)
 
 
 
@@ -1213,7 +1212,6 @@ class WebArenaProStudy(Study):
                 try:
                     drain_step_verifiers()
                     if self.exp_args_list:
-                        write_run_usage(Path(self.dir))
                         self.get_results(suffix="queue")
                 finally:
                     queue.close()
