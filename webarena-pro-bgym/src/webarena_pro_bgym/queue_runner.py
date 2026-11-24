@@ -452,6 +452,7 @@ def run_queue_workers(
         use_prewarm = container_prewarm_enabled() if prewarm is None else prewarm
         pending_count = sum(row["state"] == "pending" for row in queue.status())
         if not pending_count:
+            write_run_usage(root_dir)
             logger.info("No pending or unstarted tasks remain in %s", root_dir)
             return int(any(row["state"] != "done" for row in queue.status()))
         sites = sorted({site for row in queue.status() for site in row["sites"]})

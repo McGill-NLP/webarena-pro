@@ -678,6 +678,23 @@ def test_idle_worker_receives_unstarted_lookahead_after_other_worker_crashes(
     _assert_released(worker_fixture)
 
 
+def test_resume_completed_queue_writes_usage_without_launching_workers(tmp_path):
+    queue = TaskQueue.create(tmp_path / "queue.jsonl", _task_sites(1))
+    task = queue.claim("old")
+    queue.started(task, "old")
+    queue.complete(task, "old")
+    (tmp_path / "queue_run.json").write_text(json.dumps({"prewarm": False}))
+    episode = tmp_path / "workers/old/episode"
+    episode.mkdir(parents=True)
+    (episode / "summary_info.json").write_text("{}")
+    assert queue_runner.run_queue_workers(
+        task_sites=_task_sites(1), worker_count=1, root_dir=tmp_path, command=[], resume=True,
+    ) == 0
+    run = json.loads((tmp_path / "model_requests.json").read_text())
+    assert run["requests"] == []
+    assert [g["source_path"] for g in run["coverage_gaps"]] == ["workers/old/episode/summary_info.json"]
+
+
 def test_resume_repairs_torn_tail_and_runs_only_pending_and_unstarted_tasks(
     tmp_path, monkeypatch, worker_fixture
 ):
