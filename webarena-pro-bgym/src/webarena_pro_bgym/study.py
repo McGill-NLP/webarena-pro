@@ -47,6 +47,7 @@ from webarena_pro_bgym.agentlab_compat import (
 )
 from webarena_pro_bgym.step_verifier import dispatch_step
 from webarena_pro_bgym.checkpoint import EpisodeCheckpoint
+from webarena_pro_bgym.model_requests import EpisodeTrace, write_run_usage
 from webarena_pro_bgym.benchmark.actions import is_completion_action
 from webarena_pro_bgym.utils import has_ungraded_score
 from webarena_pro_core.verifier import drain_step_verifiers
@@ -432,6 +433,7 @@ class WebArenaProExpArgs(ExpArgs):
                     if self.resume_requested and not self.resume_from_start:
                         checkpoint.load()
                         if checkpoint.data["phase"] == "finished":
+                            EpisodeTrace(self.exp_dir, checkpoint)  # Reattach the saved request artifacts.
                             episode_info = checkpoint.data["episode"]
                             step_info = episode_info[-1]
                             for saved_step in episode_info:
@@ -450,6 +452,7 @@ class WebArenaProExpArgs(ExpArgs):
                         os.environ.pop("WP_PREWARMED_TASK_ID", None)
                     else:
                         checkpoint.start()
+                trace = EpisodeTrace(self.exp_dir, checkpoint)
                 agent = self.agent_args.make_agent()
                 if hasattr(agent, "set_task_name"):
                     agent.set_task_name(self.env_args.task_name)
@@ -510,10 +513,11 @@ class WebArenaProExpArgs(ExpArgs):
                     else:
                         if checkpoint is not None:
                             checkpoint.mark("model_pending")
-                        with _wall_clock_timeout(
-                            step_timeout, f"agent action for {self.env_args.task_name} step {step_info.step}"
-                        ):
-                            action = step_info.from_action(agent)
+                        with trace.step(agent, step_info.step):
+                            with _wall_clock_timeout(
+                                step_timeout, f"agent action for {self.env_args.task_name} step {step_info.step}"
+                            ):
+                                action = step_info.from_action(agent)
                         if checkpoint is not None:
                             checkpoint.save("action_ready", episode_info, agent, env)
                     logger.debug(f"Agent chose action:\n {action}")
@@ -1316,6 +1320,7 @@ class WebArenaProStudy(Study):
             # queued records before we return. AgentLab parallel backends use
             # separate workers with empty registries, so this is a no-op there.
             drain_step_verifiers()
+            write_run_usage(Path(self.dir))
 
     @property
     def name(self):

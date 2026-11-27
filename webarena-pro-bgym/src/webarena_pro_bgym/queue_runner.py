@@ -17,6 +17,7 @@ import subprocess
 import time
 import uuid
 
+from webarena_pro_bgym.model_requests import write_run_usage
 from webarena_pro_bgym.parallel import (
     _pid_is_running,
     build_worker_environment,
@@ -451,6 +452,7 @@ def run_queue_workers(
         use_prewarm = container_prewarm_enabled() if prewarm is None else prewarm
         pending_count = sum(row["state"] == "pending" for row in queue.status())
         if not pending_count:
+            write_run_usage(root_dir)
             logger.info("No pending or unstarted tasks remain in %s", root_dir)
             return int(any(row["state"] != "done" for row in queue.status()))
         sites = sorted({site for row in queue.status() for site in row["sites"]})
@@ -557,6 +559,7 @@ def run_queue_workers(
                         finally:
                             for slot in reversed(reservations):
                                 slot.release()
+                        write_run_usage(root_dir)
                     else:
                         logger.error("Some worker groups could not be stopped; retaining their roster and reservations")
                 finally:

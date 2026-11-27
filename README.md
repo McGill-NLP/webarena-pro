@@ -17,6 +17,25 @@ https://github.com/user-attachments/assets/a66d1924-ad3e-4a31-a13c-7aad175b2549
 | Harbor | Export native Harbor tasks and run existing MCP-capable agents | [Harbor integration](docs/source/harbor.md) |
 | MCP | Connect your own agent/orchestrator to browser and media tools with Core grading | [MCP runtime](docs/source/mcp.md) |
 
+### Model request files
+
+Open `<study>/model_requests.json` for BrowserGym or `<job>/model_requests.json`
+for Harbor. Each row in `requests` describes one observed model request.
+
+| Field | Meaning |
+|---|---|
+| `episode_id`, `step_id`, `call_id` | Episode, trajectory step, and model invocation. |
+| `attempt`, `call_reason` | HTTP retries share a call ID and increment the attempt. A parser follow-up starts a new call. |
+| `usage.input_tokens` | `total` includes cache hits. For 1,000 inputs with 400 hits, `regular` is 600 and `cached` is 400. Cache writes are part of regular input. |
+| `usage.input_tokens.by_modality` | The same three counters for each modality the provider reports. |
+| `usage.output_tokens` | Total generated tokens and any reported reasoning, text or tool-call counts. |
+| `totals`, `episode_totals` | Run and episode request counts, token sums and cumulative latency. Each metric includes its number of contributing requests. |
+| `coverage_gaps` | Missing source data or steps that combine multiple inferences. Unavailable counters are `null`. |
+
+For native completions and retry behavior, see the [BrowserGym transcript](webarena-pro-bgym/README.md#agent-model-requests)
+and [Harbor trajectory](webarena-pro-harbor/README.md#per-request-token-usage) guides.
+To export the JSON Schema, use `webarena_pro_core.model_requests.RunRequests.model_json_schema(mode="serialization")`.
+
 ## Quickstart
 
 This quickstart uses BrowserGym/AgentLab. You need **Python 3.12+**, **Docker**, and [uv](https://docs.astral.sh/uv/).

@@ -34,7 +34,7 @@ server, and FFmpeg. It does not push an image. Install Harbor in its own tool
 environment, independently of the browser service's MCP SDK:
 
 ```bash
-uv tool install 'harbor @ git+https://github.com/harbor-framework/harbor.git@981a4b246aef3c68b3d1b5aa27cecb703692b1f9'
+uv tool install --with ../webarena-pro-core 'harbor @ git+https://github.com/harbor-framework/harbor.git@981a4b246aef3c68b3d1b5aa27cecb703692b1f9'
 ```
 
 For a shared deployment, build/tag/push the runtime through your normal image
@@ -77,7 +77,7 @@ Incomplete streams remain evaluation errors. The saved judge request records
 the transport so audit replay uses the same mode. The default is non-streaming.
 
 ```bash
-harbor run -p ./exported/dev -a claude-code -m '<your-model>' \
+harbor run --plugin webarena_pro_core.atif_usage:HarborRequestUsage -p ./exported/dev -a claude-code -m '<your-model>' \
   -e docker -n 1
 ```
 
@@ -208,12 +208,12 @@ With `OPENAI_API_KEY` set, use `-a codex` and an `openai/` model name:
 
 ```bash
 # GPT-5.6 Sol, low reasoning effort.
-harbor run -p ./exported/agent-smoke -a codex -m openai/gpt-5.6-sol \
+harbor run --plugin webarena_pro_core.atif_usage:HarborRequestUsage -p ./exported/agent-smoke -a codex -m openai/gpt-5.6-sol \
   --ak version=0.166.0 --ak reasoning_effort=low --ak disable_web_search=true \
   -e docker -n 1 -k 1 -o ./jobs --job-name codex-gpt56-sol-dev349
 
 # GPT-5, using the same agent version and task budgets.
-harbor run -p ./exported/agent-smoke -a codex -m openai/gpt-5 \
+harbor run --plugin webarena_pro_core.atif_usage:HarborRequestUsage -p ./exported/agent-smoke -a codex -m openai/gpt-5 \
   --ak version=0.166.0 --ak reasoning_effort=low --ak disable_web_search=true \
   -e docker -n 1 -k 1 -o ./jobs --job-name codex-gpt5-dev349
 ```
@@ -230,12 +230,12 @@ With `ANTHROPIC_API_KEY` set, use `-a claude-code` and an `anthropic/` model nam
 
 ```bash
 # Claude Sonnet 5.5.
-harbor run -p ./exported/agent-smoke -a claude-code -m anthropic/claude-sonnet-5-5 \
+harbor run --plugin webarena_pro_core.atif_usage:HarborRequestUsage -p ./exported/agent-smoke -a claude-code -m anthropic/claude-sonnet-5-5 \
   --ak version=2.1.318 --ak reasoning_effort=low --ak disable_web_search=true \
   -e docker -n 1 -k 1 -o ./jobs --job-name claude-sonnet55-dev349
 
 # Claude Opus 5.5, using the same agent version and task budgets.
-harbor run -p ./exported/agent-smoke -a claude-code -m anthropic/claude-opus-5-5 \
+harbor run --plugin webarena_pro_core.atif_usage:HarborRequestUsage -p ./exported/agent-smoke -a claude-code -m anthropic/claude-opus-5-5 \
   --ak version=2.1.318 --ak reasoning_effort=low --ak disable_web_search=true \
   -e docker -n 1 -k 1 -o ./jobs --job-name claude-opus55-dev349
 ```
@@ -251,7 +251,7 @@ With `GEMINI_API_KEY` set, use `-a gemini-cli` and a `gemini/` model name:
 
 ```bash
 : "${GEMINI_API_KEY:?Load the Gemini agent API key first}"
-harbor run -p ./exported/agent-smoke -a gemini-cli -m gemini/gemini-2.5-pro \
+harbor run --plugin webarena_pro_core.atif_usage:HarborRequestUsage -p ./exported/agent-smoke -a gemini-cli -m gemini/gemini-2.5-pro \
   --ak version=0.40.0 --ak disable_web_search=true \
   -e docker -n 1 -k 1 -o ./jobs --job-name gemini25-pro-dev349
 ```
@@ -300,7 +300,7 @@ with the same concurrency as `harbor run -n`, before launching the queue:
 
 ```bash
 uv run --locked webarena-pro-harbor preflight-networks --concurrency 6 && \
-  harbor run -p ./exported/test-browser -a claude-code -m '<your-model>' \
+  harbor run --plugin webarena_pro_core.atif_usage:HarborRequestUsage -p ./exported/test-browser -a claude-code -m '<your-model>' \
     -e docker -n 6 --job-name test-network-checked
 ```
 
@@ -436,6 +436,20 @@ A setup exception is an unscored infrastructure failure. Retry it as a fresh
 trial after addressing the cause, preserving the original attempt and the task,
 model, judge, image pins, and action/time budgets. Do not rerun a valid graded
 trial merely because its score is low.
+
+## Per-request token usage
+
+The launchers write `<job>/model_requests.json` at job end. Harbor supplies the
+input, cached and output counts from each trial's native `agent/trajectory.json`.
+A step with `llm_call_count: 1` identifies one inference. Aggregated steps
+appear in `coverage_gaps`. HTTP retries absent from the native trajectory have
+no individual record. Inspect the native trajectory for the agent's completion.
+See the [shared token fields and totals](../README.md#model-request-files).
+
+To rebuild a report from an existing job, run
+`uv run --locked webarena-pro-harbor export-usage jobs/my-job`.
+When moving a job, include the hidden `.request-usage-<trial-uuid>.json` files.
+They preserve the usage of failed trials whose directories Harbor replaces on retry.
 
 ## Verification and artifacts
 

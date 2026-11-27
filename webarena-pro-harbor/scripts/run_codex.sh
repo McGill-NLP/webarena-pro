@@ -6,6 +6,7 @@ if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
   cat <<'HELP'
 Usage: run_codex.sh <exported-dataset> <job-name> [harbor run arguments...]
 Requires OPENROUTER_API_KEY, WP_HARBOR_JUDGE_API_KEY, and WP_HARBOR_EVAL_TOKEN.
+Writes JOBS_DIR/<job-name>/model_requests.json with input and output tokens for each recorded inference.
 Overrides: HARBOR_BIN=harbor, N_CONCURRENT=1, JOBS_DIR=./jobs.
 HELP
   exit 0
@@ -39,6 +40,7 @@ CODEX_CONFIG='{
 }'
 
 exec "${HARBOR_BIN:-harbor}" run \
+  --plugin webarena_pro_core.atif_usage:HarborRequestUsage \
   -p "${DATASET}" -a codex -m openrouter/openai/gpt-6.1-sol \
   --api-key-name OPENROUTER_API_KEY \
   --ak version=0.166.0 --ak reasoning_effort=high --ak disable_web_search=true \

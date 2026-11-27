@@ -529,3 +529,87 @@ def test_real_task_configuration_identity_ignores_runtime_origin_but_preserves_s
     assert EpisodeCheckpoint.for_experiment(first).identity == EpisodeCheckpoint.for_experiment(second).identity
     second.env_args.task_config.start_url += "&semantic_change=1"
     assert EpisodeCheckpoint.for_experiment(first).identity != EpisodeCheckpoint.for_experiment(second).identity
+
+
+def test_saved_model_requests_cover_sdk_and_parser_retries(tmp_path, monkeypatch):
+    import httpx
+    from jsonschema import Draft202012Validator
+    from openai import OpenAI
+
+    from webarena_pro_bgym.llm_configs import GeminiChatModel
+    from webarena_pro_bgym.model_requests import write_run_usage
+    from webarena_pro_core.model_requests import RunRequests
+
+    monkeypatch.setenv("GEMINI_API_KEY", "fixture-provider-secret")
+    attempts = 0
+
+    def serve(request):
+        nonlocal attempts
+        attempts += 1
+        if attempts == 1:
+            return httpx.Response(503, headers={"retry-after-ms": "1"}, json={
+                "error": {"message": "retry fixture-provider-secret", "api_key": "nested-secret"},
+            })
+        parsed = attempts == 3
+        action = "<action>send_msg_to_user('done')</action>" if parsed else "missing action tag"
+        return httpx.Response(200, headers={"x-request-id": f"req-{attempts}"}, json={
+            "id": f"completion-{attempts}", "model": "served-model", "provider": "route-a",
+            "choices": [{"index": 0, "finish_reason": "stop",
+                         "message": {"role": "assistant", "content": action}}],
+            "usage": {"prompt_tokens": 1000, "completion_tokens": 10,
+                      "prompt_tokens_details": {"cached_tokens": 400},
+                      "completion_tokens_details": {"reasoning_tokens": 4}},
+        })
+
+    def make_model(_):
+        model = GeminiChatModel("requested-model")
+        model.client.close()
+        model.client = OpenAI(api_key="fixture-provider-secret",
+                              http_client=httpx.Client(transport=httpx.MockTransport(serve)))
+        return model
+
+    monkeypatch.setattr(FakeModelArgs, "make_model", make_model)
+    exp = experiment(tmp_path)
+    exp.run()
+    assert exp.err_msg is None
+    directory = exp.exp_dir
+    assert json.loads((directory / "summary_info.json").read_text())["n_steps"] == 1
+    resumed = experiment(tmp_path, resume=True)
+    resumed.run()
+    write_run_usage(tmp_path)
+    assert attempts == 3
+
+    saved = json.loads((tmp_path / "model_requests.json").read_text())
+    Draft202012Validator(RunRequests.model_json_schema(mode="serialization")).validate(saved)
+    run = RunRequests.model_validate(saved)
+    failed, retry, followup = run.requests
+    assert [(r.step_id, r.attempt, r.call_reason, r.http_status) for r in run.requests] == [
+        (0, 1, "action", 503), (0, 2, "action", 200), (0, 1, "parser_retry", 200),
+    ]
+    assert failed.call_id == retry.call_id != followup.call_id
+    assert failed.status == "failed" and failed.usage.input_tokens.total is None
+    assert followup.provider_request_id == "req-3"
+    assert (followup.model_requested, followup.model_served, followup.route) == (
+        "requested-model", "served-model", "route-a",
+    )
+
+    assert {r.transcript_path for r in run.requests} == {failed.transcript_path}
+    assert [r.transcript_line for r in run.requests] == [1, 2, 3]
+    transcript = tmp_path / failed.transcript_path
+    records = [json.loads(line) for line in transcript.read_text().splitlines()]
+    assert records[0]["response"]["error"] == {"message": "retry [REDACTED]", "api_key": "[REDACTED]"}
+    assert records[0]["request"] == records[1]["request"]
+    assert records[1]["response"]["choices"][0]["message"]["content"] == "missing action tag"
+    assert records[2]["request"]["messages"][-2]["content"] == "missing action tag"
+    assert "send_msg_to_user" in records[2]["response"]["choices"][0]["message"]["content"]
+    assert (resumed.exp_dir / "model_requests.jsonl").samefile(transcript)
+
+    totals = saved["totals"]
+    assert totals == saved["episode_totals"][failed.episode_id]
+    assert (totals["request_count"], totals["failed_count"], totals["retry_count"]) == (3, 1, 1)
+    for field, expected in (("regular", 1200), ("cached", 800), ("total", 2000)):
+        values = [getattr(row.usage.input_tokens, field) for row in run.requests]
+        assert sum(value for value in values if value is not None) == expected
+        assert totals["metrics"][f"input_tokens.{field}"] == {"sum": expected, "reported_requests": 2}
+    assert totals["metrics"]["output_tokens.total"] == {"sum": 20, "reported_requests": 2}
+    assert totals["metrics"]["output_tokens.text"] == {"sum": None, "reported_requests": 0}

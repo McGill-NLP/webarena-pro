@@ -16,6 +16,13 @@ def build_parser() -> argparse.ArgumentParser:
     parser.prog = "webarena-pro run"
     parser.description = "Run WebArena-Pro tiered evals or open the local worker/study dashboard."
     parser.epilog = (
+        "Model requests\n"
+        "  <study>/model_requests.json holds requests, totals, episode_totals and coverage_gaps.\n"
+        "  usage.input_tokens.total = regular + cached. by_modality holds reported splits.\n"
+        "  usage.output_tokens.total counts generated tokens. Missing counts are null.\n"
+        "  call_id groups HTTP attempts. call_reason identifies parser follow-ups.\n"
+        "  transcript_path and transcript_line locate the redacted request and response in\n"
+        "  <episode>/model_requests.jsonl, appended once per browser step.\n\n"
         "Examples:\n"
         "  webarena-pro run --split dev --site nextcloud --task 172,173\n"
         "  webarena-pro run --site mattermost --n-jobs 2\n"

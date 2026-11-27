@@ -273,6 +273,26 @@ AgentLab study directories contain artifacts such as:
 - `screenshot_step_<N>.png` for visual observations; and
 - `dag_trace.html` for dependency-aware evaluator evidence.
 
+### Agent model requests
+
+Open `<study>/model_requests.json` for request usage and episode totals.
+Each row's `transcript_path` (relative to the study) and one-based
+`transcript_line` point to an entry in the episode's `model_requests.jsonl`.
+Read its `request` and `response` fields to inspect the redacted provider
+bodies, including completions the action parser rejected. A transport failure
+has a null response. These private transcripts can include page content and media.
+
+BrowserGym buffers HTTP attempts during a browser step and appends them when the
+step returns or raises. A hard kill before that flush can lose the current step.
+Checkpoint continuations share one transcript. A fresh retry gets its own.
+
+`model_requested`, `model_served` and `route` identify the model and upstream
+route. `provider_request_id` and `completion_id` identify the provider records.
+`status`, `http_status`, `error_type` and `finish_reason` describe the outcome.
+`started_at` is UTC and `latency_ms` measures HTTP time. The built-in adapters
+use nonstreamed responses, so `time_to_first_token_ms` is null.
+See the [shared token fields](../README.md#model-request-files).
+
 ### Resume and relaunch
 
 Continue a queued study through the supported CLI:

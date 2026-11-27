@@ -6,6 +6,8 @@ from pathlib import Path
 
 
 def check(path):
+    usage = json.loads((Path(path) / "model_requests.json").read_text())
+    assert usage["runner"] == "harbor" and usage["requests"] == []  # Oracle makes no model calls.
     trials = []
     for result_path in Path(path).glob("*/result.json"):
         result = json.loads(result_path.read_text())

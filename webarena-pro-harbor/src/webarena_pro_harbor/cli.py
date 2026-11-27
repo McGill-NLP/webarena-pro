@@ -64,6 +64,14 @@ def build_runtime(source_root, tag, platform=None):
 def parser():
     p = argparse.ArgumentParser(description="Export and serve native WebArena-Pro Harbor tasks")
     commands = p.add_subparsers(dest="command", required=True)
+    usage = commands.add_parser(
+        "export-usage", help="Write JOB_DIR/model_requests.json from native Harbor trajectories",
+        description="Write JOB_DIR/model_requests.json with one row per identified model request. "
+                    "usage.input_tokens.total includes cached tokens. regular is total minus cached. "
+                    "usage.output_tokens.total counts generated tokens. Missing counts are null. "
+                    "coverage_gaps identifies native steps without per-request attribution.",
+    )
+    usage.add_argument("job_dir", type=Path, help="Harbor job directory containing trial subdirectories")
     listing = commands.add_parser("list")
     export = commands.add_parser("export")
     for item in (listing, export):
@@ -169,6 +177,12 @@ def main():
                     ),
                 )
                 print(f"Exported {len(manifest)} tasks to {args.output.resolve()}")
+        elif args.command == "export-usage":
+            from webarena_pro_core.atif_usage import export_job
+
+            run = export_job(args.job_dir)
+            print(f"{args.job_dir.resolve() / 'model_requests.json'} "
+                  f"({len(run.requests)} requests, {len(run.coverage_gaps)} coverage gaps)")
         elif args.command == "build-runtime":
             build_runtime(args.source_root, args.tag, args.platform)
         elif args.command == "preflight-networks":

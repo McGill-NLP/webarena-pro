@@ -350,3 +350,6 @@ uv run webarena-pro-agentlab-xray
 
 The WebArena-Pro XRay extension adds a **DAG Evaluator** tab for the selected
 step's evaluation evidence.
+
+For model request counts, episode totals, and raw completions, see the
+[BrowserGym transcript guide](https://github.com/McGill-NLP/webarena-pro/blob/main/webarena-pro-bgym/README.md#agent-model-requests).

@@ -65,6 +65,8 @@ def _inline_part(block: dict, *, audio_support: bool) -> tuple[dict, int]:
 
 
 class GeminiMediaChatModel(AbstractChatModel):
+    request_provider = "gemini"
+
     def __init__(self, model_name, temperature=1.0, max_tokens=4096,
                  max_input_tokens=None, reasoning_effort=None, audio_support=False):
         self.model_name = model_name
