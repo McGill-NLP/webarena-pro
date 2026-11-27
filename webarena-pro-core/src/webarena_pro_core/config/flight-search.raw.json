@@ -386,7 +386,7 @@
     }
   },
   {
-    "intent": "Book a flight from toronto to vancouver for next weekend",
+    "intent": "Today is 2026-04-01 in Flight Search. Book a flight from Toronto to Vancouver for next weekend.",
     "login_usernames": {
       "password-manager": "agent1"
     },
@@ -405,7 +405,7 @@
           "type": "tiered",
           "depends_on": [],
           "eval_config": {
-            "rubric": "A Toronto -> Vancouver flight for next weekend (Apr 3-5 or Apr 10-12, 2026) is booked.",
+            "rubric": "Using Flight Search's date of 2026-04-01, a flight from Toronto to Vancouver was booked for next weekend, departing 2026-04-03 through 2026-04-05 or 2026-04-10 through 2026-04-12 (inclusive).",
             "strategies": [
               {
                 "tier": 0,
@@ -417,7 +417,7 @@
                   "checks": [
                     {
                       "type": "body_regex",
-                      "pattern": "\"outbound_flight\":\\s*\\{[^}]*\"origin\":\\s*\"(?:YYZ|YTZ)\"[^}]*\"destination\":\\s*\"(?:YVR)\"[^}]*\"departure\":\\s*\"2026-04-(0[3-5]|1[0-2])"
+                      "pattern": "\"outbound_flight\":\\s*\\{[^}]*\"origin\":\\s*\"(?:YYZ|YTZ)\"[^}]*\"destination\":\\s*\"YVR\"[^}]*\"departure\":\\s*\"(?:2026-04-03|2026-04-04|2026-04-05|2026-04-10|2026-04-11|2026-04-12)"
                     }
                   ]
                 },
@@ -427,7 +427,7 @@
                 "tier": 2,
                 "type": "llm_judge",
                 "config": {
-                  "rubric": "A flight from Toronto to Vancouver was booked for next weekend (the site's date is April 1, 2026, so departing April 3-5 or April 10-12, 2026)."
+                  "rubric": "Using Flight Search's date of 2026-04-01, a flight from Toronto to Vancouver was booked for next weekend, departing 2026-04-03 through 2026-04-05 or 2026-04-10 through 2026-04-12 (inclusive)."
                 }
               }
             ]

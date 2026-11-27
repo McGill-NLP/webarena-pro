@@ -78,6 +78,14 @@ default. The CLI's `--no-reset-per-task` option disables per-task reset, and
 
 The Dev set contains **100 tasks**.
 
+## Flight Search task 070
+
+Task `070` interprets “next weekend” using the frozen date in Flight Search’s
+`backend/benchmark.py`. After changing that date, run
+`python scripts/generate_task_070_weekends.py` from `webarena-pro-core/` to
+update the task instruction, booking check, and judge rubric together. Add
+`--check` to verify the packaged task matches the website clock.
+
 ## Tiered evaluations
 
 Each active task contains its evaluation DAG in `eval`, alongside `task_id`,
